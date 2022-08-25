@@ -73,6 +73,22 @@ public class TextToSpeech {
   }
 
   /**
+   * This simply runs the spead method in a new task
+   *
+   * @param sentence
+   */
+  public void speakAsync(final String sentence) {
+    Thread thread =
+        new Thread(
+            () -> {
+              this.speak(sentence);
+            });
+    // Set daemon so the thread runs in the background.
+    thread.setDaemon(true);
+    thread.start();
+  }
+
+  /**
    * Speaks the given sentence.
    *
    * @param sentence A string to speak.
