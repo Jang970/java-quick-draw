@@ -8,7 +8,7 @@
 			"type": "shell",
 			"command": "./mvnw clean javafx:run@debug",
 			"windows": {
-				"command": ".\\mvnw clean javafx:run@debug"
+				"command": ".\\mvnw.cmd clean javafx:run@debug"
 			},
 			"group": "build",
 			"isBackground": true,
@@ -48,7 +48,7 @@
 			"type": "shell",
 			"command": "./mvnw clean javafx:run",
 			"windows": {
-				"command": ".\\mvnw clean javafx:run"
+				"command": ".\\mvnw.cmd clean javafx:run"
 			},
 			"group": "build"
 		},
@@ -57,7 +57,7 @@
 			"type": "shell",
 			"command": "./mvnw clean test",
 			"windows": {
-				"command": ".\\mvnw clean test"
+				"command": ".\\mvnw.cmd clean test"
 			},
 			"group": "test"
 		},
