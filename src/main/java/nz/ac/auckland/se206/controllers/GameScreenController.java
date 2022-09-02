@@ -151,13 +151,6 @@ public class GameScreenController {
 
     canvasManager = new CanvasManager(canvas);
 
-    // Add a border to make the canvas visible
-    // canvasContainerPane.setBorder(
-    // new Border(
-    // new BorderStroke(
-    // Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
-    // BorderWidths.DEFAULT)));
-
     // This is necessary to tell the app that the view has been switched.
     // The on view change method wll run every time the app switches views.
     App.subscribeToViewChange((View v) -> onViewChanged(v));
