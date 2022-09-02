@@ -34,34 +34,55 @@ import nz.ac.auckland.se206.util.PredictionManager.ClassificationListener;
 import nz.ac.auckland.se206.util.PredictionManager.SnapshotProvider;
 
 /**
- * This is the controller of the canvas. You are free to modify this class and the corresponding
- * FXML file as you see fit. For example, you might no longer need the "Predict" button because the
+ * This is the controller of the canvas. You are free to modify this class and
+ * the corresponding
+ * FXML file as you see fit. For example, you might no longer need the "Predict"
+ * button because the
  * DL model should be automatically queried in the background every second.
  *
- * <p>!! IMPORTANT !!
+ * <p>
+ * !! IMPORTANT !!
  *
- * <p>Although we added the scale of the image, you need to be careful when changing the size of the
- * drawable canvas and the brush size. If you make the brush too big or too small with respect to
- * the canvas size, the ML model will not work correctly. So be careful. If you make some changes in
+ * <p>
+ * Although we added the scale of the image, you need to be careful when
+ * changing the size of the
+ * drawable canvas and the brush size. If you make the brush too big or too
+ * small with respect to
+ * the canvas size, the ML model will not work correctly. So be careful. If you
+ * make some changes in
  * the canvas and brush sizes, make sure that the prediction works fine.
  */
 public class GameScreenController {
 
-  @FXML private Canvas canvas;
-  @FXML private Pane canvasContainerPane;
+  @FXML
+  private Canvas canvas;
+  @FXML
+  private Pane canvasContainerPane;
 
-  @FXML private Button pencilButton;
-  @FXML private Button eraserButton;
-  @FXML private Button clearButton;
+  @FXML
+  private Button pencilButton;
+  @FXML
+  private Button eraserButton;
+  @FXML
+  private Button clearButton;
 
-  @FXML private Button returnHomeButton;
-  @FXML private Button gameActionButton;
-  @FXML private Button downloadImageButton;
+  @FXML
+  private Button returnHomeButton;
+  @FXML
+  private Button gameActionButton;
+  @FXML
+  private Button downloadImageButton;
 
-  @FXML private Label timeRemainingLabel;
-  @FXML private Label whatToDrawLabel;
+  @FXML
+  private Label timeRemainingLabel;
+  @FXML
+  private Label whatToDrawLabel;
 
-  @FXML private VBox guessLabelContainer;
+  @FXML
+  private VBox guessLabelCol1;
+
+  @FXML
+  private VBox guessLabelCol2;
 
   private Label[] guessLabels = new Label[10];
 
@@ -88,17 +109,26 @@ public class GameScreenController {
   private TextToSpeech textToSpeech;
 
   /**
-   * JavaFX calls this method once the GUI elements are loaded. In our case we create a listener for
+   * JavaFX calls this method once the GUI elements are loaded. In our case we
+   * create a listener for
    * the drawing, and we load the ML model.
    *
-   * @throws ModelException If there is an error in reading the input/output of the DL model.
-   * @throws IOException If the model cannot be found on the file system.
+   * @throws ModelException If there is an error in reading the input/output of
+   *                        the DL model.
+   * @throws IOException    If the model cannot be found on the file system.
    */
   public void initialize() throws ModelException, IOException {
 
     // Get guess labels
     int labelIndex = 0;
-    for (Node child : guessLabelContainer.getChildren()) {
+    // TODO: Remove repetition (possibily through another method)
+    for (Node child : guessLabelCol1.getChildren()) {
+      if (child instanceof Label) {
+        guessLabels[labelIndex] = (Label) child;
+        labelIndex++;
+      }
+    }
+    for (Node child : guessLabelCol2.getChildren()) {
       if (child instanceof Label) {
         guessLabels[labelIndex] = (Label) child;
         labelIndex++;
@@ -107,7 +137,8 @@ public class GameScreenController {
 
     textToSpeech = new TextToSpeech();
 
-    // TODO: Add possiblility to register multiple functions rather than set this to be the only
+    // TODO: Add possiblility to register multiple functions rather than set this to
+    // be the only
     // one. Something like App.getStage().registerOnClose(() -> {...})
     App.getStage()
         .setOnCloseRequest(
@@ -121,10 +152,11 @@ public class GameScreenController {
     canvasManager = new CanvasManager(canvas);
 
     // Add a border to make the canvas visible
-    canvasContainerPane.setBorder(
-        new Border(
-            new BorderStroke(
-                Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+    // canvasContainerPane.setBorder(
+    // new Border(
+    // new BorderStroke(
+    // Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
+    // BorderWidths.DEFAULT)));
 
     // This is necessary to tell the app that the view has been switched.
     // The on view change method wll run every time the app switches views.
@@ -154,62 +186,64 @@ public class GameScreenController {
 
     ////////////////////////////// END TIMER SECTION //////////////////////////////
 
-    ////////////////////////////// PREDICTION MANAGER SECTION //////////////////////////////
+    ////////////////////////////// PREDICTION MANAGER SECTION
+    ////////////////////////////// //////////////////////////////
 
-    // This provides a method which passes the snapshot from the canvas to the prediction manager
-    final SnapshotProvider snapshotProvider =
-        new SnapshotProvider() {
-          @Override
-          public BufferedImage getCurrentSnapshot() {
+    // This provides a method which passes the snapshot from the canvas to the
+    // prediction manager
+    final SnapshotProvider snapshotProvider = new SnapshotProvider() {
+      @Override
+      public BufferedImage getCurrentSnapshot() {
 
-            // This is used to run the get current snapshot on the javafx
-            // thread and then once the task is complete, we can use the returned result
-            final FutureTask<BufferedImage> futureTask =
-                new FutureTask<BufferedImage>(
-                    new Callable<BufferedImage>() {
+        // This is used to run the get current snapshot on the javafx
+        // thread and then once the task is complete, we can use the returned result
+        final FutureTask<BufferedImage> futureTask = new FutureTask<BufferedImage>(
+            new Callable<BufferedImage>() {
 
-                      @Override
-                      public BufferedImage call() throws Exception {
-                        return canvasManager.getCurrentSnapshot();
-                      }
-                    });
+              @Override
+              public BufferedImage call() throws Exception {
+                return canvasManager.getCurrentSnapshot();
+              }
+            });
 
-            // Run our task
-            Platform.runLater(futureTask);
-            try {
-              // Return the task result
-              return futureTask.get();
-            } catch (InterruptedException | ExecutionException e) {
-              return null; // TODO: Make sure this is safe
-            }
-          }
-        };
+        // Run our task
+        Platform.runLater(futureTask);
+        try {
+          // Return the task result
+          return futureTask.get();
+        } catch (InterruptedException | ExecutionException e) {
+          return null; // TODO: Make sure this is safe
+        }
+      }
+    };
 
-    // This creates an anyonymous class with method which listens for updates from the snapshot
+    // This creates an anyonymous class with method which listens for updates from
+    // the snapshot
     // provider
     // and sends the result to the game controllers update guesses function
-    final ClassificationListener classificationListener =
-        new ClassificationListener() {
-          @Override
-          public void classificationReceived(List<Classification> classificationList) {
-            Platform.runLater(
-                () -> {
-                  onGuessChange(classificationList);
-                });
-          }
-        };
+    final ClassificationListener classificationListener = new ClassificationListener() {
+      @Override
+      public void classificationReceived(List<Classification> classificationList) {
+        Platform.runLater(
+            () -> {
+              onGuessChange(classificationList);
+            });
+      }
+    };
 
-    // The prediction manager takes care of everything to do with guessing the drawing
-    predictionManager =
-        new PredictionManager(100, guessLabels.length, snapshotProvider, classificationListener);
+    // The prediction manager takes care of everything to do with guessing the
+    // drawing
+    predictionManager = new PredictionManager(100, guessLabels.length, snapshotProvider, classificationListener);
 
-    ////////////////////////////// END PREDICTION MANAGER SECTION //////////////////////////////
+    ////////////////////////////// END PREDICTION MANAGER SECTION
+    ////////////////////////////// //////////////////////////////
   }
 
   /**
    * This method updates the guess labels with the top guesses
    *
-   * @param classificationList the list of top guesses from the model with percentage likelihood
+   * @param classificationList the list of top guesses from the model with
+   *                           percentage likelihood
    */
   private void onGuessChange(List<Classification> classificationList) {
     int range = Math.min(classificationList.size(), guessLabels.length);
@@ -224,7 +258,8 @@ public class GameScreenController {
         }
       }
 
-      // getClassName does not give the name of a java class but the label of the classification
+      // getClassName does not give the name of a java class but the label of the
+      // classification
       String guessText = classificationList.get(i).getClassName().replace('_', ' ');
       guessLabels[i].setText((i + 1) + ": " + guessText);
     }
@@ -261,7 +296,7 @@ public class GameScreenController {
     gameState = newGameState;
     if (newGameState == GameState.ENDED) {
       // End the game and display the results
-      gameActionButton.setText("New Category");
+      gameActionButton.setText("Play Again!");
       updateTimerLabel(0);
       if (playerDidWin) {
         whatToDrawLabel.setText("You got it! :)");
@@ -307,7 +342,10 @@ public class GameScreenController {
     }
   }
 
-  /** This function takes the current game state and progresses to the next natural game state */
+  /**
+   * This function takes the current game state and progresses to the next natural
+   * game state
+   */
   private void progressGame() {
     // Self explanatory
     if (gameState == GameState.READY) {
@@ -326,7 +364,8 @@ public class GameScreenController {
   }
 
   /**
-   * This function sets the timer label to the time based on the number of seconds given
+   * This function sets the timer label to the time based on the number of seconds
+   * given
    *
    * @param numberSeconds the number of seconds remaining on the timer
    */

@@ -15,13 +15,19 @@ import javax.imageio.ImageIO;
 import nz.ac.auckland.se206.App;
 
 /**
- * The purpose of this class is to isolate all functionality of the canvas from the controller
+ * The purpose of this class is to isolate all functionality of the canvas from
+ * the controller
  * through a simple interface.
  *
- * <p>It handles everything to do with drawing on, erasing on and clearning the canvas
+ * <p>
+ * It handles everything to do with drawing on, erasing on and clearning the
+ * canvas
  *
- * <p>//TODO: Perhaps this functionality should be abstracted as this violates the single
- * responsibility principle It also provides a method which gives the user an image from the pointed
+ * <p>
+ * //TODO: Perhaps this functionality should be abstracted as this violates the
+ * single
+ * responsibility principle It also provides a method which gives the user an
+ * image from the pointed
  * canvas
  */
 public class CanvasManager {
@@ -44,7 +50,8 @@ public class CanvasManager {
   private boolean isHolding = false;
 
   /**
-   * The canvas manager is bound to one canvas which is given through this constructor
+   * The canvas manager is bound to one canvas which is given through this
+   * constructor
    *
    * @param canvas
    */
@@ -77,8 +84,10 @@ public class CanvasManager {
   }
 
   /**
-   * This is the main drawing function. IT should be run whenever the mouse is dragged (in a new
-   * position from previous while being held down) It uses the current and previous mouse positions
+   * This is the main drawing function. IT should be run whenever the mouse is
+   * dragged (in a new
+   * position from previous while being held down) It uses the current and
+   * previous mouse positions
    * to interpolate lines
    *
    * @param event the MouseEvent
@@ -101,17 +110,19 @@ public class CanvasManager {
 
         // Sets the stroke colour and width depending on the draw mode
 
-        // TODO: Extract this to either already be set when drawmode is updated or extract to simple
+        // TODO: Extract this to either already be set when drawmode is updated or
+        // extract to simple
         // function
         if (drawMode == DrawMode.DRAWING) {
           context.setStroke(Color.BLACK);
           context.setLineWidth(brushSize * 0.8);
         } else if (drawMode == DrawMode.ERASING) {
-          context.setStroke(Color.WHITE);
+          context.setStroke(Color.rgb(235, 233, 221));
           context.setLineWidth(brushSize * 5);
         }
 
-        // Using context api to draw a stroke between the last and current points detected
+        // Using context api to draw a stroke between the last and current points
+        // detected
         context.moveTo(prevX, prevY);
         context.lineTo(newX, newY);
         context.stroke();
@@ -147,8 +158,7 @@ public class CanvasManager {
 
   /** Simply sets all the pixels to white */
   public void clear() {
-    context.setFill(Color.WHITE);
-    context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+    context.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
     isHolding = false;
   }
 
@@ -162,8 +172,8 @@ public class CanvasManager {
     final BufferedImage image = SwingFXUtils.fromFXImage(snapshot, null);
 
     // Convert into a binary image.
-    final BufferedImage imageBinary =
-        new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_BYTE_BINARY);
+    final BufferedImage imageBinary = new BufferedImage(image.getWidth(), image.getHeight(),
+        BufferedImage.TYPE_BYTE_BINARY);
 
     final Graphics2D graphics = imageBinary.createGraphics();
 
@@ -176,7 +186,8 @@ public class CanvasManager {
   }
 
   /**
-   * Save the current snapshot on a bitmap file. // TODO: Extract this to another class as it
+   * Save the current snapshot on a bitmap file. // TODO: Extract this to another
+   * class as it
    * violates the single responsibility principle belong here
    *
    * @return The file of the saved image.
@@ -195,8 +206,8 @@ public class CanvasManager {
     }
 
     // We save the image to a file in the tmp folder.
-    final File imageToClassify =
-        new File(directory.getAbsolutePath() + "/snapshot" + System.currentTimeMillis() + ".bmp");
+    final File imageToClassify = new File(
+        directory.getAbsolutePath() + "/snapshot" + System.currentTimeMillis() + ".bmp");
 
     // Save the image to a file.
     ImageIO.write(getCurrentSnapshot(), "bmp", imageToClassify);

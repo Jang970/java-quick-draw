@@ -9,91 +9,129 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.GameScreenController">
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="570.0" prefWidth="600.0" spacing="5.0" stylesheets="@../css/application.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.GameScreenController">
    <children>
-      <VBox alignment="CENTER" prefHeight="94.0" prefWidth="600.0">
+      <Label styleClass="quickdrawCanvas" text="Quick, Draw!">
+         <font>
+            <Font size="40.0" />
+         </font>
+      </Label>
+      <Label layoutX="217.0" layoutY="24.0" styleClass="quickdrawCanvas" text="SE206 Edition">
+         <font>
+            <Font size="18.0" />
+         </font>
+         <VBox.margin>
+            <Insets top="-10.0" />
+         </VBox.margin>
+      </Label>
+      <HBox alignment="CENTER" prefHeight="53.0" prefWidth="600.0">
          <children>
-            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="20.0" prefWidth="117.0" text="Time Remaining" textAlignment="CENTER" />
-            <Label fx:id="timeRemainingLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="22.0" prefWidth="156.0" text="0:00" textAlignment="CENTER">
+            <Label fx:id="whatToDrawLabel" contentDisplay="CENTER" prefHeight="28.0" prefWidth="305.0" styleClass="canvasSubHeaders" text="Draw a ...">
                <font>
-                  <Font size="40.0" />
+                  <Font size="20.0" />
                </font>
             </Label>
-            <Label fx:id="whatToDrawLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="26.0" prefWidth="207.0" text="Draw a ..." textAlignment="CENTER">
+            <Label fx:id="timeRemainingLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="27.0" prefWidth="74.0" styleClass="canvasSubHeaders" text="0:00" textAlignment="CENTER">
                <font>
-                  <Font size="14.0" />
+                  <Font size="20.0" />
                </font>
             </Label>
          </children>
-         <VBox.margin>
-            <Insets bottom="10.0" top="10.0" />
-         </VBox.margin>
-      </VBox>
+      </HBox>
       <HBox prefHeight="247.0" prefWidth="600.0">
          <children>
-
-            <HBox alignment="CENTER" prefHeight="299.0" prefWidth="426.0" HBox.hgrow="ALWAYS">
+            <VBox alignment="CENTER" prefHeight="221.0" prefWidth="79.0">
                <children>
-                  <VBox prefHeight="299.0" prefWidth="68.0">
-                     <children>
-                        <Button fx:id="pencilButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onPencilSelected" prefWidth="10000.0" text="Pencil" VBox.vgrow="ALWAYS">
-                           <VBox.margin>
-                              <Insets bottom="5.0" />
-                           </VBox.margin>
-                        </Button>
-                        <Button fx:id="eraserButton" mnemonicParsing="false" onAction="#onEraserSelected" prefWidth="10000.0" text="Eraser" VBox.vgrow="ALWAYS" />
-                        <Button fx:id="clearButton" mnemonicParsing="false" onAction="#onClearCanvas" prefWidth="10000.0" text="Clear" VBox.vgrow="ALWAYS">
-                           <VBox.margin>
-                              <Insets top="30.0" />
-                           </VBox.margin>
-                        </Button>
-                     </children>
-                     <HBox.margin>
-                        <Insets left="5.0" />
-                     </HBox.margin>
-                  </VBox>
-                  <Pane fx:id="canvasContainerPane" prefHeight="247.0" prefWidth="342.0">
-                     <children>
-                        <Canvas fx:id="canvas" height="247.0" width="342.0" />
-                     </children>
-                     <HBox.margin>
-                        <Insets left="5.0" />
-                     </HBox.margin>
-                  </Pane>
-               </children>
-            </HBox>
-
-            <VBox prefHeight="299.0" prefWidth="137.0">
-               <children>
-                  <Label prefHeight="17.0" prefWidth="10000.0" text="Top Guesses:" VBox.vgrow="ALWAYS">
+                  <Button fx:id="pencilButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onPencilSelected" prefWidth="10000.0" text="Pencil" VBox.vgrow="ALWAYS">
                      <VBox.margin>
                         <Insets bottom="5.0" />
                      </VBox.margin>
-                     <font>
-                        <Font size="19.0" />
-                     </font>
-                  </Label>
-                  <VBox fx:id="guessLabelContainer" prefHeight="200.0" prefWidth="100.0">
+                  </Button>
+                  <Button fx:id="eraserButton" mnemonicParsing="false" onAction="#onEraserSelected" prefHeight="33.0" prefWidth="79.0" text="Eraser" VBox.vgrow="ALWAYS" />
+                  <Button fx:id="clearButton" mnemonicParsing="false" onAction="#onClearCanvas" prefWidth="10000.0" text="Clear" VBox.vgrow="ALWAYS">
+                     <VBox.margin>
+                        <Insets top="30.0" />
+                     </VBox.margin>
+                  </Button>
+               </children>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </VBox>
+            <Pane fx:id="canvasContainerPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="243.0" prefWidth="400.0" styleClass="canvas">
+               <children>
+                  <Canvas fx:id="canvas" height="243.0" width="400.0" />
+               </children>
+               <HBox.margin>
+                  <Insets left="5.0" />
+               </HBox.margin>
+            </Pane>
+         </children>
+         <padding>
+            <Insets left="25.0" />
+         </padding>
+      </HBox>
+
+            <VBox alignment="CENTER_RIGHT" prefHeight="122.0" prefWidth="456.0" styleClass="canvasSubHeaders">
+         <children>
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="10000.0" styleClass="canvasSubHeaders" text="Top Guesses" textAlignment="CENTER" VBox.vgrow="ALWAYS">
+               <VBox.margin>
+                  <Insets bottom="5.0" />
+               </VBox.margin>
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Label>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="601.0" spacing="30.0">
+               <children>
+                  <VBox fx:id="guessLabelCol1" alignment="CENTER" prefHeight="100.0" prefWidth="153.0">
                      <children>
                         <Label prefHeight="17.0" prefWidth="231.0" text="Guess 1" />
                         <Label prefHeight="17.0" prefWidth="517.0" text="Guess 2" />
                         <Label prefHeight="17.0" prefWidth="585.0" text="Guess 3" />
                         <Label prefHeight="17.0" prefWidth="585.0" text="Guess 4" />
                         <Label prefHeight="17.0" prefWidth="585.0" text="Guess 5" />
-                        <Label prefHeight="17.0" prefWidth="585.0" text="Guess 6" />
-                        <Label prefHeight="17.0" prefWidth="585.0" text="Guess 7" />
-                        <Label prefHeight="17.0" prefWidth="585.0" text="Guess 8" />
-                        <Label prefHeight="17.0" prefWidth="585.0" text="Guess 9" />
-                        <Label prefHeight="17.0" prefWidth="585.0" text="Guess 10" />
+                     </children>
+                  </VBox>
+                  <VBox fx:id="guessLabelCol2" alignment="CENTER" layoutX="260.0" layoutY="10.0" prefHeight="100.0" prefWidth="153.0">
+                     <children>
+                        <Label prefHeight="17.0" prefWidth="585.0" text="Guess 6">
+                           <font>
+                              <Font size="29.0" />
+                           </font>
+                        </Label>
+                        <Label prefHeight="17.0" prefWidth="585.0" text="Guess 7">
+                           <font>
+                              <Font size="29.0" />
+                           </font>
+                        </Label>
+                        <Label prefHeight="17.0" prefWidth="152.0" text="Guess 8">
+                           <font>
+                              <Font size="29.0" />
+                           </font>
+                        </Label>
+                        <Label prefHeight="17.0" prefWidth="585.0" text="Guess 9">
+                           <font>
+                              <Font size="29.0" />
+                           </font>
+                        </Label>
+                        <Label prefHeight="17.0" prefWidth="585.0" text="Guess 10">
+                           <font>
+                              <Font size="29.0" />
+                           </font>
+                        </Label>
                      </children>
                   </VBox>
                </children>
-            </VBox>
+               <padding>
+                  <Insets left="60.0" />
+               </padding>
+            </HBox>
          </children>
-      </HBox>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+      </VBox>
+      <HBox alignment="CENTER" prefHeight="48.0" prefWidth="600.0">
          <children>
-            <Button fx:id="returnHomeButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onReturnHome" prefHeight="26.0" prefWidth="117.0" text="Return to Home" textAlignment="CENTER">
+            <Button fx:id="returnHomeButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onReturnHome" prefHeight="33.0" prefWidth="128.0" text="Return Home" textAlignment="CENTER">
                <HBox.margin>
                   <Insets right="20.0" />
                </HBox.margin>
@@ -102,7 +140,7 @@
                <HBox.margin>
                   <Insets right="20.0" />
                </HBox.margin></Button>
-            <Button fx:id="downloadImageButton" mnemonicParsing="false" onAction="#onDownloadImage" prefHeight="26.0" prefWidth="121.0" text="Download Image" />
+            <Button fx:id="downloadImageButton" mnemonicParsing="false" onAction="#onDownloadImage" prefHeight="26.0" prefWidth="121.0" text="Save Image" />
          </children>
       </HBox>
    </children>
