@@ -192,6 +192,7 @@ fabric.properties
 *.nar
 *.ear
 *.zip
+!ml/*.zip
 *.tar.gz
 *.rar
 
