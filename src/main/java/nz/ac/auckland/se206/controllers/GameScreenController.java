@@ -14,14 +14,8 @@ import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.BorderWidths;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
 import nz.ac.auckland.se206.controllers.CanvasManager.DrawMode;
@@ -367,7 +361,7 @@ public class GameScreenController {
     int minutes = (numberSeconds / 60);
 
     // Update the time label with the new minutes and seconds.
-    timeRemainingLabel.setText(String.format("%2d:%2d", minutes, seconds).replace(' ', '0'));
+    timeRemainingLabel.setText("Time Remaining: " + String.format("%2d:%2d", minutes, seconds).replace(' ', '0'));
   }
 
   /** This function is called when the timer reaches 0 */

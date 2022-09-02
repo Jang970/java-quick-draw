@@ -22,8 +22,9 @@ public class CategoryGenerator {
   private Map<Difficulty, List<String>> categories;
 
   /**
-   * @param fileLocation the location of the csv with the categories and their associated difficulty
-   *     values.
+   * @param fileLocation the location of the csv with the categories and their
+   *                     associated difficulty
+   *                     values.
    */
   public CategoryGenerator(String fileName) {
     categories = new HashMap<Difficulty, List<String>>();
@@ -33,7 +34,8 @@ public class CategoryGenerator {
     categories.put(Difficulty.MEDIUM, new ArrayList<String>());
     categories.put(Difficulty.HARD, new ArrayList<String>());
 
-    // Get the global path to the csv with the categories and their associated difficulty
+    // Get the global path to the csv with the categories and their associated
+    // difficulty
     String pathToFile = getClass().getClassLoader().getResource(fileName).getFile();
     try {
 
@@ -52,13 +54,13 @@ public class CategoryGenerator {
         String difficultyString = entry[1];
 
         // Iterate through all csv values and add them to the relevant category
-        if (difficultyString.equals("H")) {
+        if (difficultyString.equals("E")) {
           easyList.add(categoryString);
         }
         if (difficultyString.equals("M")) {
           mediumList.add(categoryString);
         }
-        if (difficultyString.equals("E")) {
+        if (difficultyString.equals("H")) {
           hardList.add(categoryString);
         }
       }
@@ -76,7 +78,8 @@ public class CategoryGenerator {
   }
 
   /**
-   * Sets the difficulty of the generator. The generator will only generate items with the given
+   * Sets the difficulty of the generator. The generator will only generate items
+   * with the given
    * difficulty
    *
    * @param defaultDifficulty

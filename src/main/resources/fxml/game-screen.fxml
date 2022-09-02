@@ -26,12 +26,12 @@
       </Label>
       <HBox alignment="CENTER" prefHeight="53.0" prefWidth="600.0">
          <children>
-            <Label fx:id="whatToDrawLabel" contentDisplay="CENTER" prefHeight="28.0" prefWidth="305.0" styleClass="canvasSubHeaders" text="Draw a ...">
+            <Label fx:id="whatToDrawLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="28.0" prefWidth="305.0" styleClass="canvasSubHeaders" text="To Draw: ...">
                <font>
                   <Font size="20.0" />
                </font>
             </Label>
-            <Label fx:id="timeRemainingLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="27.0" prefWidth="74.0" styleClass="canvasSubHeaders" text="0:00" textAlignment="CENTER">
+            <Label fx:id="timeRemainingLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="27.0" prefWidth="215.0" styleClass="canvasSubHeaders" text="Time Remaining: 0:00" textAlignment="CENTER">
                <font>
                   <Font size="20.0" />
                </font>
@@ -79,45 +79,60 @@
                   <Insets bottom="5.0" />
                </VBox.margin>
                <font>
-                  <Font size="17.0" />
+                  <Font size="20.0" />
                </font>
             </Label>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="601.0" spacing="30.0">
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="601.0" spacing="20.0">
                <children>
-                  <VBox fx:id="guessLabelCol1" alignment="CENTER" prefHeight="100.0" prefWidth="153.0">
+                  <VBox fx:id="guessLabelCol1" alignment="CENTER" prefHeight="95.0" prefWidth="180.0">
                      <children>
-                        <Label prefHeight="17.0" prefWidth="231.0" text="Guess 1" />
-                        <Label prefHeight="17.0" prefWidth="517.0" text="Guess 2" />
-                        <Label prefHeight="17.0" prefWidth="585.0" text="Guess 3" />
-                        <Label prefHeight="17.0" prefWidth="585.0" text="Guess 4" />
-                        <Label prefHeight="17.0" prefWidth="585.0" text="Guess 5" />
+                        <Label prefHeight="17.0" prefWidth="231.0" styleClass="canvasSubHeaders" text="Guess 1">
+                           <font>
+                              <Font size="15.0" />
+                           </font></Label>
+                        <Label prefHeight="17.0" prefWidth="517.0" styleClass="canvasSubHeaders" text="Guess 2">
+                           <font>
+                              <Font size="15.0" />
+                           </font></Label>
+                        <Label prefHeight="17.0" prefWidth="585.0" styleClass="canvasSubHeaders" text="Guess 3">
+                           <font>
+                              <Font size="15.0" />
+                           </font></Label>
+                        <Label prefHeight="17.0" prefWidth="585.0" styleClass="canvasSubHeaders" text="Guess 4">
+                           <font>
+                              <Font size="15.0" />
+                           </font></Label>
+                        <Label prefHeight="17.0" prefWidth="585.0" styleClass="canvasSubHeaders" text="Guess 5">
+                           <font>
+                              <Font size="15.0" />
+                           </font></Label>
                      </children>
                   </VBox>
-                  <VBox fx:id="guessLabelCol2" alignment="CENTER" layoutX="260.0" layoutY="10.0" prefHeight="100.0" prefWidth="153.0">
+                  <VBox fx:id="guessLabelCol2" alignment="CENTER" layoutX="260.0" layoutY="10.0" prefHeight="100.0" prefWidth="180.0">
                      <children>
-                        <Label prefHeight="17.0" prefWidth="585.0" text="Guess 6">
+                        <Label prefHeight="17.0" prefWidth="585.0" styleClass="canvasSubHeaders" text="Guess 6">
                            <font>
-                              <Font size="29.0" />
+                              <Font size="15.0" />
                            </font>
                         </Label>
-                        <Label prefHeight="17.0" prefWidth="585.0" text="Guess 7">
+                        <Label prefHeight="17.0" prefWidth="585.0" styleClass="canvasSubHeaders" text="Guess 7">
                            <font>
-                              <Font size="29.0" />
+                              <Font size="15.0" />
                            </font>
                         </Label>
-                        <Label prefHeight="17.0" prefWidth="152.0" text="Guess 8">
+                        <Label prefHeight="17.0" prefWidth="185.0" styleClass="canvasSubHeaders" text="Guess 8">
                            <font>
-                              <Font size="29.0" />
+                              <Font size="15.0" />
                            </font>
                         </Label>
-                        <Label prefHeight="17.0" prefWidth="585.0" text="Guess 9">
+                        <Label prefHeight="17.0" prefWidth="585.0" styleClass="canvasSubHeaders" text="Guess 9">
                            <font>
-                              <Font size="29.0" />
+                              <Font size="15.0" />
                            </font>
                         </Label>
-                        <Label prefHeight="17.0" prefWidth="585.0" text="Guess 10">
+                        <Label prefHeight="17.0" prefWidth="585.0" styleClass="canvasSubHeaders" text="Guess 10">
                            <font>
-                              <Font size="29.0" />
+                              <Font size="15.0" />
                            </font>
                         </Label>
                      </children>
