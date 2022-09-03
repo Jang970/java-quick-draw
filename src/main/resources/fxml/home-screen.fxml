@@ -8,13 +8,13 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="570.0" prefWidth="600.0" stylesheets="@../css/application.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.HomeScreenController">
    <children>
-      <ImageView fitHeight="437.0" fitWidth="581.0" layoutX="10.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true" styleClass="splash" />
-      <Label layoutX="94.0" layoutY="155.0" styleClass="quickdraw" text="Quick, Draw!">
+      <ImageView fitHeight="428.0" fitWidth="621.0" layoutX="-8.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true" styleClass="splash" />
+      <Label layoutX="94.0" layoutY="155.0" styleClass="headers" text="Quick, Draw!">
          <font>
             <Font size="70.0" />
          </font>
       </Label>
-      <Label layoutX="257.0" layoutY="233.0" prefHeight="35.0" prefWidth="172.0" styleClass="quickdraw" text="SE206 Edition">
+      <Label layoutX="257.0" layoutY="233.0" prefHeight="35.0" prefWidth="172.0" styleClass="headers" text="SE206 Edition">
          <font>
             <Font size="29.0" />
          </font>
