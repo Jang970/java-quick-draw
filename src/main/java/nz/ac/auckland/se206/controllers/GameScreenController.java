@@ -147,8 +147,7 @@ public class GameScreenController {
 
     ////////////////////////////// END TIMER SECTION //////////////////////////////
 
-    ////////////////////////////// PREDICTION MANAGER SECTION
-    ////////////////////////////// //////////////////////////////
+    ///////////////////////// PREDICTION MANAGER SECTION///////////////////////
 
     // This provides a method which passes the snapshot from the canvas to the
     // prediction manager
@@ -200,8 +199,7 @@ public class GameScreenController {
     predictionManager =
         new PredictionManager(100, guessLabels.length, snapshotProvider, classificationListener);
 
-    ////////////////////////////// END PREDICTION MANAGER SECTION
-    ////////////////////////////// //////////////////////////////
+    ////////////////////////////// END PREDICTION MANAGER SECTION /////////////////////////////
   }
 
   /**
