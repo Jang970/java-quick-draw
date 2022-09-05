@@ -10,9 +10,9 @@ public class User {
   
   // instance fields to track user associated stats and as well as the name
   private String userName;
-  private int gamesWon;
-  private int gamesLost;
-  private int fastestWin;
+  private int gamesWon = 0;
+  private int gamesLost = 0;
+  private int fastestWin = 59;
   private ArrayList<String> wordHistory;
 
   // constructor to create a user profile with an associated name
@@ -21,5 +21,23 @@ public class User {
     this.userName = profileName;
 
   }
+
+  /**
+   * method that will simply increase tally of user games won 
+   * method can possibly be called everytime the boolean, playerDidWin is true
+   */
+  public void updateGamesWon(){
+    gamesWon++;
+  }
+
+  /**
+   * method that will simply increase tally of user games lost
+   * method can possibly be called everytime the user runs out of time
+   */
+  public void updateGamesLost(){
+    gamesLost++;
+  }
+
+  
 
 }
