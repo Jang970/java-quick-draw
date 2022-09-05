@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="570.0" prefWidth="600.0" spacing="5.0" stylesheets="@../css/application.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.GameScreenController">
+   <children>
+      <Label styleClass="quickdrawCanvas" text="Quick, Draw!">
+         <font>
+            <Font size="40.0" />
+         </font>
+      </Label>
+      <Label layoutX="217.0" layoutY="24.0" styleClass="quickdrawCanvas" text="SE206 Edition">
+         <font>
+            <Font size="18.0" />
+         </font>
+         <VBox.margin>
+            <Insets top="-10.0" />
+         </VBox.margin>
+      </Label>
+      <HBox alignment="CENTER" prefHeight="56.0" prefWidth="600.0" spacing="20.0">
+         <children>
+            <Label fx:id="whatToDrawLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="55.0" prefWidth="212.0" styleClass="subHeaders" text="To Draw: ..." textAlignment="CENTER" wrapText="true">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="timeRemainingLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="27.0" prefWidth="215.0" styleClass="subHeaders" text="Time Remaining: 0:00" textAlignment="CENTER">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
+      <HBox prefHeight="247.0" prefWidth="600.0">
+         <children>
+            <VBox alignment="CENTER" prefHeight="221.0" prefWidth="79.0">
+               <children>
+                  <Button fx:id="pencilButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onPencilSelected" prefWidth="10000.0" text="Pencil" VBox.vgrow="ALWAYS">
+                     <VBox.margin>
+                        <Insets bottom="5.0" />
+                     </VBox.margin>
+                  </Button>
+                  <Button fx:id="eraserButton" mnemonicParsing="false" onAction="#onEraserSelected" prefHeight="33.0" prefWidth="79.0" text="Eraser" VBox.vgrow="ALWAYS" />
+                  <Button fx:id="clearButton" mnemonicParsing="false" onAction="#onClearCanvas" prefWidth="10000.0" text="Clear" VBox.vgrow="ALWAYS">
+                     <VBox.margin>
+                        <Insets top="30.0" />
+                     </VBox.margin>
+                  </Button>
+               </children>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </VBox>
+            <Pane fx:id="canvasContainerPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="243.0" prefWidth="400.0" styleClass="canvas">
+               <children>
+                  <Canvas fx:id="canvas" height="243.0" width="400.0" />
+               </children>
+               <HBox.margin>
+                  <Insets left="5.0" />
+               </HBox.margin>
+            </Pane>
+         </children>
+         <padding>
+            <Insets left="25.0" />
+         </padding>
+      </HBox>
+
+            <VBox alignment="CENTER_RIGHT" prefHeight="122.0" prefWidth="456.0" styleClass="canvasSubHeaders">
+         <children>
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="10000.0" styleClass="subHeaders" text="Top Guesses" textAlignment="CENTER" VBox.vgrow="ALWAYS">
+               <VBox.margin>
+                  <Insets bottom="5.0" />
+               </VBox.margin>
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="601.0" spacing="20.0">
+               <children>
+                  <VBox fx:id="guessLabelCol1" alignment="CENTER" prefHeight="95.0" prefWidth="180.0">
+                     <children>
+                        <Label prefHeight="17.0" prefWidth="231.0" styleClass="subHeaders" text="Guess 1">
+                           <font>
+                              <Font size="15.0" />
+                           </font></Label>
+                        <Label prefHeight="17.0" prefWidth="517.0" styleClass="subHeaders" text="Guess 2">
+                           <font>
+                              <Font size="15.0" />
+                           </font></Label>
+                        <Label prefHeight="17.0" prefWidth="585.0" styleClass="subHeaders" text="Guess 3">
+                           <font>
+                              <Font size="15.0" />
+                           </font></Label>
+                        <Label prefHeight="17.0" prefWidth="585.0" styleClass="subHeaders" text="Guess 4">
+                           <font>
+                              <Font size="15.0" />
+                           </font></Label>
+                        <Label prefHeight="17.0" prefWidth="585.0" styleClass="subHeaders" text="Guess 5">
+                           <font>
+                              <Font size="15.0" />
+                           </font></Label>
+                     </children>
+                  </VBox>
+                  <VBox fx:id="guessLabelCol2" alignment="CENTER" layoutX="260.0" layoutY="10.0" prefHeight="100.0" prefWidth="180.0">
+                     <children>
+                        <Label prefHeight="17.0" prefWidth="585.0" styleClass="subHeaders" text="Guess 6">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <Label prefHeight="17.0" prefWidth="585.0" styleClass="subHeaders" text="Guess 7">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <Label prefHeight="17.0" prefWidth="185.0" styleClass="subHeaders" text="Guess 8">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <Label prefHeight="17.0" prefWidth="585.0" styleClass="subHeaders" text="Guess 9">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <Label prefHeight="17.0" prefWidth="585.0" styleClass="subHeaders" text="Guess 10">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </VBox>
+               </children>
+               <padding>
+                  <Insets left="60.0" />
+               </padding>
+            </HBox>
+         </children>
+      </VBox>
+      <HBox alignment="CENTER" prefHeight="48.0" prefWidth="600.0">
+         <children>
+            <Button fx:id="returnHomeButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onReturnHome" prefHeight="33.0" prefWidth="128.0" text="Return Home" textAlignment="CENTER">
+               <HBox.margin>
+                  <Insets right="20.0" />
+               </HBox.margin>
+            </Button>
+            <Button fx:id="gameActionButton" mnemonicParsing="false" onAction="#onProgressGame" prefHeight="26.0" prefWidth="124.0" text="Start Game">
+               <HBox.margin>
+                  <Insets right="20.0" />
+               </HBox.margin></Button>
+            <Button fx:id="downloadImageButton" mnemonicParsing="false" onAction="#onDownloadImage" prefHeight="26.0" prefWidth="121.0" text="Save Image" />
+         </children>
+      </HBox>
+   </children>
+</VBox>

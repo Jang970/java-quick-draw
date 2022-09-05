@@ -1,0 +1,18 @@
+package nz.ac.auckland.se206.controllers;
+
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import nz.ac.auckland.se206.App;
+import nz.ac.auckland.se206.App.View;
+
+public class HomeScreenController {
+  @FXML private Button newGameButton;
+
+  @FXML
+  private void onStartNewGame() {
+    // gets controller to update category
+    CategoryScreenController categoryScreen = App.getLoader("category-screen").getController();
+    categoryScreen.updateCategory();
+    App.setView(View.CATEGORY);
+  }
+}

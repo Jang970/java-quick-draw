@@ -1,0 +1,79 @@
+/* Stylesheet for all fxml pages */
+/* Note: all images are drawn by me */
+
+/* All the fonts used (Google Fonts) */
+@font-face {
+	src: url('../fonts/Londrina_Solid/LondrinaSolid-Regular.ttf');
+}
+
+@font-face {
+	src: url('../fonts/Gaegu/Gaegu-Regular.ttf');
+}
+
+@font-face {
+	src: url('../fonts/Gaegu/Gaegu-Bold.ttf');
+}
+
+/* Sets the background color of all scenes as cream */
+.root {
+    -fx-background-color: rgb(235, 233, 221);
+	-fx-margin: center;
+}
+
+.headers{
+	-fx-font-family: 'Londrina Solid';
+	-fx-text-fill: rgb(235, 233, 221);
+}
+
+.subHeaders{
+	-fx-font-family: 'Gaegu Bold';
+}
+
+.button {
+	-fx-font-family: 'Gaegu';
+	-fx-background-color: black;
+	-fx-background-radius: 40px;
+	-fx-text-fill: rgb(102, 140, 255);
+	-fx-font-size: 18px;
+}
+
+.button:hover{
+	-fx-font-family: 'Gaegu';
+	-fx-background-color: rgb(102, 140, 255);
+	-fx-background-radius: 40px;
+	-fx-text-fill: black;
+	-fx-font-size: 18px;
+}
+/* Main Menu scene */
+
+/* Adds the splash */
+.splash {
+	-fx-image: url('../images/splash.png');
+}
+
+
+/* For text to speech add volume image */
+#audio{
+	-fx-background-image: url('../images/audio.png');
+	-fx-background-color: transparent;
+	-fx-background-repeat: no-repeat;
+	-fx-background-size: 150 100;
+	-fx-background-position: center center;
+}
+
+/* Canvas scene */
+
+.quickdrawCanvas{
+	-fx-font-family: 'Londrina Solid';
+	-fx-text-fill: rgb(102, 140, 255);
+}
+
+.resultSplash {
+	-fx-image: url('../images/resultSplash.png');
+}
+
+/* Adds border to canvas so user can see where to draw */
+.canvas {
+    -fx-border-color: rgb(102, 140, 255);
+	-fx-border-radius: 40px;
+}
