@@ -1,0 +1,17 @@
+{
+	"emeraldwalk.runonsave": {
+		"commands": [
+			{
+				"match": ".*\\.java",
+				"isAsync": true,
+				"cmd": "./mvnw -B git-code-format:format-code"
+			}
+		]
+	},
+	"[java]": {
+		"editor.formatOnSave": false,
+		"editor.defaultFormatter": null,
+		"editor.tabSize": 2
+	},
+	"java.configuration.updateBuildConfiguration": "automatic"
+}
