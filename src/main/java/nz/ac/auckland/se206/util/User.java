@@ -38,6 +38,26 @@ public class User {
     gamesLost++;
   }
 
-  
+  /**
+   * This method will update the fastestWin variable
+   * Can be called when the player wins at a faster time than the current time stored in fastestWin
+   * @param currentTime the time to update fastestWin to, it should be smaller than current fastestWin
+   */
+  public void updateFastestWin(int currentTime){
+    this.fastestWin = currentTime;
+  }
+
+  /** Getter methods for games won lost and fastest win */
+  public int getGamesWon(){
+    return this.gamesWon;
+  }
+
+  public int getGamesLost(){
+    return this.gamesLost;
+  }
+
+  public int getFastestWin(){
+    return this.fastestWin;
+  }
 
 }
