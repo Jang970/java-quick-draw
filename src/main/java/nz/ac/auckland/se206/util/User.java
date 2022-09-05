@@ -13,7 +13,7 @@ public class User {
   private int gamesWon = 0;
   private int gamesLost = 0;
   private int fastestWin = 59;
-  private ArrayList<String> wordHistory;
+  private ArrayList<String> wordHistory = new ArrayList<>();
 
   // constructor to create a user profile with an associated name
   public User(String profileName){
@@ -46,18 +46,37 @@ public class User {
   public void updateFastestWin(int currentTime){
     this.fastestWin = currentTime;
   }
-
-  /** Getter methods for games won lost and fastest win */
-  public int getGamesWon(){
-    return this.gamesWon;
+  
+  /**
+   * This method will be used to add the current category/word to draw to list of previous words
+   * Can be called everytime a new category appears
+   * @param category current category/word that user must draw
+   */
+  public void addWord(String category){
+    wordHistory.add(category);
   }
 
-  public int getGamesLost(){
-    return this.gamesLost;
-  }
+    /** Getter methods for our instance fields */
 
-  public int getFastestWin(){
-    return this.fastestWin;
-  }
+    public String getUserName(){
+      return this.userName;
+    }
+  
+    public int getGamesWon(){
+      return this.gamesWon;
+    }
+  
+    public int getGamesLost(){
+      return this.gamesLost;
+    }
+  
+    public int getFastestWin(){
+      return this.fastestWin;
+    }
+  
+    public ArrayList<String> getWordHistory(){
+      return this.wordHistory;
+    }
+
 
 }
