@@ -1,16 +1,98 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ColorPicker?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Pagination?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="570.0" prefWidth="600.0" stylesheets="@../css/application.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.UserProfilesScreenController">
+
+<VBox alignment="TOP_CENTER" prefHeight="570.0" prefWidth="600.0" spacing="10.0" stylesheets="@../css/application.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.UserProfilesScreenController">
    <children>
-      <Pagination fx:id="profilesPagination" layoutX="102.0" layoutY="56.0" maxPageIndicatorCount="3" pageCount="0" prefHeight="313.0" prefWidth="396.0" />
-      <Button fx:id="newGameButton" alignment="CENTER" layoutX="222.0" layoutY="424.0" mnemonicParsing="false" onAction="#onStartNewGame" prefHeight="33.0" prefWidth="156.0" stylesheets="@../css/application.css" text="Let's Start!" textAlignment="CENTER">
+      <Label styleClass="quickdrawCanvas" text="Quick, Draw!">
          <font>
-            <Font size="26.0" />
-         </font></Button>
+            <Font size="40.0" />
+         </font>
+         <VBox.margin>
+            <Insets top="20.0" />
+         </VBox.margin>
+      </Label>
+      <Label layoutX="217.0" layoutY="48.0" styleClass="quickdrawCanvas" text="SE206 Edition">
+         <font>
+            <Font size="18.0" />
+         </font>
+         <VBox.margin>
+            <Insets top="-10.0" />
+         </VBox.margin>
+      </Label>
+      <StackPane prefHeight="473.0" prefWidth="600.0">
+         <children>
+            <VBox fx:id="profilesVBox" alignment="TOP_CENTER" prefHeight="471.0" prefWidth="600.0" spacing="10.0">
+               <children>
+                  <Label styleClass="subHeaders" text="Choose your profile to play">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Pagination fx:id="profilesPagination" maxPageIndicatorCount="5" pageCount="0" prefHeight="310.0" prefWidth="600.0">
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </Pagination>
+                  <Button fx:id="createUserButton" alignment="CENTER" mnemonicParsing="false" onAction="#onCreateUser" prefHeight="33.0" prefWidth="156.0" stylesheets="@../css/application.css" text="I'm new!" textAlignment="CENTER">
+                     <font>
+                        <Font size="26.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets top="20.0" />
+                     </VBox.margin>
+                  </Button>
+               </children>
+            </VBox>
+            <Pane fx:id="newUserPane" prefHeight="453.0" prefWidth="600.0" visible="false">
+               <children>
+                  <ImageView fitHeight="469.0" fitWidth="601.0" layoutX="-4.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true" styleClass="splash" />
+                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="-3.0" layoutY="8.0" prefHeight="24.0" prefWidth="597.0" styleClass="subHeaders" text="Please enter a username and choose your favourite color!" textAlignment="CENTER" wrapText="true">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="usernameTextField" focusTraversable="false" layoutX="97.0" layoutY="154.0" maxWidth="335.0" prefHeight="24.0" prefWidth="335.0" promptText="Username" styleClass="subHeaders">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </TextField>
+                  <ColorPicker fx:id="colorPicker" layoutX="179.0" layoutY="194.0">
+                     <value>
+                        <Color opacity="0.0" />
+                     </value>
+                  </ColorPicker>
+                  <Label fx:id="errorMessage" alignment="CENTER" contentDisplay="CENTER" layoutX="133.0" layoutY="239.0" prefHeight="44.0" prefWidth="305.0" styleClass="subHeaders" textAlignment="CENTER" textFill="RED" wrapText="true">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Button fx:id="playButton" alignment="CENTER" layoutX="220.0" layoutY="407.0" mnemonicParsing="false" onAction="#onStartGame" prefHeight="33.0" prefWidth="156.0" stylesheets="@../css/application.css" text="Let's play!" textAlignment="CENTER">
+                     <font>
+                        <Font size="26.0" />
+                     </font>
+                  </Button>
+               </children>
+            </Pane>
+         </children>
+      </StackPane>
    </children>
-</Pane>
+</VBox>

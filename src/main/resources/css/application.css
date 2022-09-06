@@ -51,7 +51,7 @@
 	-fx-image: url('../images/splash.png');
 }
 
-
+/*TODO: Should we use this or not*/
 /* For text to speech add volume image */
 #audio{
 	-fx-background-image: url('../images/audio.png');
@@ -60,6 +60,51 @@
 	-fx-background-size: 150 100;
 	-fx-background-position: center center;
 }
+
+/* User Profile scene*/
+.pagination {
+  -fx-font-family: 'Gaegu';
+  -fx-font-size: 18px;
+  -fx-page-information-visible: false;
+}
+
+.pagination .toggle-button  {
+  -fx-color:black ;
+  -fx-background-radius: 20px;
+  -fx-tooltip-visible: false;
+}
+
+.pagination .toggle-button:selected{
+  -fx-color: rgb(102, 140, 255);
+}
+
+
+.pagination .toggle-button:hover {
+  -fx-background-color: rgb(102, 140, 255);
+}
+
+.pagination .pagination-control .left-arrow, .right-arrow{
+    -fx-background-color: black, rgb(102, 140, 255);
+	-fx-min-width: 20;
+	-fx-min-height: 20;
+}
+
+.pagination .button {
+	-fx-background-color: none;
+}
+
+.pagination .pagination-control .left-arrow:hover, .right-arrow:hover{
+    -fx-background-color: rgb(102, 140, 255), black;
+	-fx-min-width: 25;
+	-fx-min-height: 25;
+}
+
+.text-field, .color-picker{
+	-fx-font-family: 'Gaegu';
+   	-fx-font-size: 18px;
+	-fx-background-color: rgb(235, 233, 221);
+}
+
 
 /* Canvas scene */
 
