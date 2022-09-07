@@ -103,10 +103,7 @@ public class UserProfilesScreenController {
             System.out.println(userButton.getId());
 
             // gets controller to update category
-            CategoryScreenController categoryScreen =
-                App.getLoader("category-screen").getController();
-            categoryScreen.updateCategory();
-            App.setView(View.CATEGORY);
+            changeView();
           }
         });
   }
@@ -130,11 +127,7 @@ public class UserProfilesScreenController {
       // TODO: send username and color to profile manager
       System.out.println(usernameTextField.getText() + " " + colorPicker.getValue().toString());
 
-      // gets controller to update category
-      CategoryScreenController categoryScreen = App.getLoader("category-screen").getController();
-      categoryScreen.updateCategory();
-      App.setView(View.CATEGORY);
-
+      changeView();
     } else {
       // shows an alert pop up if username is blank or spaces and/or color hasn't been chosen
       Alert errorAlert = new Alert(AlertType.ERROR);
@@ -147,5 +140,13 @@ public class UserProfilesScreenController {
       errorAlert.setContentText("Please enter a valid username or color.");
       errorAlert.showAndWait();
     }
+  }
+
+  /** Changes view to category */
+  private void changeView() {
+    // gets controller to update category
+    CategoryScreenController categoryScreen = App.getLoader("category-screen").getController();
+    categoryScreen.updateCategory();
+    App.setView(View.CATEGORY);
   }
 }
