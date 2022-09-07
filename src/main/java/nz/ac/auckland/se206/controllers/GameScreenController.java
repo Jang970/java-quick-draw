@@ -18,12 +18,10 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
+import nz.ac.auckland.se206.GameLogicManager;
+import nz.ac.auckland.se206.GameLogicManager.WinState;
 import nz.ac.auckland.se206.controllers.CanvasManager.DrawMode;
 import nz.ac.auckland.se206.speech.TextToSpeech;
-import nz.ac.auckland.se206.util.CountdownTimer;
-import nz.ac.auckland.se206.util.PredictionManager;
-import nz.ac.auckland.se206.util.PredictionManager.ClassificationListener;
-import nz.ac.auckland.se206.util.PredictionManager.SnapshotProvider;
 
 /**
  * This is the controller of the canvas. You are free to modify this class and the corresponding
@@ -59,26 +57,9 @@ public class GameScreenController {
 
   private Label[] guessLabels = new Label[10];
 
-  private enum GameState {
-    PLAYING,
-    ENDED,
-    NEWGAME
-  }
-
-  private GameState gameState = GameState.PLAYING;
-
-  // TODO: Extract these into a setting page
-  // TODO: Make timer seconds more readable
-  private int gameLengthSeconds = 30;
-  private int numTopGuessNeededToWin = 3;
-
-  private String categoryToGuess;
-
   private CanvasManager canvasManager;
-  private PredictionManager predictionManager;
-  private CountdownTimer countdownTimer;
-  private boolean playerDidWin = false;
   private TextToSpeech textToSpeech;
+  private GameLogicManager gameLogicManager;
 
   /**
    * JavaFX calls this method once the GUI elements are loaded. In our case we create a listener for
@@ -105,11 +86,38 @@ public class GameScreenController {
       }
     }
 
+    canvasManager = new CanvasManager(canvas);
     textToSpeech = new TextToSpeech();
 
-    // TODO: Add possiblility to register multiple functions rather than set this to
-    // be the only
-    // one. Something like App.getStage().registerOnClose(() -> {...})
+    gameLogicManager = App.getGameLogicManager();
+
+    gameLogicManager.setImageSource(
+        () -> {
+          final FutureTask<BufferedImage> query =
+              new FutureTask<BufferedImage>(
+                  new Callable<BufferedImage>() {
+                    @Override
+                    public BufferedImage call() throws Exception {
+                      return canvasManager.getCurrentSnapshot();
+                    }
+                  });
+          Platform.runLater(query);
+          try {
+            return query.get();
+          } catch (InterruptedException | ExecutionException e1) {
+            e1.printStackTrace();
+            System.exit(0);
+            return null;
+          }
+        });
+
+    gameLogicManager.subscriveToPredictionsChange(
+        (List<Classification> predictions) -> onPredictionsChange(predictions));
+    gameLogicManager.subscribeToTimeChange((Integer seconds) -> onTimeChange(seconds));
+    gameLogicManager.subscribeToGameStart(() -> onGameStart());
+    gameLogicManager.subscribeToGameEnd((WinState winState) -> onGameEnd(winState));
+
+    // TODO: Make this an app event emitter that we can subscribe to
     App.getStage()
         .setOnCloseRequest(
             (e) -> {
@@ -117,89 +125,40 @@ public class GameScreenController {
               textToSpeech.terminate();
             });
 
-    canvasManager = new CanvasManager(canvas);
-
-    // This is necessary to tell the app that the view has been switched.
-    // The on view change method wll run every time the app switches views.
-    App.subscribeToViewChange((View v) -> onViewChanged(v));
-
-    ////////////////////////////// TIMER SECTION //////////////////////////////
-
-    // This object handles the main timer
-    countdownTimer = new CountdownTimer();
-
-    // Update the game controlelrs time label when the time updates and completes
-    countdownTimer.setOnChange(
-        (int secondsRemaining) -> {
-          Platform.runLater(
-              () -> {
-                updateTimerLabel(secondsRemaining);
-              });
+    App.subscribeToViewChange(
+        (View newView) -> {
+          if (newView == View.HOME || newView == View.CATEGORY) {
+            gameLogicManager.cancelGame();
+          } else if (newView == View.GAME) {
+            // When the view changes to game, we start a new game and clear the canvas
+            gameLogicManager.startGame();
+            whatToDrawLabel.setText("To Draw: " + gameLogicManager.getCurrentCategory());
+            canvasManager.clearCanvas();
+          }
         });
+  }
 
-    countdownTimer.setOnComplete(
+  private void onGameEnd(WinState winState) {
+    Platform.runLater(
         () -> {
-          Platform.runLater(
-              () -> {
-                onTimerComplete();
-              });
+          canvasManager.setDrawingEnabled(false);
+          setCanvasButtonsDisabled(true);
+          updateTimeRemainingLabel(0);
+
+          gameActionButton.setText("New Game");
+
+          if (winState == WinState.WIN) {
+            textToSpeech.speakAsync("You got it!");
+          } else {
+            textToSpeech.speakAsync("Sorry, you ran out of time!");
+          }
         });
+  }
 
-    ////////////////////////////// END TIMER SECTION //////////////////////////////
-
-    ///////////////////////// PREDICTION MANAGER SECTION///////////////////////
-
-    // This provides a method which passes the snapshot from the canvas to the
-    // prediction manager
-    final SnapshotProvider snapshotProvider =
-        new SnapshotProvider() {
-          @Override
-          public BufferedImage getCurrentSnapshot() {
-
-            // This is used to run the get current snapshot on the javafx
-            // thread and then once the task is complete, we can use the returned result
-            final FutureTask<BufferedImage> futureTask =
-                new FutureTask<BufferedImage>(
-                    new Callable<BufferedImage>() {
-
-                      @Override
-                      public BufferedImage call() throws Exception {
-                        return canvasManager.getCurrentSnapshot();
-                      }
-                    });
-
-            // Run our task
-            Platform.runLater(futureTask);
-            try {
-              // Return the task result
-              return futureTask.get();
-            } catch (InterruptedException | ExecutionException e) {
-              return null; // TODO: Make sure this is safe
-            }
-          }
-        };
-
-    // This creates an anyonymous class with method which listens for updates from
-    // the snapshot
-    // provider
-    // and sends the result to the game controllers update guesses function
-    final ClassificationListener classificationListener =
-        new ClassificationListener() {
-          @Override
-          public void classificationReceived(List<Classification> classificationList) {
-            Platform.runLater(
-                () -> {
-                  onGuessChange(classificationList);
-                });
-          }
-        };
-
-    // The prediction manager takes care of everything to do with guessing the
-    // drawing
-    predictionManager =
-        new PredictionManager(100, guessLabels.length, snapshotProvider, classificationListener);
-
-    ////////////////////////////// END PREDICTION MANAGER SECTION /////////////////////////////
+  private void onGameStart() {
+    setCanvasButtonsDisabled(false);
+    canvasManager.setDrawingEnabled(true);
+    gameActionButton.setDisable(false);
   }
 
   /**
@@ -207,116 +166,16 @@ public class GameScreenController {
    *
    * @param classificationList the list of top guesses from the model with percentage likelihood
    */
-  private void onGuessChange(List<Classification> classificationList) {
-    int range = Math.min(classificationList.size(), guessLabels.length);
+  private void onPredictionsChange(List<Classification> classificationList) {
+    Platform.runLater(
+        () -> {
+          int range = Math.min(classificationList.size(), guessLabels.length);
 
-    for (int i = 0; i < range; i++) {
-      String classification = classificationList.get(i).getClassName().replace('_', ' ');
-
-      if (i < numTopGuessNeededToWin) {
-        if (classification.equals(categoryToGuess)) {
-          playerDidWin = true;
-          setGameState(GameState.ENDED);
-        }
-      }
-
-      // getClassName does not give the name of a java class but the label of the
-      // classification
-      String guessText = classificationList.get(i).getClassName().replace('_', ' ');
-      guessLabels[i].setText((i + 1) + ": " + guessText);
-    }
-  }
-
-  /**
-   * This function is called every time the view is changed
-   *
-   * @param currentView
-   */
-  private void onViewChanged(View currentView) {
-    if (currentView == View.HOME || currentView == View.CATEGORY) {
-      // When the view is changed to home, we stop the timer and stop the prediction
-      predictionManager.stopListening();
-      countdownTimer.cancelCountdown();
-
-    } else if (currentView == View.GAME) {
-      // When the view changes to game, we start a new game and clear the canvas
-
-      canvasManager.clear();
-      setGameState(GameState.PLAYING);
-    }
-  }
-
-  /**
-   * Sets the state of the game regardless of the previous state.
-   *
-   * @param newGameState the new game state.
-   */
-  private void setGameState(GameState newGameState) {
-
-    // TODO: Clean this functionality as this may be prone to complexity and bugs
-
-    gameState = newGameState;
-    if (newGameState == GameState.ENDED) {
-      // End the game and display the results
-      gameActionButton.setText("Play Again!");
-
-      if (playerDidWin) {
-        whatToDrawLabel.setText("You got it! :)");
-        textToSpeech.speakAsync("You got it");
-      } else {
-        textToSpeech.speakAsync("Sorry, you ran out of time");
-      }
-
-      canvasManager.setDrawingEnabled(false);
-      setCanvasButtonsDisabled(true);
-
-      countdownTimer.cancelCountdown();
-      predictionManager.stopListening();
-    }
-    if (newGameState == GameState.PLAYING) {
-      gameActionButton.setText("Give Up");
-      updateTimerLabel(gameLengthSeconds);
-
-      getCategoryAndUpdateLabel();
-
-      // Start a new round
-      playerDidWin = false;
-
-      setCanvasButtonsDisabled(false);
-      canvasManager.setDrawingEnabled(true);
-      canvasManager.clear();
-
-      countdownTimer.startCountdown(gameLengthSeconds);
-      predictionManager.startListening();
-    }
-    if (newGameState == GameState.NEWGAME) {
-      // gets controller to update category
-      CategoryScreenController categoryScreen = App.getLoader("category-screen").getController();
-      categoryScreen.updateCategory();
-      App.setView(View.CATEGORY);
-    }
-  }
-
-  /** This function takes the current game state and progresses to the next natural game state */
-  private void progressGame() {
-    // Self explanatory
-    if (gameState == GameState.PLAYING) {
-      setGameState(GameState.ENDED);
-    } else if (gameState == GameState.ENDED) {
-      setGameState(GameState.NEWGAME);
-    } else if (gameState == GameState.NEWGAME) {
-      setGameState(GameState.PLAYING);
-    }
-  }
-
-  /** This function sets a new category to guess and updates the label. */
-  private void getCategoryAndUpdateLabel() {
-    categoryToGuess = CategoryScreenController.getCategoryToGuess();
-    whatToDrawLabel.setText("To draw: " + categoryToGuess);
-  }
-
-  protected int getGameLengthSeconds() {
-    return gameLengthSeconds;
+          for (int i = 0; i < range; i++) {
+            String guessText = classificationList.get(i).getClassName().replace('_', ' ');
+            guessLabels[i].setText((i + 1) + ": " + guessText);
+          }
+        });
   }
 
   /**
@@ -324,19 +183,18 @@ public class GameScreenController {
    *
    * @param numberSeconds the number of seconds remaining on the timer
    */
-  void updateTimerLabel(int numberSeconds) {
-    int seconds = (numberSeconds % 60);
-    int minutes = (numberSeconds / 60);
+  void onTimeChange(int numberSeconds) {
+    Platform.runLater(
+        () -> {
 
-    // Update the time label with the new minutes and seconds.
-    timeRemainingLabel.setText(
-        "Time Remaining: " + String.format("%2d:%2d", minutes, seconds).replace(' ', '0'));
+          // Update the time label with the new minutes and seconds.
+          updateTimeRemainingLabel(numberSeconds);
+        });
   }
 
-  /** This function is called when the timer reaches 0 */
-  private void onTimerComplete() {
-    // End the game
-    setGameState(GameState.ENDED);
+  private void updateTimeRemainingLabel(int numberSeconds) {
+    timeRemainingLabel.setText(
+        "Time Remaining: " + String.format("%2d", numberSeconds).replace(' ', '0'));
   }
 
   private void setCanvasButtonsDisabled(boolean disabled) {
@@ -365,11 +223,16 @@ public class GameScreenController {
   @FXML
   private void onReturnHome() {
     App.setView(View.HOME);
+    gameLogicManager.cancelGame();
   }
 
   @FXML
-  private void onProgressGame() {
-    progressGame();
+  private void onGameAction() {
+    if (gameLogicManager.isPlaying()) {
+      gameLogicManager.cancelGame();
+    } else {
+      App.setView(View.CATEGORY);
+    }
   }
 
   // TODO: Figure out why it breaks when cancelled

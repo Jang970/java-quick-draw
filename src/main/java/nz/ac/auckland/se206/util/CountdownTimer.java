@@ -6,29 +6,32 @@ import java.util.TimerTask;
 /** This class creates a timers which count down from a given time */
 public class CountdownTimer {
 
-  public interface OnChangeFunction {
+  public interface CountdownTimerChangeEvent {
     /**
      * @param secondsRemaining the number of seconds until the timer reaches 0.
      */
     void run(int secondsRemaining);
   }
 
-  private Runnable onComplete = null;
-  private OnChangeFunction onChange = null;
+  public interface CountdownTimerCompleteEvent {
+    void run();
+  }
 
-  // Usually number of seconds but time between each decrement may not be a second so using a more
-  // generic term instead
-  private int totalUnits;
+  private CountdownTimerCompleteEvent onCompleteEvent = null;
+  private CountdownTimerChangeEvent onChangeEvent = null;
+
+  // The number we are counting down from
+  private int remainingCount;
   private Timer timer;
 
   /**
    * Sets a function to be called when the timer changes..
    *
    * @param onChange A class which implements OnChangeFunction - this implements one method <code>
-   *     void run(int secondsRemaining)</code> @see {@link OnChangeFunction}.
+   *     void run(int secondsRemaining)</code> @see {@link CountdownTimerChangeEvent}.
    */
-  public void setOnChange(OnChangeFunction onChange) {
-    this.onChange = onChange;
+  public void setOnChange(CountdownTimerChangeEvent onChange) {
+    this.onChangeEvent = onChange;
   }
 
   /**
@@ -36,45 +39,40 @@ public class CountdownTimer {
    *
    * @param onComplete A class which implements Runnable
    */
-  public void setOnComplete(Runnable onComplete) {
-    this.onComplete = onComplete;
+  public void setOnComplete(CountdownTimerCompleteEvent onComplete) {
+    this.onCompleteEvent = onComplete;
   }
 
   /**
    * Starts a new countdown
    *
-   * @param units the number of units to countdown from
+   * @param count the number to countdown from
    * @param delay the delay before starting the countdown in milliseconds
    * @param period the preiod of each decrement in milliseconds
    */
-  public void startCountdown(int units, int delay, int period) {
+  public void startCountdown(int count, int delay, int period) {
     if (timer != null) {
       timer.cancel();
     }
     // Set isDaemon to true so that it cancels with the rest of the app
     timer = new Timer(true);
-    totalUnits = units;
+    remainingCount = count;
     timer.scheduleAtFixedRate(
-        // A little anonymous class trickery
         new TimerTask() {
 
           @Override
           public void run() {
 
-            // This is a matter of preference but it makes it explicit
-            // that I am refering to the outer class. I think it is safer
-            CountdownTimer outer = CountdownTimer.this;
-
-            if (outer.onChange != null) {
-              outer.onChange.run(totalUnits);
+            if (CountdownTimer.this.onChangeEvent != null) {
+              CountdownTimer.this.onChangeEvent.run(remainingCount);
             }
-            if (totalUnits == 0) {
-              if (outer.onComplete != null) {
-                outer.onComplete.run();
+            if (remainingCount == 0) {
+              if (CountdownTimer.this.onCompleteEvent != null) {
+                CountdownTimer.this.onCompleteEvent.run();
               }
-              outer.timer.cancel();
+              CountdownTimer.this.timer.cancel();
             }
-            outer.totalUnits--;
+            CountdownTimer.this.remainingCount--;
           }
         },
         0,

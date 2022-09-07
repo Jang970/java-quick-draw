@@ -11,8 +11,6 @@ public class HomeScreenController {
   @FXML
   private void onStartNewGame() {
     // gets controller to update category
-    CategoryScreenController categoryScreen = App.getLoader("category-screen").getController();
-    categoryScreen.updateCategory();
     App.setView(View.CATEGORY);
   }
 }

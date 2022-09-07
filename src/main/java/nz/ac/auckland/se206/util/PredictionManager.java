@@ -6,84 +6,20 @@ import ai.djl.translate.TranslateException;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
+import nz.ac.auckland.se206.DataSource;
 import nz.ac.auckland.se206.ml.DoodlePrediction;
 
 public class PredictionManager {
 
-  /** This class is a thread which runs a while loop in the background to get predictions. */
-  private final class ModelQueryThread extends Thread {
-
-    private int numTopGuesses;
-
-    // Constructor sets the daemon status to true immediately
-    private ModelQueryThread(int numTopGuesses) {
-      this.numTopGuesses = numTopGuesses;
-      // Make this a background thread.
-      setDaemon(true);
-    }
-
-    @Override
-    public void run() {
-      // Inifinite loop
-      while (true) {
-
-        // TODO: Memoize the input image so we are not making unnecessary queires
-
-        // Only makes calls to the model query if listening is enabled
-        if (isListening) {
-          try {
-
-            // Safetly null checks never hurt anyone
-            if (classificationListener != null && snapshotProvider != null) {
-              BufferedImage snapshot = snapshotProvider.getCurrentSnapshot();
-              if (snapshot != null) {
-                // Send the data back to the listener
-                classificationListener.classificationReceived(
-                    model.getPredictions(snapshot, numTopGuesses));
-              } else {
-                System.out.println("Snapshot was null :/");
-              }
-            }
-
-          } catch (TranslateException e) {
-            System.out.println("Prediction manager failed prediction");
-          }
-        }
-
-        // Try sleep as to not hog the cpu. Cannot poll for any less than 10ms
-        try {
-          Thread.sleep(Math.max(pollInterval, 10));
-        } catch (InterruptedException e) {
-          System.out.println("Thread - " + Thread.currentThread().getName() + " was interrupted");
-          // DO NOTHING, program has probably terminated
-        }
-      }
-    }
-  }
-
-  public interface SnapshotProvider {
-    /**
-     * @return a BufferedImage that you want to make a prediction on
-     */
-    BufferedImage getCurrentSnapshot();
-  }
-
-  public interface ClassificationListener {
-    /**
-     * @param classificationList a list of the top classifications from the model
-     */
-    void classificationReceived(List<Classification> classificationList);
-  }
-
-  private SnapshotProvider snapshotProvider;
-  private ClassificationListener classificationListener;
+  private DataSource<BufferedImage> imageSource;
+  private EventListener<List<Classification>> predictionListener;
 
   private final DoodlePrediction model;
   private final Thread pollResultThread;
 
   private long pollInterval;
 
-  private boolean isListening = false;
+  private boolean isMakingPredictions = false;
 
   /**
    * Creates a new PredictionManager. The manager uses the snapshot provider to get images and then
@@ -92,73 +28,88 @@ public class PredictionManager {
    *
    * @param pollInterval - how often the manager will send queires to the server to get predictions
    *     in milliseconds. The poll interval is bound below by 10ms.
-   * @param snapshotProvider - a class which implements the {@link SnapshotProvider} interface.
-   * @param classificationListener - a class which implements the {@link ClassificationListener}
+   * @param imageSource - a class which implements the {@link SnapshotProvider} interface.
+   * @param predictionListener - a class which implements the {@link ClassificationListener}
    *     interface
    * @throws IOException - If there is an error in reading the input/output of the DL model.
    * @throws ModelException - If the model cannot be found on the file system.
    */
-  public PredictionManager(
-      long pollInterval,
-      int numTopGuesses,
-      SnapshotProvider snapshotProvider,
-      ClassificationListener classificationListener)
+  public PredictionManager(long pollInterval, int numTopGuesses)
       throws IOException, ModelException {
-
-    this.classificationListener = classificationListener;
-    this.snapshotProvider = snapshotProvider;
-    this.pollInterval = pollInterval;
 
     model = new DoodlePrediction();
 
-    // Create a new thread which takes the current image
-    pollResultThread = new ModelQueryThread(numTopGuesses);
+    pollResultThread =
+        new Thread() {
+          {
+            setDaemon(true);
+          }
+
+          @Override
+          public void run() {
+            // Inifinite loop
+            while (true) {
+
+              // TODO: Memoize the input image so we are not making unnecessary queires
+
+              // Only makes calls to the model query if listening is enabled
+              if (isMakingPredictions) {
+                try {
+
+                  // Safetly null checks never hurt anyone
+                  if (predictionListener != null && imageSource != null) {
+                    BufferedImage snapshot = PredictionManager.this.imageSource.getData();
+                    if (snapshot != null) {
+                      // Send the data back to the listener
+                      PredictionManager.this.predictionListener.update(
+                          model.getPredictions(snapshot, numTopGuesses));
+                    } else {
+                      System.out.println("Snapshot was null :/");
+                    }
+                  }
+
+                } catch (TranslateException e) {
+                  System.out.println("Prediction manager failed prediction");
+                }
+              }
+
+              // Try sleep as to not hog the cpu. Cannot poll for any less than 10ms
+              try {
+                Thread.sleep(Math.max(pollInterval, 10));
+              } catch (InterruptedException e) {
+                System.out.println(
+                    "Thread - " + Thread.currentThread().getName() + " was interrupted");
+                // DO NOTHING, program has probably terminated
+              }
+            }
+          }
+        };
 
     // Start the thread.
     pollResultThread.start();
   }
 
   /**
-   * Gets the current snapshot provider. Returns null if there is no snapshot provider.
-   *
-   * @return a class which implements the SnapshotProvider interface.
-   */
-  public SnapshotProvider getSnapshotProvider() {
-    return snapshotProvider;
-  }
-
-  /**
    * Sets the snapshot provider. If you input null, nothing will happen
    *
-   * @param snapshotProvider a class which implements the SnapshotProvider interface @see {@link
-   *     SnapshotProvider}
+   * @param imageSource a class which has an image providing function
    */
-  public void setSnapshotProvider(SnapshotProvider snapshotProvider) {
-    if (snapshotProvider != null) {
-      this.snapshotProvider = snapshotProvider;
+  public void setImageSource(DataSource<BufferedImage> imageSource) {
+    if (imageSource != null) {
+      this.imageSource = imageSource;
     }
-  }
-
-  /**
-   * Gets the class which is currently listening for updated predictions on the snapshot given by
-   * the snapshot provider. Returns null if there is no classification listener.
-   *
-   * @return A class which implements the ClassificationListener interface.
-   */
-  public ClassificationListener getClassificationListener() {
-    return classificationListener;
   }
 
   /**
    * Sets the class which listens out for recent predictions in the model. If you input null,
    * nothing will happen.
    *
-   * @param classificationListener A class which implements the ClassificationListener
-   *     interface @see {@link ClassificationListener}
+   * @param predictionListener A class which implements the ClassificationListener interface @see
+   *     {@link ClassificationListener}
    */
-  public void setClassificationReceiver(ClassificationListener classificationListener) {
-    if (classificationListener != null) {
-      this.classificationListener = classificationListener;
+  public void setPredictionListener(EventListener<List<Classification>> predictionListener) {
+    if (predictionListener != null) {
+      this.predictionListener = predictionListener;
     }
   }
 
@@ -167,7 +118,7 @@ public class PredictionManager {
    *
    * @return the poll interval in milliseconds
    */
-  public long getPollInterval() {
+  public long getPredictionPollInterval() {
     return pollInterval;
   }
 
@@ -177,20 +128,20 @@ public class PredictionManager {
    *
    * @param pollInterval the poll interval in milliseconds
    */
-  public void setPollInterval(long pollInterval) {
+  public void setPredictionPollInterval(long pollInterval) {
     this.pollInterval = pollInterval;
   }
 
   /**
    * Start making predictions on the model and sending the results to the classification listener
    */
-  public void startListening() {
-    isListening = true;
+  public void startMakingPredictions() {
+    isMakingPredictions = true;
   }
 
   /** Stop making predictions on the model. */
-  public void stopListening() {
-    isListening = false;
+  public void stopMakingPredictions() {
+    isMakingPredictions = false;
   }
 
   /**
@@ -198,7 +149,7 @@ public class PredictionManager {
    *
    * @return a boolean indicating whether the prediction manager is making predictions
    */
-  public boolean isListening() {
-    return isListening;
+  public boolean isMakingPredictions() {
+    return isMakingPredictions;
   }
 }

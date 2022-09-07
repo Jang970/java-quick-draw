@@ -1,7 +1,7 @@
 package nz.ac.auckland.se206;
 
+import ai.djl.ModelException;
 import java.io.IOException;
-import java.util.HashMap;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -22,8 +22,13 @@ public class App extends Application {
   }
 
   private static ViewManager<View> viewManager;
+  private static GameLogicManager gameLogicManager;
+
+  public static GameLogicManager getGameLogicManager() {
+    return gameLogicManager;
+  }
+
   private static Stage stage;
-  private static HashMap<String, FXMLLoader> loaderMap = new HashMap<String, FXMLLoader>();
 
   public static void subscribeToViewChange(ViewChangeSubscription<View> runnable) {
     viewManager.subscribeToViewChange(runnable);
@@ -47,7 +52,6 @@ public class App extends Application {
    */
   private static Parent loadFxml(final String fxml) throws IOException {
     FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("/fxml/" + fxml + ".fxml"));
-    addFxml(fxml, fxmlLoader);
     return fxmlLoader.load();
   }
 
@@ -65,15 +69,18 @@ public class App extends Application {
    *
    * @param stage The primary stage of the application.
    * @throws IOException If "src/main/resources/fxml/canvas.fxml" is not found.
+   * @throws ModelException If there is an error with loading the doodle model.
    */
   @Override
-  public void start(final Stage stage) throws IOException {
+  public void start(final Stage stage) throws IOException, ModelException {
     App.stage = stage;
     Parent defaultParent = loadFxml("home-screen");
     final Scene scene = new Scene(defaultParent, 600, 570);
 
     // We know this class only runs once so it is safe to do this.
     viewManager = new ViewManager<View>(scene);
+    gameLogicManager = new GameLogicManager(10);
+
     viewManager.addView(View.HOME, defaultParent);
     viewManager.addView(View.GAME, loadFxml("game-screen"));
     viewManager.addView(View.CATEGORY, loadFxml("category-screen"));
@@ -84,24 +91,5 @@ public class App extends Application {
 
     stage.setScene(scene);
     stage.show();
-  }
-
-  /**
-   * This adds a new fxml loader the manager keep tracks of
-   *
-   * @param view the user defined id of the view
-   * @param root the fxml loader of the parent node
-   */
-  public static void addFxml(String fxmlFile, FXMLLoader fxmlLoader) {
-    loaderMap.put(fxmlFile, fxmlLoader);
-  }
-
-  /**
-   * Gets the fxml loader of the respective view
-   *
-   * @param view the name of fxml file
-   */
-  public static FXMLLoader getLoader(String fxmlFile) {
-    return loaderMap.get(fxmlFile);
   }
 }
