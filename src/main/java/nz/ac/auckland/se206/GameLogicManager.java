@@ -17,6 +17,7 @@ public class GameLogicManager {
   public enum WinState {
     WIN,
     LOOSE,
+    CANCEL,
   }
 
   // TODO: Extract these into a settings page
@@ -97,7 +98,7 @@ public class GameLogicManager {
 
   public void cancelGame() {
     if (isPlaying) {
-      this.endGame(WinState.LOOSE);
+      this.endGame(WinState.CANCEL);
     }
   }
 

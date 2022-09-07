@@ -7,7 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import nz.ac.auckland.se206.ViewManager.ViewChangeSubscription;
+import nz.ac.auckland.se206.util.EventListener;
 
 /**
  * This is the entry point of the JavaFX application, while you can change this class, it should
@@ -30,8 +30,8 @@ public class App extends Application {
 
   private static Stage stage;
 
-  public static void subscribeToViewChange(ViewChangeSubscription<View> runnable) {
-    viewManager.subscribeToViewChange(runnable);
+  public static void subscribeToViewChange(EventListener<View> listener) {
+    viewManager.subscribeToViewChange(listener);
   }
 
   public static void setView(View view) {

@@ -149,13 +149,14 @@ public class GameScreenController {
 
           if (winState == WinState.WIN) {
             textToSpeech.speakAsync("You got it!");
-          } else {
+          } else if (winState == WinState.LOOSE) {
             textToSpeech.speakAsync("Sorry, you ran out of time!");
           }
         });
   }
 
   private void onGameStart() {
+    gameActionButton.setText("Cancel Game");
     setCanvasButtonsDisabled(false);
     canvasManager.setDrawingEnabled(true);
     gameActionButton.setDisable(false);
