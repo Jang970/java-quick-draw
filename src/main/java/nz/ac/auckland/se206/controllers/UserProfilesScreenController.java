@@ -75,8 +75,9 @@ public class UserProfilesScreenController {
     userButton.setId(username[pageIndex]);
 
     userButton.getStyleClass().clear();
+    userButton.getStyleClass().add("userButton");
     String color = "-fx-background-color: " + colors[pageIndex].toString().replace("0x", "#") + ";";
-    userButton.setStyle(getStyle(color));
+    userButton.setStyle(color);
 
     box.getChildren().add(userButton);
 
@@ -146,33 +147,5 @@ public class UserProfilesScreenController {
       errorAlert.setContentText("Please enter a valid username or color.");
       errorAlert.showAndWait();
     }
-  }
-
-  /**
-   * Creates style of each profile button
-   *
-   * @param color
-   * @return
-   */
-  private String getStyle(String color) {
-
-    return "-fx-background-image: url('images/profile.png');"
-        + "-fx-background-repeat: no-repeat;"
-        + "-fx-background-position: center center;"
-        + "-fx-background-size: 200 200;"
-        + "-fx-background-radius: 40px 40px 0 0;"
-        + "-fx-border-style: solid;"
-        + "-fx-border-color: black;"
-        + "-fx-border-radius: 35px 35px 0 0;"
-        + "-fx-border-width: 3px;"
-        + "-fx-font-family: 'Londrina Solid';"
-        + "-fx-text-fill: black;"
-        + "-fx-font-size: 18px;"
-        + "-fx-pref-width: 200;"
-        + "-fx-pref-height: 200;"
-        + "-fx-alignment: bottom-center;"
-        + "-fx-wrap-text: true;"
-        + color
-        + ";";
   }
 }

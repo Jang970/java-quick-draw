@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Button?>
@@ -11,20 +12,34 @@
 
 <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="570.0" prefWidth="600.0" spacing="5.0" stylesheets="@../css/application.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.GameScreenController">
    <children>
-      <Label styleClass="quickdrawCanvas" text="Quick, Draw!">
-         <font>
-            <Font size="40.0" />
-         </font>
-      </Label>
-      <Label layoutX="217.0" layoutY="24.0" styleClass="quickdrawCanvas" text="SE206 Edition">
-         <font>
-            <Font size="18.0" />
-         </font>
-         <VBox.margin>
-            <Insets top="-10.0" />
-         </VBox.margin>
-      </Label>
-      <HBox alignment="CENTER" prefHeight="56.0" prefWidth="600.0" spacing="20.0">
+      <Pane prefHeight="77.0" prefWidth="600.0">
+         <children>
+            <VBox alignment="CENTER" layoutX="190.0" prefHeight="81.0" prefWidth="220.0" spacing="5.0">
+               <children>
+                  <Label styleClass="headers" text="Quick, Draw!" textFill="#668cff">
+                     <font>
+                        <Font size="40.0" />
+                     </font>
+                  </Label>
+                  <Label styleClass="headers" text="SE206 Edition" textFill="#668cff">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets top="-10.0" />
+                     </VBox.margin>
+                  </Label>
+               </children>
+            </VBox>
+            <Button fx:id="userButton" layoutX="520.0" layoutY="4.0" mnemonicParsing="false" prefHeight="41.0" prefWidth="60.0" text="username">
+               <styleClass>
+                  <String fx:value="userButton" />
+                  <String fx:value="userButtonCanvas" />
+               </styleClass>
+            </Button>
+         </children>
+      </Pane>
+      <HBox alignment="CENTER" prefHeight="38.0" prefWidth="600.0" spacing="20.0">
          <children>
             <Label fx:id="whatToDrawLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="55.0" prefWidth="212.0" styleClass="subHeaders" text="To Draw: ..." textAlignment="CENTER" wrapText="true">
                <font>
