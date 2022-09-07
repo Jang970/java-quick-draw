@@ -4,9 +4,11 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
-import javafx.scene.control.Label;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
@@ -22,7 +24,6 @@ public class UserProfilesScreenController {
   @FXML private VBox profilesVBox;
   @FXML private Pane newUserPane;
   @FXML private TextField usernameTextField;
-  @FXML private Label errorMessage;
   @FXML private ColorPicker colorPicker;
 
   // TODO: Each user can choose a color for their box?
@@ -46,6 +47,8 @@ public class UserProfilesScreenController {
   /** Creates pagination */
   // TODO: this should happen every time the view is called (so it creates new user profile)
   public void initialize() {
+    // TODO: call profile manager and get usernames and colours of every user
+    // TODO: clear username, color picker (everytime it goes back to scene)
     profilesPagination.getStyleClass().add(Pagination.STYLE_CLASS_BULLET);
     profilesPagination.setPageFactory(
         (Integer pageIndex) -> {
@@ -119,6 +122,7 @@ public class UserProfilesScreenController {
   @FXML
   private void onStartGame() {
 
+    // TODO: Better way to check if color picker has been selected or not
     if (!usernameTextField.getText().isBlank()
         && !colorPicker.getValue().equals(Color.TRANSPARENT)) {
 
@@ -129,8 +133,18 @@ public class UserProfilesScreenController {
       CategoryScreenController categoryScreen = App.getLoader("category-screen").getController();
       categoryScreen.updateCategory();
       App.setView(View.CATEGORY);
+
     } else {
-      errorMessage.setText("Please enter a valid username or color.");
+      // shows an alert pop up if username is blank or spaces and/or color hasn't been chosen
+      Alert errorAlert = new Alert(AlertType.ERROR);
+      DialogPane dialogPane = errorAlert.getDialogPane();
+      dialogPane
+          .getStylesheets()
+          .add(getClass().getResource("/css/application.css").toExternalForm());
+
+      errorAlert.setTitle("Invalid Input");
+      errorAlert.setContentText("Please enter a valid username or color.");
+      errorAlert.showAndWait();
     }
   }
 
