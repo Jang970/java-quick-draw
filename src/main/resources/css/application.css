@@ -39,8 +39,12 @@
 .button:hover{
 	-fx-background-color: rgb(102, 140, 255);
 	-fx-text-fill: black;
+}
+
+.button:hover, .userIconButton:hover, .usernameButton:hover, .pagination .toggle-button:hover, .color-picker:hover{
 	-fx-cursor: hand;
 }
+
 /* Main Menu scene */
 
 /* Adds the splash */
@@ -60,49 +64,40 @@
 
 /* User Profile scene*/
 
-.userButton{
-	-fx-background-image: url('../images/profile.png');
-    -fx-background-repeat: no-repeat;
-    -fx-background-position: center center;
-    -fx-background-size: 200 200;
-    -fx-background-radius: 40px 40px 0 0;
-    -fx-border-style: solid;
-    -fx-border-color: black;
-	-fx-border-radius: 35px 35px 0 0;
-    -fx-border-width: 3px;
-	-fx-font-family: 'Londrina Solid';
-    -fx-text-fill: black;
-    -fx-font-size: 18px;
-    -fx-pref-width: 200;
-	-fx-pref-height: 200;
+.userIconButton{
+	-fx-shape: "M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z";
+    -fx-pref-width: 150;
+	-fx-pref-height: 150;
     -fx-alignment: bottom-center;
-    -fx-wrap-text: true;
+	-fx-text-fill: none;
 }
 
-.userButton:hover{
-	-fx-cursor: hand;
+.usernameButton{
+	-fx-font-family: 'Londrina Solid';
+	-fx-text-fill: black;
+	-fx-font-size: 18px;
+	-fx-alignment: bottom-center;
+    -fx-wrap-text: true;
 }
 
 .pagination {
 	-fx-font-family: 'Gaegu';
 	-fx-font-size: 18px;
 	-fx-page-information-visible: false;
+	-fx-tooltip-visible: false;
 	}
 
 .pagination .toggle-button  {
 	-fx-color:black ;
 	-fx-background-radius: 20px;
-	-fx-tooltip-visible: false;
 }
 
 .pagination .toggle-button:selected{
  	 -fx-color: rgb(102, 140, 255);
 }
 
-
 .pagination .toggle-button:hover {
  	 -fx-background-color: rgb(102, 140, 255);
-	 -fx-cursor: hand;
 }
 
 .pagination .pagination-control .left-arrow, .right-arrow{
@@ -129,9 +124,7 @@
 	-fx-background-radius: 40px;
 }
 
-.color-picker:hover{
-	-fx-cursor: hand;
-}
+/* Error Message Scene */
 
 .dialog-pane{
   	-fx-font-family: 'Gaegu';
@@ -151,12 +144,13 @@
 
 /* Canvas scene */
 
-.userButtonCanvas{
-	-fx-background-size: 70 70;
-	-fx-pref-width: 70;
-	-fx-pref-height: 70;
-	-fx-font-size: 10px;
+.userIconButtonCanvas {
+	-fx-pref-width: 50;
+	-fx-pref-height: 50;
+	/* TODO: Get rid of this and set into game screen controller */
+	-fx-background-color: red;
 }
+
 .resultSplash {
 	-fx-image: url('../images/resultSplash.png');
 }

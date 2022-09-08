@@ -48,6 +48,7 @@ public class UserProfilesScreenController {
   // TODO: this should happen every time the view is called (so it creates new user profile)
   public void initialize() {
     // TODO: call profile manager and get usernames and colours of every user
+
     // TODO: clear username, color picker (everytime it goes back to scene)
     profilesPagination.getStyleClass().add(Pagination.STYLE_CLASS_BULLET);
     profilesPagination.setPageFactory(
@@ -68,20 +69,29 @@ public class UserProfilesScreenController {
    * @return
    */
   public VBox createProfile(int pageIndex) {
+    // create vBox for ever page
     VBox box = new VBox(5);
     box.setAlignment(Pos.CENTER);
 
-    Button userButton = new Button(username[pageIndex]);
-    userButton.setId(username[pageIndex]);
+    // create user buttons
+    Button userIconButton = new Button();
+    Button usernameButton = new Button(username[pageIndex]);
 
-    userButton.getStyleClass().clear();
-    userButton.getStyleClass().add("userButton");
+    // set style
+    userIconButton.getStyleClass().clear();
+    userIconButton.getStyleClass().add("userIconButton");
+    usernameButton.getStyleClass().clear();
+    usernameButton.getStyleClass().add("usernameButton");
     String color = "-fx-background-color: " + colors[pageIndex].toString().replace("0x", "#") + ";";
-    userButton.setStyle(color);
+    userIconButton.setStyle(color);
 
-    box.getChildren().add(userButton);
+    // adds buttons to vBox
+    box.getChildren().add(userIconButton);
+    box.getChildren().add(usernameButton);
 
-    onUserButtonClicked(userButton);
+    // sets on action
+    onUserButtonsClicked(userIconButton);
+    onUserButtonsClicked(usernameButton);
 
     return box;
   }
@@ -92,7 +102,7 @@ public class UserProfilesScreenController {
    *
    * @param userButton
    */
-  private void onUserButtonClicked(Button userButton) {
+  private void onUserButtonsClicked(Button userButton) {
 
     userButton.setOnAction(
         new EventHandler<ActionEvent>() {
@@ -100,7 +110,6 @@ public class UserProfilesScreenController {
           public void handle(ActionEvent event) {
 
             // TODO: send username to profile manager
-            System.out.println(userButton.getId());
 
             // gets controller to update category
             changeView();

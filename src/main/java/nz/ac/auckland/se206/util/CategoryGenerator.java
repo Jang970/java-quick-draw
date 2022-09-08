@@ -22,9 +22,8 @@ public class CategoryGenerator {
   private Map<Difficulty, List<String>> categories;
 
   /**
-   * @param fileLocation the location of the csv with the categories and their
-   *                     associated difficulty
-   *                     values.
+   * @param fileLocation the location of the csv with the categories and their associated difficulty
+   *     values.
    */
   public CategoryGenerator(String fileName) {
     categories = new HashMap<Difficulty, List<String>>();
@@ -78,8 +77,7 @@ public class CategoryGenerator {
   }
 
   /**
-   * Sets the difficulty of the generator. The generator will only generate items
-   * with the given
+   * Sets the difficulty of the generator. The generator will only generate items with the given
    * difficulty
    *
    * @param defaultDifficulty
