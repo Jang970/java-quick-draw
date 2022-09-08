@@ -35,11 +35,7 @@ public class UserManager {
     User user = new User(username, colour);
     users.add(user);
 
-    // serialising - saving our list of users to a json file using gson library
-    try(Writer writer = new FileWriter("UserProfiles.json")) {
-      Gson gson = new GsonBuilder().create();
-      gson.toJson(users, writer);
-    }
+    serialise();
 
   }
 
@@ -51,20 +47,7 @@ public class UserManager {
    */
   public List<User> getExistingProfiles() throws IOException{
 
-    // deserialising file containing existing profiles
-    // de-serialisation
-    // create file reader
-    Reader reader = Files.newBufferedReader(Paths.get("UserProfiles.json"));
-
-    Gson gson = new Gson();
-    Type listType = new TypeToken<ArrayList<User>>(){}.getType();
-        
-    // converting json string to arraylist of user objects
-    users = gson.fromJson(reader, listType);
-
-    // close reader
-    reader.close();
-
+    deserialise();
     return users;
   }
 
@@ -90,11 +73,40 @@ public class UserManager {
 
     // now 'replace' recently deleted user profile and serialise list
     users.add(currentUser);
+    serialise();
 
+  }
+
+  /**
+   * This method will handle serialising / saving to json file
+   * @throws IOException
+   */
+  private void serialise() throws IOException{
     try(Writer writer = new FileWriter("UserProfiles.json")) {
       Gson gson = new GsonBuilder().create();
       gson.toJson(users, writer);
     }
+  }
+
+  /**
+   * This method will handle deserialsing / loading from json file 
+   * @throws IOException
+   */
+  private void deserialise() throws IOException{
+
+    // deserialising file containing existing profiles
+    // de-serialisation
+    // create file reader
+    Reader reader = Files.newBufferedReader(Paths.get("UserProfiles.json"));
+
+    Gson gson = new Gson();
+    Type listType = new TypeToken<ArrayList<User>>(){}.getType();
+        
+    // converting json string to arraylist of user objects
+    users = gson.fromJson(reader, listType);
+
+    // close reader
+    reader.close();
 
   }
 
