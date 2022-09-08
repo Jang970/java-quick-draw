@@ -60,12 +60,43 @@ public class UserManager {
     Type listType = new TypeToken<ArrayList<User>>(){}.getType();
         
     // converting json string to arraylist of user objects
-    List<User> listOfUsers = gson.fromJson(reader, listType);
+    users = gson.fromJson(reader, listType);
 
     // close reader
     reader.close();
 
-    return listOfUsers;
+    return users;
   }
 
+  /**
+   * Use this method when you want to save the stats of an existing user profile into json
+   * @param currentUser the current user object in use and the object we want to update in our json file
+   * @throws IOException
+   */
+  public void updateCurrentProfile(User currentUser) throws IOException{
+
+    // first get list of all user profiles
+    users = getExistingProfiles();
+
+    // iterate through and find and delete user object with same username
+    for (User user : users){
+
+      if (user.getUserName().equals(currentUser.getUserName())){
+        users.remove(user);
+        break;
+      }
+
+    }
+
+    // now 'replace' recently deleted user profile and serialise list
+    users.add(currentUser);
+
+    try(Writer writer = new FileWriter("UserProfiles.json")) {
+      Gson gson = new GsonBuilder().create();
+      gson.toJson(users, writer);
+    }
+
+  }
+
+  // TODO: still need to figure out how to set to a current user profile
 }
