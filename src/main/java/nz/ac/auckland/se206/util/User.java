@@ -14,11 +14,13 @@ public class User {
   private int gamesLost = 0;
   private int fastestWin = 59;
   private ArrayList<String> wordHistory = new ArrayList<>();
+  private String userColour;
 
-  // constructor to create a user profile with an associated name
-  public User(String profileName){
+  // constructor to create a user profile with an associated name and colour
+  public User(String profileName, String colour){
 
     this.userName = profileName;
+    this.userColour = colour;
 
   }
 
@@ -76,6 +78,10 @@ public class User {
   
     public ArrayList<String> getWordHistory(){
       return this.wordHistory;
+    }
+
+    public String getUserColour(){
+      return this.userColour;
     }
 
 
