@@ -110,5 +110,9 @@ public class UserManager {
 
   }
 
-  // TODO: still need to figure out how to set to a current user profile
+  /**
+   * LIST OF TODOS
+   * 
+   * TODO: still need to figure out how to set to a current user profile
+   */
 }
