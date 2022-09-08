@@ -114,5 +114,9 @@ public class UserManager {
    * LIST OF TODOS
    * 
    * TODO: still need to figure out how to set to a current user profile
+   * TODO: find efficient way to update stats of a user?
+   * TODO: find effective way to swtich between profiles
+   * TODO: find how to show user stats to user?
+   * 
    */
 }
