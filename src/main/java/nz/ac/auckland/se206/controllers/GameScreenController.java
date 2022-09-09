@@ -20,7 +20,8 @@ import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
 import nz.ac.auckland.se206.GameLogicManager;
 import nz.ac.auckland.se206.GameLogicManager.WinState;
-import nz.ac.auckland.se206.controllers.CanvasManager.DrawMode;
+import nz.ac.auckland.se206.fxmlutils.CanvasManager;
+import nz.ac.auckland.se206.fxmlutils.CanvasManager.DrawMode;
 import nz.ac.auckland.se206.speech.TextToSpeech;
 
 /**

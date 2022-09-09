@@ -1,4 +1,4 @@
-package nz.ac.auckland.se206.controllers;
+package nz.ac.auckland.se206.fxmlutils;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -48,7 +48,7 @@ public class CanvasManager {
    *
    * @param canvas
    */
-  CanvasManager(Canvas canvas) {
+  public CanvasManager(Canvas canvas) {
     this.canvas = canvas;
     this.context = canvas.getGraphicsContext2D();
 
