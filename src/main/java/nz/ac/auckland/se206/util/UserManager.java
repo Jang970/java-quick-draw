@@ -156,22 +156,29 @@ public class UserManager {
 
     // add stats to arraylist which will also be returned
     ArrayList<Object> userStats = new ArrayList<>();
-
-    // TODO: can possibly extract to method for cleaner look
-    userStats.add(currentUser.getGamesWon());
-    userStats.add(currentUser.getGamesLost());
-    userStats.add(currentUser.getFastestWin());
-    userStats.add(currentUser.getWordHistory());
+    appendStats(userStats);
 
     return userStats;
 
   }
 
   /**
+   * Helper method that extracts away putting user stats into arraylist
+   * 
+   * @param userStats arraylist to add to
+   */
+  private void appendStats(ArrayList<Object> userStats){
+
+    userStats.add(currentUser.getGamesWon());
+    userStats.add(currentUser.getGamesLost());
+    userStats.add(currentUser.getFastestWin());
+    userStats.add(currentUser.getWordHistory());
+  }
+
+  /**
    * LIST OF TODOS
    * 
    * TODO: find efficient way to update stats of a user?
-   * TODO: find how to show user stats to user?
    * 
    */
 }
