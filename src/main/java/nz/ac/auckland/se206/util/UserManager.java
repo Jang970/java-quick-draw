@@ -137,11 +137,20 @@ public class UserManager {
   }
 
   /**
+   * Getter method to get the current User object profile in use
+   * @return object / value stored in currentUser instance field
+   */
+  public User getCurrentProfile(){
+    return this.currentUser;
+  }
+
+  /**
    * Use this method to get an ArrayList containing all the stats of the current user profile.
    * Only use when a user profile has been set
    * The arraylist structure will be as follows: 
    * [gamesWon, gamesLost, fastestWin, wordHistory]
    * Can simply index to get desired stat/s
+   * @return arraylist of current user stats
    */
   public ArrayList<Object> getUserStats(){
 
