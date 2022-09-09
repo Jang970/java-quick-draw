@@ -21,7 +21,8 @@ import com.google.gson.reflect.TypeToken;
 public class UserManager {
   
   // instance fields
-  List<User> users = new ArrayList<User>();
+  private List<User> users = new ArrayList<User>();
+  private User currentUser;
 
   /**
    * Call this method when it is required to create and save (serialise) a new user profile to json file
@@ -36,6 +37,9 @@ public class UserManager {
     users.add(user);
 
     serialise();
+
+    // lets assume we want to use the newly created profile
+    setCurrentProfile(user.getUserName());
 
   }
 
@@ -111,9 +115,29 @@ public class UserManager {
   }
 
   /**
+   * Use this method to set the reference of currentUser to wanted user profile / object
+   * @param username name of user profile we want to use
+   * @throws IOException
+   */
+  public void setCurrentProfile(String username) throws IOException{
+
+    users = getExistingProfiles();
+    
+    // iterate through and find user object with same username and update our currentUser instance field
+    for (User user : users){
+
+      if (user.getUserName().equals(currentUser.getUserName())){
+        currentUser = user;
+        break;
+      }
+
+    }
+
+  }
+
+  /**
    * LIST OF TODOS
    * 
-   * TODO: still need to figure out how to set to a current user profile
    * TODO: find efficient way to update stats of a user?
    * TODO: find effective way to swtich between profiles
    * TODO: find how to show user stats to user?
