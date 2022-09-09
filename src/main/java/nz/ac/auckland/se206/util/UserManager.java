@@ -116,6 +116,7 @@ public class UserManager {
 
   /**
    * Use this method to set the reference of currentUser to wanted user profile / object
+   * Can also be used to switch between user profiles
    * @param username name of user profile we want to use
    * @throws IOException
    */
@@ -136,10 +137,31 @@ public class UserManager {
   }
 
   /**
+   * Use this method to get an ArrayList containing all the stats of the current user profile.
+   * Only use when a user profile has been set
+   * The arraylist structure will be as follows: 
+   * [gamesWon, gamesLost, fastestWin, wordHistory]
+   * Can simply index to get desired stat/s
+   */
+  public ArrayList<Object> getUserStats(){
+
+    // add stats to arraylist which will also be returned
+    ArrayList<Object> userStats = new ArrayList<>();
+
+    // TODO: can possibly extract to method for cleaner look
+    userStats.add(currentUser.getGamesWon());
+    userStats.add(currentUser.getGamesLost());
+    userStats.add(currentUser.getFastestWin());
+    userStats.add(currentUser.getWordHistory());
+
+    return userStats;
+
+  }
+
+  /**
    * LIST OF TODOS
    * 
    * TODO: find efficient way to update stats of a user?
-   * TODO: find effective way to swtich between profiles
    * TODO: find how to show user stats to user?
    * 
    */
