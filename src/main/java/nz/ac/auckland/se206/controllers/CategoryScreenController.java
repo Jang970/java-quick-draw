@@ -26,8 +26,15 @@ public class CategoryScreenController {
         (View view) -> {
           if (view == View.CATEGORY) {
             updateCategory();
+            updateGameTime();
           }
         });
+  }
+
+  private void updateGameTime() {
+    int numSeconds = gameLogicManager.getGameLengthSeconds();
+
+    drawTimeLabel.setText("Draw in " + numSeconds + " seconds");
   }
 
   /** updated category and display on fxml every time this view is set */

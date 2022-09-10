@@ -64,6 +64,22 @@ public class GameLogicManager {
         });
   }
 
+  public int getGameLengthSeconds() {
+    return gameLengthSeconds;
+  }
+
+  public void setGameLengthSeconds(int gameLengthSeconds) {
+    this.gameLengthSeconds = gameLengthSeconds;
+  }
+
+  public int getNumTopGuessNeededToWin() {
+    return numTopGuessNeededToWin;
+  }
+
+  public void setNumTopGuessNeededToWin(int numTopGuessNeededToWin) {
+    this.numTopGuessNeededToWin = numTopGuessNeededToWin;
+  }
+
   private void endGame(WinState winState) {
     predictionManager.stopMakingPredictions();
     countdownTimer.cancelCountdown();
