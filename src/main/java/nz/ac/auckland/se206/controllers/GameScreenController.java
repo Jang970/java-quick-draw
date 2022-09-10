@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
+import java.util.stream.Stream;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -24,18 +24,6 @@ import nz.ac.auckland.se206.fxmlutils.CanvasManager;
 import nz.ac.auckland.se206.fxmlutils.CanvasManager.DrawMode;
 import nz.ac.auckland.se206.speech.TextToSpeech;
 
-/**
- * This is the controller of the canvas. You are free to modify this class and the corresponding
- * FXML file as you see fit. For example, you might no longer need the "Predict" button because the
- * DL model should be automatically queried in the background every second.
- *
- * <p>!! IMPORTANT !!
- *
- * <p>Although we added the scale of the image, you need to be careful when changing the size of the
- * drawable canvas and the brush size. If you make the brush too big or too small with respect to
- * the canvas size, the ML model will not work correctly. So be careful. If you make some changes in
- * the canvas and brush sizes, make sure that the prediction works fine.
- */
 public class GameScreenController {
 
   @FXML private Canvas canvas;
@@ -71,21 +59,9 @@ public class GameScreenController {
    */
   public void initialize() throws ModelException, IOException {
 
-    // Get guess labels
-    int labelIndex = 0;
-    // TODO: Remove repetition (possibily through another method)
-    for (Node child : guessLabelCol1.getChildren()) {
-      if (child instanceof Label) {
-        guessLabels[labelIndex] = (Label) child;
-        labelIndex++;
-      }
-    }
-    for (Node child : guessLabelCol2.getChildren()) {
-      if (child instanceof Label) {
-        guessLabels[labelIndex] = (Label) child;
-        labelIndex++;
-      }
-    }
+    guessLabels =
+        Stream.concat(guessLabelCol1.getChildren().stream(), guessLabelCol2.getChildren().stream())
+            .toArray(Label[]::new);
 
     canvasManager = new CanvasManager(canvas);
     textToSpeech = new TextToSpeech();
