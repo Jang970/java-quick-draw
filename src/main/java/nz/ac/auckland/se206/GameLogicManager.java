@@ -22,8 +22,8 @@ public class GameLogicManager {
 
   // TODO: Extract these into a settings page
   // TODO: Make timer seconds more readable
-  private int gameLengthSeconds = 30;
-  private int numTopGuessNeededToWin = 3;
+  private int gameLengthSeconds;
+  private int numTopGuessNeededToWin;
 
   private Boolean isPlaying = false;
 

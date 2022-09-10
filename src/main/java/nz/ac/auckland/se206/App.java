@@ -81,6 +81,9 @@ public class App extends Application {
     viewManager = new ViewManager<View>(scene);
     gameLogicManager = new GameLogicManager(10);
 
+    gameLogicManager.setNumTopGuessNeededToWin(3);
+    gameLogicManager.setGameLengthSeconds(60);
+
     viewManager.addView(View.HOME, defaultParent);
     viewManager.addView(View.GAME, loadFxml("game-screen"));
     viewManager.addView(View.CATEGORY, loadFxml("category-screen"));
