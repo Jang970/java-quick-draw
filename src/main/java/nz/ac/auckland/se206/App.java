@@ -7,6 +7,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+import nz.ac.auckland.se206.util.EventEmitter;
 import nz.ac.auckland.se206.util.EventListener;
 
 /**
@@ -23,6 +25,16 @@ public class App extends Application {
 
   private static ViewManager<View> viewManager;
   private static GameLogicManager gameLogicManager;
+
+  private static EventEmitter<WindowEvent> appTerminationEmitter;
+
+  public static int subscribeToAppTermination(EventListener<WindowEvent> listener) {
+    return appTerminationEmitter.subscribe(listener);
+  }
+
+  public static void unsubscribeFromAppTermination(int id) {
+    appTerminationEmitter.unsubscribe(id);
+  }
 
   public static GameLogicManager getGameLogicManager() {
     return gameLogicManager;
@@ -74,6 +86,9 @@ public class App extends Application {
   @Override
   public void start(final Stage stage) throws IOException, ModelException {
     App.stage = stage;
+
+    stage.setOnCloseRequest((e) -> appTerminationEmitter.emit(e));
+
     Parent defaultParent = loadFxml("home-screen");
     final Scene scene = new Scene(defaultParent, 600, 570);
 

@@ -94,13 +94,10 @@ public class GameScreenController {
     gameLogicManager.subscribeToGameStart(() -> onGameStart());
     gameLogicManager.subscribeToGameEnd((WinState winState) -> onGameEnd(winState));
 
-    // TODO: Make this an app event emitter that we can subscribe to
-    App.getStage()
-        .setOnCloseRequest(
-            (e) -> {
-              System.out.println("Terminating application");
-              textToSpeech.terminate();
-            });
+    App.subscribeToAppTermination(
+        (e) -> {
+          textToSpeech.terminate();
+        });
 
     App.subscribeToViewChange(
         (View newView) -> {

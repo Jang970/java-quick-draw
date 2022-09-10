@@ -29,6 +29,11 @@ public class CategoryScreenController {
             updateGameTime();
           }
         });
+
+    App.subscribeToAppTermination(
+        (e) -> {
+          textToSpeech.terminate();
+        });
   }
 
   private void updateGameTime() {
