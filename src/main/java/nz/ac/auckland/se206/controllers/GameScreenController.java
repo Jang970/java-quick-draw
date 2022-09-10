@@ -70,7 +70,7 @@ public class GameScreenController {
 
     gameLogicManager.setImageSource(
         () -> {
-          final FutureTask<BufferedImage> query =
+          final FutureTask<BufferedImage> getImage =
               new FutureTask<BufferedImage>(
                   new Callable<BufferedImage>() {
                     @Override
@@ -78,11 +78,11 @@ public class GameScreenController {
                       return canvasManager.getCurrentSnapshot();
                     }
                   });
-          Platform.runLater(query);
+          Platform.runLater(getImage);
           try {
-            return query.get();
-          } catch (InterruptedException | ExecutionException e1) {
-            e1.printStackTrace();
+            return getImage.get();
+          } catch (InterruptedException | ExecutionException error) {
+            error.printStackTrace();
             System.exit(0);
             return null;
           }
