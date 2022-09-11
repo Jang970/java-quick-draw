@@ -8,9 +8,13 @@ import java.util.List;
  * We will be using the concept of json serialisation and de-serialisation in order to save and load exisiting user profiles in our app.
  */
 public class User {
+
+  // static variable to implement unique user ID
+  private static int count = 0;
   
   // instance fields to track user associated stats and as well as the name
   private String name;
+  private int id = 0;
   private int gamesWon = 0;
   private int gamesLost = 0;
   private int fastestWin = 59;
@@ -22,6 +26,7 @@ public class User {
   public User(String profileName, Colour colour){
 
     this.name = profileName;
+    this.id = count++;
     this.colour = colour;
 
   }
@@ -75,6 +80,10 @@ public class User {
 
     public String getName(){
       return this.name;
+    }
+
+    public int getID(){
+      return this.id;
     }
   
     public int getGamesWon(){
