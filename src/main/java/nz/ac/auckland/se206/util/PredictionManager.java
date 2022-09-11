@@ -6,7 +6,6 @@ import ai.djl.translate.TranslateException;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
-import nz.ac.auckland.se206.DataSource;
 import nz.ac.auckland.se206.ml.DoodlePrediction;
 
 public class PredictionManager {

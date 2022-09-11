@@ -26,7 +26,7 @@ public class App extends Application {
   private static ViewManager<View> viewManager;
   private static GameLogicManager gameLogicManager;
 
-  private static EventEmitter<WindowEvent> appTerminationEmitter;
+  private static EventEmitter<WindowEvent> appTerminationEmitter = new EventEmitter<WindowEvent>();
 
   public static int subscribeToAppTermination(EventListener<WindowEvent> listener) {
     return appTerminationEmitter.subscribe(listener);
