@@ -18,39 +18,38 @@ public class CategoryScreenController {
   private GameLogicManager gameLogicManager;
 
   public void initialize() {
-    // Gets game length to display
+
     gameLogicManager = App.getGameLogicManager();
     textToSpeech = new TextToSpeech();
 
     App.subscribeToViewChange(
         (View view) -> {
           if (view == View.CATEGORY) {
-            updateCategory();
-            updateGameTime();
+            generateNewCategoryAndUpdateLabel();
+            updateGameTimeLabel();
           }
         });
 
     App.subscribeToAppTermination(
         (e) -> {
+          // TODO: Make the TextToSpeech class handle this automatically
           textToSpeech.terminate();
         });
   }
 
-  private void updateGameTime() {
+  private void updateGameTimeLabel() {
     int numSeconds = gameLogicManager.getGameLengthSeconds();
 
     drawTimeLabel.setText("Draw in " + numSeconds + " seconds");
   }
 
-  /** updated category and display on fxml every time this view is set */
-  private void updateCategory() {
+  private void generateNewCategoryAndUpdateLabel() {
     String newCategory = gameLogicManager.selectNewRandomCategory();
 
     categoryLabel.setText(newCategory);
     textToSpeech.speakAsync("Draw " + newCategory);
   }
 
-  /** switches to game screen */
   @FXML
   private void onReadyToPlay() {
     App.setView(View.GAME);

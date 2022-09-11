@@ -21,17 +21,16 @@ public class PredictionManager {
   private boolean isMakingPredictions = false;
 
   /**
-   * Creates a new PredictionManager. The manager uses the snapshot provider to get images and then
-   * runs a prediction on those images. When the prediction is complete, the manager will send the
-   * results to the classification listener via the <code>classificationReceived</code> method
+   * The manager uses the snapshot provider to get images and then runs a prediction on those
+   * images. When the prediction is complete, the manager will send the results to the prediction
+   * listener
    *
-   * @param pollInterval - how often the manager will send queires to the server to get predictions
-   *     in milliseconds. The poll interval is bound below by 10ms.
-   * @param imageSource - a class which implements the {@link SnapshotProvider} interface.
-   * @param predictionListener - a class which implements the {@link ClassificationListener}
-   *     interface
-   * @throws IOException - If there is an error in reading the input/output of the DL model.
-   * @throws ModelException - If the model cannot be found on the file system.
+   * @param pollInterval how often the manager will send queires to the server to get predictions in
+   *     milliseconds. The poll interval is bound below by 10ms.
+   * @param imageSource a class which implements the {@link DataSouce} interface
+   * @param predictionListener a class which implements the {@link EventListener} interface
+   * @throws IOException If there is an error in reading the input/output of the DL model.
+   * @throws ModelException If the model cannot be found on the file system.
    */
   public PredictionManager(long pollInterval, int numTopGuesses)
       throws IOException, ModelException {
@@ -46,50 +45,41 @@ public class PredictionManager {
 
           @Override
           public void run() {
-            // Inifinite loop
             while (true) {
 
               // TODO: Memoize the input image so we are not making unnecessary queires
 
-              // Only makes calls to the model query if listening is enabled
               if (isMakingPredictions) {
                 try {
 
-                  // Safetly null checks never hurt anyone
                   if (predictionListener != null && imageSource != null) {
-                    BufferedImage snapshot = PredictionManager.this.imageSource.getData();
+                    BufferedImage snapshot = imageSource.getData();
                     if (snapshot != null) {
-                      // Send the data back to the listener
-                      PredictionManager.this.predictionListener.update(
-                          model.getPredictions(snapshot, numTopGuesses));
-                    } else {
-                      System.out.println("Snapshot was null :/");
+                      predictionListener.update(model.getPredictions(snapshot, numTopGuesses));
                     }
                   }
-
-                } catch (TranslateException e) {
-                  System.out.println("Prediction manager failed prediction");
+                } catch (TranslateException error) {
+                  System.out.println("Prediction manager failed prediction: " + error.getMessage());
                 }
               }
 
-              // Try sleep as to not hog the cpu. Cannot poll for any less than 10ms
               try {
+                // We add a small delay so as to not hog the cpu
                 Thread.sleep(Math.max(pollInterval, 10));
               } catch (InterruptedException e) {
                 System.out.println(
                     "Thread - " + Thread.currentThread().getName() + " was interrupted");
-                // DO NOTHING, program has probably terminated
               }
             }
           }
         };
 
-    // Start the thread.
     pollResultThread.start();
   }
 
   /**
-   * Sets the snapshot provider. If you input null, nothing will happen
+   * Sets the image source which will be used to make predictions. If you input null, nothing will
+   * happen
    *
    * @param imageSource a class which has an image providing function
    */
@@ -103,8 +93,7 @@ public class PredictionManager {
    * Sets the class which listens out for recent predictions in the model. If you input null,
    * nothing will happen.
    *
-   * @param predictionListener A class which implements the ClassificationListener interface @see
-   *     {@link ClassificationListener}
+   * @param predictionListener A class which implements the EventListener Interface
    */
   public void setPredictionListener(EventListener<List<Classification>> predictionListener) {
     if (predictionListener != null) {
@@ -112,11 +101,6 @@ public class PredictionManager {
     }
   }
 
-  /**
-   * Gets the poll interval
-   *
-   * @return the poll interval in milliseconds
-   */
   public long getPredictionPollInterval() {
     return pollInterval;
   }
@@ -131,23 +115,15 @@ public class PredictionManager {
     this.pollInterval = pollInterval;
   }
 
-  /**
-   * Start making predictions on the model and sending the results to the classification listener
-   */
+  /** Start making predictions on the model and sending the results to the prediction listener */
   public void startMakingPredictions() {
     isMakingPredictions = true;
   }
 
-  /** Stop making predictions on the model. */
   public void stopMakingPredictions() {
     isMakingPredictions = false;
   }
 
-  /**
-   * Gets the listening state
-   *
-   * @return a boolean indicating whether the prediction manager is making predictions
-   */
   public boolean isMakingPredictions() {
     return isMakingPredictions;
   }

@@ -18,7 +18,6 @@ public class CategoryGenerator {
     HARD,
   }
 
-  private Difficulty defaultDifficulty = Difficulty.EASY;
   private Map<Difficulty, List<String>> categories;
 
   /**
@@ -28,31 +27,41 @@ public class CategoryGenerator {
   public CategoryGenerator(String fileName) {
     categories = new HashMap<Difficulty, List<String>>();
 
-    // Creates an arraylist for each category
     categories.put(Difficulty.EASY, new ArrayList<String>());
     categories.put(Difficulty.MEDIUM, new ArrayList<String>());
     categories.put(Difficulty.HARD, new ArrayList<String>());
 
-    // Get the global path to the csv with the categories and their associated
-    // difficulty
+    loadCategoriesFromFile(fileName);
+  }
+
+  /**
+   * Takes a csv file and loads all the categories from the file into the store. The CSV should have
+   * two columns with no header: category, difficulty. category is a string of the category name and
+   * difficulty should be E, M or H representing Easy, Medium or Hard respectively
+   *
+   * @param fileName the name of the csv file to load the categories from
+   */
+  public void loadCategoriesFromFile(String fileName) {
     String pathToFile = getClass().getClassLoader().getResource(fileName).getFile();
     try {
 
       CSVReader reader = new CSVReader(new FileReader(pathToFile));
 
-      // The first element is the entry and the second element is the difficulty
+      // Each string array: [entry, difficulty] e.g. ["Hat", "E"]
       List<String[]> entries = reader.readAll();
 
-      // Slight speed optimisation by not running the hash function on every loop
       List<String> easyList = categories.get(Difficulty.EASY);
       List<String> mediumList = categories.get(Difficulty.MEDIUM);
       List<String> hardList = categories.get(Difficulty.HARD);
+
+      easyList.clear();
+      mediumList.clear();
+      hardList.clear();
 
       for (String[] entry : entries) {
         String categoryString = entry[0];
         String difficultyString = entry[1];
 
-        // Iterate through all csv values and add them to the relevant category
         if (difficultyString.equals("E")) {
           easyList.add(categoryString);
         }
@@ -70,44 +79,16 @@ public class CategoryGenerator {
   }
 
   /**
-   * @return the current default difficulty
-   */
-  public Difficulty getDefaultDifficulty() {
-    return defaultDifficulty;
-  }
-
-  /**
-   * Sets the difficulty of the generator. The generator will only generate items with the given
-   * difficulty
-   *
-   * @param defaultDifficulty
-   */
-  public void setDefaultDifficulty(Difficulty defaultDifficulty) {
-    this.defaultDifficulty = defaultDifficulty;
-  }
-
-  /**
-   * Generates a random category to use.
+   * Returns a random category from the list of categories with the input diffuculty
    *
    * @param difficulty the difficulty level to use
    * @return the category as a string
    */
-  public String generateCategory(Difficulty difficulty) {
-
+  public String getRandomCategory(Difficulty difficulty) {
+    // TODO: Allow that if user selects M, it picks randomly from M or E, and if user selects H, it
+    // choses randomly from E, M or H
     List<String> options = categories.get(difficulty);
-
-    // Get random index from list
-    int idx = ThreadLocalRandom.current().nextInt(options.size());
-
-    return options.get(idx);
-  }
-
-  /**
-   * Generates a category with the set difficulty.
-   *
-   * @return the category as a string
-   */
-  public String generateCategory() {
-    return generateCategory(defaultDifficulty);
+    int randomIndex = ThreadLocalRandom.current().nextInt(options.size());
+    return options.get(randomIndex);
   }
 }

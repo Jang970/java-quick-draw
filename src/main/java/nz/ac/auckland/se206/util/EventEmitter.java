@@ -10,7 +10,7 @@ public class EventEmitter<Data> {
   private int idCount = 0;
 
   /**
-   * Dispatches data to all the observers
+   * Dispatches data to all the listeners.
    *
    * @param data the data to be sent to the observers
    */
@@ -21,10 +21,10 @@ public class EventEmitter<Data> {
   }
 
   /**
-   * Allows a listener to be notified upon this emitter dispatches an update. Make sure to
-   * unsubscribe from the emitter on clean up using the returned value
+   * Allows a listener to be notified upon this EventEmitter dispatching an update. Make sure to
+   * unsubscribe from the EventEmitter on clean up using the returned value
    *
-   * @param listener to be notified when an event is emitted
+   * @param listener the EventListener to be notified when an event is emitted
    * @return the subscription ID for unsubscribing
    */
   public int subscribe(EventListener<Data> listener) {
@@ -35,6 +35,12 @@ public class EventEmitter<Data> {
     return id;
   }
 
+  /**
+   * Allows listeners to unsubscribe from events using the subscription id that was returned when
+   * the listener subscribed
+   *
+   * @param subscription the id returned from the subscription which you would like to unsubscribe
+   */
   public void unsubscribe(int subscription) {
     eventListeners.remove(subscription);
   }

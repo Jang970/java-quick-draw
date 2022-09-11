@@ -11,10 +11,7 @@ import javafx.stage.WindowEvent;
 import nz.ac.auckland.se206.util.EventEmitter;
 import nz.ac.auckland.se206.util.EventListener;
 
-/**
- * This is the entry point of the JavaFX application, while you can change this class, it should
- * remain as the class that runs the JavaFX application.
- */
+/** This is the entry point of the JavaFX application. */
 public class App extends Application {
 
   public static enum View {
@@ -25,8 +22,28 @@ public class App extends Application {
 
   private static ViewManager<View> viewManager;
   private static GameLogicManager gameLogicManager;
-
   private static EventEmitter<WindowEvent> appTerminationEmitter = new EventEmitter<WindowEvent>();
+  private static Stage stage;
+
+  public static GameLogicManager getGameLogicManager() {
+    return gameLogicManager;
+  }
+
+  public static Stage getStage() {
+    return stage;
+  }
+
+  public static void setView(View view) {
+    viewManager.loadView(view);
+  }
+
+  public static int subscribeToViewChange(EventListener<View> listener) {
+    return viewManager.subscribeToViewChange(listener);
+  }
+
+  public static void unsubscribeFromViewChange(int id) {
+    viewManager.unsubscribeFromViewChange(id);
+  }
 
   public static int subscribeToAppTermination(EventListener<WindowEvent> listener) {
     return appTerminationEmitter.subscribe(listener);
@@ -34,24 +51,6 @@ public class App extends Application {
 
   public static void unsubscribeFromAppTermination(int id) {
     appTerminationEmitter.unsubscribe(id);
-  }
-
-  public static GameLogicManager getGameLogicManager() {
-    return gameLogicManager;
-  }
-
-  private static Stage stage;
-
-  public static void subscribeToViewChange(EventListener<View> listener) {
-    viewManager.subscribeToViewChange(listener);
-  }
-
-  public static void setView(View view) {
-    viewManager.loadView(view);
-  }
-
-  public static void main(final String[] args) {
-    launch();
   }
 
   /**
@@ -67,13 +66,9 @@ public class App extends Application {
     return fxmlLoader.load();
   }
 
-  /**
-   * Gets the stage of the javafx app
-   *
-   * @return the stage
-   */
-  public static Stage getStage() {
-    return stage;
+  public static void main(final String[] args) {
+    // Launch the JavaFX runtime
+    launch();
   }
 
   /**
@@ -85,6 +80,11 @@ public class App extends Application {
    */
   @Override
   public void start(final Stage stage) throws IOException, ModelException {
+
+    gameLogicManager = new GameLogicManager(10);
+    gameLogicManager.setNumTopGuessNeededToWin(3);
+    gameLogicManager.setGameLengthSeconds(60);
+
     App.stage = stage;
 
     stage.setOnCloseRequest((e) -> appTerminationEmitter.emit(e));
@@ -92,21 +92,13 @@ public class App extends Application {
     Parent defaultParent = loadFxml("home-screen");
     final Scene scene = new Scene(defaultParent, 600, 570);
 
-    // We know this class only runs once so it is safe to do this.
     viewManager = new ViewManager<View>(scene);
-    gameLogicManager = new GameLogicManager(10);
-
-    gameLogicManager.setNumTopGuessNeededToWin(3);
-    gameLogicManager.setGameLengthSeconds(60);
-
     viewManager.addView(View.HOME, defaultParent);
     viewManager.addView(View.GAME, loadFxml("game-screen"));
     viewManager.addView(View.CATEGORY, loadFxml("category-screen"));
 
     stage.setTitle("Speedy Sketchers");
-
-    stage.setResizable(false); // The UI is not currently repsonsive
-
+    stage.setResizable(false);
     stage.setScene(scene);
     stage.show();
   }

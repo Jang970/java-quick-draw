@@ -3,13 +3,9 @@ package nz.ac.auckland.se206.util;
 import java.util.Timer;
 import java.util.TimerTask;
 
-/** This class creates a timers which count down from a given time */
 public class CountdownTimer {
 
   public interface CountdownTimerChangeEvent {
-    /**
-     * @param secondsRemaining the number of seconds until the timer reaches 0.
-     */
     void run(int secondsRemaining);
   }
 
@@ -17,11 +13,10 @@ public class CountdownTimer {
     void run();
   }
 
-  private CountdownTimerCompleteEvent onCompleteEvent = null;
-  private CountdownTimerChangeEvent onChangeEvent = null;
+  private CountdownTimerCompleteEvent onCompleteEvent;
+  private CountdownTimerChangeEvent onChangeEvent;
 
-  // The number we are counting down from
-  private int remainingCount;
+  private int countdownCurrentCount;
   private Timer timer;
 
   /**
@@ -37,7 +32,7 @@ public class CountdownTimer {
   /**
    * Sets a function to be called when the timer reaches 0
    *
-   * @param onComplete A class which implements Runnable
+   * @param onComplete the function to run when the timer completes
    */
   public void setOnComplete(CountdownTimerCompleteEvent onComplete) {
     this.onCompleteEvent = onComplete;
@@ -46,33 +41,36 @@ public class CountdownTimer {
   /**
    * Starts a new countdown
    *
-   * @param count the number to countdown from
-   * @param delay the delay before starting the countdown in milliseconds
-   * @param period the preiod of each decrement in milliseconds
+   * @param countToCountdownFrom the number to countdown from
+   * @param delayBeforeStarting the delay before starting the countdown in milliseconds
+   * @param period the time between each decrement (including time taken to decrement)
    */
-  public void startCountdown(int count, int delay, int period) {
+  public void startCountdown(int countToCountdownFrom, int delayBeforeStarting, int period) {
     if (timer != null) {
       timer.cancel();
     }
-    // Set isDaemon to true so that it cancels with the rest of the app
+
+    // Make this a background task by setting isDaemon to true
     timer = new Timer(true);
-    remainingCount = count;
+
+    countdownCurrentCount = countToCountdownFrom;
+
     timer.scheduleAtFixedRate(
         new TimerTask() {
 
           @Override
           public void run() {
 
-            if (CountdownTimer.this.onChangeEvent != null) {
-              CountdownTimer.this.onChangeEvent.run(remainingCount);
+            if (onChangeEvent != null) {
+              onChangeEvent.run(countdownCurrentCount);
             }
-            if (remainingCount == 0) {
-              if (CountdownTimer.this.onCompleteEvent != null) {
-                CountdownTimer.this.onCompleteEvent.run();
+            if (countdownCurrentCount == 0) {
+              if (onCompleteEvent != null) {
+                onCompleteEvent.run();
               }
-              CountdownTimer.this.timer.cancel();
+              timer.cancel();
             }
-            CountdownTimer.this.remainingCount--;
+            countdownCurrentCount--;
           }
         },
         0,
@@ -80,7 +78,7 @@ public class CountdownTimer {
   }
 
   /**
-   * Starts a countdown with no delay
+   * Starts a countdown with no delay and a period of one second
    *
    * @param seconds the number of seconds to countdown from
    */
@@ -88,7 +86,6 @@ public class CountdownTimer {
     this.startCountdown(seconds, 0, 1000);
   }
 
-  /** Cancels the countdown */
   public void cancelCountdown() {
     if (timer != null) {
       timer.cancel();

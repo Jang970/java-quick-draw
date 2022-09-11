@@ -66,7 +66,7 @@ public class ViewManager<View extends Enum<View>> {
     return viewChangeEmitter.subscribe(listener);
   }
 
-  public void cancelSubsctiption(int subId) {
+  public void unsubscribeFromViewChange(int subId) {
     viewChangeEmitter.unsubscribe(subId);
   }
 }

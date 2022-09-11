@@ -5,7 +5,6 @@ import ai.djl.modality.Classifications.Classification;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 import java.util.stream.Stream;
@@ -41,7 +40,6 @@ public class GameScreenController {
   @FXML private Label whatToDrawLabel;
 
   @FXML private VBox guessLabelCol1;
-
   @FXML private VBox guessLabelCol2;
 
   private Label[] guessLabels = new Label[10];
@@ -51,8 +49,7 @@ public class GameScreenController {
   private GameLogicManager gameLogicManager;
 
   /**
-   * JavaFX calls this method once the GUI elements are loaded. In our case we create a listener for
-   * the drawing, and we load the ML model.
+   * JavaFX calls this method once the GUI elements are loaded.
    *
    * @throws ModelException If there is an error in reading the input/output of the DL model.
    * @throws IOException If the model cannot be found on the file system.
@@ -70,25 +67,18 @@ public class GameScreenController {
 
     gameLogicManager.setImageSource(
         () -> {
-          final FutureTask<BufferedImage> getImage =
-              new FutureTask<BufferedImage>(
-                  new Callable<BufferedImage>() {
-                    @Override
-                    public BufferedImage call() throws Exception {
-                      return canvasManager.getCurrentSnapshot();
-                    }
-                  });
+          FutureTask<BufferedImage> getImage =
+              new FutureTask<BufferedImage>(() -> canvasManager.getCurrentSnapshot());
           Platform.runLater(getImage);
           try {
             return getImage.get();
           } catch (InterruptedException | ExecutionException error) {
-            error.printStackTrace();
-            System.exit(0);
+            System.out.println("There was an error in getting an image: " + error.getMessage());
             return null;
           }
         });
 
-    gameLogicManager.subscriveToPredictionsChange(
+    gameLogicManager.subscribeToPredictionsChange(
         (List<Classification> predictions) -> onPredictionsChange(predictions));
     gameLogicManager.subscribeToTimeChange((Integer seconds) -> onTimeChange(seconds));
     gameLogicManager.subscribeToGameStart(() -> onGameStart());
@@ -117,8 +107,8 @@ public class GameScreenController {
         () -> {
           canvasManager.setDrawingEnabled(false);
           setCanvasButtonsDisabled(true);
-          updateTimeRemainingLabel(0);
 
+          updateTimeRemainingLabel(0);
           gameActionButton.setText("New Game");
 
           if (winState == WinState.WIN) {
@@ -130,17 +120,15 @@ public class GameScreenController {
   }
 
   private void onGameStart() {
-    gameActionButton.setText("Cancel Game");
-    setCanvasButtonsDisabled(false);
-    canvasManager.setDrawingEnabled(true);
-    gameActionButton.setDisable(false);
+    Platform.runLater(
+        () -> {
+          gameActionButton.setText("Cancel Game");
+          setCanvasButtonsDisabled(false);
+          canvasManager.setDrawingEnabled(true);
+          gameActionButton.setDisable(false);
+        });
   }
 
-  /**
-   * This method updates the guess labels with the top guesses
-   *
-   * @param classificationList the list of top guesses from the model with percentage likelihood
-   */
   private void onPredictionsChange(List<Classification> classificationList) {
     Platform.runLater(
         () -> {
@@ -153,16 +141,9 @@ public class GameScreenController {
         });
   }
 
-  /**
-   * This function sets the timer label to the time based on the number of seconds given
-   *
-   * @param numberSeconds the number of seconds remaining on the timer
-   */
   void onTimeChange(int numberSeconds) {
     Platform.runLater(
         () -> {
-
-          // Update the time label with the new minutes and seconds.
           updateTimeRemainingLabel(numberSeconds);
         });
   }
@@ -177,8 +158,6 @@ public class GameScreenController {
     eraserButton.setDisable(disabled);
     clearButton.setDisable(disabled);
   }
-
-  // The following methods are associated with button presses
 
   @FXML
   private void onPencilSelected() {

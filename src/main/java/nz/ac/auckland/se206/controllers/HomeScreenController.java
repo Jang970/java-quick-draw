@@ -10,7 +10,6 @@ public class HomeScreenController {
 
   @FXML
   private void onStartNewGame() {
-    // gets controller to update category
     App.setView(View.CATEGORY);
   }
 }
