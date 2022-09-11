@@ -24,6 +24,7 @@ public class UserManager {
   // instance fields
   private List<User> users = new ArrayList<User>();
   private User currentUser;
+  private int currentUserIndex;
 
   /**
    * Call this method when it is required to create and save (serialise) a new user profile to json file
@@ -61,23 +62,15 @@ public class UserManager {
    * @param currentUser the current user object in use and the object we want to update in our json file
    * @throws IOException
    */
-  public void updateCurrentProfile(User currentUser) throws IOException{
+  public void updateCurrentProfile() throws IOException{
 
     // first get list of all user profiles
     users = getExistingProfiles();
 
-    // iterate through and find and delete user object with same username
-    for (User user : users){
+    // then replace User at given currentUserIndex in our list with updated values
+    users.set(currentUserIndex, currentUser);
 
-      if (user.getName().equals(currentUser.getName())){
-        users.remove(user);
-        break;
-      }
-
-    }
-
-    // now 'replace' recently deleted user profile and serialise list
-    users.add(currentUser);
+    // serialise list to save changes
     serialise();
 
   }
@@ -129,11 +122,14 @@ public class UserManager {
 
     users = getExistingProfiles();
     
-    // iterate through and find user object with same username and update our currentUser instance field
-    for (User user : users){
+    int length = users.size();
 
-      if (user.getName().equals(currentUser.getName())){
-        currentUser = user;
+    // iterate through and find user object with same username and update our currentUser instance field
+    for (int i = 0; i < length; i++){
+      
+      if (users.get(i).getName().equals(username)){
+        currentUser = users.get(i);
+        currentUserIndex = i;
         break;
       }
 
