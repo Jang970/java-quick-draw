@@ -1,5 +1,6 @@
 package nz.ac.auckland.se206.util;
 
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
@@ -101,16 +102,20 @@ public class UserManager {
     // deserialising file containing existing profiles
     // de-serialisation
     // create file reader
-    Reader reader = Files.newBufferedReader(Paths.get("UserProfiles.json"));
-
-    Gson gson = new Gson();
-    Type listType = new TypeToken<ArrayList<User>>(){}.getType();
+    
+    // firstly checking if the file exists
+    try (Reader reader = Files.newBufferedReader(Paths.get("UserProfiles.json"))){
+      Gson gson = new Gson();
+      Type listType = new TypeToken<ArrayList<User>>(){}.getType();
         
-    // converting json string to arraylist of user objects
-    users = gson.fromJson(reader, listType);
+      // converting json string to arraylist of user objects
+      users = gson.fromJson(reader, listType);
 
-    // close reader
-    reader.close();
+      // close reader
+      reader.close();
+    } catch(FileNotFoundException e){
+      // will throw an exception if file does not exist
+    }
 
   }
 
