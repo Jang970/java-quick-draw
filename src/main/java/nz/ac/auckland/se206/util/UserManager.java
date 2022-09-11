@@ -30,7 +30,7 @@ public class UserManager {
    * @param colour chosen user colour
    * @throws IOException
    */
-  public void createUserProfile(String username, String colour) throws IOException{
+  public void createUserProfile(String username, Colour colour) throws IOException{
 
     // creation of new user instance, adding to our user list
     User user = new User(username, colour);
@@ -39,7 +39,7 @@ public class UserManager {
     serialise();
 
     // lets assume we want to use the newly created profile
-    setCurrentProfile(user.getUserName());
+    setCurrentProfile(user.getName());
 
   }
 
@@ -68,7 +68,7 @@ public class UserManager {
     // iterate through and find and delete user object with same username
     for (User user : users){
 
-      if (user.getUserName().equals(currentUser.getUserName())){
+      if (user.getName().equals(currentUser.getName())){
         users.remove(user);
         break;
       }
@@ -127,7 +127,7 @@ public class UserManager {
     // iterate through and find user object with same username and update our currentUser instance field
     for (User user : users){
 
-      if (user.getUserName().equals(currentUser.getUserName())){
+      if (user.getName().equals(currentUser.getName())){
         currentUser = user;
         break;
       }

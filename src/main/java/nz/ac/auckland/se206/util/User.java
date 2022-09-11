@@ -9,18 +9,18 @@ import java.util.ArrayList;
 public class User {
   
   // instance fields to track user associated stats and as well as the name
-  private String userName;
+  private String name;
   private int gamesWon = 0;
   private int gamesLost = 0;
   private int fastestWin = 59;
   private ArrayList<String> wordHistory = new ArrayList<>();
-  private String userColour;
+  private Colour colour;
 
   // constructor to create a user profile with an associated name and colour
-  public User(String profileName, String colour){
+  public User(String profileName, Colour colour){
 
-    this.userName = profileName;
-    this.userColour = colour;
+    this.name = profileName;
+    this.colour = colour;
 
   }
 
@@ -28,7 +28,7 @@ public class User {
    * method that will simply increase tally of user games won 
    * method can possibly be called everytime the boolean, playerDidWin is true
    */
-  public void updateGamesWon(){
+  public void incrementGamesWon(){
     gamesWon++;
   }
 
@@ -36,7 +36,7 @@ public class User {
    * method that will simply increase tally of user games lost
    * method can possibly be called everytime the user runs out of time
    */
-  public void updateGamesLost(){
+  public void incrementGamesLost(){
     gamesLost++;
   }
 
@@ -54,14 +54,14 @@ public class User {
    * Can be called everytime a new category appears
    * @param category current category/word that user must draw
    */
-  public void addWord(String category){
+  public void addToCategoryHistory(String category){
     wordHistory.add(category);
   }
 
     /** Getter methods for our instance fields */
 
-    public String getUserName(){
-      return this.userName;
+    public String getName(){
+      return this.name;
     }
   
     public int getGamesWon(){
@@ -80,8 +80,8 @@ public class User {
       return this.wordHistory;
     }
 
-    public String getUserColour(){
-      return this.userColour;
+    public Colour getColour(){
+      return this.colour;
     }
 
 
