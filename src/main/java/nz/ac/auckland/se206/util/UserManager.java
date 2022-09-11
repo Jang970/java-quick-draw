@@ -35,13 +35,14 @@ public class UserManager {
   public void createUserProfile(String username, Colour colour) throws IOException{
 
     // creation of new user instance, adding to our user list
+    // TODO: ensure that there are no duplicate usernames
     User user = new User(username, colour);
     users.add(user);
 
     serialise();
 
     // lets assume we want to use the newly created profile
-    setCurrentProfile(user.getName());
+    setCurrentProfile(user.getID());
 
   }
 
@@ -112,22 +113,22 @@ public class UserManager {
 
   }
 
-  /**
+   /**
    * Use this method to set the reference of currentUser to wanted user profile / object
    * Can also be used to switch between user profiles
-   * @param username name of user profile we want to use
+   * @param userID unique ID of the User profile we want to set to / use
    * @throws IOException
    */
-  public void setCurrentProfile(String username) throws IOException{
+  public void setCurrentProfile(int userID) throws IOException{
 
     users = getExistingProfiles();
     
     int length = users.size();
 
-    // iterate through and find user object with same username and update our currentUser instance field
+    // iterate through and find user object with same ID and update our currentUser instance field
     for (int i = 0; i < length; i++){
       
-      if (users.get(i).getName().equals(username)){
+      if (users.get(i).getID() == userID){
         currentUser = users.get(i);
         currentUserIndex = i;
         break;
