@@ -110,5 +110,9 @@ public class User {
       return this.colour;
     }
 
+    // method to change the username of user profile
+    public void changeUserName(String newName){
+      this.name = newName;
+    }
 
 }

@@ -77,6 +77,16 @@ public class UserManager {
   }
 
   /**
+   * Use this method to update the username of the current user profile in use
+   * TODO: ensure no duplicate usernames
+   */
+  public void updateUserName(String newName) {
+    
+    currentUser.changeUserName(newName);
+
+  }
+
+  /**
    * This method will handle serialising / saving to json file
    * @throws IOException
    */
