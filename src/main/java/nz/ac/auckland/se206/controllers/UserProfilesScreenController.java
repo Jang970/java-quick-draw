@@ -153,9 +153,6 @@ public class UserProfilesScreenController {
 
   /** Changes view to category */
   private void changeView() {
-    // gets controller to update category
-    CategoryScreenController categoryScreen = App.getLoader("category-screen").getController();
-    categoryScreen.updateCategory();
     App.setView(View.CATEGORY);
   }
 }

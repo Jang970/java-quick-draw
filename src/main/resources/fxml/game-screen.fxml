@@ -166,7 +166,7 @@
                   <Insets right="20.0" />
                </HBox.margin>
             </Button>
-            <Button fx:id="gameActionButton" mnemonicParsing="false" onAction="#onProgressGame" prefHeight="26.0" prefWidth="124.0" text="Start Game">
+            <Button fx:id="gameActionButton" mnemonicParsing="false" onAction="#onGameAction" prefHeight="26.0" prefWidth="124.0" text="Cancel Game">
                <HBox.margin>
                   <Insets right="20.0" />
                </HBox.margin></Button>

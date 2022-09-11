@@ -122,6 +122,7 @@
     </dependency>
     
     <!-- Added by PK -->
+    <!-- Using this for reading the categories from file -->
     <!-- https://mvnrepository.com/artifact/com.opencsv/opencsv -->
     <dependency>
         <groupId>com.opencsv</groupId>

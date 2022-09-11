@@ -1,9 +1,10 @@
 package nz.ac.auckland.se206;
 
 import java.util.HashMap;
-import java.util.Map;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import nz.ac.auckland.se206.util.EventEmitter;
+import nz.ac.auckland.se206.util.EventListener;
 
 public class ViewManager<View extends Enum<View>> {
   public interface ViewChangeSubscription<View> {
@@ -11,12 +12,10 @@ public class ViewManager<View extends Enum<View>> {
   }
 
   // TODO: Refactor so creating a view manager makes more sense
+
+  private EventEmitter<View> viewChangeEmitter = new EventEmitter<View>();
   private HashMap<View, Parent> viewMap = new HashMap<View, Parent>();
   private Scene scene;
-
-  private int subId = 100;
-  private HashMap<Integer, ViewChangeSubscription<View>> registeredFunctions =
-      new HashMap<Integer, ViewChangeSubscription<View>>();
 
   /**
    * Constructs a new view manager. The view manager is intentionally tied to one scene
@@ -59,20 +58,15 @@ public class ViewManager<View extends Enum<View>> {
       scene.setRoot(parent);
 
       // Runs all registered subscription functions
-      for (Map.Entry<Integer, ViewChangeSubscription<View>> entry :
-          this.registeredFunctions.entrySet()) {
-        entry.getValue().run(view);
-      }
+      viewChangeEmitter.emit(view);
     }
   }
 
-  public int subscribeToViewChange(ViewChangeSubscription<View> runnable) {
-    subId++;
-    this.registeredFunctions.put(subId, runnable);
-    return subId;
+  public int subscribeToViewChange(EventListener<View> listener) {
+    return viewChangeEmitter.subscribe(listener);
   }
 
-  public void cancelSubsctiption(int subId) {
-    this.registeredFunctions.remove(subId);
+  public void unsubscribeFromViewChange(int subId) {
+    viewChangeEmitter.unsubscribe(subId);
   }
 }

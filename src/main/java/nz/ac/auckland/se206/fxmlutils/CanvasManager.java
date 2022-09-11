@@ -1,4 +1,4 @@
-package nz.ac.auckland.se206.controllers;
+package nz.ac.auckland.se206.fxmlutils;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -48,7 +48,7 @@ public class CanvasManager {
    *
    * @param canvas
    */
-  CanvasManager(Canvas canvas) {
+  public CanvasManager(Canvas canvas) {
     this.canvas = canvas;
     this.context = canvas.getGraphicsContext2D();
 
@@ -56,7 +56,7 @@ public class CanvasManager {
     canvas.setOnMouseReleased((e) -> isHolding = false);
     canvas.setOnMouseClicked((e) -> handleClickEvent(e));
 
-    clear();
+    clearCanvas();
   }
 
   /**
@@ -77,7 +77,7 @@ public class CanvasManager {
   }
 
   /**
-   * This is the main drawing function. IT should be run whenever the mouse is dragged (in a new
+   * This is the main drawing function. It should be run whenever the mouse is dragged (in a new
    * position from previous while being held down) It uses the current and previous mouse positions
    * to interpolate lines
    *
@@ -102,12 +102,12 @@ public class CanvasManager {
         // Sets the stroke colour and width depending on the draw mode
 
         // TODO: Extract this to either already be set when drawmode is updated or
-        // extract to simple
-        // function
+        // extract to simple function
         if (drawMode == DrawMode.DRAWING) {
           context.setStroke(Color.BLACK);
           context.setLineWidth(brushSize * 0.8);
         } else if (drawMode == DrawMode.ERASING) {
+          // TODO: Extract this hard coded specific color
           context.setStroke(Color.rgb(235, 233, 221));
           context.setLineWidth(brushSize * 5);
         }
@@ -143,12 +143,12 @@ public class CanvasManager {
   /** Runs the clear function if drawing is enabled. */
   public void clearOnlyIfDrawingEnabled() {
     if (drawingEnabled) {
-      clear();
+      clearCanvas();
     }
   }
 
   /** Simply sets all the pixels to white */
-  public void clear() {
+  public void clearCanvas() {
     context.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
     isHolding = false;
   }
@@ -178,7 +178,7 @@ public class CanvasManager {
 
   /**
    * Save the current snapshot on a bitmap file. // TODO: Extract this to another class as it
-   * violates the single responsibility principle belong here
+   * violates the single responsibility principle
    *
    * @return The file of the saved image.
    * @throws IOException If the image cannot be saved.
