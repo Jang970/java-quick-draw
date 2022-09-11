@@ -146,41 +146,28 @@ public class UserManager {
   }
 
   /**
-   * Use this method to get an ArrayList containing all the stats of the current user profile.
+   * Use this method to get an object of class UserStats containing simple getter methods for user to get wanted user stats
    * Only use when a user profile has been set
-   * The arraylist structure will be as follows: 
-   * [gamesWon, gamesLost, fastestWin, bestCategory, wordHistory]
-   * Can simply index to get desired stat/s
-   * @return arraylist of current user stats
-   */
-  public ArrayList<Object> getUserStats(){
-
-    // add stats to arraylist which will also be returned
-    ArrayList<Object> userStats = new ArrayList<>();
-    appendStats(userStats);
-
-    return userStats;
-
-  }
-
-  /**
-   * Helper method that extracts away putting user stats into arraylist
    * 
-   * @param userStats arraylist to add to
+   * Can simply use UserStats class methods to get desired stats
+   * 
+   * @return object of class UserStats containing stats of the current user profile
    */
-  private void appendStats(ArrayList<Object> userStats){
+  public UserStats getUserStats(){
 
-    userStats.add(currentUser.getGamesWon());
-    userStats.add(currentUser.getGamesLost());
-    userStats.add(currentUser.getFastestWin());
-    userStats.add(currentUser.getBestCategory());
-    userStats.add(currentUser.getWordHistory());
+    // create new instance of UserStats class to return
+    UserStats currUserStats = new UserStats(currentUser);
+
+    return currUserStats;
+
   }
+
 
   /**
    * LIST OF TODOS
    * 
    * TODO: find efficient way to update stats of a user?
+   * TODO: implement and use IDs instead of usernames
    * 
    */
 }
