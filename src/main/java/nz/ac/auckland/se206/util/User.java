@@ -1,6 +1,7 @@
 package nz.ac.auckland.se206.util;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class will be used to create objects for each new user profile containing all information related to that specific profile.
@@ -13,7 +14,8 @@ public class User {
   private int gamesWon = 0;
   private int gamesLost = 0;
   private int fastestWin = 59;
-  private ArrayList<String> wordHistory = new ArrayList<>();
+  private String bestCategory;
+  private List<String> wordHistory = new ArrayList<String>();
   private Colour colour;
 
   // constructor to create a user profile with an associated name and colour
@@ -41,12 +43,23 @@ public class User {
   }
 
   /**
-   * This method will update the fastestWin variable
+   * This method will update the fastestWin and bestCategory variables
    * Can be called when the player wins at a faster time than the current time stored in fastestWin
-   * @param currentTime the time to update fastestWin to, it should be smaller than current fastestWin
+   * @param currentTime the time to update fastestWin to
+   * @param currentCategory the word that the user had to draw
    */
-  public void updateFastestWin(int currentTime){
-    this.fastestWin = currentTime;
+  public void updateFastestGame(int currentTime, String currentCategory){
+    
+    // make sure currentTime is actually faster than fastestWin
+    if (currentTime < fastestWin){
+
+      this.fastestWin = currentTime;
+      this.bestCategory = currentCategory;
+
+    } 
+
+    // TODO: Maybe prompt or alert somehow that fastestWin is not being updated?
+
   }
   
   /**
@@ -75,8 +88,12 @@ public class User {
     public int getFastestWin(){
       return this.fastestWin;
     }
+
+    public String getBestCategory(){
+      return this.bestCategory;
+    }
   
-    public ArrayList<String> getWordHistory(){
+    public List<String> getWordHistory(){
       return this.wordHistory;
     }
 

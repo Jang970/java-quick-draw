@@ -148,7 +148,7 @@ public class UserManager {
    * Use this method to get an ArrayList containing all the stats of the current user profile.
    * Only use when a user profile has been set
    * The arraylist structure will be as follows: 
-   * [gamesWon, gamesLost, fastestWin, wordHistory]
+   * [gamesWon, gamesLost, fastestWin, bestCategory, wordHistory]
    * Can simply index to get desired stat/s
    * @return arraylist of current user stats
    */
@@ -172,6 +172,7 @@ public class UserManager {
     userStats.add(currentUser.getGamesWon());
     userStats.add(currentUser.getGamesLost());
     userStats.add(currentUser.getFastestWin());
+    userStats.add(currentUser.getBestCategory());
     userStats.add(currentUser.getWordHistory());
   }
 
