@@ -14,7 +14,7 @@
             <Font size="45.0" />
          </font>
       </Label>
-      <Label fx:id="drawTimeLabel" layoutX="140.0" layoutY="151.0" prefHeight="35.0" prefWidth="258.0" styleClass="subHeaders" text="Draw in 60 seconds">
+      <Label fx:id="drawTimeLabel" alignment="CENTER" layoutX="129.0" layoutY="158.0" prefHeight="35.0" prefWidth="279.0" styleClass="subHeaders" text="Draw in 30 seconds" textAlignment="CENTER">
          <font>
             <Font size="30.0" />
          </font>

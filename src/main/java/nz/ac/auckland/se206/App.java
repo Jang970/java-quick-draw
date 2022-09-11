@@ -1,18 +1,17 @@
 package nz.ac.auckland.se206;
 
+import ai.djl.ModelException;
 import java.io.IOException;
-import java.util.HashMap;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import nz.ac.auckland.se206.ViewManager.ViewChangeSubscription;
+import javafx.stage.WindowEvent;
+import nz.ac.auckland.se206.util.EventEmitter;
+import nz.ac.auckland.se206.util.EventListener;
 
-/**
- * This is the entry point of the JavaFX application, while you can change this class, it should
- * remain as the class that runs the JavaFX application.
- */
+/** This is the entry point of the JavaFX application. */
 public class App extends Application {
 
   public static enum View {
@@ -22,19 +21,36 @@ public class App extends Application {
   }
 
   private static ViewManager<View> viewManager;
+  private static GameLogicManager gameLogicManager;
+  private static EventEmitter<WindowEvent> appTerminationEmitter = new EventEmitter<WindowEvent>();
   private static Stage stage;
-  private static HashMap<String, FXMLLoader> loaderMap = new HashMap<String, FXMLLoader>();
 
-  public static void subscribeToViewChange(ViewChangeSubscription<View> runnable) {
-    viewManager.subscribeToViewChange(runnable);
+  public static GameLogicManager getGameLogicManager() {
+    return gameLogicManager;
+  }
+
+  public static Stage getStage() {
+    return stage;
   }
 
   public static void setView(View view) {
     viewManager.loadView(view);
   }
 
-  public static void main(final String[] args) {
-    launch();
+  public static int subscribeToViewChange(EventListener<View> listener) {
+    return viewManager.subscribeToViewChange(listener);
+  }
+
+  public static void unsubscribeFromViewChange(int id) {
+    viewManager.unsubscribeFromViewChange(id);
+  }
+
+  public static int subscribeToAppTermination(EventListener<WindowEvent> listener) {
+    return appTerminationEmitter.subscribe(listener);
+  }
+
+  public static void unsubscribeFromAppTermination(int id) {
+    appTerminationEmitter.unsubscribe(id);
   }
 
   /**
@@ -47,17 +63,12 @@ public class App extends Application {
    */
   private static Parent loadFxml(final String fxml) throws IOException {
     FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("/fxml/" + fxml + ".fxml"));
-    addFxml(fxml, fxmlLoader);
     return fxmlLoader.load();
   }
 
-  /**
-   * Gets the stage of the javafx app
-   *
-   * @return the stage
-   */
-  public static Stage getStage() {
-    return stage;
+  public static void main(final String[] args) {
+    // Launch the JavaFX runtime
+    launch();
   }
 
   /**
@@ -65,43 +76,30 @@ public class App extends Application {
    *
    * @param stage The primary stage of the application.
    * @throws IOException If "src/main/resources/fxml/canvas.fxml" is not found.
+   * @throws ModelException If there is an error with loading the doodle model.
    */
   @Override
-  public void start(final Stage stage) throws IOException {
+  public void start(final Stage stage) throws IOException, ModelException {
+
+    gameLogicManager = new GameLogicManager(10);
+    gameLogicManager.setNumTopGuessNeededToWin(3);
+    gameLogicManager.setGameLengthSeconds(60);
+
     App.stage = stage;
+
+    stage.setOnCloseRequest((e) -> appTerminationEmitter.emit(e));
+
     Parent defaultParent = loadFxml("home-screen");
     final Scene scene = new Scene(defaultParent, 600, 570);
 
-    // We know this class only runs once so it is safe to do this.
     viewManager = new ViewManager<View>(scene);
     viewManager.addView(View.HOME, defaultParent);
     viewManager.addView(View.GAME, loadFxml("game-screen"));
     viewManager.addView(View.CATEGORY, loadFxml("category-screen"));
 
     stage.setTitle("Speedy Sketchers");
-
-    stage.setResizable(false); // The UI is not currently repsonsive
-
+    stage.setResizable(false);
     stage.setScene(scene);
     stage.show();
-  }
-
-  /**
-   * This adds a new fxml loader the manager keep tracks of
-   *
-   * @param view the user defined id of the view
-   * @param root the fxml loader of the parent node
-   */
-  public static void addFxml(String fxmlFile, FXMLLoader fxmlLoader) {
-    loaderMap.put(fxmlFile, fxmlLoader);
-  }
-
-  /**
-   * Gets the fxml loader of the respective view
-   *
-   * @param view the name of fxml file
-   */
-  public static FXMLLoader getLoader(String fxmlFile) {
-    return loaderMap.get(fxmlFile);
   }
 }

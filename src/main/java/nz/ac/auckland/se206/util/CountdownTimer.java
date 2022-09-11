@@ -3,78 +3,74 @@ package nz.ac.auckland.se206.util;
 import java.util.Timer;
 import java.util.TimerTask;
 
-/** This class creates a timers which count down from a given time */
 public class CountdownTimer {
 
-  public interface OnChangeFunction {
-    /**
-     * @param secondsRemaining the number of seconds until the timer reaches 0.
-     */
+  public interface CountdownTimerChangeEvent {
     void run(int secondsRemaining);
   }
 
-  private Runnable onComplete = null;
-  private OnChangeFunction onChange = null;
+  public interface CountdownTimerCompleteEvent {
+    void run();
+  }
 
-  // Usually number of seconds but time between each decrement may not be a second so using a more
-  // generic term instead
-  private int totalUnits;
+  private CountdownTimerCompleteEvent onCompleteEvent;
+  private CountdownTimerChangeEvent onChangeEvent;
+
+  private int countdownCurrentCount;
   private Timer timer;
 
   /**
    * Sets a function to be called when the timer changes..
    *
    * @param onChange A class which implements OnChangeFunction - this implements one method <code>
-   *     void run(int secondsRemaining)</code> @see {@link OnChangeFunction}.
+   *     void run(int secondsRemaining)</code> @see {@link CountdownTimerChangeEvent}.
    */
-  public void setOnChange(OnChangeFunction onChange) {
-    this.onChange = onChange;
+  public void setOnChange(CountdownTimerChangeEvent onChange) {
+    this.onChangeEvent = onChange;
   }
 
   /**
    * Sets a function to be called when the timer reaches 0
    *
-   * @param onComplete A class which implements Runnable
+   * @param onComplete the function to run when the timer completes
    */
-  public void setOnComplete(Runnable onComplete) {
-    this.onComplete = onComplete;
+  public void setOnComplete(CountdownTimerCompleteEvent onComplete) {
+    this.onCompleteEvent = onComplete;
   }
 
   /**
    * Starts a new countdown
    *
-   * @param units the number of units to countdown from
-   * @param delay the delay before starting the countdown in milliseconds
-   * @param period the preiod of each decrement in milliseconds
+   * @param countToCountdownFrom the number to countdown from
+   * @param delayBeforeStarting the delay before starting the countdown in milliseconds
+   * @param period the time between each decrement (including time taken to decrement)
    */
-  public void startCountdown(int units, int delay, int period) {
+  public void startCountdown(int countToCountdownFrom, int delayBeforeStarting, int period) {
     if (timer != null) {
       timer.cancel();
     }
-    // Set isDaemon to true so that it cancels with the rest of the app
+
+    // Make this a background task by setting isDaemon to true
     timer = new Timer(true);
-    totalUnits = units;
+
+    countdownCurrentCount = countToCountdownFrom;
+
     timer.scheduleAtFixedRate(
-        // A little anonymous class trickery
         new TimerTask() {
 
           @Override
           public void run() {
 
-            // This is a matter of preference but it makes it explicit
-            // that I am refering to the outer class. I think it is safer
-            CountdownTimer outer = CountdownTimer.this;
-
-            if (outer.onChange != null) {
-              outer.onChange.run(totalUnits);
+            if (onChangeEvent != null) {
+              onChangeEvent.run(countdownCurrentCount);
             }
-            if (totalUnits == 0) {
-              if (outer.onComplete != null) {
-                outer.onComplete.run();
+            if (countdownCurrentCount == 0) {
+              if (onCompleteEvent != null) {
+                onCompleteEvent.run();
               }
-              outer.timer.cancel();
+              timer.cancel();
             }
-            outer.totalUnits--;
+            countdownCurrentCount--;
           }
         },
         0,
@@ -82,7 +78,7 @@ public class CountdownTimer {
   }
 
   /**
-   * Starts a countdown with no delay
+   * Starts a countdown with no delay and a period of one second
    *
    * @param seconds the number of seconds to countdown from
    */
@@ -90,7 +86,6 @@ public class CountdownTimer {
     this.startCountdown(seconds, 0, 1000);
   }
 
-  /** Cancels the countdown */
   public void cancelCountdown() {
     if (timer != null) {
       timer.cancel();

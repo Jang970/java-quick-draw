@@ -5,9 +5,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
+import nz.ac.auckland.se206.GameLogicManager;
 import nz.ac.auckland.se206.speech.TextToSpeech;
-import nz.ac.auckland.se206.util.CategoryGenerator;
-import nz.ac.auckland.se206.util.CategoryGenerator.Difficulty;
 
 public class CategoryScreenController {
 
@@ -15,36 +14,42 @@ public class CategoryScreenController {
   @FXML private Label drawTimeLabel;
   @FXML private Label categoryLabel;
 
-  private CategoryGenerator categoryGenerator;
   private TextToSpeech textToSpeech;
-  private static String categoryToGuess;
+  private GameLogicManager gameLogicManager;
 
   public void initialize() {
-    // Gets game length to display
-    GameScreenController gameScreen = App.getLoader("game-screen").getController();
-    drawTimeLabel.setText("Draw in " + gameScreen.getGameLengthSeconds() + " seconds");
 
+    gameLogicManager = App.getGameLogicManager();
     textToSpeech = new TextToSpeech();
+
+    App.subscribeToViewChange(
+        (View view) -> {
+          if (view == View.CATEGORY) {
+            generateNewCategoryAndUpdateLabel();
+            updateGameTimeLabel();
+          }
+        });
+
+    App.subscribeToAppTermination(
+        (e) -> {
+          // TODO: Make the TextToSpeech class handle this automatically
+          textToSpeech.terminate();
+        });
   }
 
-  /** updated category and display on fxml every time this view is set */
-  protected void updateCategory() {
-    categoryGenerator = new CategoryGenerator("category_difficulty.csv");
-    categoryToGuess = categoryGenerator.generateCategory(Difficulty.EASY);
-    categoryLabel.setText(categoryToGuess);
-    textToSpeech.speakAsync("Draw " + categoryToGuess);
+  private void updateGameTimeLabel() {
+    int numSeconds = gameLogicManager.getGameLengthSeconds();
+
+    drawTimeLabel.setText("Draw in " + numSeconds + " seconds");
   }
 
-  /**
-   * gets category to display on game screen
-   *
-   * @return categoryToGuess
-   */
-  protected static String getCategoryToGuess() {
-    return categoryToGuess;
+  private void generateNewCategoryAndUpdateLabel() {
+    String newCategory = gameLogicManager.selectNewRandomCategory();
+
+    categoryLabel.setText(newCategory);
+    textToSpeech.speakAsync("Draw " + newCategory);
   }
 
-  /** switches to game screen */
   @FXML
   private void onReadyToPlay() {
     App.setView(View.GAME);
