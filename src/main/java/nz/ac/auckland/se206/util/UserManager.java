@@ -30,31 +30,51 @@ public class UserManager {
   /**
    * Call this method when it is required to create and save (serialise) a new user profile to json file
    * @param username name of user profile
-   * @param colour chosen user colour
+   * @param colour chosen colour
+   * @return boolean to indicate if creation was successful or not
    * @throws IOException
    */
-  public void createUserProfile(String username, Color colour) throws IOException{
+  public boolean createUserProfile(String username, Color colour) throws IOException{
 
-    // creation of new user instance, adding to our user list
-    // TODO: ensure that there are no duplicate usernames
-    User user = new User(username, colour);
-    users.add(user);
+    // check if username already exists, return false
+    if (containsDuplicate(username)){
 
-    serialise();
+      return false;
 
-    // lets assume we want to use the newly created profile
-    setCurrentProfile(user.getID());
+    } else { // username is unique and new user can successfully be created, return true
 
+      // creation of new user instance, adding to our user list
+      User user = new User(username, colour);
+      users.add(user);
+
+      serialise();
+
+      // lets assume we want to use the newly created profile
+      setCurrentProfile(user.getID());
+
+      return true;
+    }
   }
 
-  /**
-   * Use this method to update the username of the current user profile in use
-   * TODO: ensure no duplicate usernames
-   */
-  public void updateUserName(String newName) {
+   /**
+    *  Use this method to update the username of the current user profile in use
+    * @param newName new username to update to
+    * @return boolean to indicate if update was successful or not
+    * @throws IOException
+    */
+  public boolean updateUserName(String newName) throws IOException {
     
-    this.users.get(currentUserIndex).changeUserName(newName);
+    // checking if username already exists, return false if it does
+    if (containsDuplicate(newName)){
 
+      return false;
+
+    } else { // username is unique, return true
+
+      this.users.get(currentUserIndex).changeUserName(newName);
+      return true;
+
+    }
   }
 
   /**
@@ -175,9 +195,26 @@ public class UserManager {
   }
 
   /**
-   * LIST OF TODOS
-   * 
-   * TODO: ensure no duplicate usernames
-   * 
+   * Helper method to check for duplicate usernames
+   * @return boolean - True if a duplicate exists
+   * @throws IOException
    */
+  private boolean containsDuplicate(String userName) throws IOException{
+
+    // update users 
+    users = getExistingProfiles();
+    
+    // iterate through all users and if username already exists, return true
+    for (User user : users){
+
+      if (user.getName().equals(userName)){
+        return true;
+      }
+
+    }
+
+    return false;
+
+  }
+
 }
