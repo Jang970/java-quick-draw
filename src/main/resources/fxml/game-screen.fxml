@@ -31,7 +31,7 @@
                   </Label>
                </children>
             </VBox>
-            <Button fx:id="userButton" alignment="BOTTOM_CENTER" contentDisplay="CENTER" layoutX="526.0" layoutY="16.0" mnemonicParsing="false" prefHeight="52.0" prefWidth="71.0" textAlignment="CENTER">
+            <Button fx:id="userButton" alignment="BOTTOM_CENTER" contentDisplay="CENTER" layoutX="526.0" layoutY="16.0" mnemonicParsing="false" onAction="#onUserStats" prefHeight="52.0" prefWidth="71.0" textAlignment="CENTER">
                <styleClass>
                   <String fx:value="userIconButtonCanvas" />
                   <String fx:value="userIconButton" />

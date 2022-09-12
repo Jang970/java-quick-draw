@@ -18,7 +18,8 @@ public class App extends Application {
     HOME,
     USERPROFILES,
     CATEGORY,
-    GAME
+    GAME,
+    USERSTATS
   }
 
   private static ViewManager<View> viewManager;
@@ -98,6 +99,7 @@ public class App extends Application {
     viewManager.addView(View.GAME, loadFxml("game-screen"));
     viewManager.addView(View.CATEGORY, loadFxml("category-screen"));
     viewManager.addView(View.USERPROFILES, loadFxml("userprofiles-screen"));
+    viewManager.addView(View.USERSTATS, loadFxml("userstats-screen"));
 
     stage.setTitle("Speedy Sketchers");
     stage.setResizable(false);

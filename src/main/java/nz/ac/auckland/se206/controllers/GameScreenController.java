@@ -181,6 +181,12 @@ public class GameScreenController {
   }
 
   @FXML
+  private void onUserStats() {
+    App.setView(View.USERSTATS);
+    gameLogicManager.cancelGame();
+  }
+
+  @FXML
   private void onGameAction() {
     if (gameLogicManager.isPlaying()) {
       gameLogicManager.cancelGame();
