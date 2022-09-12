@@ -6,7 +6,7 @@ import nz.ac.auckland.se206.App.View;
 
 public class UserStatsScreenController {
 
-  // TODO: Uncomment the following when I can implement
+  // TODO: Uncomment the following when we can implement
   // private Label fastestWinLabel;
   // private Label numGamesWonLabel;
   // private Label numGamesLostLabel;
@@ -19,7 +19,6 @@ public class UserStatsScreenController {
         (View view) -> {
           if (view == View.USERSTATS) {
             // TODO: get recent user stats and set labels
-
           }
         });
   }

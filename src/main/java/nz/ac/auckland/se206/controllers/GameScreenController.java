@@ -32,7 +32,7 @@ public class GameScreenController {
   @FXML private Button eraserButton;
   @FXML private Button clearButton;
 
-  @FXML private Button returnHomeButton;
+  @FXML private Button userProfilesButton;
   @FXML private Button gameActionButton;
   @FXML private Button downloadImageButton;
 
@@ -175,15 +175,13 @@ public class GameScreenController {
   }
 
   @FXML
-  private void onReturnHome() {
-    App.setView(View.HOME);
-    gameLogicManager.cancelGame();
+  private void onUserProfiles() {
+    App.setView(View.USERPROFILES);
   }
 
   @FXML
   private void onUserStats() {
     App.setView(View.USERSTATS);
-    gameLogicManager.cancelGame();
   }
 
   @FXML
