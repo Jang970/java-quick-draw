@@ -1,7 +1,7 @@
 package nz.ac.auckland.se206.util;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * This class will (for now), be handling the showing of a user profile's stats.
@@ -15,7 +15,7 @@ public class UserStats {
   private int gamesLost;
   private int fastestWin;
   private String bestCategory;
-  private List<String> wordHistory = new ArrayList<String>();
+  private Set<String> wordHistory = new HashSet<String>();
   private User currentUser;
 
   // constructor, takes input of User object
@@ -42,7 +42,7 @@ public class UserStats {
     return this.bestCategory;
   }
 
-  public List<String> wordHistory(){
+  public Set<String> wordHistory(){
     return this.wordHistory;
   }
 

@@ -1,7 +1,7 @@
 package nz.ac.auckland.se206.util;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javafx.scene.paint.Color;
 
@@ -21,7 +21,7 @@ public class User {
   private int gamesLost = 0;
   private int fastestWin = 59;
   private String bestCategory;
-  private List<String> wordHistory = new ArrayList<String>();
+  private Set<String> wordHistory = new HashSet<>();
   private Color colour;
 
   // constructor to create a user profile with an associated name and colour
@@ -55,7 +55,7 @@ public class User {
    * @param currentTime the time to update fastestWin to
    * @param currentCategory the word that the user had to draw
    */
-  public void updateFastestGame(int currentTime, String currentCategory){
+  public Boolean updateFastestGame(int currentTime, String currentCategory){
     
     // make sure currentTime is actually faster than fastestWin
     if (currentTime < fastestWin){
@@ -63,7 +63,13 @@ public class User {
       this.fastestWin = currentTime;
       this.bestCategory = currentCategory;
 
-    } 
+      return true;
+
+    } else {
+
+      return false;
+      
+    }
 
     // TODO: Maybe prompt or alert somehow that fastestWin is not being updated?
 
@@ -104,7 +110,7 @@ public class User {
       return this.bestCategory;
     }
   
-    public List<String> getWordHistory(){
+    public Set<String> getWordHistory(){
       return this.wordHistory;
     }
 
