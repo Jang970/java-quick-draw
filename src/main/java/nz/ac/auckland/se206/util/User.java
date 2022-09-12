@@ -3,6 +3,8 @@ package nz.ac.auckland.se206.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.scene.paint.Color;
+
 /**
  * This class will be used to create objects for each new user profile containing all information related to that specific profile.
  * We will be using the concept of json serialisation and de-serialisation in order to save and load exisiting user profiles in our app.
@@ -20,10 +22,10 @@ public class User {
   private int fastestWin = 59;
   private String bestCategory;
   private List<String> wordHistory = new ArrayList<String>();
-  private Colour colour;
+  private Color colour;
 
   // constructor to create a user profile with an associated name and colour
-  public User(String profileName, Colour colour){
+  public User(String profileName, Color colour){
 
     this.name = profileName;
     this.id = count++;
@@ -106,7 +108,7 @@ public class User {
       return this.wordHistory;
     }
 
-    public Colour getColour(){
+    public Color getColour(){
       return this.colour;
     }
 

@@ -15,6 +15,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
+import javafx.scene.paint.Color;
+
 /**
  * This class will be used to handle any functionalities we would like to do with User class objects/instances
  * An example would be saving a newly created user profile into our json file
@@ -32,7 +34,7 @@ public class UserManager {
    * @param colour chosen user colour
    * @throws IOException
    */
-  public void createUserProfile(String username, Colour colour) throws IOException{
+  public void createUserProfile(String username, Color colour) throws IOException{
 
     // creation of new user instance, adding to our user list
     // TODO: ensure that there are no duplicate usernames
