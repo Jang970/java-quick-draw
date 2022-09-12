@@ -26,7 +26,6 @@ public class UserProfilesScreenController {
   @FXML private TextField usernameTextField;
   @FXML private ColorPicker colorPicker;
 
-  // TODO: Each user can choose a color for their box?
   private Color[] colors =
       new Color[] {
         Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN, Color.BLUE, Color.INDIGO, Color.VIOLET
@@ -45,25 +44,49 @@ public class UserProfilesScreenController {
       };
 
   /** Creates pagination */
-  // TODO: this should happen every time the view is called (so it creates new user profile)
   public void initialize() {
-    // TODO: call profile manager and get usernames and colours of every user
 
-    // TODO: clear username, color picker (everytime it goes back to scene)
+    // every time view is changed to user profiles pagination is created again based on the new user
+    // profiles
+    App.subscribeToViewChange(
+        (View view) -> {
+          if (view == View.USERPROFILES) {
+            // TODO: call profile manager and get usernames and colours of every user
+
+            // sets to profile Vbox
+            changeToProfilesView(true);
+
+            // doesn't store previous new user value
+            usernameTextField.clear();
+            colorPicker.setValue(Color.TRANSPARENT);
+
+            createProfilesPagination();
+          }
+        });
+  }
+
+  /** Creates a new profile pagination by creating profile buttons */
+  private void createProfilesPagination() {
+
+    // sets style has bullets (no numbers)
     profilesPagination.getStyleClass().add(Pagination.STYLE_CLASS_BULLET);
+
+    // creates pages length of profiles list
     profilesPagination.setPageFactory(
         (Integer pageIndex) -> {
           if (pageIndex >= username.length) {
             return null;
           } else {
+            // creates each profiles
             return createProfile(pageIndex);
           }
         });
+    // sets max page count
     profilesPagination.setPageCount(username.length);
   }
 
   /**
-   * Creates each page (profiles) from username and colors given
+   * Creates each page (profile) from given username and colors
    *
    * @param pageIndex
    * @return
@@ -74,26 +97,58 @@ public class UserProfilesScreenController {
     box.setAlignment(Pos.CENTER);
 
     // create user buttons
-    Button userIconButton = new Button();
+    Button userIconButton = new Button("userIconButton");
     Button usernameButton = new Button(username[pageIndex]);
 
     // set style
-    userIconButton.getStyleClass().clear();
-    userIconButton.getStyleClass().add("userIconButton");
-    usernameButton.getStyleClass().clear();
-    usernameButton.getStyleClass().add("usernameButton");
-    String color = "-fx-background-color: " + colors[pageIndex].toString().replace("0x", "#") + ";";
-    userIconButton.setStyle(color);
+    setButtonStyle(userIconButton);
+    setButtonStyle(usernameButton);
+    userIconButton.setStyle(getBackgroundColor(colors[pageIndex]));
 
     // adds buttons to vBox
     box.getChildren().add(userIconButton);
     box.getChildren().add(usernameButton);
 
-    // sets on action
+    // set on action of buttons
     onUserButtonsClicked(userIconButton);
     onUserButtonsClicked(usernameButton);
 
     return box;
+  }
+
+  /**
+   * Returns the desired format for css background color string
+   *
+   * @param color given background color of user
+   * @return
+   */
+  private String getBackgroundColor(Color color) {
+    return "-fx-background-color: " + color.toString().replace("0x", "#") + ";";
+  }
+
+  /**
+   * Sets specific style class for each button and clears previous style classes
+   *
+   * @param button
+   */
+  private void setButtonStyle(Button button) {
+
+    // Clears current button style so it doesn't have css style of the general buttons
+    button.getStyleClass().clear();
+    // adds new style class to button
+    button.getStyleClass().add(button.getText());
+  }
+
+  /** Changes view to category */
+  private void changeView() {
+    App.setView(View.CATEGORY);
+  }
+
+  /** Changes view to user profiles vBox view */
+  private void changeToProfilesView(boolean visibility) {
+
+    profilesVBox.setVisible(visibility);
+    newUserPane.setVisible(!visibility);
   }
 
   /**
@@ -121,22 +176,34 @@ public class UserProfilesScreenController {
   @FXML
   private void onCreateUser() {
 
-    profilesVBox.setVisible(false);
-    newUserPane.setVisible(true);
+    changeToProfilesView(false);
   }
 
-  /** Checks if user input is invalid, takes the inputs and then starts playing */
+  /** Allows user to go back to profiles pagination from new user pane */
+  @FXML
+  private void onBackToProfiles() {
+
+    changeToProfilesView(true);
+  }
+
+  /**
+   * When start game is clicked (on new user pane) it switches to category screen after checking if
+   * inputs are valid.
+   */
   @FXML
   private void onStartGame() {
 
     // TODO: Better way to check if color picker has been selected or not
+    // checks if username and colour picker has been selected
     if (!usernameTextField.getText().isBlank()
         && !colorPicker.getValue().equals(Color.TRANSPARENT)) {
 
-      // TODO: send username and color to profile manager
+      // TODO: send username and color to user profile manager
       System.out.println(usernameTextField.getText() + " " + colorPicker.getValue().toString());
 
+      // changes vie to category
       changeView();
+
     } else {
       // shows an alert pop up if username is blank or spaces and/or color hasn't been chosen
       Alert errorAlert = new Alert(AlertType.ERROR);
@@ -149,10 +216,5 @@ public class UserProfilesScreenController {
       errorAlert.setContentText("Please enter a valid username or color.");
       errorAlert.showAndWait();
     }
-  }
-
-  /** Changes view to category */
-  private void changeView() {
-    App.setView(View.CATEGORY);
   }
 }
