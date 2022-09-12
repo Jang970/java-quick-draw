@@ -168,10 +168,10 @@ public class UserManager {
    */
   public UserStats getUserStats(){
 
-    // create new instance of UserStats class to return
-    UserStats currUserStats = new UserStats(currentUser);
+    // get current user
+    User currUser = users.get(currentUserIndex);
 
-    return currUserStats;
+    return currUser.getUserStats();
 
   }
 
