@@ -4,14 +4,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.DialogPane;
 import javafx.scene.control.Pagination;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import nz.ac.auckland.se206.App;
@@ -22,9 +16,6 @@ public class UserProfilesScreenController {
   @FXML private Button newGameButton;
   @FXML private Pagination profilesPagination;
   @FXML private VBox profilesVBox;
-  @FXML private Pane newUserPane;
-  @FXML private TextField usernameTextField;
-  @FXML private ColorPicker colorPicker;
 
   private Color[] colors =
       new Color[] {
@@ -51,15 +42,8 @@ public class UserProfilesScreenController {
     App.subscribeToViewChange(
         (View view) -> {
           if (view == View.USERPROFILES) {
+
             // TODO: call profile manager and get usernames and colours of every user
-
-            // sets to profile Vbox
-            changeToProfilesView(true);
-
-            // doesn't store previous new user value
-            usernameTextField.clear();
-            colorPicker.setValue(Color.TRANSPARENT);
-
             createProfilesPagination();
           }
         });
@@ -139,18 +123,6 @@ public class UserProfilesScreenController {
     button.getStyleClass().add(button.getText());
   }
 
-  /** Changes view to category */
-  private void changeView() {
-    App.setView(View.CATEGORY);
-  }
-
-  /** Changes view to user profiles vBox view */
-  private void changeToProfilesView(boolean visibility) {
-
-    profilesVBox.setVisible(visibility);
-    newUserPane.setVisible(!visibility);
-  }
-
   /**
    * When profile is clicked it switches to category screen to play and sends user profile details
    * to profile manager
@@ -167,54 +139,14 @@ public class UserProfilesScreenController {
             // TODO: send username to profile manager
 
             // gets controller to update category
-            changeView();
+            App.setView(View.CATEGORY);
           }
         });
   }
 
-  /** Switches to new user pane */
+  /** Switches to new user screen */
   @FXML
-  private void onCreateUser() {
-
-    changeToProfilesView(false);
-  }
-
-  /** Allows user to go back to profiles pagination from new user pane */
-  @FXML
-  private void onBackToProfiles() {
-
-    changeToProfilesView(true);
-  }
-
-  /**
-   * When start game is clicked (on new user pane) it switches to category screen after checking if
-   * inputs are valid.
-   */
-  @FXML
-  private void onStartGame() {
-
-    // TODO: Better way to check if color picker has been selected or not
-    // checks if username and colour picker has been selected
-    if (!usernameTextField.getText().isBlank()
-        && !colorPicker.getValue().equals(Color.TRANSPARENT)) {
-
-      // TODO: send username and color to user profile manager
-      System.out.println(usernameTextField.getText() + " " + colorPicker.getValue().toString());
-
-      // changes vie to category
-      changeView();
-
-    } else {
-      // shows an alert pop up if username is blank or spaces and/or color hasn't been chosen
-      Alert errorAlert = new Alert(AlertType.ERROR);
-      DialogPane dialogPane = errorAlert.getDialogPane();
-      dialogPane
-          .getStylesheets()
-          .add(getClass().getResource("/css/application.css").toExternalForm());
-
-      errorAlert.setTitle("Invalid Input");
-      errorAlert.setContentText("Please enter a valid username or color.");
-      errorAlert.showAndWait();
-    }
+  private void onNewUser() {
+    App.setView(View.NEWUSER);
   }
 }

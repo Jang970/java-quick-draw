@@ -17,6 +17,7 @@ public class App extends Application {
   public static enum View {
     HOME,
     USERPROFILES,
+    NEWUSER,
     CATEGORY,
     GAME,
     USERSTATS
@@ -99,6 +100,7 @@ public class App extends Application {
     viewManager.addView(View.GAME, loadFxml("game-screen"));
     viewManager.addView(View.CATEGORY, loadFxml("category-screen"));
     viewManager.addView(View.USERPROFILES, loadFxml("userprofiles-screen"));
+    viewManager.addView(View.NEWUSER, loadFxml("newuser-screen"));
     viewManager.addView(View.USERSTATS, loadFxml("userstats-screen"));
 
     stage.setTitle("Speedy Sketchers");
