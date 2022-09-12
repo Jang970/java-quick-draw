@@ -25,8 +25,7 @@ public class UserManager {
   
   // instance fields
   private List<User> users = new ArrayList<User>();
-  private User currentUser;
-  private int currentUserIndex;
+  private int currentUserIndex = 0;
 
   /**
    * Call this method when it is required to create and save (serialise) a new user profile to json file
@@ -49,6 +48,60 @@ public class UserManager {
   }
 
   /**
+   * Use this method to update the username of the current user profile in use
+   * TODO: ensure no duplicate usernames
+   */
+  public void updateUserName(String newName) {
+    
+    this.users.get(currentUserIndex).changeUserName(newName);
+
+  }
+
+  /**
+   * Use this method when you want to save the stats of an existing user profile into json
+   * @throws IOException
+   */
+  public void updateCurrentProfile() throws IOException{
+
+    // store current user in use
+    User currUser = this.users.get(currentUserIndex);
+
+    // get and update list of all user profiles
+    users = getExistingProfiles();
+
+    // then replace User at given currentUserIndex in our list with updated values
+    users.set(currentUserIndex, currUser);
+
+    // serialise list to save changes
+    serialise();
+
+  }
+
+  /**
+   * Use this method to set the reference of currentUser to wanted user profile / object
+   * Can also be used to switch between user profiles
+   * @param userID unique ID of the User profile we want to set to / use
+   * @throws IOException
+   */
+  public void setCurrentProfile(int userID) throws IOException{
+
+    users = getExistingProfiles();
+    
+    int length = users.size();
+
+    // iterate through and find user object with same ID and update our currentUserIndex instance field
+    for (int i = 0; i < length; i++){
+      
+      if (users.get(i).getID() == userID){
+        currentUserIndex = i;
+        break;
+      }
+
+    }
+
+  }
+
+  /**
    * Call this method when you want a list of all User objects that have been created and stored on json file
    * Can only call if the json file already exists
    * @return arraylist of User objects
@@ -60,31 +113,27 @@ public class UserManager {
     return users;
   }
 
+
   /**
-   * Use this method when you want to save the stats of an existing user profile into json
-   * @param currentUser the current user object in use and the object we want to update in our json file
+   * Getter method to get the current User object profile in use
+   * @return object of class User that is the current profile being used
    * @throws IOException
    */
-  public void updateCurrentProfile() throws IOException{
-
-    // first get list of all user profiles
-    users = getExistingProfiles();
-
-    // then replace User at given currentUserIndex in our list with updated values
-    users.set(currentUserIndex, currentUser);
-
-    // serialise list to save changes
-    serialise();
-
+  public User getCurrentProfile() throws IOException{
+    return getExistingProfiles().get(currentUserIndex);
   }
 
   /**
-   * Use this method to update the username of the current user profile in use
-   * TODO: ensure no duplicate usernames
+   * Use this method to get an object of class UserStats containing simple getter methods for user to get wanted user stats
+   * Only use when a user profile has been set
+   * 
+   * Can simply use UserStats class methods to get and update desired stats
+   * 
+   * @return object of class UserStats containing stats of the current user profile
    */
-  public void updateUserName(String newName) {
-    
-    currentUser.changeUserName(newName);
+  public UserStats getUserStats(){
+
+    return users.get(currentUserIndex).getUserStats();
 
   }
 
@@ -125,62 +174,10 @@ public class UserManager {
 
   }
 
-   /**
-   * Use this method to set the reference of currentUser to wanted user profile / object
-   * Can also be used to switch between user profiles
-   * @param userID unique ID of the User profile we want to set to / use
-   * @throws IOException
-   */
-  public void setCurrentProfile(int userID) throws IOException{
-
-    users = getExistingProfiles();
-    
-    int length = users.size();
-
-    // iterate through and find user object with same ID and update our currentUser instance field
-    for (int i = 0; i < length; i++){
-      
-      if (users.get(i).getID() == userID){
-        currentUser = users.get(i);
-        currentUserIndex = i;
-        break;
-      }
-
-    }
-
-  }
-
-  /**
-   * Getter method to get the current User object profile in use
-   * @return object / value stored in currentUser instance field
-   */
-  public User getCurrentProfile(){
-    return this.currentUser;
-  }
-
-  /**
-   * Use this method to get an object of class UserStats containing simple getter methods for user to get wanted user stats
-   * Only use when a user profile has been set
-   * 
-   * Can simply use UserStats class methods to get desired stats
-   * 
-   * @return object of class UserStats containing stats of the current user profile
-   */
-  public UserStats getUserStats(){
-
-    // get current user
-    User currUser = users.get(currentUserIndex);
-
-    return currUser.getUserStats();
-
-  }
-
-
   /**
    * LIST OF TODOS
    * 
-   * TODO: find efficient way to update stats of a user?
-   * TODO: implement and use IDs instead of usernames
+   * TODO: ensure no duplicate usernames
    * 
    */
 }
