@@ -203,12 +203,8 @@ public class UserManager {
         Gson gson = new Gson();
         Type listType = new TypeToken<ArrayList<User>>() {}.getType();
 
-        System.out.println("deserialise");
-
         // converting json string to arraylist of user objects
         users = gson.fromJson(reader, listType);
-
-        System.out.println("deserialise" + users.get(0).getName());
 
         // close reader
         reader.close();

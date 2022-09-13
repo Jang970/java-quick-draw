@@ -1,16 +1,19 @@
 package nz.ac.auckland.se206.controllers;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
+import nz.ac.auckland.se206.util.UserStats;
 
 public class UserStatsScreenController {
 
-  // TODO: Uncomment the following when we can implement
-  // private Label fastestWinLabel;
-  // private Label numGamesWonLabel;
-  // private Label numGamesLostLabel;
-  // private Label numCategoriesPlayedLabel;
+  @FXML private Label fastestWinLabel;
+  @FXML private Label numGamesWonLabel;
+  @FXML private Label numGamesLostLabel;
+  @FXML private Label numCategoriesPlayedLabel;
 
   public void initialize() {
 
@@ -18,7 +21,16 @@ public class UserStatsScreenController {
     App.subscribeToViewChange(
         (View view) -> {
           if (view == View.USERSTATS) {
-            // TODO: get recent user stats and set labels
+            try {
+              UserStats currentUserStats = App.getUserManager().getCurrentProfile().getUserStats();
+              fastestWinLabel.setText(String.valueOf(currentUserStats.getFastestWin()));
+              numGamesWonLabel.setText(String.valueOf(currentUserStats.getGamesWon()));
+              numGamesLostLabel.setText(String.valueOf(currentUserStats.getGamesLost()));
+              numCategoriesPlayedLabel.setText(
+                  String.valueOf(currentUserStats.getCategoryHistory().size()));
+            } catch (IOException | URISyntaxException e) {
+              e.printStackTrace();
+            }
           }
         });
   }

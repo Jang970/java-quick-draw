@@ -1,5 +1,7 @@
 package nz.ac.auckland.se206.controllers;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -13,6 +15,7 @@ public class CategoryScreenController {
   @FXML private Button readyButton;
   @FXML private Label drawTimeLabel;
   @FXML private Label categoryLabel;
+  @FXML private Label usernameLabel;
 
   private TextToSpeech textToSpeech;
   private GameLogicManager gameLogicManager;
@@ -25,6 +28,11 @@ public class CategoryScreenController {
     App.subscribeToViewChange(
         (View view) -> {
           if (view == View.CATEGORY) {
+            try {
+              usernameLabel.setText("Hi, " + App.getUserManager().getCurrentProfile().getName());
+            } catch (IOException | URISyntaxException e1) {
+              e1.printStackTrace();
+            }
             generateNewCategoryAndUpdateLabel();
             updateGameTimeLabel();
           }

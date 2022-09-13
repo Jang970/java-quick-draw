@@ -8,7 +8,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <VBox alignment="TOP_CENTER" minHeight="570.0" prefHeight="570.0" prefWidth="600.0" spacing="10.0" stylesheets="@../css/application.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.CategoryScreenController">
    <children>
       <Label styleClass="headers" text="Quick, Draw!" textFill="#668cff">
@@ -40,7 +39,7 @@
                   <Font size="45.0" />
                </font>
             </Label>
-            <Label layoutX="29.0" layoutY="8.0" prefHeight="43.0" prefWidth="542.0" styleClass="headers" text="Hi, username" textAlignment="CENTER">
+            <Label fx:id="usernameLabel" layoutX="29.0" layoutY="8.0" prefHeight="43.0" prefWidth="542.0" styleClass="headers" text="Hi, username" textAlignment="CENTER">
                <font>
                   <Font size="40.0" />
                </font>

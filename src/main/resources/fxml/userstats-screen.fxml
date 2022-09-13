@@ -76,7 +76,7 @@
                         <Font size="20.0" />
                      </font>
                   </Label>
-                  <Label fx:id="NumsCategoriesPlayedLabel" alignment="CENTER" prefHeight="22.0" prefWidth="121.0" styleClass="subHeaders" text="0">
+                  <Label fx:id="numCategoriesPlayedLabel" alignment="CENTER" prefHeight="22.0" prefWidth="121.0" styleClass="subHeaders" text="0">
                      <font>
                         <Font size="20.0" />
                      </font>

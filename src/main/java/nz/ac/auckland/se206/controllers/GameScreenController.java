@@ -4,6 +4,7 @@ import ai.djl.ModelException;
 import ai.djl.modality.Classifications.Classification;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
@@ -33,6 +34,7 @@ public class GameScreenController {
   @FXML private Button clearButton;
 
   @FXML private Button userProfilesButton;
+  @FXML private Button userButton;
   @FXML private Button gameActionButton;
   @FXML private Button downloadImageButton;
 
@@ -94,12 +96,24 @@ public class GameScreenController {
           if (newView == View.HOME || newView == View.CATEGORY) {
             gameLogicManager.cancelGame();
           } else if (newView == View.GAME) {
+            setUserButtonStyle();
             // When the view changes to game, we start a new game and clear the canvas
             gameLogicManager.startGame();
             whatToDrawLabel.setText("To Draw: " + gameLogicManager.getCurrentCategory());
             canvasManager.clearCanvas();
           }
         });
+  }
+
+  private void setUserButtonStyle() {
+    try {
+      userButton.setStyle(
+          "-fx-background-color: "
+              + App.getUserManager().getCurrentProfile().getColour().replace("0x", "#")
+              + ";");
+    } catch (IOException | URISyntaxException e1) {
+      e1.printStackTrace();
+    }
   }
 
   private void onGameEnd(WinState winState) {
@@ -111,6 +125,7 @@ public class GameScreenController {
           updateTimeRemainingLabel(0);
           gameActionButton.setText("New Game");
 
+          // TODO: Results are not being displayed!
           if (winState == WinState.WIN) {
             textToSpeech.speakAsync("You got it!");
           } else if (winState == WinState.LOOSE) {

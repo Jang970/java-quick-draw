@@ -13,7 +13,6 @@ import javafx.scene.layout.VBox;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
 import nz.ac.auckland.se206.util.User;
-import nz.ac.auckland.se206.util.UserManager;
 
 public class UserProfilesScreenController {
 
@@ -22,7 +21,6 @@ public class UserProfilesScreenController {
   @FXML private VBox profilesVBox;
 
   private List<User> users;
-  private UserManager userManager;
 
   /** Creates pagination */
   public void initialize() {
@@ -51,7 +49,6 @@ public class UserProfilesScreenController {
     // creates pages length of profiles list
     profilesPagination.setPageFactory(
         (Integer pageIndex) -> {
-          System.out.println(pageIndex);
           if (pageIndex >= users.size()) {
             return null;
           } else {
@@ -135,7 +132,7 @@ public class UserProfilesScreenController {
           public void handle(ActionEvent event) {
 
             try {
-              userManager.setCurrentProfile(Integer.parseInt(userButton.getId()));
+              App.getUserManager().setCurrentProfile(Integer.parseInt(userButton.getId()));
             } catch (NumberFormatException | IOException | URISyntaxException e) {
               e.printStackTrace();
             }

@@ -147,8 +147,6 @@
 .userIconButtonCanvas {
 	-fx-pref-width: 50;
 	-fx-pref-height: 50;
-	/* TODO: Get rid of this and set into game screen controller */
-	-fx-background-color: red;
 }
 
 .resultSplash {
