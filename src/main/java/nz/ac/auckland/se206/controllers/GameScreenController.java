@@ -93,14 +93,13 @@ public class GameScreenController {
 
     App.subscribeToViewChange(
         (View newView) -> {
-          if (newView == View.HOME || newView == View.CATEGORY) {
-            gameLogicManager.cancelGame();
-          } else if (newView == View.GAME) {
-            setUserButtonStyle();
+          if (newView == View.GAME) {
             // When the view changes to game, we start a new game and clear the canvas
             gameLogicManager.startGame();
             whatToDrawLabel.setText("To Draw: " + gameLogicManager.getCurrentCategory());
             canvasManager.clearCanvas();
+          } else {
+            gameLogicManager.cancelGame();
           }
         });
   }
