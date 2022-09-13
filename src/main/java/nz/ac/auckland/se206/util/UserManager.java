@@ -191,26 +191,28 @@ public class UserManager {
 
     // deserialising file containing existing profiles
     // de-serialisation
-    // create file reader
-    userProfilesFile = new File(UserManager.class.getResource("/").getFile() + "UserProfiles.json");
 
+    // firstly checking if the file exists if not create it
+    userProfilesFile = new File(UserManager.class.getResource("/").getFile() + "UserProfiles.json");
     userProfilesFile.createNewFile();
 
-    // doesn't deserialise if user profiles is empty
-    if (!users.isEmpty()) {
-      // firstly checking if the file exists
-      try (Reader reader = new FileReader(userProfilesFile)) {
-        Gson gson = new Gson();
-        Type listType = new TypeToken<ArrayList<User>>() {}.getType();
+    // create file reader
+    try (Reader reader = new FileReader(userProfilesFile)) {
+      Gson gson = new Gson();
+      Type listType = new TypeToken<ArrayList<User>>() {}.getType();
 
-        // converting json string to arraylist of user objects
-        users = gson.fromJson(reader, listType);
+      // converting json string to arraylist of user objects
+      users = gson.fromJson(reader, listType);
 
-        // close reader
-        reader.close();
-      } catch (FileNotFoundException e) {
-        System.out.println("Error");
-      }
+      // close reader
+      reader.close();
+    } catch (FileNotFoundException e) {
+      System.out.println("Error");
+    }
+
+    // users will return null if file is empty in this case users should return empty
+    if (users == null) {
+      users = new ArrayList<User>();
     }
   }
 
