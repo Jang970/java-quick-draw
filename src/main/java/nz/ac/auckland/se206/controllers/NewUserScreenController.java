@@ -1,5 +1,7 @@
 package nz.ac.auckland.se206.controllers;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -47,12 +49,18 @@ public class NewUserScreenController {
   private void onCreateProfile() {
 
     // TODO: Better way to check if color picker has been selected or not
+
+    // TODO: check if username is not dupilicated
     // checks if username and colour picker has been selected
     if (!usernameTextField.getText().isBlank()
         && !colorPicker.getValue().equals(Color.TRANSPARENT)) {
 
-      // TODO: send username and color to user profile manager
-      System.out.println(usernameTextField.getText() + " " + colorPicker.getValue().toString());
+      try {
+        App.getUserManager()
+            .createUserProfile(usernameTextField.getText(), colorPicker.getValue().toString());
+      } catch (IOException | URISyntaxException e) {
+        e.printStackTrace();
+      }
 
       // changes view to user profiles
       App.setView(View.USERPROFILES);

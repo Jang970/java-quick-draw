@@ -3,17 +3,17 @@ package nz.ac.auckland.se206.util;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 import java.lang.reflect.Type;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
-import javafx.scene.paint.Color;
 
 /**
  * This class will be used to handle any functionalities we would like to do with User class
@@ -24,6 +24,7 @@ public class UserManager {
   // instance fields
   private List<User> users = new ArrayList<User>();
   private int currentUserIndex = 0;
+  private File userProfilesFile;
 
   /**
    * Call this method when it is required to create and save (serialise) a new user profile to json
@@ -33,8 +34,10 @@ public class UserManager {
    * @param colour chosen colour
    * @return boolean to indicate if creation was successful or not
    * @throws IOException
+   * @throws URISyntaxException
    */
-  public boolean createUserProfile(String username, Color colour) throws IOException {
+  public boolean createUserProfile(String username, String colour)
+      throws IOException, URISyntaxException {
 
     // check if username already exists, return false
     if (userWithNameAlreadyExists(username)) {
@@ -62,8 +65,9 @@ public class UserManager {
    * @param newName new username to update to
    * @return boolean to indicate if update was successful or not
    * @throws IOException
+   * @throws URISyntaxException
    */
-  public boolean updateUserName(String newName) throws IOException {
+  public boolean updateUserName(String newName) throws IOException, URISyntaxException {
 
     // checking if username already exists, return false if it does
     if (userWithNameAlreadyExists(newName)) {
@@ -81,8 +85,9 @@ public class UserManager {
    * Use this method when you want to save the stats of an existing user profile into json
    *
    * @throws IOException
+   * @throws URISyntaxException
    */
-  public void updateCurrentProfile() throws IOException {
+  public void updateCurrentProfile() throws IOException, URISyntaxException {
 
     // store current user in use
     User currUser = this.users.get(currentUserIndex);
@@ -103,8 +108,9 @@ public class UserManager {
    *
    * @param userID unique ID of the User profile we want to set to / use
    * @throws IOException
+   * @throws URISyntaxException
    */
-  public void setCurrentProfile(int userID) throws IOException {
+  public void setCurrentProfile(int userID) throws IOException, URISyntaxException {
 
     users = getExistingProfiles();
 
@@ -127,8 +133,9 @@ public class UserManager {
    *
    * @return arraylist of User objects
    * @throws IOException
+   * @throws URISyntaxException
    */
-  public List<User> getExistingProfiles() throws IOException {
+  public List<User> getExistingProfiles() throws IOException, URISyntaxException {
 
     deserialise();
     return users;
@@ -139,8 +146,9 @@ public class UserManager {
    *
    * @return object of class User that is the current profile being used
    * @throws IOException
+   * @throws URISyntaxException
    */
-  public User getCurrentProfile() throws IOException {
+  public User getCurrentProfile() throws IOException, URISyntaxException {
     return getExistingProfiles().get(currentUserIndex);
   }
 
@@ -162,36 +170,51 @@ public class UserManager {
    *
    * @throws IOException
    */
-  private void serialise() throws IOException {
-    try (Writer writer = new FileWriter("UserProfiles.json")) {
-      Gson gson = new GsonBuilder().create();
-      gson.toJson(users, writer);
-    }
+  private void serialise() throws IOException, URISyntaxException {
+
+    Writer writer = new FileWriter(userProfilesFile);
+    Gson gson = new GsonBuilder().create();
+    gson.toJson(users, writer);
+
+    // flushing and closing the writer (cleaning)
+    writer.flush();
+    writer.close();
   }
 
   /**
    * This method will handle deserialsing / loading from json file
    *
    * @throws IOException
+   * @throws URISyntaxException
    */
-  private void deserialise() throws IOException {
+  private void deserialise() throws IOException, URISyntaxException {
 
     // deserialising file containing existing profiles
     // de-serialisation
     // create file reader
+    userProfilesFile = new File(UserManager.class.getResource("/").getFile() + "UserProfiles.json");
 
-    // firstly checking if the file exists
-    try (Reader reader = Files.newBufferedReader(Paths.get("UserProfiles.json"))) {
-      Gson gson = new Gson();
-      Type listType = new TypeToken<ArrayList<User>>() {}.getType();
+    userProfilesFile.createNewFile();
 
-      // converting json string to arraylist of user objects
-      users = gson.fromJson(reader, listType);
+    // doesn't deserialise if user profiles is empty
+    if (!users.isEmpty()) {
+      // firstly checking if the file exists
+      try (Reader reader = new FileReader(userProfilesFile)) {
+        Gson gson = new Gson();
+        Type listType = new TypeToken<ArrayList<User>>() {}.getType();
 
-      // close reader
-      reader.close();
-    } catch (FileNotFoundException e) {
-      // will throw an exception if file does not exist
+        System.out.println("deserialise");
+
+        // converting json string to arraylist of user objects
+        users = gson.fromJson(reader, listType);
+
+        System.out.println("deserialise" + users.get(0).getName());
+
+        // close reader
+        reader.close();
+      } catch (FileNotFoundException e) {
+        System.out.println("Error");
+      }
     }
   }
 
@@ -200,8 +223,10 @@ public class UserManager {
    *
    * @return boolean - True if a duplicate exists
    * @throws IOException
+   * @throws URISyntaxException
    */
-  private boolean userWithNameAlreadyExists(String userName) throws IOException {
+  private boolean userWithNameAlreadyExists(String userName)
+      throws IOException, URISyntaxException {
 
     // update users
     users = getExistingProfiles();

@@ -1,7 +1,5 @@
 package nz.ac.auckland.se206.util;
 
-import javafx.scene.paint.Color;
-
 /**
  * This class will be used to create objects for each new user profile containing all information
  * related to that specific profile. We will be using the concept of json serialisation and
@@ -15,12 +13,12 @@ public class User {
   // instance fields to track user associated stats and as well as the name
   private String name;
   private int id = 0;
-  private Color colour;
+  private String colour;
   // object of class UserStats
   private UserStats userStats = new UserStats();
 
   // constructor to create a user profile with an associated name and colour
-  public User(String profileName, Color colour) {
+  public User(String profileName, String colour) {
 
     this.name = profileName;
     this.id = count++;
@@ -36,7 +34,7 @@ public class User {
     return this.id;
   }
 
-  public Color getColour() {
+  public String getColour() {
     return this.colour;
   }
 

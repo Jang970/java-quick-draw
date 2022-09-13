@@ -161,7 +161,7 @@
       </VBox>
       <HBox alignment="CENTER" prefHeight="48.0" prefWidth="600.0">
          <children>
-            <Button fx:id="userProfilesButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onuserProfiles" prefHeight="33.0" prefWidth="139.0" text="Switch Profiles" textAlignment="CENTER">
+            <Button fx:id="userProfilesButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onUserProfiles" prefHeight="33.0" prefWidth="139.0" text="Switch Profiles" textAlignment="CENTER">
                <HBox.margin>
                   <Insets right="20.0" />
                </HBox.margin>

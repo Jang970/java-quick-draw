@@ -1,5 +1,8 @@
 package nz.ac.auckland.se206.controllers;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.List;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -7,9 +10,10 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Pagination;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
+import nz.ac.auckland.se206.util.User;
+import nz.ac.auckland.se206.util.UserManager;
 
 public class UserProfilesScreenController {
 
@@ -17,22 +21,8 @@ public class UserProfilesScreenController {
   @FXML private Pagination profilesPagination;
   @FXML private VBox profilesVBox;
 
-  private Color[] colors =
-      new Color[] {
-        Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN, Color.BLUE, Color.INDIGO, Color.VIOLET
-      };
-
-  // TODO: This would be a string of usernames I need.
-  final String[] username =
-      new String[] {
-        "this is a test 1",
-        "this is a test 2",
-        "this is a test 3",
-        "this is a test 4",
-        "this is a test 5",
-        "this is a test 6",
-        "this is a test 7",
-      };
+  private List<User> users;
+  private UserManager userManager;
 
   /** Creates pagination */
   public void initialize() {
@@ -42,8 +32,11 @@ public class UserProfilesScreenController {
     App.subscribeToViewChange(
         (View view) -> {
           if (view == View.USERPROFILES) {
-
-            // TODO: call profile manager and get usernames and colours of every user
+            try {
+              users = App.getUserManager().getExistingProfiles();
+            } catch (IOException | URISyntaxException e) {
+              e.printStackTrace();
+            }
             createProfilesPagination();
           }
         });
@@ -58,7 +51,8 @@ public class UserProfilesScreenController {
     // creates pages length of profiles list
     profilesPagination.setPageFactory(
         (Integer pageIndex) -> {
-          if (pageIndex >= username.length) {
+          System.out.println(pageIndex);
+          if (pageIndex >= users.size()) {
             return null;
           } else {
             // creates each profiles
@@ -66,7 +60,7 @@ public class UserProfilesScreenController {
           }
         });
     // sets max page count
-    profilesPagination.setPageCount(username.length);
+    profilesPagination.setPageCount(users.size());
   }
 
   /**
@@ -82,12 +76,16 @@ public class UserProfilesScreenController {
 
     // create user buttons
     Button userIconButton = new Button("userIconButton");
-    Button usernameButton = new Button(username[pageIndex]);
+    Button usernameButton = new Button(users.get(pageIndex).getName());
+
+    // sets id's of button to corresponding user id
+    userIconButton.setId(String.valueOf(users.get(pageIndex).getID()));
+    usernameButton.setId(String.valueOf(users.get(pageIndex).getID()));
 
     // set style
-    setButtonStyle(userIconButton);
-    setButtonStyle(usernameButton);
-    userIconButton.setStyle(getBackgroundColor(colors[pageIndex]));
+    setButtonStyle(userIconButton, "userIconButton");
+    setButtonStyle(usernameButton, "usernameButton");
+    userIconButton.setStyle(getBackgroundColor(users.get(pageIndex).getColour()));
 
     // adds buttons to vBox
     box.getChildren().add(userIconButton);
@@ -106,8 +104,8 @@ public class UserProfilesScreenController {
    * @param color given background color of user
    * @return
    */
-  private String getBackgroundColor(Color color) {
-    return "-fx-background-color: " + color.toString().replace("0x", "#") + ";";
+  private String getBackgroundColor(String color) {
+    return "-fx-background-color: " + color.replace("0x", "#") + ";";
   }
 
   /**
@@ -115,12 +113,12 @@ public class UserProfilesScreenController {
    *
    * @param button
    */
-  private void setButtonStyle(Button button) {
+  private void setButtonStyle(Button button, String cssClass) {
 
     // Clears current button style so it doesn't have css style of the general buttons
     button.getStyleClass().clear();
     // adds new style class to button
-    button.getStyleClass().add(button.getText());
+    button.getStyleClass().add(cssClass);
   }
 
   /**
@@ -136,7 +134,11 @@ public class UserProfilesScreenController {
           @Override
           public void handle(ActionEvent event) {
 
-            // TODO: send username to profile manager
+            try {
+              userManager.setCurrentProfile(Integer.parseInt(userButton.getId()));
+            } catch (NumberFormatException | IOException | URISyntaxException e) {
+              e.printStackTrace();
+            }
 
             // gets controller to update category
             App.setView(View.CATEGORY);
