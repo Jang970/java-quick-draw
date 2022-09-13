@@ -33,7 +33,6 @@ public class NewUserScreenController {
     App.subscribeToViewChange(
         (View view) -> {
           if (view == View.NEWUSER) {
-
             // doesn't store previous user values
             usernameTextField.clear();
             colorPicker.setValue(Color.TRANSPARENT);
@@ -44,28 +43,26 @@ public class NewUserScreenController {
   /**
    * When start game is clicked (on new user pane) it switches to category screen after checking if
    * inputs are valid.
+   *
+   * @throws URISyntaxException
+   * @throws IOException
    */
   @FXML
-  private void onCreateProfile() {
+  private void onCreateProfile() throws IOException, URISyntaxException {
 
     // TODO: Better way to check if color picker has been selected or not
-
-    // TODO: check if username is not dupilicated
     // checks if username and colour picker has been selected
+    // and creates profile (must return true to ensure it does not contain duplicate)
     if (!usernameTextField.getText().isBlank()
-        && !colorPicker.getValue().equals(Color.TRANSPARENT)) {
-
-      try {
-        App.getUserManager()
-            .createUserProfile(usernameTextField.getText(), colorPicker.getValue().toString());
-      } catch (IOException | URISyntaxException e) {
-        e.printStackTrace();
-      }
+        && !colorPicker.getValue().equals(Color.TRANSPARENT)
+        && App.getUserManager()
+            .createUserProfile(usernameTextField.getText(), colorPicker.getValue().toString())) {
 
       // changes view to user profiles
       App.setView(View.USERPROFILES);
 
     } else {
+      // TODO: Do we want specific error alerts depending on error?
       // shows an alert pop up if username is blank or spaces and/or color hasn't been chosen
       Alert errorAlert = new Alert(AlertType.ERROR);
       DialogPane dialogPane = errorAlert.getDialogPane();

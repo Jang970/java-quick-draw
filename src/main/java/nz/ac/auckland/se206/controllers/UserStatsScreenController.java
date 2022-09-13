@@ -10,6 +10,7 @@ import nz.ac.auckland.se206.util.UserStats;
 
 public class UserStatsScreenController {
 
+  @FXML private Label statsHeaderLabel;
   @FXML private Label fastestWinLabel;
   @FXML private Label numGamesWonLabel;
   @FXML private Label numGamesLostLabel;
@@ -22,6 +23,11 @@ public class UserStatsScreenController {
         (View view) -> {
           if (view == View.USERSTATS) {
             try {
+              // sets all labels of the user stats and users name
+              statsHeaderLabel.setText(
+                  App.getUserManager().getCurrentProfile().getName() + "'s Stats");
+
+              //  user stats label
               UserStats currentUserStats = App.getUserManager().getCurrentProfile().getUserStats();
               fastestWinLabel.setText(String.valueOf(currentUserStats.getFastestWin()));
               numGamesWonLabel.setText(String.valueOf(currentUserStats.getGamesWon()));

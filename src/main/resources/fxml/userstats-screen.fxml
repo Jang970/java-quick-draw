@@ -25,7 +25,7 @@
             <Insets top="-10.0" />
          </VBox.margin>
       </Label>
-      <Label alignment="CENTER" prefHeight="49.0" prefWidth="608.0" styleClass="headers" text="Username's Stats" textAlignment="CENTER">
+      <Label fx:id="statsHeaderLabel" alignment="CENTER" prefHeight="49.0" prefWidth="608.0" styleClass="headers" text="Username's Stats" textAlignment="CENTER">
          <font>
             <Font size="40.0" />
          </font>
