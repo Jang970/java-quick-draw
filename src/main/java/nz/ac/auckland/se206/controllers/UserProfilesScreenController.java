@@ -3,6 +3,7 @@ package nz.ac.auckland.se206.controllers;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.UUID;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -76,8 +77,8 @@ public class UserProfilesScreenController {
     Button usernameButton = new Button(users.get(pageIndex).getName());
 
     // sets id's of button to corresponding user id
-    userIconButton.setId(String.valueOf(users.get(pageIndex).getID()));
-    usernameButton.setId(String.valueOf(users.get(pageIndex).getID()));
+    userIconButton.setId(users.get(pageIndex).getID().toString());
+    usernameButton.setId(users.get(pageIndex).getID().toString());
 
     // set style
     setButtonStyle(userIconButton, "userIconButton");
@@ -132,7 +133,8 @@ public class UserProfilesScreenController {
           public void handle(ActionEvent event) {
 
             try {
-              App.getUserManager().setCurrentProfile(Integer.parseInt(userButton.getId()));
+              // sets current profile by obtaining button uuid
+              App.getUserManager().setCurrentProfile(UUID.fromString(userButton.getId()));
             } catch (NumberFormatException | IOException | URISyntaxException e) {
               e.printStackTrace();
             }

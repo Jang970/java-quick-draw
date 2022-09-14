@@ -1,5 +1,7 @@
 package nz.ac.auckland.se206.util;
 
+import java.util.UUID;
+
 /**
  * This class will be used to create objects for each new user profile containing all information
  * related to that specific profile. We will be using the concept of json serialisation and
@@ -7,12 +9,9 @@ package nz.ac.auckland.se206.util;
  */
 public class User {
 
-  // static variable to implement unique user ID
-  private static int count = 0;
-
   // instance fields to track user associated stats and as well as the name
   private String name;
-  private int id = 0;
+  private UUID id;
   private String colour;
   // object of class UserStats
   private UserStats userStats = new UserStats();
@@ -21,7 +20,8 @@ public class User {
   public User(String profileName, String colour) {
 
     this.name = profileName;
-    this.id = count++;
+    // generates a random UUID for each user profile
+    this.id = UUID.randomUUID();
     this.colour = colour;
   }
 
@@ -30,7 +30,7 @@ public class User {
     return this.name;
   }
 
-  public int getID() {
+  public UUID getID() {
     return this.id;
   }
 

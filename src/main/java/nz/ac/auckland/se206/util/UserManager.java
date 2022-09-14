@@ -14,6 +14,7 @@ import java.lang.reflect.Type;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * This class will be used to handle any functionalities we would like to do with User class
@@ -110,7 +111,7 @@ public class UserManager {
    * @throws IOException
    * @throws URISyntaxException
    */
-  public void setCurrentProfile(int userID) throws IOException, URISyntaxException {
+  public void setCurrentProfile(UUID userID) throws IOException, URISyntaxException {
 
     users = getExistingProfiles();
 
@@ -120,7 +121,8 @@ public class UserManager {
     // field
     for (int i = 0; i < length; i++) {
 
-      if (users.get(i).getID() == userID) {
+      // checks if the two UUID's are equal
+      if (users.get(i).getID().equals(userID)) {
         currentUserIndex = i;
         break;
       }
