@@ -16,34 +16,40 @@
 
 /* Sets the background color of all scenes as cream */
 .root {
-    -fx-background-color: rgb(235, 233, 221);
+    -fx-background-color: #ebe9dd;
 	-fx-margin: center;
 }
 
 .headers{
 	-fx-font-family: 'Londrina Solid';
-	-fx-text-fill: rgb(235, 233, 221);
 }
 
 .subHeaders{
 	-fx-font-family: 'Gaegu Bold';
 }
 
+.stateHeaders{
+	-fx-background-color: #668cff;
+	-fx-background-radius: 40px;
+}
+
 .button {
 	-fx-font-family: 'Gaegu';
 	-fx-background-color: black;
 	-fx-background-radius: 40px;
-	-fx-text-fill: rgb(102, 140, 255);
+	-fx-text-fill: #668cff;
 	-fx-font-size: 18px;
 }
 
 .button:hover{
-	-fx-font-family: 'Gaegu';
 	-fx-background-color: rgb(102, 140, 255);
-	-fx-background-radius: 40px;
 	-fx-text-fill: black;
-	-fx-font-size: 18px;
 }
+
+.button:hover, .userIconButton:hover, .usernameButton:hover, .pagination .toggle-button:hover, .color-picker:hover{
+	-fx-cursor: hand;
+}
+
 /* Main Menu scene */
 
 /* Adds the splash */
@@ -51,7 +57,7 @@
 	-fx-image: url('../images/splash.png');
 }
 
-
+/*TODO: Should we use this or not*/
 /* For text to speech add volume image */
 #audio{
 	-fx-background-image: url('../images/audio.png');
@@ -61,11 +67,91 @@
 	-fx-background-position: center center;
 }
 
+/* User Profile scene*/
+
+.userIconButton{
+	-fx-shape: "M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z";
+    -fx-pref-width: 150;
+	-fx-pref-height: 150;
+    -fx-alignment: bottom-center;
+	-fx-text-fill: none;
+}
+
+.usernameButton{
+	-fx-font-family: 'Londrina Solid';
+	-fx-text-fill: black;
+	-fx-font-size: 18px;
+	-fx-alignment: bottom-center;
+    -fx-wrap-text: true;
+}
+
+.pagination {
+	-fx-font-family: 'Gaegu';
+	-fx-font-size: 18px;
+	-fx-page-information-visible: false;
+	-fx-tooltip-visible: false;
+	}
+
+.pagination .toggle-button  {
+	-fx-color:black ;
+	-fx-background-radius: 20px;
+}
+
+.pagination .toggle-button:selected{
+ 	 -fx-color: rgb(102, 140, 255);
+}
+
+.pagination .toggle-button:hover {
+ 	 -fx-background-color: rgb(102, 140, 255);
+}
+
+.pagination .pagination-control .left-arrow, .right-arrow{
+    -fx-background-color: black, rgb(102, 140, 255);
+	-fx-min-width: 20;
+	-fx-min-height: 20;
+}
+
+.pagination .button {
+	-fx-background-color: none;
+}
+
+.pagination .pagination-control .left-arrow:hover, .right-arrow:hover{
+    -fx-background-color: rgb(102, 140, 255), black;
+	-fx-min-width: 25;
+	-fx-min-height: 25;
+	-fx-cursor: hand;
+}
+
+.text-field, .color-picker {
+	-fx-font-family: 'Gaegu';
+   	-fx-font-size: 18px;
+	-fx-background-color: rgb(235, 233, 221);
+	-fx-background-radius: 40px;
+}
+
+/* Error Message Scene */
+
+.dialog-pane{
+  	-fx-font-family: 'Gaegu';
+	-fx-font-size: 18px;
+	-fx-background-color: rgb(235, 233, 221);
+ }
+ 
+ .dialog-pane .header-panel{
+	-fx-font-family: 'Londrina Solid';
+	-fx-font-size: 20px;
+	-fx-background-color:  rgb(102, 140, 255);
+ }
+
+ .dialog-pane .label {
+	-fx-text-fill: darkred;
+ }
+
 /* Canvas scene */
 
-.quickdrawCanvas{
-	-fx-font-family: 'Londrina Solid';
-	-fx-text-fill: rgb(102, 140, 255);
+.userIconButtonCanvas {
+	-fx-pref-width: 50;
+	-fx-pref-height: 50;
 }
 
 .resultSplash {
@@ -74,6 +160,6 @@
 
 /* Adds border to canvas so user can see where to draw */
 .canvas {
-    -fx-border-color: rgb(102, 140, 255);
 	-fx-border-radius: 40px;
+    -fx-border-color: rgb(102, 140, 255);
 }

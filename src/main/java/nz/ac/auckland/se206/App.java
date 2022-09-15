@@ -10,20 +10,30 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import nz.ac.auckland.se206.util.EventEmitter;
 import nz.ac.auckland.se206.util.EventListener;
+import nz.ac.auckland.se206.util.ProfileManager;
 
 /** This is the entry point of the JavaFX application. */
 public class App extends Application {
 
   public static enum View {
     HOME,
+    USERPROFILES,
+    NEWUSER,
     CATEGORY,
-    GAME
+    GAME,
+    USERSTATS
   }
 
   private static ViewManager<View> viewManager;
   private static GameLogicManager gameLogicManager;
   private static EventEmitter<WindowEvent> appTerminationEmitter = new EventEmitter<WindowEvent>();
   private static Stage stage;
+
+  private static ProfileManager profileManager;
+
+  public static ProfileManager getProfileManager() {
+    return profileManager;
+  }
 
   public static GameLogicManager getGameLogicManager() {
     return gameLogicManager;
@@ -85,6 +95,8 @@ public class App extends Application {
     gameLogicManager.setNumTopGuessNeededToWin(3);
     gameLogicManager.setGameLengthSeconds(60);
 
+    profileManager = new ProfileManager("profiles.json");
+
     App.stage = stage;
 
     stage.setOnCloseRequest((e) -> appTerminationEmitter.emit(e));
@@ -96,6 +108,9 @@ public class App extends Application {
     viewManager.addView(View.HOME, defaultParent);
     viewManager.addView(View.GAME, loadFxml("game-screen"));
     viewManager.addView(View.CATEGORY, loadFxml("category-screen"));
+    viewManager.addView(View.USERPROFILES, loadFxml("userprofiles-screen"));
+    viewManager.addView(View.NEWUSER, loadFxml("newuser-screen"));
+    viewManager.addView(View.USERSTATS, loadFxml("userstats-screen"));
 
     stage.setTitle("Speedy Sketchers");
     stage.setResizable(false);

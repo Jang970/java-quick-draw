@@ -32,7 +32,8 @@ public class GameScreenController {
   @FXML private Button eraserButton;
   @FXML private Button clearButton;
 
-  @FXML private Button returnHomeButton;
+  @FXML private Button userProfilesButton;
+  @FXML private Button userButton;
   @FXML private Button gameActionButton;
   @FXML private Button downloadImageButton;
 
@@ -92,6 +93,8 @@ public class GameScreenController {
     App.subscribeToViewChange(
         (View newView) -> {
           if (newView == View.GAME) {
+            // set color of user profile icon button
+            setUserButtonStyle();
             // When the view changes to game, we start a new game and clear the canvas
             gameLogicManager.startGame();
             whatToDrawLabel.setText("To Draw: " + gameLogicManager.getCurrentCategory());
@@ -102,19 +105,31 @@ public class GameScreenController {
         });
   }
 
+  /** Gets colour and sets css background colour */
+  private void setUserButtonStyle() {
+    userButton.setStyle(
+        "-fx-background-color: "
+            + App.getProfileManager().getCurrentProfile().getColour().replace("0x", "#")
+            + ";");
+  }
+
   private void onGameEnd(WinState winState) {
     Platform.runLater(
         () -> {
           canvasManager.setDrawingEnabled(false);
           setCanvasButtonsDisabled(true);
 
-          updateTimeRemainingLabel(0);
           gameActionButton.setText("New Game");
+          whatToDrawLabel.getStyleClass().add("stateHeaders");
 
           if (winState == WinState.WIN) {
+            whatToDrawLabel.setText("You got it!");
             textToSpeech.speakAsync("You got it!");
           } else if (winState == WinState.LOOSE) {
+            whatToDrawLabel.setText("Sorry, you ran out of time!");
             textToSpeech.speakAsync("Sorry, you ran out of time!");
+          } else {
+            whatToDrawLabel.setText("Game cancelled.");
           }
         });
   }
@@ -126,6 +141,7 @@ public class GameScreenController {
           setCanvasButtonsDisabled(false);
           canvasManager.setDrawingEnabled(true);
           gameActionButton.setDisable(false);
+          whatToDrawLabel.getStyleClass().remove("stateHeaders");
         });
   }
 
@@ -175,9 +191,13 @@ public class GameScreenController {
   }
 
   @FXML
-  private void onReturnHome() {
-    App.setView(View.HOME);
-    gameLogicManager.cancelGame();
+  private void onUserProfiles() {
+    App.setView(View.USERPROFILES);
+  }
+
+  @FXML
+  private void onUserStats() {
+    App.setView(View.USERSTATS);
   }
 
   @FXML

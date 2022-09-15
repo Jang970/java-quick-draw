@@ -13,6 +13,7 @@ public class CategoryScreenController {
   @FXML private Button readyButton;
   @FXML private Label drawTimeLabel;
   @FXML private Label categoryLabel;
+  @FXML private Label usernameLabel;
 
   private TextToSpeech textToSpeech;
   private GameLogicManager gameLogicManager;
@@ -25,6 +26,7 @@ public class CategoryScreenController {
     App.subscribeToViewChange(
         (View view) -> {
           if (view == View.CATEGORY) {
+            usernameLabel.setText("Hi, " + App.getProfileManager().getCurrentProfile().getName());
             generateNewCategoryAndUpdateLabel();
             updateGameTimeLabel();
           }

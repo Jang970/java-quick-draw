@@ -44,6 +44,15 @@
 			]
 		},
 		{
+			"label": "run without cleaning",
+			"type": "shell",
+			"command": "./mvnw javafx:run",
+			"windows": {
+				"command": ".\\mvnw.cmd javafx:run"
+			},
+			"group": "build"
+		},
+		{
 			"label": "run",
 			"type": "shell",
 			"command": "./mvnw clean javafx:run",
