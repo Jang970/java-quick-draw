@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import nz.ac.auckland.se206.util.EventEmitter;
 import nz.ac.auckland.se206.util.EventListener;
-import nz.ac.auckland.se206.util.UserManager;
+import nz.ac.auckland.se206.util.ProfileManager;
 
 /** This is the entry point of the JavaFX application. */
 public class App extends Application {
@@ -29,10 +29,10 @@ public class App extends Application {
   private static EventEmitter<WindowEvent> appTerminationEmitter = new EventEmitter<WindowEvent>();
   private static Stage stage;
 
-  private static UserManager userManager;
+  private static ProfileManager profileManager;
 
-  public static UserManager getUserManager() {
-    return userManager;
+  public static ProfileManager getProfileManager() {
+    return profileManager;
   }
 
   public static GameLogicManager getGameLogicManager() {
@@ -95,7 +95,7 @@ public class App extends Application {
     gameLogicManager.setNumTopGuessNeededToWin(3);
     gameLogicManager.setGameLengthSeconds(60);
 
-    userManager = new UserManager();
+    profileManager = new ProfileManager("profiles.json");
 
     App.stage = stage;
 

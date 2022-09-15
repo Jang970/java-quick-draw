@@ -13,7 +13,7 @@ public class HomeScreenController {
   @FXML
   private void onStartNewGame() throws IOException, URISyntaxException {
 
-    if (App.getUserManager().getExistingProfiles().isEmpty()) {
+    if (App.getProfileManager().getProfiles().isEmpty()) {
       App.setView(View.NEWUSER);
     } else {
       App.setView(View.USERPROFILES);
