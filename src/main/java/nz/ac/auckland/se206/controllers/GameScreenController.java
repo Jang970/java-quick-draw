@@ -126,12 +126,16 @@ public class GameScreenController {
 
           updateTimeRemainingLabel(0);
           gameActionButton.setText("New Game");
+          whatToDrawLabel.getStyleClass().add("stateHeaders");
 
-          // TODO: Results are not being displayed!
           if (winState == WinState.WIN) {
+            whatToDrawLabel.setText("You got it!");
             textToSpeech.speakAsync("You got it!");
           } else if (winState == WinState.LOOSE) {
+            whatToDrawLabel.setText("Sorry, you ran out of time!");
             textToSpeech.speakAsync("Sorry, you ran out of time!");
+          } else {
+            whatToDrawLabel.setText("Game cancelled.");
           }
         });
   }
@@ -143,6 +147,7 @@ public class GameScreenController {
           setCanvasButtonsDisabled(false);
           canvasManager.setDrawingEnabled(true);
           gameActionButton.setDisable(false);
+          whatToDrawLabel.getStyleClass().remove("stateHeaders");
         });
   }
 

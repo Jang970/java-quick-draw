@@ -41,7 +41,7 @@
       </Pane>
       <HBox alignment="CENTER" prefHeight="38.0" prefWidth="600.0" spacing="20.0">
          <children>
-            <Label fx:id="whatToDrawLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="55.0" prefWidth="212.0" styleClass="subHeaders" text="To Draw: ..." textAlignment="CENTER" wrapText="true">
+            <Label fx:id="whatToDrawLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="38.0" prefWidth="244.0" styleClass="subHeaders" text="To Draw: ..." textAlignment="CENTER" wrapText="true">
                <font>
                   <Font size="20.0" />
                </font>

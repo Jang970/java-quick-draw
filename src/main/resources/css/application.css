@@ -28,6 +28,11 @@
 	-fx-font-family: 'Gaegu Bold';
 }
 
+.stateHeaders{
+	-fx-background-color: #668cff;
+	-fx-background-radius: 40px;
+}
+
 .button {
 	-fx-font-family: 'Gaegu';
 	-fx-background-color: black;
