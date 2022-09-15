@@ -38,7 +38,7 @@
                   <Font size="18.0" />
                </font>
             </Label>
-            <TextField fx:id="usernameTextField" focusTraversable="false" layoutX="85.0" layoutY="164.0" maxWidth="335.0" prefHeight="33.0" prefWidth="374.0" promptText="Username" styleClass="subHeaders">
+            <TextField fx:id="usernameTextField" focusTraversable="false" layoutX="85.0" layoutY="164.0" maxWidth="335.0" prefHeight="33.0" prefWidth="374.0" promptText="Username (20 characters max)" styleClass="subHeaders">
                <font>
                   <Font size="19.0" />
                </font>

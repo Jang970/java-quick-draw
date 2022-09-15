@@ -64,16 +64,17 @@ public class NewUserScreenController {
     // TODO: Better way to check if color picker has been selected or not
     // checks if username and colour picker has been selected
     // and creates profile (must return true to ensure it does not contain duplicate)
+    // and checks is username is no longer than 20 characters
     if (!usernameTextField.getText().isBlank()
         && !colorPicker.getValue().equals(Color.TRANSPARENT)
         && App.getUserManager()
-            .createUserProfile(usernameTextField.getText(), colorPicker.getValue().toString())) {
+            .createUserProfile(usernameTextField.getText(), colorPicker.getValue().toString())
+        && (usernameTextField.getText().length() <= 20)) {
 
       // changes view to user profiles
       App.setView(View.USERPROFILES);
 
     } else {
-      // TODO: Do we want specific error alerts depending on error?
       // shows an alert pop up if username is blank or spaces and/or color hasn't been chosen
       Alert errorAlert = new Alert(AlertType.ERROR);
       DialogPane dialogPane = errorAlert.getDialogPane();

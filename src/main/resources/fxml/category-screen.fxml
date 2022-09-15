@@ -39,9 +39,9 @@
                   <Font size="45.0" />
                </font>
             </Label>
-            <Label fx:id="usernameLabel" layoutX="29.0" layoutY="8.0" prefHeight="43.0" prefWidth="542.0" styleClass="headers" text="Hi, username" textAlignment="CENTER">
+            <Label fx:id="usernameLabel" layoutX="29.0" prefHeight="43.0" prefWidth="542.0" styleClass="headers" text="Hi, username" textAlignment="CENTER">
                <font>
-                  <Font size="40.0" />
+                  <Font size="35.0" />
                </font>
             </Label>
             <Button fx:id="playButton" alignment="CENTER" layoutX="222.0" layoutY="393.0" mnemonicParsing="false" onAction="#onReadyToPlay" prefHeight="33.0" prefWidth="156.0" text="I'm Ready!" textAlignment="CENTER">
