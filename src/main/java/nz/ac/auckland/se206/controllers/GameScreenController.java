@@ -119,7 +119,6 @@ public class GameScreenController {
           canvasManager.setDrawingEnabled(false);
           setCanvasButtonsDisabled(true);
 
-          updateTimeRemainingLabel(0);
           gameActionButton.setText("New Game");
           whatToDrawLabel.getStyleClass().add("stateHeaders");
 
