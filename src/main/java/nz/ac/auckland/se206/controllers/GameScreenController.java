@@ -4,7 +4,6 @@ import ai.djl.ModelException;
 import ai.djl.modality.Classifications.Classification;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
@@ -108,14 +107,10 @@ public class GameScreenController {
 
   /** Gets colour and sets css background colour */
   private void setUserButtonStyle() {
-    try {
-      userButton.setStyle(
-          "-fx-background-color: "
-              + App.getUserManager().getCurrentProfile().getColour().replace("0x", "#")
-              + ";");
-    } catch (IOException | URISyntaxException e1) {
-      e1.printStackTrace();
-    }
+    userButton.setStyle(
+        "-fx-background-color: "
+            + App.getProfileManager().getCurrentProfile().getColour().replace("0x", "#")
+            + ";");
   }
 
   private void onGameEnd(WinState winState) {

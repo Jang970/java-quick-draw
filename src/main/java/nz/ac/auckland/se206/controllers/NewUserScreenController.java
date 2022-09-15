@@ -40,12 +40,8 @@ public class NewUserScreenController {
 
             // if there are existing users allow user to go back to user profiles screen by making
             // button visible
-            try {
-              if (!App.getUserManager().getExistingProfiles().isEmpty()) {
-                backButton.setVisible(true);
-              }
-            } catch (IOException | URISyntaxException e) {
-              e.printStackTrace();
+            if (!App.getProfileManager().getProfiles().isEmpty()) {
+              backButton.setVisible(true);
             }
           }
         });
@@ -67,8 +63,8 @@ public class NewUserScreenController {
     // and checks is username is no longer than 20 characters
     if (!usernameTextField.getText().isBlank()
         && !colorPicker.getValue().equals(Color.TRANSPARENT)
-        && App.getUserManager()
-            .createUserProfile(usernameTextField.getText(), colorPicker.getValue().toString())
+        && App.getProfileManager()
+            .createProfile(usernameTextField.getText(), colorPicker.getValue().toString())
         && (usernameTextField.getText().length() <= 20)) {
 
       // changes view to user profiles

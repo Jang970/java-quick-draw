@@ -1,12 +1,10 @@
 package nz.ac.auckland.se206.controllers;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
-import nz.ac.auckland.se206.util.UserStats;
+import nz.ac.auckland.se206.util.Profile;
 
 public class UserStatsScreenController {
 
@@ -22,21 +20,17 @@ public class UserStatsScreenController {
     App.subscribeToViewChange(
         (View view) -> {
           if (view == View.USERSTATS) {
-            try {
-              // sets all labels of the user stats and users name
-              statsHeaderLabel.setText(
-                  App.getUserManager().getCurrentProfile().getName() + "'s Stats");
+            // sets all labels of the user stats and users name
+            statsHeaderLabel.setText(
+                App.getProfileManager().getCurrentProfile().getName() + "'s Stats");
 
-              //  user stats label
-              UserStats currentUserStats = App.getUserManager().getCurrentProfile().getUserStats();
-              fastestWinLabel.setText(String.valueOf(currentUserStats.getFastestWin()));
-              numGamesWonLabel.setText(String.valueOf(currentUserStats.getGamesWon()));
-              numGamesLostLabel.setText(String.valueOf(currentUserStats.getGamesLost()));
-              numCategoriesPlayedLabel.setText(
-                  String.valueOf(currentUserStats.getCategoryHistory().size()));
-            } catch (IOException | URISyntaxException e) {
-              e.printStackTrace();
-            }
+            //  user stats label
+            Profile currentProfile = App.getProfileManager().getCurrentProfile();
+            fastestWinLabel.setText(String.valueOf(currentProfile.getFastestWin()));
+            numGamesWonLabel.setText(String.valueOf(currentProfile.getGamesWon()));
+            numGamesLostLabel.setText(String.valueOf(currentProfile.getGamesLost()));
+            numCategoriesPlayedLabel.setText(
+                String.valueOf(currentProfile.getCategoryHistory().size()));
           }
         });
   }

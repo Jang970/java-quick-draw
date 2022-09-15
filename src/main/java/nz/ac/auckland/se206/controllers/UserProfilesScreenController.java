@@ -1,7 +1,5 @@
 package nz.ac.auckland.se206.controllers;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.UUID;
 import javafx.event.ActionEvent;
@@ -13,7 +11,7 @@ import javafx.scene.control.Pagination;
 import javafx.scene.layout.VBox;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
-import nz.ac.auckland.se206.util.User;
+import nz.ac.auckland.se206.util.Profile;
 
 public class UserProfilesScreenController {
 
@@ -21,7 +19,7 @@ public class UserProfilesScreenController {
   @FXML private Pagination profilesPagination;
   @FXML private VBox profilesVBox;
 
-  private List<User> users;
+  private List<Profile> users;
 
   /** Creates pagination */
   public void initialize() {
@@ -31,11 +29,7 @@ public class UserProfilesScreenController {
     App.subscribeToViewChange(
         (View view) -> {
           if (view == View.USERPROFILES) {
-            try {
-              users = App.getUserManager().getExistingProfiles();
-            } catch (IOException | URISyntaxException e) {
-              e.printStackTrace();
-            }
+            users = App.getProfileManager().getProfiles();
             createProfilesPagination();
           }
         });
@@ -134,8 +128,8 @@ public class UserProfilesScreenController {
 
             try {
               // sets current profile by obtaining button uuid
-              App.getUserManager().setCurrentProfile(UUID.fromString(userButton.getId()));
-            } catch (NumberFormatException | IOException | URISyntaxException e) {
+              App.getProfileManager().setCurrentProfile(UUID.fromString(userButton.getId()));
+            } catch (NumberFormatException e) {
               e.printStackTrace();
             }
 

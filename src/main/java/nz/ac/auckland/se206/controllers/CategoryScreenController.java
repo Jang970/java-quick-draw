@@ -1,7 +1,5 @@
 package nz.ac.auckland.se206.controllers;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -28,11 +26,7 @@ public class CategoryScreenController {
     App.subscribeToViewChange(
         (View view) -> {
           if (view == View.CATEGORY) {
-            try {
-              usernameLabel.setText("Hi, " + App.getUserManager().getCurrentProfile().getName());
-            } catch (IOException | URISyntaxException e1) {
-              e1.printStackTrace();
-            }
+            usernameLabel.setText("Hi, " + App.getProfileManager().getCurrentProfile().getName());
             generateNewCategoryAndUpdateLabel();
             updateGameTimeLabel();
           }

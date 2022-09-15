@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -20,44 +19,46 @@ import java.util.UUID;
  * This class will be used to handle any functionalities we would like to do with User class
  * objects/instances An example would be saving a newly created user profile into our json file
  */
-public class UserManager {
+public class ProfileManager {
 
-  // instance fields
-  private List<User> users = new ArrayList<User>();
-  private int currentUserIndex = 0;
-  private File userProfilesFile;
+  private List<Profile> profiles = new ArrayList<Profile>();
+  private int currentProfileIndex = 0;
+  private File profilesFile;
+
+  public ProfileManager(String fileName) {
+    profilesFile = new File(ProfileManager.class.getResource("/").getFile() + fileName);
+    loadProfilesFromFile();
+  }
 
   /**
    * Call this method when it is required to create and save (serialise) a new user profile to json
    * file
    *
-   * @param username name of user profile
+   * @param name name of user profile
    * @param colour chosen colour
    * @return boolean to indicate if creation was successful or not
    * @throws IOException
    * @throws URISyntaxException
    */
-  public boolean createUserProfile(String username, String colour)
-      throws IOException, URISyntaxException {
+  public boolean createProfile(String name, String colour) throws IOException, URISyntaxException {
 
     // check if username already exists, return false
-    if (userWithNameAlreadyExists(username)) {
-
-      return false;
-
-    } else { // username is unique and new user can successfully be created, return true
+    if (!profileWithNameAlreadyExists(name)) {
+      // username is unique and new user can successfully be created, return true
 
       // creation of new user instance, adding to our user list
-      User user = new User(username, colour);
-      users.add(user);
-
-      serialise();
+      Profile newProfile = new Profile(name, colour);
+      profiles.add(newProfile);
 
       // lets assume we want to use the newly created profile
-      setCurrentProfile(user.getID());
+      setCurrentProfile(newProfile.getID());
+
+      saveProfilesToFile();
 
       return true;
     }
+
+    return false;
   }
 
   /**
@@ -71,36 +72,15 @@ public class UserManager {
   public boolean updateUserName(String newName) throws IOException, URISyntaxException {
 
     // checking if username already exists, return false if it does
-    if (userWithNameAlreadyExists(newName)) {
+    if (profileWithNameAlreadyExists(newName)) {
 
       return false;
-
     } else { // username is unique, return true
+      profiles.get(currentProfileIndex).updateName(newName);
+      saveProfilesToFile();
 
-      this.users.get(currentUserIndex).changeUserName(newName);
       return true;
     }
-  }
-
-  /**
-   * Use this method when you want to save the stats of an existing user profile into json
-   *
-   * @throws IOException
-   * @throws URISyntaxException
-   */
-  public void updateCurrentProfile() throws IOException, URISyntaxException {
-
-    // store current user in use
-    User currUser = this.users.get(currentUserIndex);
-
-    // get and update list of all user profiles
-    users = getExistingProfiles();
-
-    // then replace User at given currentUserIndex in our list with updated values
-    users.set(currentUserIndex, currUser);
-
-    // serialise list to save changes
-    serialise();
   }
 
   /**
@@ -111,19 +91,15 @@ public class UserManager {
    * @throws IOException
    * @throws URISyntaxException
    */
-  public void setCurrentProfile(UUID userID) throws IOException, URISyntaxException {
-
-    users = getExistingProfiles();
-
-    int length = users.size();
+  public void setCurrentProfile(UUID userID) {
 
     // iterate through and find user object with same ID and update our currentUserIndex instance
     // field
-    for (int i = 0; i < length; i++) {
+    for (int i = 0; i < profiles.size(); i++) {
 
       // checks if the two UUID's are equal
-      if (users.get(i).getID().equals(userID)) {
-        currentUserIndex = i;
+      if (profiles.get(i).getID().equals(userID)) {
+        currentProfileIndex = i;
         break;
       }
     }
@@ -137,10 +113,8 @@ public class UserManager {
    * @throws IOException
    * @throws URISyntaxException
    */
-  public List<User> getExistingProfiles() throws IOException, URISyntaxException {
-
-    deserialise();
-    return users;
+  public List<Profile> getProfiles() {
+    return profiles;
   }
 
   /**
@@ -150,21 +124,8 @@ public class UserManager {
    * @throws IOException
    * @throws URISyntaxException
    */
-  public User getCurrentProfile() throws IOException, URISyntaxException {
-    return getExistingProfiles().get(currentUserIndex);
-  }
-
-  /**
-   * Use this method to get an object of class UserStats containing simple getter methods for user
-   * to get wanted user stats Only use when a user profile has been set
-   *
-   * <p>Can simply use UserStats class methods to get and update desired stats
-   *
-   * @return object of class UserStats containing stats of the current user profile
-   */
-  public UserStats getUserStats() {
-
-    return users.get(currentUserIndex).getUserStats();
+  public Profile getCurrentProfile() {
+    return profiles.get(currentProfileIndex);
   }
 
   /**
@@ -172,15 +133,20 @@ public class UserManager {
    *
    * @throws IOException
    */
-  private void serialise() throws IOException, URISyntaxException {
+  private void saveProfilesToFile() {
 
-    Writer writer = new FileWriter(userProfilesFile);
-    Gson gson = new GsonBuilder().create();
-    gson.toJson(users, writer);
+    try {
+      Writer writer = new FileWriter(profilesFile);
+      Gson gson = new GsonBuilder().create();
+      gson.toJson(profiles, writer);
 
-    // flushing and closing the writer (cleaning)
-    writer.flush();
-    writer.close();
+      // flushing and closing the writer (cleaning)
+      writer.flush();
+      writer.close();
+    } catch (IOException e) {
+      System.out.println(
+          "There was an unexpected error saving profiles to file! - " + e.getMessage());
+    }
   }
 
   /**
@@ -189,32 +155,29 @@ public class UserManager {
    * @throws IOException
    * @throws URISyntaxException
    */
-  private void deserialise() throws IOException, URISyntaxException {
+  private void loadProfilesFromFile() {
 
     // deserialising file containing existing profiles
     // de-serialisation
 
-    // firstly checking if the file exists if not create it
-    userProfilesFile = new File(UserManager.class.getResource("/").getFile() + "UserProfiles.json");
-    userProfilesFile.createNewFile();
-
-    // create file reader
-    try (Reader reader = new FileReader(userProfilesFile)) {
+    try {
+      profilesFile.createNewFile();
+      Reader reader = new FileReader(profilesFile);
       Gson gson = new Gson();
-      Type listType = new TypeToken<ArrayList<User>>() {}.getType();
+      Type listType = new TypeToken<ArrayList<Profile>>() {}.getType();
 
       // converting json string to arraylist of user objects
-      users = gson.fromJson(reader, listType);
+      profiles = gson.fromJson(reader, listType);
 
       // close reader
       reader.close();
-    } catch (FileNotFoundException e) {
-      System.out.println("Error");
+    } catch (IOException e) {
+      System.out.println("There was an error loading from the json file " + e.getMessage());
     }
 
     // users will return null if file is empty in this case users should return empty
-    if (users == null) {
-      users = new ArrayList<User>();
+    if (profiles == null) {
+      profiles = new ArrayList<Profile>();
     }
   }
 
@@ -225,15 +188,10 @@ public class UserManager {
    * @throws IOException
    * @throws URISyntaxException
    */
-  private boolean userWithNameAlreadyExists(String userName)
-      throws IOException, URISyntaxException {
-
-    // update users
-    users = getExistingProfiles();
+  private boolean profileWithNameAlreadyExists(String userName) {
 
     // iterate through all users and if username already exists, return true
-    for (User user : users) {
-
+    for (Profile user : profiles) {
       if (user.getName().equals(userName)) {
         return true;
       }
