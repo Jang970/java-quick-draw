@@ -19,6 +19,7 @@ import nz.ac.auckland.se206.App.View;
 public class NewUserScreenController {
 
   @FXML private Button newGameButton;
+  @FXML private Button backButton;
   @FXML private Pagination profilesPagination;
   @FXML private VBox profilesVBox;
   @FXML private Pane newUserPane;
@@ -36,6 +37,16 @@ public class NewUserScreenController {
             // doesn't store previous user values
             usernameTextField.clear();
             colorPicker.setValue(Color.TRANSPARENT);
+
+            // if there are existing users allow user to go back to user profiles screen by making
+            // button visible
+            try {
+              if (!App.getUserManager().getExistingProfiles().isEmpty()) {
+                backButton.setVisible(true);
+              }
+            } catch (IOException | URISyntaxException e) {
+              e.printStackTrace();
+            }
           }
         });
   }
@@ -74,5 +85,10 @@ public class NewUserScreenController {
       errorAlert.setContentText("Please enter a valid username or color.");
       errorAlert.showAndWait();
     }
+  }
+
+  @FXML
+  private void onBackToProfile() {
+    App.setView(View.USERPROFILES);
   }
 }
