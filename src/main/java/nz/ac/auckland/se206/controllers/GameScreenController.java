@@ -83,7 +83,7 @@ public class GameScreenController {
         (List<Classification> predictions) -> onPredictionsChange(predictions));
     gameLogicManager.subscribeToTimeChange((Integer seconds) -> onTimeChange(seconds));
     gameLogicManager.subscribeToGameStart(() -> onGameStart());
-    gameLogicManager.subscribeToGameEnd((WinState winState) -> onGameEnd(winState));
+    gameLogicManager.subscribeToGameEnd((gameInfo) -> onGameEnd(gameInfo.getWinState()));
 
     App.subscribeToAppTermination(
         (e) -> {

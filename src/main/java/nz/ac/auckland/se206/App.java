@@ -8,8 +8,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import nz.ac.auckland.se206.GameLogicManager.WinState;
 import nz.ac.auckland.se206.util.EventEmitter;
 import nz.ac.auckland.se206.util.EventListener;
+import nz.ac.auckland.se206.util.Profile;
 import nz.ac.auckland.se206.util.ProfileManager;
 
 /** This is the entry point of the JavaFX application. */
@@ -96,6 +98,25 @@ public class App extends Application {
     gameLogicManager.setGameLengthSeconds(60);
 
     profileManager = new ProfileManager("profiles.json");
+
+    gameLogicManager.subscribeToGameEnd(
+        (gameInfo) -> {
+          Profile currentProfile = profileManager.getCurrentProfile();
+
+          if (gameInfo.getWinState() == WinState.WIN) {
+
+            if (gameInfo.getTimeTaken() < currentProfile.getFastestWin()) {
+              currentProfile.updateFastestGame(gameInfo.getTimeTaken(), gameInfo.getCategory());
+            }
+
+            currentProfile.incrementGamesWon();
+
+          } else if (gameInfo.getWinState() == WinState.LOOSE) {
+            currentProfile.incrementGamesLost();
+          }
+
+          currentProfile.addToCategoryHistory(gameInfo.getCategory());
+        });
 
     App.stage = stage;
 

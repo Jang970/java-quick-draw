@@ -14,6 +14,38 @@ import nz.ac.auckland.se206.util.CategoryGenerator.Difficulty;
  */
 public class GameLogicManager {
 
+  public class GameEndInfo {
+    private WinState winState;
+
+    private String category;
+
+    private int timeTaken;
+    private int secondsRemaining;
+
+    GameEndInfo(WinState winState, String category, int timeTaken, int secondsRemaining) {
+      this.winState = winState;
+      this.category = category;
+      this.timeTaken = timeTaken;
+      this.secondsRemaining = secondsRemaining;
+    }
+
+    public int getTimeTaken() {
+      return timeTaken;
+    }
+
+    public int getSecondsRemaining() {
+      return secondsRemaining;
+    }
+
+    public WinState getWinState() {
+      return winState;
+    }
+
+    public String getCategory() {
+      return category;
+    }
+  }
+
   public enum WinState {
     WIN,
     LOOSE,
@@ -33,7 +65,7 @@ public class GameLogicManager {
 
   private EventEmitter<List<Classification>> predictionChangeEmitter =
       new EventEmitter<List<Classification>>();
-  private EventEmitter<WinState> gameEndedEmitter = new EventEmitter<WinState>();
+  private EventEmitter<GameEndInfo> gameEndedEmitter = new EventEmitter<GameEndInfo>();
   private EventEmitter<Integer> timeChangedEmitter = new EventEmitter<Integer>();
   private EmptyEventEmitter gameStartedEmitter = new EmptyEventEmitter();
 
@@ -66,9 +98,18 @@ public class GameLogicManager {
   }
 
   private void endGame(WinState winState) {
+    int secondsRemaining = countdownTimer.getRemainingCount();
+
     predictionManager.stopMakingPredictions();
     countdownTimer.cancelCountdown();
-    gameEndedEmitter.emit(winState);
+
+    gameEndedEmitter.emit(
+        new GameEndInfo(
+            winState,
+            this.categoryToGuess,
+            gameLengthSeconds - secondsRemaining - 1,
+            secondsRemaining));
+
     isPlaying = false;
   }
 
@@ -110,12 +151,16 @@ public class GameLogicManager {
   }
 
   /**
-   * Gets the number of seconds until the game ends
+   * Gets the number of seconds that the game should run for when starting
    *
-   * @return the number of seconds until the game ends
+   * @return the number of seconds that the game should run for before ending
    */
   public int getGameLengthSeconds() {
     return gameLengthSeconds;
+  }
+
+  public int getRemainingSeconds() {
+    return countdownTimer.getRemainingCount();
   }
 
   /**
@@ -167,7 +212,7 @@ public class GameLogicManager {
     return isPlaying;
   }
 
-  public void subscribeToGameEnd(EventListener<WinState> listener) {
+  public void subscribeToGameEnd(EventListener<GameEndInfo> listener) {
     gameEndedEmitter.subscribe(listener);
   }
 

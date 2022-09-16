@@ -17,7 +17,7 @@ public class Profile {
 
   private int gamesWon = 0;
   private int gamesLost = 0;
-  private int fastestWinTime = 59;
+  private int fastestWinTime = -1;
   private String categoryOfFastestWin;
   private Set<String> categoryHistory = new HashSet<String>();
 
@@ -66,7 +66,7 @@ public class Profile {
    */
   public Boolean updateFastestGame(int newFastestWinTime, String category) {
 
-    if (newFastestWinTime < fastestWinTime) {
+    if (newFastestWinTime < fastestWinTime || fastestWinTime == -1) {
       fastestWinTime = newFastestWinTime;
       categoryOfFastestWin = category;
 
@@ -94,6 +94,11 @@ public class Profile {
     return gamesLost;
   }
 
+  /**
+   * If the player has not had a fastest win, this will be -1
+   *
+   * @return the fastest win time
+   */
   public int getFastestWin() {
     return fastestWinTime;
   }
