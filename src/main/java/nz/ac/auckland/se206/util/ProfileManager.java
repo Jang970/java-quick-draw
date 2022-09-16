@@ -133,7 +133,7 @@ public class ProfileManager {
    *
    * @throws IOException
    */
-  private void saveProfilesToFile() {
+  public void saveProfilesToFile() {
 
     try {
       Writer writer = new FileWriter(profilesFile);

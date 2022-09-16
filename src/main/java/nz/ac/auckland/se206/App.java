@@ -116,6 +116,8 @@ public class App extends Application {
           }
 
           currentProfile.addToCategoryHistory(gameInfo.getCategory());
+
+          profileManager.saveProfilesToFile();
         });
 
     App.stage = stage;
