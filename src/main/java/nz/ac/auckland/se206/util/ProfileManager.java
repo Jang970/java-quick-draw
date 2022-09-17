@@ -25,8 +25,8 @@ public class ProfileManager {
   private int currentProfileIndex = 0;
   private File profilesFile;
 
-  public ProfileManager(String fileName) {
-    profilesFile = new File(ProfileManager.class.getResource("/").getFile() + fileName);
+  public ProfileManager(String fileNameFullPath) {
+    profilesFile = new File(fileNameFullPath);
     loadProfilesFromFile();
   }
 

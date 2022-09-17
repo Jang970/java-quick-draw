@@ -78,6 +78,10 @@ public class App extends Application {
     return fxmlLoader.load();
   }
 
+  public static String getResourcePath(String relativePathInResourceFolder) {
+    return App.class.getResource("/").getFile() + "/" + relativePathInResourceFolder;
+  }
+
   public static void main(final String[] args) {
     // Launch the JavaFX runtime
     launch();
@@ -97,7 +101,7 @@ public class App extends Application {
     gameLogicManager.setNumTopGuessNeededToWin(3);
     gameLogicManager.setGameLengthSeconds(60);
 
-    profileManager = new ProfileManager("profiles.json");
+    profileManager = new ProfileManager(App.getResourcePath("profiles.json"));
 
     gameLogicManager.subscribeToGameEnd(
         (gameInfo) -> {
