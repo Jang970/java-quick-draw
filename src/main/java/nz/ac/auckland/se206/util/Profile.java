@@ -20,6 +20,7 @@ public class Profile {
   private int fastestWinTime = -1;
   private String categoryOfFastestWin;
   private Set<String> categoryHistory = new HashSet<String>();
+  private int numberOfHistoryResets = 0;
 
   public Profile(String name, String colour) {
 
@@ -84,6 +85,19 @@ public class Profile {
    */
   public void addToCategoryHistory(String category) {
     categoryHistory.add(category);
+  }
+
+  /** Use this to reset the category history to 0 and increment the number of resets by 1 */
+  public void resetCategoryHistory() {
+    categoryHistory.clear();
+    numberOfHistoryResets++;
+  }
+
+  /**
+   * @return the number of times the category history was reset
+   */
+  public int getNumResets() {
+    return numberOfHistoryResets;
   }
 
   public int getGamesWon() {

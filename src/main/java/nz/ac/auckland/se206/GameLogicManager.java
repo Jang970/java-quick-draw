@@ -19,6 +19,12 @@ import nz.ac.auckland.se206.util.*;
  */
 public class GameLogicManager {
 
+  public class FilterTooStrictException extends Exception {
+    public FilterTooStrictException(String message) {
+      super(message);
+    }
+  }
+
   public class GameEndInfo {
     private WinState winState;
 
@@ -100,6 +106,10 @@ public class GameLogicManager {
                 (v) -> v)
             .loadCategoriesFromFile(App.getResourcePath("category_difficulty.csv"), true);
 
+    if (categories.isEmpty()) {
+      throw new CsvException("The csv is not valid");
+    }
+
     countdownTimer = new CountdownTimer();
     countdownTimer.setOnChange(
         (secondsRemaining) -> {
@@ -154,7 +164,8 @@ public class GameLogicManager {
    * @param categoryFilter
    * @return
    */
-  public String selectNewRandomCategory(Set<String> categoryFilter) {
+  public String selectNewRandomCategory(Set<String> categoryFilter)
+      throws FilterTooStrictException {
 
     List<String> easyCategories = categories.get(CategoryType.EASY);
 
@@ -162,6 +173,9 @@ public class GameLogicManager {
         easyCategories.stream()
             .filter((category) -> !categoryFilter.contains(category))
             .collect(Collectors.toList());
+
+    if (possibleCategories.isEmpty())
+      throw new FilterTooStrictException("The filter filtered out all categories");
 
     int randomIndexFromList = ThreadLocalRandom.current().nextInt(possibleCategories.size());
 
@@ -171,7 +185,12 @@ public class GameLogicManager {
   }
 
   public String selectNewRandomCategory() {
-    return this.selectNewRandomCategory(new HashSet<String>());
+    try {
+      return this.selectNewRandomCategory(new HashSet<String>());
+    } catch (FilterTooStrictException e) {
+      System.exit(0);
+      return "";
+    }
   }
 
   /** Ends the game if it is ongoing with a win state of CANCEL */
