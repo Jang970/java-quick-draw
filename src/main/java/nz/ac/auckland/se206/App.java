@@ -1,6 +1,7 @@
 package nz.ac.auckland.se206;
 
 import ai.djl.ModelException;
+import com.opencsv.exceptions.CsvException;
 import java.io.IOException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -93,9 +94,10 @@ public class App extends Application {
    * @param stage The primary stage of the application.
    * @throws IOException If "src/main/resources/fxml/canvas.fxml" is not found.
    * @throws ModelException If there is an error with loading the doodle model.
+   * @throws CsvException
    */
   @Override
-  public void start(final Stage stage) throws IOException, ModelException {
+  public void start(final Stage stage) throws IOException, ModelException, CsvException {
 
     gameLogicManager = new GameLogicManager(10);
     gameLogicManager.setNumTopGuessNeededToWin(3);

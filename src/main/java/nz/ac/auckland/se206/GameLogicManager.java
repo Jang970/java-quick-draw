@@ -2,11 +2,16 @@ package nz.ac.auckland.se206;
 
 import ai.djl.ModelException;
 import ai.djl.modality.Classifications.Classification;
+import com.opencsv.exceptions.CsvException;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 import nz.ac.auckland.se206.util.*;
-import nz.ac.auckland.se206.util.CategoryGenerator.Difficulty;
 
 /**
  * This class contains all of the logic for the QuickDraw Game. It manages game state and
@@ -52,6 +57,14 @@ public class GameLogicManager {
     CANCEL,
   }
 
+  public enum CategoryType {
+    EASY,
+    MEDIUM,
+    HARD,
+  }
+
+  private Map<CategoryType, List<String>> categories;
+
   private int gameLengthSeconds;
   private int numTopGuessNeededToWin;
 
@@ -61,7 +74,6 @@ public class GameLogicManager {
 
   private PredictionManager predictionManager;
   private CountdownTimer countdownTimer;
-  private CategoryGenerator categoryGenerator;
 
   private EventEmitter<List<Classification>> predictionChangeEmitter =
       new EventEmitter<List<Classification>>();
@@ -73,10 +85,20 @@ public class GameLogicManager {
    * @param numPredictions the number of predictions the game should make for each snapshot image
    * @throws IOException If there is an error in reading the input/output of the DL model.
    * @throws ModelException If the model cannot be found on the file system.
+   * @throws CsvException
    */
-  public GameLogicManager(int numPredictions) throws IOException, ModelException {
+  public GameLogicManager(int numPredictions) throws IOException, ModelException, CsvException {
 
-    categoryGenerator = new CategoryGenerator("category_difficulty.csv");
+    categories =
+        new CSVKeyValuePairLoader<CategoryType, String>(
+                (keyString) -> {
+                  if (keyString.equals("E")) return CategoryType.EASY;
+                  if (keyString.equals("M")) return CategoryType.MEDIUM;
+                  if (keyString.equals("H")) return CategoryType.HARD;
+                  return null;
+                },
+                (v) -> v)
+            .loadCategoriesFromFile(App.getResourcePath("category_difficulty.csv"), true);
 
     countdownTimer = new CountdownTimer();
     countdownTimer.setOnChange(
@@ -93,7 +115,7 @@ public class GameLogicManager {
 
     predictionManager.setPredictionListener(
         (predictions) -> {
-          handleNewPredictions(predictions);
+          handlePredictionsReceived(predictions);
         });
   }
 
@@ -113,7 +135,7 @@ public class GameLogicManager {
     isPlaying = false;
   }
 
-  private void handleNewPredictions(List<Classification> predictions) {
+  private void handlePredictionsReceived(List<Classification> predictions) {
     int range = Math.min(predictions.size(), numTopGuessNeededToWin);
     for (int i = 0; i < range; i++) {
       String prediction = predictions.get(i).getClassName().replace('_', ' ');
@@ -126,13 +148,30 @@ public class GameLogicManager {
   }
 
   /**
-   * Selects a new random category and sets it as the category to guess
+   * This generates a new random category, updates the category for the class and returns the value
+   * of the new category. It will not use any values in the provided set
    *
-   * @return the new category
+   * @param categoryFilter
+   * @return
    */
-  public String selectNewRandomCategory() {
-    categoryToGuess = categoryGenerator.getRandomCategory(Difficulty.EASY);
+  public String selectNewRandomCategory(Set<String> categoryFilter) {
+
+    List<String> easyCategories = categories.get(CategoryType.EASY);
+
+    List<String> possibleCategories =
+        easyCategories.stream()
+            .filter((category) -> !categoryFilter.contains(category))
+            .collect(Collectors.toList());
+
+    int randomIndexFromList = ThreadLocalRandom.current().nextInt(possibleCategories.size());
+
+    categoryToGuess = possibleCategories.get(randomIndexFromList);
+
     return categoryToGuess;
+  }
+
+  public String selectNewRandomCategory() {
+    return this.selectNewRandomCategory(new HashSet<String>());
   }
 
   /** Ends the game if it is ongoing with a win state of CANCEL */
@@ -150,6 +189,10 @@ public class GameLogicManager {
     isPlaying = true;
   }
 
+  public int getRemainingSeconds() {
+    return countdownTimer.getRemainingCount();
+  }
+
   /**
    * Gets the number of seconds that the game should run for when starting
    *
@@ -157,10 +200,6 @@ public class GameLogicManager {
    */
   public int getGameLengthSeconds() {
     return gameLengthSeconds;
-  }
-
-  public int getRemainingSeconds() {
-    return countdownTimer.getRemainingCount();
   }
 
   /**
