@@ -1,7 +1,6 @@
 package nz.ac.auckland.se206;
 
 import ai.djl.ModelException;
-import com.opencsv.exceptions.CsvException;
 import java.io.IOException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -67,6 +66,39 @@ public class App extends Application {
   }
 
   /**
+   * Use this function in places where code should never have to reach for some reason. EG you know
+   * a catch block will never run. If this code is reached, it will exit the app and print the
+   * message for why it should not have been reached (which you need to provide)
+   *
+   * @param whyThisShouldNeverRun
+   */
+  public static Object expect(String whyThisShouldNeverRun) {
+    System.out.println(
+        "Unexpected crash as the following expectation was not upheld: " + whyThisShouldNeverRun);
+    System.exit(1);
+    // This statement should never run as we exit the program
+    return null;
+  }
+
+  /**
+   * Use this function in places where code should never have to reach for some reason. EG you know
+   * a catch block will never run. If this code is reached, it will exit the app and print the
+   * message for why it should not have been reached (which you need to provide)
+   *
+   * @param whyThisShouldNeverRun
+   * @param exception
+   */
+  public static Object expect(String whyThisShouldNeverRun, Exception exception) {
+    System.out.println(
+        "Unexpected crash as the following expectation was not upheld: " + whyThisShouldNeverRun);
+    System.out.println("Exception Message: " + exception.getMessage());
+    exception.printStackTrace();
+    System.exit(1);
+    // This statement should never run as we exit the program
+    return null;
+  }
+
+  /**
    * Returns the node associated to the input file. The method expects that the file is located in
    * "src/main/resources/fxml".
    *
@@ -92,18 +124,26 @@ public class App extends Application {
    * This method is invoked when the application starts. It loads and shows the "Canvas" scene.
    *
    * @param stage The primary stage of the application.
-   * @throws IOException If "src/main/resources/fxml/canvas.fxml" is not found.
-   * @throws ModelException If there is an error with loading the doodle model.
-   * @throws CsvException
    */
   @Override
-  public void start(final Stage stage) throws IOException, ModelException, CsvException {
+  public void start(final Stage stage) {
 
-    gameLogicManager = new GameLogicManager(10);
+    try {
+      gameLogicManager = new GameLogicManager(10);
+    } catch (IOException | ModelException e1) {
+      App.expect(
+          "The machine learning model exists on file and the class should have no issue reading or writing from it",
+          e1);
+    }
+
     gameLogicManager.setNumTopGuessNeededToWin(3);
     gameLogicManager.setGameLengthSeconds(60);
 
-    profileManager = new ProfileManager(App.getResourcePath("profiles.json"));
+    try {
+      profileManager = new ProfileManager(App.getResourcePath("profiles.json"));
+    } catch (IOException e2) {
+      App.expect("profiles.json is a file name, not a directory", e2);
+    }
 
     gameLogicManager.subscribeToGameEnd(
         (gameInfo) -> {
@@ -129,16 +169,25 @@ public class App extends Application {
 
     stage.setOnCloseRequest((e) -> appTerminationEmitter.emit(e));
 
-    Parent defaultParent = loadFxml("home-screen");
-    final Scene scene = new Scene(defaultParent, 600, 570);
+    Parent defaultParent;
+    Scene scene = null;
 
-    viewManager = new ViewManager<View>(scene);
-    viewManager.addView(View.HOME, defaultParent);
-    viewManager.addView(View.GAME, loadFxml("game-screen"));
-    viewManager.addView(View.CATEGORY, loadFxml("category-screen"));
-    viewManager.addView(View.USERPROFILES, loadFxml("userprofiles-screen"));
-    viewManager.addView(View.NEWUSER, loadFxml("newuser-screen"));
-    viewManager.addView(View.USERSTATS, loadFxml("userstats-screen"));
+    try {
+
+      defaultParent = loadFxml("home-screen");
+      scene = new Scene(defaultParent, 600, 570);
+
+      viewManager = new ViewManager<View>(scene);
+      viewManager.addView(View.HOME, defaultParent);
+      viewManager.addView(View.GAME, loadFxml("game-screen"));
+      viewManager.addView(View.CATEGORY, loadFxml("category-screen"));
+      viewManager.addView(View.USERPROFILES, loadFxml("userprofiles-screen"));
+      viewManager.addView(View.NEWUSER, loadFxml("newuser-screen"));
+      viewManager.addView(View.USERSTATS, loadFxml("userstats-screen"));
+
+    } catch (IOException e1) {
+      App.expect("All of the previously listed files should exists", e1);
+    }
 
     stage.setTitle("Speedy Sketchers");
     stage.setResizable(false);

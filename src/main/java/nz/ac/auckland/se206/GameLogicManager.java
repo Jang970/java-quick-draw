@@ -91,24 +91,25 @@ public class GameLogicManager {
    * @param numPredictions the number of predictions the game should make for each snapshot image
    * @throws IOException If there is an error in reading the input/output of the DL model.
    * @throws ModelException If the model cannot be found on the file system.
-   * @throws CsvException
    */
-  public GameLogicManager(int numPredictions) throws IOException, ModelException, CsvException {
+  public GameLogicManager(int numPredictions) throws IOException, ModelException {
 
-    categories =
-        new CSVKeyValuePairLoader<CategoryType, String>(
-                (keyString) -> {
-                  if (keyString.equals("E")) return CategoryType.EASY;
-                  if (keyString.equals("M")) return CategoryType.MEDIUM;
-                  if (keyString.equals("H")) return CategoryType.HARD;
-                  return null;
-                },
-                (v) -> v)
-            .loadCategoriesFromFile(App.getResourcePath("category_difficulty.csv"), true);
-
-    if (categories.isEmpty()) {
-      throw new CsvException("The csv is not valid");
+    try {
+      categories =
+          new CSVKeyValuePairLoader<CategoryType, String>(
+                  (keyString) -> {
+                    if (keyString.equals("E")) return CategoryType.EASY;
+                    if (keyString.equals("M")) return CategoryType.MEDIUM;
+                    if (keyString.equals("H")) return CategoryType.HARD;
+                    return null;
+                  },
+                  (v) -> v)
+              .loadCategoriesFromFile(App.getResourcePath("category_difficulty.csv"), true);
+    } catch (CsvException e) {
+      App.expect("Category CSV is in the resource folder and is not empty", e);
     }
+
+    if (categories.isEmpty()) {}
 
     countdownTimer = new CountdownTimer();
     countdownTimer.setOnChange(
@@ -188,8 +189,7 @@ public class GameLogicManager {
     try {
       return this.selectNewRandomCategory(new HashSet<String>());
     } catch (FilterTooStrictException e) {
-      System.exit(0);
-      return "";
+      return (String) App.expect("The filter is empty so it cannot be too strict");
     }
   }
 

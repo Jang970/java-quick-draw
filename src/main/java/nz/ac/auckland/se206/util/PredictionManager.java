@@ -51,7 +51,6 @@ public class PredictionManager {
 
               if (isMakingPredictions) {
                 try {
-
                   if (predictionListener != null && imageSource != null) {
                     BufferedImage snapshot = imageSource.getData();
                     if (snapshot != null) {

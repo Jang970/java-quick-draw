@@ -56,13 +56,7 @@ public class CategoryScreenController {
       newCategory = gameLogicManager.selectNewRandomCategory(profile.getCategoryHistory());
     } catch (FilterTooStrictException e) {
       profile.resetCategoryHistory();
-      try {
-        newCategory = gameLogicManager.selectNewRandomCategory(profile.getCategoryHistory());
-      } catch (FilterTooStrictException e1) {
-        e1.printStackTrace();
-        System.exit(1);
-        return;
-      }
+      newCategory = gameLogicManager.selectNewRandomCategory();
     }
 
     categoryLabel.setText(newCategory);
