@@ -60,14 +60,14 @@ public class Profile {
    * This method will update the fastestWin and bestCategory variables Can be called when the player
    * wins at a faster time than the current time stored in fastestWin
    *
-   * @param newFastestWinTime the time to update fastestWin to
+   * @param newPossibleFastestWinTime the time to update fastestWin to
    * @param category the word that the profile had to draw
    * @return true or false depending if update was successful or not
    */
-  public Boolean updateFastestGame(int newFastestWinTime, String category) {
+  public Boolean updateFastestGameIfBeatsCurrent(int newPossibleFastestWinTime, String category) {
 
-    if (newFastestWinTime < fastestWinTime || fastestWinTime == -1) {
-      fastestWinTime = newFastestWinTime;
+    if (newPossibleFastestWinTime < fastestWinTime || fastestWinTime == -1) {
+      fastestWinTime = newPossibleFastestWinTime;
       categoryOfFastestWin = category;
 
       return true;

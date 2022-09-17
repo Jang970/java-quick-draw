@@ -109,9 +109,8 @@ public class App extends Application {
 
           if (gameInfo.getWinState() == WinState.WIN) {
 
-            if (gameInfo.getTimeTaken() < currentProfile.getFastestWin()) {
-              currentProfile.updateFastestGame(gameInfo.getTimeTaken(), gameInfo.getCategory());
-            }
+            currentProfile.updateFastestGameIfBeatsCurrent(
+                gameInfo.getTimeTaken(), gameInfo.getCategory());
 
             currentProfile.incrementGamesWon();
 
