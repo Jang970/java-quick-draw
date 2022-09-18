@@ -21,7 +21,8 @@ public class App extends Application {
     NEWUSER,
     CATEGORY,
     GAME,
-    USERSTATS
+    USERSTATS,
+    WORDHISTORY
   }
 
   private static ViewManager<View> viewManager;
@@ -111,6 +112,7 @@ public class App extends Application {
     viewManager.addView(View.USERPROFILES, loadFxml("userprofiles-screen"));
     viewManager.addView(View.NEWUSER, loadFxml("newuser-screen"));
     viewManager.addView(View.USERSTATS, loadFxml("userstats-screen"));
+    viewManager.addView(View.WORDHISTORY, loadFxml("wordhistory-screen"));
 
     stage.setTitle("Speedy Sketchers");
     stage.setResizable(false);

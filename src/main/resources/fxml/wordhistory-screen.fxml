@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="TOP_CENTER" minHeight="570.0" prefHeight="570.0" prefWidth="600.0" spacing="10.0" stylesheets="@../css/application.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.WordHistoryScreenController">
+   <children>
+      <Label styleClass="headers" text="Quick, Draw!" textFill="#668cff">
+         <font>
+            <Font size="40.0" />
+         </font>
+         <VBox.margin>
+            <Insets top="20.0" />
+         </VBox.margin>
+      </Label>
+      <Label layoutX="217.0" layoutY="48.0" styleClass="headers" text="SE206 Edition" textFill="#668cff">
+         <font>
+            <Font size="18.0" />
+         </font>
+         <VBox.margin>
+            <Insets top="-10.0" />
+         </VBox.margin>
+      </Label>
+      <HBox alignment="CENTER" prefHeight="415.0" prefWidth="600.0" spacing="30.0" styleClass="subHeaders">
+         <children>
+            <ListView fx:id="wordHistoryListViewOne" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" prefWidth="250.0" />
+            <ListView fx:id="wordHistoryListViewTwo" focusTraversable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="250.0" />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="62.0" prefWidth="600.0" spacing="30.0">
+         <children>
+            <Button mnemonicParsing="false" onAction="#onPlayAgain" prefHeight="33.0" prefWidth="145.0" text="Play again!" />
+            <Button mnemonicParsing="false" onAction="#onBackToStats" prefHeight="33.0" prefWidth="150.0" text="Back to Stats" />
+         </children>
+      </HBox>
+   </children>
+</VBox>

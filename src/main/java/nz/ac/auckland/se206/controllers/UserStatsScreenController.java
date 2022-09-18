@@ -46,4 +46,10 @@ public class UserStatsScreenController {
   private void onSwitchToProfiles() {
     App.setView(View.USERPROFILES);
   }
+
+  /** Switches view to word history */
+  @FXML
+  private void onWordHistory() {
+    App.setView(View.WORDHISTORY);
+  }
 }

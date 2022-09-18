@@ -163,3 +163,37 @@
 	-fx-border-radius: 40px;
     -fx-border-color: rgb(102, 140, 255);
 }
+
+/* Word History Screen */
+
+.list-view {
+    -fx-background-color: #ebe9dd;
+	-fx-alignment: center;
+	-fx-font-size: 18px;
+	-fx-background-radius: 40px;
+}
+
+.list-view .scroll-bar {
+	-fx-background-color: #ebe9dd;
+}
+
+.list-view .scroll-bar .thumb{
+	-fx-background-color: rgb(102, 140, 255);
+}
+
+.list-view .scroll-bar .increment-button:hover, .decrement-button:hover{
+	-fx-background-color:  #dad8cc;
+}
+.list-cell:odd{
+	-fx-background-color: #ebe9dd;
+	-fx-alignment: center;
+}
+
+.list-cell:even{
+	-fx-background-color: #dad8cc;
+	-fx-alignment: center;
+}
+
+.list-cell:empty{
+	visibility: false;
+}
