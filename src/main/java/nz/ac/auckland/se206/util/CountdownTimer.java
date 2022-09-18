@@ -39,6 +39,15 @@ public class CountdownTimer {
   }
 
   /**
+   * Gets the remaining count
+   *
+   * @return the remaining count
+   */
+  public int getRemainingCount() {
+    return countdownCurrentCount;
+  }
+
+  /**
    * Starts a new countdown
    *
    * @param countToCountdownFrom the number to countdown from

@@ -17,9 +17,10 @@ public class Profile {
 
   private int gamesWon = 0;
   private int gamesLost = 0;
-  private int fastestWinTime = 59;
+  private int fastestWinTime = -1;
   private String categoryOfFastestWin;
   private Set<String> categoryHistory = new HashSet<String>();
+  private int numberOfHistoryResets = 0;
 
   public Profile(String name, String colour) {
 
@@ -60,14 +61,14 @@ public class Profile {
    * This method will update the fastestWin and bestCategory variables Can be called when the player
    * wins at a faster time than the current time stored in fastestWin
    *
-   * @param newFastestWinTime the time to update fastestWin to
+   * @param newPossibleFastestWinTime the time to update fastestWin to
    * @param category the word that the profile had to draw
    * @return true or false depending if update was successful or not
    */
-  public Boolean updateFastestGame(int newFastestWinTime, String category) {
+  public Boolean updateFastestGameIfBeatsCurrent(int newPossibleFastestWinTime, String category) {
 
-    if (newFastestWinTime < fastestWinTime) {
-      fastestWinTime = newFastestWinTime;
+    if (newPossibleFastestWinTime < fastestWinTime || fastestWinTime == -1) {
+      fastestWinTime = newPossibleFastestWinTime;
       categoryOfFastestWin = category;
 
       return true;
@@ -86,6 +87,19 @@ public class Profile {
     categoryHistory.add(category);
   }
 
+  /** Use this to reset the category history to 0 and increment the number of resets by 1 */
+  public void resetCategoryHistory() {
+    categoryHistory.clear();
+    numberOfHistoryResets++;
+  }
+
+  /**
+   * @return the number of times the category history was reset
+   */
+  public int getNumResets() {
+    return numberOfHistoryResets;
+  }
+
   public int getGamesWon() {
     return gamesWon;
   }
@@ -94,6 +108,11 @@ public class Profile {
     return gamesLost;
   }
 
+  /**
+   * If the player has not had a fastest win, this will be -1
+   *
+   * @return the fastest win time
+   */
   public int getFastestWin() {
     return fastestWinTime;
   }

@@ -6,7 +6,9 @@ import javafx.scene.control.Label;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
 import nz.ac.auckland.se206.GameLogicManager;
+import nz.ac.auckland.se206.GameLogicManager.FilterTooStrictException;
 import nz.ac.auckland.se206.speech.TextToSpeech;
+import nz.ac.auckland.se206.util.Profile;
 
 public class CategoryScreenController {
 
@@ -46,7 +48,16 @@ public class CategoryScreenController {
   }
 
   private void generateNewCategoryAndUpdateLabel() {
-    String newCategory = gameLogicManager.selectNewRandomCategory();
+
+    Profile profile = App.getProfileManager().getCurrentProfile();
+
+    String newCategory;
+    try {
+      newCategory = gameLogicManager.selectNewRandomCategory(profile.getCategoryHistory());
+    } catch (FilterTooStrictException e) {
+      profile.resetCategoryHistory();
+      newCategory = gameLogicManager.selectNewRandomCategory();
+    }
 
     categoryLabel.setText(newCategory);
     textToSpeech.speakAsync("Draw " + newCategory);

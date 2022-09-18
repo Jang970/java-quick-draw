@@ -130,7 +130,7 @@ public class UserProfilesScreenController {
               // sets current profile by obtaining button uuid
               App.getProfileManager().setCurrentProfile(UUID.fromString(userButton.getId()));
             } catch (NumberFormatException e) {
-              e.printStackTrace();
+              App.expect("Button ids should be able to generate valid UUIDs", e);
             }
 
             // gets controller to update category

@@ -4,16 +4,17 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 import java.lang.reflect.Type;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import nz.ac.auckland.se206.App;
 
 /**
  * This class will be used to handle any functionalities we would like to do with User class
@@ -25,8 +26,16 @@ public class ProfileManager {
   private int currentProfileIndex = 0;
   private File profilesFile;
 
-  public ProfileManager(String fileName) {
-    profilesFile = new File(ProfileManager.class.getResource("/").getFile() + fileName);
+  /**
+   * @param fileNameFullPath
+   * @throws IOException - if the file exists but is a directory rather than a regular file, does
+   *     not exist but cannot be created, or cannot be opened for any other reason
+   */
+  public ProfileManager(String fileNameFullPath) throws IOException {
+    profilesFile = new File(fileNameFullPath);
+    if (profilesFile.isDirectory()) {
+      throw new IOException("File " + fileNameFullPath + " is a directory, not a json file");
+    }
     loadProfilesFromFile();
   }
 
@@ -37,10 +46,8 @@ public class ProfileManager {
    * @param name name of user profile
    * @param colour chosen colour
    * @return boolean to indicate if creation was successful or not
-   * @throws IOException
-   * @throws URISyntaxException
    */
-  public boolean createProfile(String name, String colour) throws IOException, URISyntaxException {
+  public boolean createProfile(String name, String colour) {
 
     // check if username already exists, return false
     if (!profileWithNameAlreadyExists(name)) {
@@ -66,10 +73,8 @@ public class ProfileManager {
    *
    * @param newName new username to update to
    * @return boolean to indicate if update was successful or not
-   * @throws IOException
-   * @throws URISyntaxException
    */
-  public boolean updateUserName(String newName) throws IOException, URISyntaxException {
+  public boolean updateUserName(String newName) {
 
     // checking if username already exists, return false if it does
     if (profileWithNameAlreadyExists(newName)) {
@@ -88,8 +93,6 @@ public class ProfileManager {
    * used to switch between user profiles
    *
    * @param userID unique ID of the User profile we want to set to / use
-   * @throws IOException
-   * @throws URISyntaxException
    */
   public void setCurrentProfile(UUID userID) {
 
@@ -110,8 +113,6 @@ public class ProfileManager {
    * json file Can only call if the json file already exists
    *
    * @return arraylist of User objects
-   * @throws IOException
-   * @throws URISyntaxException
    */
   public List<Profile> getProfiles() {
     return profiles;
@@ -121,48 +122,46 @@ public class ProfileManager {
    * Getter method to get the current User object profile in use
    *
    * @return object of class User that is the current profile being used
-   * @throws IOException
-   * @throws URISyntaxException
    */
   public Profile getCurrentProfile() {
     return profiles.get(currentProfileIndex);
   }
 
-  /**
-   * This method will handle serialising / saving to json file
-   *
-   * @throws IOException
-   */
-  private void saveProfilesToFile() {
+  /** This method will handle serialising / saving to json file */
+  public void saveProfilesToFile() {
 
+    Writer writer = null;
     try {
-      Writer writer = new FileWriter(profilesFile);
-      Gson gson = new GsonBuilder().create();
-      gson.toJson(profiles, writer);
+      writer = new FileWriter(profilesFile);
+    } catch (IOException e) {
+      App.expect("Profiles File should be guaranteed to not be a directory", e);
+    }
+    Gson gson = new GsonBuilder().create();
+    gson.toJson(profiles, writer);
 
-      // flushing and closing the writer (cleaning)
+    // flushing and closing the writer (cleaning)
+    try {
       writer.flush();
       writer.close();
     } catch (IOException e) {
-      System.out.println(
-          "There was an unexpected error saving profiles to file! - " + e.getMessage());
+      // DO NOTHING, Does, not affect user experience
     }
   }
 
-  /**
-   * This method will handle deserialsing / loading from json file
-   *
-   * @throws IOException
-   * @throws URISyntaxException
-   */
+  /** This method will handle deserialsing / loading from json file */
   private void loadProfilesFromFile() {
-
-    // deserialising file containing existing profiles
-    // de-serialisation
 
     try {
       profilesFile.createNewFile();
-      Reader reader = new FileReader(profilesFile);
+
+      Reader reader = null;
+
+      try {
+        reader = new FileReader(profilesFile);
+      } catch (FileNotFoundException e) {
+        App.expect("File should definitely exist");
+      }
+
       Gson gson = new Gson();
       Type listType = new TypeToken<ArrayList<Profile>>() {}.getType();
 
@@ -171,11 +170,12 @@ public class ProfileManager {
 
       // close reader
       reader.close();
-    } catch (IOException e) {
-      System.out.println("There was an error loading from the json file " + e.getMessage());
+
+    } catch (Exception e) {
+      // DO NOTHING
     }
 
-    // users will return null if file is empty in this case users should return empty
+    // users will return null if file is empty in this case users should be empty
     if (profiles == null) {
       profiles = new ArrayList<Profile>();
     }
@@ -185,8 +185,6 @@ public class ProfileManager {
    * Helper method to check for duplicate usernames
    *
    * @return boolean - True if a duplicate exists
-   * @throws IOException
-   * @throws URISyntaxException
    */
   private boolean profileWithNameAlreadyExists(String userName) {
 

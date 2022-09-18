@@ -1,7 +1,5 @@
 package nz.ac.auckland.se206.controllers;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -50,12 +48,9 @@ public class NewUserScreenController {
   /**
    * When start game is clicked (on new user pane) it switches to category screen after checking if
    * inputs are valid.
-   *
-   * @throws URISyntaxException
-   * @throws IOException
    */
   @FXML
-  private void onCreateProfile() throws IOException, URISyntaxException {
+  private void onCreateProfile() {
 
     // TODO: Better way to check if color picker has been selected or not
     // checks if username and colour picker has been selected
