@@ -6,9 +6,9 @@
 		{
 			"label": "run:debug",
 			"type": "shell",
-			"command": "./mvnw clean javafx:run@debug",
+			"command": "./mvnw javafx:run@debug",
 			"windows": {
-				"command": ".\\mvnw.cmd clean javafx:run@debug"
+				"command": ".\\mvnw.cmd javafx:run@debug"
 			},
 			"group": "build",
 			"isBackground": true,

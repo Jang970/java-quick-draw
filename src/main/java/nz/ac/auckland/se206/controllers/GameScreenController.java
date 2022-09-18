@@ -1,6 +1,5 @@
 package nz.ac.auckland.se206.controllers;
 
-import ai.djl.ModelException;
 import ai.djl.modality.Classifications.Classification;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -49,13 +48,8 @@ public class GameScreenController {
   private TextToSpeech textToSpeech;
   private GameLogicManager gameLogicManager;
 
-  /**
-   * JavaFX calls this method once the GUI elements are loaded.
-   *
-   * @throws ModelException If there is an error in reading the input/output of the DL model.
-   * @throws IOException If the model cannot be found on the file system.
-   */
-  public void initialize() throws ModelException, IOException {
+  /** JavaFX calls this method once the GUI elements are loaded. */
+  public void initialize() {
 
     guessLabels =
         Stream.concat(guessLabelCol1.getChildren().stream(), guessLabelCol2.getChildren().stream())
@@ -74,7 +68,7 @@ public class GameScreenController {
           try {
             return getImage.get();
           } catch (InterruptedException | ExecutionException error) {
-            System.out.println("There was an error in getting an image: " + error.getMessage());
+            App.expect("Threads are handled properly, so this error should not occur", error);
             return null;
           }
         });
@@ -83,7 +77,7 @@ public class GameScreenController {
         (List<Classification> predictions) -> onPredictionsChange(predictions));
     gameLogicManager.subscribeToTimeChange((Integer seconds) -> onTimeChange(seconds));
     gameLogicManager.subscribeToGameStart(() -> onGameStart());
-    gameLogicManager.subscribeToGameEnd((WinState winState) -> onGameEnd(winState));
+    gameLogicManager.subscribeToGameEnd((gameInfo) -> onGameEnd(gameInfo.getWinState()));
 
     App.subscribeToAppTermination(
         (e) -> {
@@ -99,7 +93,9 @@ public class GameScreenController {
             gameLogicManager.startGame();
             whatToDrawLabel.setText("To Draw: " + gameLogicManager.getCurrentCategory());
             canvasManager.clearCanvas();
-          } else {
+
+            // doesnt cancel if just looking at user stats
+          } else if (newView != View.USERSTATS) {
             gameLogicManager.cancelGame();
           }
         });
@@ -215,6 +211,7 @@ public class GameScreenController {
     try {
       canvasManager.saveCurrentSnapshotOnFile();
     } catch (IOException e) {
+      // TODO: Handle cancellation
       System.out.println("Failed to download");
     }
   }
