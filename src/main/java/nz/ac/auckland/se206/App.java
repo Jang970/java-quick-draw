@@ -24,7 +24,7 @@ public class App extends Application {
     CATEGORY,
     GAME,
     USERSTATS,
-    WORDHISTORY
+    CATEGORYHISTORY
   }
 
   private static ViewManager<View> viewManager;
@@ -185,7 +185,7 @@ public class App extends Application {
       viewManager.addView(View.USERPROFILES, loadFxml("userprofiles-screen"));
       viewManager.addView(View.NEWUSER, loadFxml("newuser-screen"));
       viewManager.addView(View.USERSTATS, loadFxml("userstats-screen"));
-      viewManager.addView(View.WORDHISTORY, loadFxml("wordhistory-screen"));
+      viewManager.addView(View.CATEGORYHISTORY, loadFxml("categoryhistory-screen"));
 
     } catch (IOException e1) {
       App.expect("All of the previously listed files should exists", e1);

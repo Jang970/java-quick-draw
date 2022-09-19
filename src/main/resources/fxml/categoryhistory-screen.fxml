@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="TOP_CENTER" minHeight="570.0" prefHeight="570.0" prefWidth="600.0" spacing="10.0" stylesheets="@../css/application.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.WordHistoryScreenController">
+<VBox alignment="TOP_CENTER" minHeight="570.0" prefHeight="570.0" prefWidth="600.0" spacing="5.0" stylesheets="@../css/application.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.CategoryHistoryScreenController">
    <children>
       <Label styleClass="headers" text="Quick, Draw!" textFill="#668cff">
          <font>
@@ -30,8 +30,8 @@
          <children>
             <HBox fx:id="historyHbox" alignment="CENTER" prefHeight="285.0" prefWidth="600.0" spacing="30.0" styleClass="subHeaders">
                <children>
-                  <ListView fx:id="wordHistoryListViewOne" focusTraversable="false" prefHeight="460.0" prefWidth="250.0" />
-                  <ListView fx:id="wordHistoryListViewTwo" focusTraversable="false" prefHeight="136.0" prefWidth="250.0" />
+                  <ListView fx:id="categoryHistoryListViewOne" focusTraversable="false" prefHeight="460.0" prefWidth="250.0" />
+                  <ListView fx:id="categoryHistoryListViewTwo" focusTraversable="false" prefHeight="136.0" prefWidth="250.0" />
                </children>
             </HBox>
          </children>

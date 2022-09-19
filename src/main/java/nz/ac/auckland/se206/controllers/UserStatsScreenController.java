@@ -50,6 +50,6 @@ public class UserStatsScreenController {
   /** Switches view to word history */
   @FXML
   private void onWordHistory() {
-    App.setView(View.WORDHISTORY);
+    App.setView(View.CATEGORYHISTORY);
   }
 }

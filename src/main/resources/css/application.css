@@ -184,6 +184,11 @@
 .list-view .scroll-bar .increment-button:hover, .decrement-button:hover{
 	-fx-background-color:  #dad8cc;
 }
+
+.list-one .scroll-bar {
+	-fx-scale-x: 0;
+}
+
 .list-cell:odd{
 	-fx-cell-size: 30 ;
 	-fx-background-color: #ebe9dd;
@@ -194,5 +199,9 @@
 	-fx-cell-size: 30;
 	-fx-background-color: #dad8cc;
 	-fx-alignment: center;
+}
+
+.list-cell:empty{
+	-fx-background-color: #ebe9dd;
 }
 
