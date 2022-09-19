@@ -26,12 +26,16 @@
             <Insets top="-10.0" />
          </VBox.margin>
       </Label>
-      <HBox alignment="CENTER" prefHeight="415.0" prefWidth="600.0" spacing="30.0" styleClass="subHeaders">
+      <VBox alignment="CENTER" prefHeight="398.0" prefWidth="600.0">
          <children>
-            <ListView fx:id="wordHistoryListViewOne" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" prefWidth="250.0" />
-            <ListView fx:id="wordHistoryListViewTwo" focusTraversable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="250.0" />
+            <HBox fx:id="historyHbox" alignment="CENTER" prefHeight="285.0" prefWidth="600.0" spacing="30.0" styleClass="subHeaders">
+               <children>
+                  <ListView fx:id="wordHistoryListViewOne" focusTraversable="false" prefHeight="460.0" prefWidth="250.0" />
+                  <ListView fx:id="wordHistoryListViewTwo" focusTraversable="false" prefHeight="136.0" prefWidth="250.0" />
+               </children>
+            </HBox>
          </children>
-      </HBox>
+      </VBox>
       <HBox alignment="CENTER" prefHeight="62.0" prefWidth="600.0" spacing="30.0">
          <children>
             <Button mnemonicParsing="false" onAction="#onPlayAgain" prefHeight="33.0" prefWidth="145.0" text="Play again!" />

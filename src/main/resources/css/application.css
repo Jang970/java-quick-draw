@@ -185,15 +185,14 @@
 	-fx-background-color:  #dad8cc;
 }
 .list-cell:odd{
+	-fx-cell-size: 30 ;
 	-fx-background-color: #ebe9dd;
 	-fx-alignment: center;
 }
 
 .list-cell:even{
+	-fx-cell-size: 30;
 	-fx-background-color: #dad8cc;
 	-fx-alignment: center;
 }
 
-.list-cell:empty{
-	visibility: false;
-}

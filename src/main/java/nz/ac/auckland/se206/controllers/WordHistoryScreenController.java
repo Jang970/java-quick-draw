@@ -5,13 +5,15 @@ import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
+import javafx.scene.layout.HBox;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
 
 public class WordHistoryScreenController {
 
-  @FXML private ListView wordHistoryListViewOne;
-  @FXML private ListView wordHistoryListViewTwo;
+  @FXML private ListView<String> wordHistoryListViewOne;
+  @FXML private ListView<String> wordHistoryListViewTwo;
+  @FXML private HBox historyHbox;
 
   private List<String> wordHistory;
 
@@ -21,10 +23,15 @@ public class WordHistoryScreenController {
     App.subscribeToViewChange(
         (View view) -> {
           if (view == View.WORDHISTORY) {
+
             wordHistory =
                 new ArrayList<String>(
                     App.getProfileManager().getCurrentProfile().getCategoryHistory());
             displayWordHistory();
+
+            // TODO: Find a better way to do this resizing
+            // dynamically resize list hbox height (doesn't show more cells than necessary)
+            historyHbox.setPrefHeight((wordHistory.size() + 1) * 15 + 2);
           }
         });
   }
@@ -32,13 +39,13 @@ public class WordHistoryScreenController {
   /** Displays word history by splitting list into two even sublists */
   private void displayWordHistory() {
 
-    // TODO: How to fix type safety problem?
+    // split list evenly into two lists
     wordHistoryListViewOne.setItems(
-        FXCollections.observableArrayList(wordHistory.subList(0, wordHistory.size() / 2)));
+        FXCollections.observableArrayList(wordHistory.subList(0, (wordHistory.size() + 1) / 2)));
 
     wordHistoryListViewTwo.setItems(
         FXCollections.observableArrayList(
-            wordHistory.subList(wordHistory.size() / 2, wordHistory.size())));
+            wordHistory.subList((wordHistory.size() + 1) / 2, wordHistory.size())));
   }
 
   @FXML
