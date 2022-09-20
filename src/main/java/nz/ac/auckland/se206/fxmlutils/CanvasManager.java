@@ -10,7 +10,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javax.imageio.ImageIO;
 import nz.ac.auckland.se206.App;
 
@@ -185,24 +185,32 @@ public class CanvasManager {
    */
   public File saveCurrentSnapshotOnFile() throws IOException {
 
-    DirectoryChooser directoryChooser = new DirectoryChooser();
-    directoryChooser.setTitle("Save drawing");
+    FileChooser fileChooser = new FileChooser();
+    fileChooser.setTitle("Save Image");
 
     // You can change the location as you see fit.
-    final File directory = directoryChooser.showDialog(App.getStage());
+    final File directory = fileChooser.showSaveDialog(App.getStage());
 
-    if (!directory.exists()) {
+    if (directory != null) {
       directory.mkdir();
+      // We save the image to a file in the tmp folder.
+      final File imageToClassify =
+          new File(directory.getAbsolutePath() + "/snapshot" + System.currentTimeMillis() + ".bmp");
+
+      // Save the image to a file.
+      ImageIO.write(getCurrentSnapshot(), "bmp", imageToClassify);
+
+      return imageToClassify;
     }
+    // // We save the image to a file in the tmp folder.
+    // final File imageToClassify =
+    //     new File(directory.getAbsolutePath() + "/snapshot" + System.currentTimeMillis() +
+    // ".bmp");
 
-    // We save the image to a file in the tmp folder.
-    final File imageToClassify =
-        new File(directory.getAbsolutePath() + "/snapshot" + System.currentTimeMillis() + ".bmp");
+    // // Save the image to a file.
+    // ImageIO.write(getCurrentSnapshot(), "bmp", imageToClassify);
 
-    // Save the image to a file.
-    ImageIO.write(getCurrentSnapshot(), "bmp", imageToClassify);
-
-    return imageToClassify;
+    return null;
   }
 
   /**
