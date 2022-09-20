@@ -95,7 +95,7 @@ public class GameScreenController {
             canvasManager.clearCanvas();
 
             // doesnt cancel if just looking at user stats
-          } else if (newView != View.USERSTATS) {
+          } else {
             gameLogicManager.cancelGame();
           }
         });

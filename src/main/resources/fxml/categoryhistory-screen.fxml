@@ -30,7 +30,7 @@
          <children>
             <HBox fx:id="historyHbox" alignment="CENTER" prefHeight="285.0" prefWidth="600.0" spacing="30.0" styleClass="subHeaders">
                <children>
-                  <ListView fx:id="categoryHistoryListViewOne" focusTraversable="false" prefHeight="460.0" prefWidth="250.0" />
+                  <ListView fx:id="categoryHistoryListViewOne" focusTraversable="false" prefHeight="460.0" prefWidth="250.0" styleClass="list-one" />
                   <ListView fx:id="categoryHistoryListViewTwo" focusTraversable="false" prefHeight="136.0" prefWidth="250.0" />
                </children>
             </HBox>
