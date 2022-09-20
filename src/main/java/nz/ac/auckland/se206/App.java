@@ -132,9 +132,7 @@ public class App extends Application {
     try {
       gameLogicManager = new GameLogicManager(10);
     } catch (IOException | ModelException e1) {
-      App.expect(
-          "The machine learning model exists on file and the class should have no issue reading or writing from it",
-          e1);
+      App.expect("The machine learning model exists on file", e1);
     }
 
     gameLogicManager.setNumTopGuessNeededToWin(3);
