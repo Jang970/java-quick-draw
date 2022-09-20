@@ -77,8 +77,14 @@
             <StackPane prefHeight="243.0" prefWidth="400.0">
                <children>
                   <Canvas fx:id="canvas" height="243.0" width="400.0" />
-                  <Pane fx:id="canvasContainerPane" disable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="243.0" prefWidth="400.0" styleClass="canvas" />
+                  <Pane fx:id="canvasContainerPane" disable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="243.0" prefWidth="400.0" styleClass="canvas">
+                     <StackPane.margin>
+                        <Insets />
+                     </StackPane.margin></Pane>
                </children>
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin>
             </StackPane>
          </children>
          <padding>
