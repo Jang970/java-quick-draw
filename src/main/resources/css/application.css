@@ -164,6 +164,13 @@
     -fx-border-color: rgb(102, 140, 255);
 }
 
+/* User Stats Screen */
+.fastestWinLabel {
+	-fx-background-color: #668cff;
+	-fx-background-radius: 30px;
+	-fx-text-fill:  #ebe9dd;
+	-fx-font-size: 25px;
+}
 /* Word History Screen */
 
 .list-view {
