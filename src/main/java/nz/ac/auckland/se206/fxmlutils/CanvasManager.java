@@ -141,7 +141,12 @@ public class CanvasManager {
    * @param event the click even
    */
   private void handleClickEvent(MouseEvent event) {
-    // TODO: Draw cirlce using white or black depending on pencil
+    if (drawingEnabled) {
+      int circleRadius = 6;
+      isDrawn = true;
+      context.fillOval(
+          event.getX() - circleRadius, event.getY() - circleRadius, circleRadius, circleRadius);
+    }
   }
 
   /** Runs the clear function if drawing is enabled. */
