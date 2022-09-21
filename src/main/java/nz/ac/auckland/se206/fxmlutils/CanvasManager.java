@@ -141,7 +141,7 @@ public class CanvasManager {
    * @param event the click even
    */
   private void handleClickEvent(MouseEvent event) {
-    if (drawingEnabled) {
+    if (drawingEnabled && drawMode == DrawMode.DRAWING) {
       int circleRadius = 6;
       isDrawn = true;
       context.fillOval(
