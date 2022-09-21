@@ -93,6 +93,7 @@ public class GameScreenController {
             gameLogicManager.startGame();
             whatToDrawLabel.setText("To Draw: " + gameLogicManager.getCurrentCategory());
             canvasManager.clearCanvas();
+            canvasManager.resetIsDrawn();
 
             // doesnt cancel if just looking at user stats
           } else {

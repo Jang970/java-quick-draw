@@ -43,6 +43,9 @@ public class CanvasManager {
   /** This helps keep track of the mouse being held down and released */
   private boolean isHolding = false;
 
+  // tracks if canvas is drawn on or not
+  private static boolean isDrawn = false;
+
   /**
    * The canvas manager is bound to one canvas which is given through this constructor
    *
@@ -106,6 +109,7 @@ public class CanvasManager {
         if (drawMode == DrawMode.DRAWING) {
           context.setStroke(Color.BLACK);
           context.setLineWidth(brushSize * 0.8);
+          isDrawn = true;
         } else if (drawMode == DrawMode.ERASING) {
           // TODO: Extract this hard coded specific color
           context.setStroke(Color.rgb(235, 233, 221));
@@ -221,5 +225,19 @@ public class CanvasManager {
    */
   public void setDrawingEnabled(boolean drawingEnabled) {
     this.drawingEnabled = drawingEnabled;
+  }
+
+  /**
+   * Returns if the canvas has been drawn or not
+   *
+   * @return
+   */
+  public static boolean getIsDrawn() {
+    return isDrawn;
+  }
+
+  /** resets is drawn to false */
+  public void resetIsDrawn() {
+    isDrawn = false;
   }
 }

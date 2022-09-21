@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
+import nz.ac.auckland.se206.fxmlutils.CanvasManager;
 import nz.ac.auckland.se206.util.CSVKeyValuePairLoader;
 import nz.ac.auckland.se206.util.CountdownTimer;
 import nz.ac.auckland.se206.util.DataSource;
@@ -164,7 +165,8 @@ public class GameLogicManager {
     int range = Math.min(predictions.size(), numTopGuessNeededToWin);
     for (int i = 0; i < range; i++) {
       String prediction = predictions.get(i).getClassName().replace('_', ' ');
-      if (prediction.equals(categoryToGuess)) {
+      // wins only if prediction matchs and if canvas is drawn on
+      if (prediction.equals(categoryToGuess) && CanvasManager.getIsDrawn()) {
         endGame(WinState.WIN);
       }
     }
