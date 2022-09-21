@@ -33,17 +33,21 @@ public class CategoryHistoryScreenController {
             // dynamically resize list hbox height (doesn't show more cells than necessary)
             historyHbox.setPrefHeight((categoryHistory.size() + 1) * 15 + 2);
 
-            // TODO: FIX - Only works after one view
-            // Binds the scrolls of the two lists
-            if (categoryHistoryListViewOne.lookup(".scroll-bar") != null) {
-              ScrollBar sb1 = (ScrollBar) categoryHistoryListViewOne.lookup(".scroll-bar");
-              ScrollBar sb2 = (ScrollBar) categoryHistoryListViewTwo.lookup(".scroll-bar");
-              sb1.valueProperty().bindBidirectional(sb2.valueProperty());
-            }
+            bindScrollBars();
 
             setCategoryHistoryLists();
           }
         });
+  }
+
+  /** Binds the scroll bars of the two lists */
+  private void bindScrollBars() {
+    categoryHistoryListViewOne.applyCss();
+    categoryHistoryListViewTwo.applyCss();
+
+    ScrollBar sb1 = (ScrollBar) categoryHistoryListViewOne.lookup(".scroll-bar");
+    ScrollBar sb2 = (ScrollBar) categoryHistoryListViewTwo.lookup(".scroll-bar");
+    sb1.valueProperty().bindBidirectional(sb2.valueProperty());
   }
 
   /** Displays word history by splitting list into two even sublists */
