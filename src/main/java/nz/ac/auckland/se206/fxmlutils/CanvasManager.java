@@ -185,30 +185,23 @@ public class CanvasManager {
    */
   public File saveCurrentSnapshotOnFile() throws IOException {
 
+    // making use of FileChooser that will allow user to create a folder containing their drawing
+    // and save it anywhere on their pc
     FileChooser fileChooser = new FileChooser();
     fileChooser.setTitle("Save Image");
 
-    // You can change the location as you see fit.
     final File directory = fileChooser.showSaveDialog(App.getStage());
 
     if (directory != null) {
       directory.mkdir();
-      // We save the image to a file in the tmp folder.
+      // save image to a file in created folder
       final File imageToClassify =
           new File(directory.getAbsolutePath() + "/snapshot" + System.currentTimeMillis() + ".bmp");
-
-      // Save the image to a file.
+      // save the image to a file
       ImageIO.write(getCurrentSnapshot(), "bmp", imageToClassify);
 
       return imageToClassify;
     }
-    // // We save the image to a file in the tmp folder.
-    // final File imageToClassify =
-    //     new File(directory.getAbsolutePath() + "/snapshot" + System.currentTimeMillis() +
-    // ".bmp");
-
-    // // Save the image to a file.
-    // ImageIO.write(getCurrentSnapshot(), "bmp", imageToClassify);
 
     return null;
   }
