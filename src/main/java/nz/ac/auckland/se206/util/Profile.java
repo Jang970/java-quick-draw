@@ -33,7 +33,7 @@ public class Profile {
     return name;
   }
 
-  public UUID getID() {
+  public UUID getId() {
     return id;
   }
 

@@ -20,13 +20,26 @@ public class UserStatsScreenController {
     App.subscribeToViewChange(
         (View view) -> {
           if (view == View.USERSTATS) {
-            // sets all labels of the user stats and users name
-            statsHeaderLabel.setText(
-                App.getProfileManager().getCurrentProfile().getName() + "'s Stats");
 
-            //  user stats label
             Profile currentProfile = App.getProfileManager().getCurrentProfile();
-            fastestWinLabel.setText(String.valueOf(currentProfile.getFastestWin()));
+
+            // sets all labels of the user stats and users name
+            statsHeaderLabel.setText(currentProfile.getName() + "'s Stats");
+
+            // fastest win label
+            if (currentProfile.getFastestWin() == -1) {
+              fastestWinLabel.setText(
+                  "You haven't won a game yet! Keep practising, you got this :)");
+            } else {
+              fastestWinLabel.setText(
+                  "Your fastest win is in "
+                      + currentProfile.getFastestWin()
+                      + " seconds when you had to draw '"
+                      + currentProfile.getCategoryOfFastestWin()
+                      + "'!");
+            }
+
+            //  rest of user stats label
             numGamesWonLabel.setText(String.valueOf(currentProfile.getGamesWon()));
             numGamesLostLabel.setText(String.valueOf(currentProfile.getGamesLost()));
             numCategoriesPlayedLabel.setText(
@@ -45,5 +58,11 @@ public class UserStatsScreenController {
   @FXML
   private void onSwitchToProfiles() {
     App.setView(View.USERPROFILES);
+  }
+
+  /** Switches view to category history */
+  @FXML
+  private void onCategoryHistory() {
+    App.setView(View.CATEGORYHISTORY);
   }
 }

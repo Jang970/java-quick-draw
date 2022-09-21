@@ -71,8 +71,8 @@ public class UserProfilesScreenController {
     Button usernameButton = new Button(users.get(pageIndex).getName());
 
     // sets id's of button to corresponding user id
-    userIconButton.setId(users.get(pageIndex).getID().toString());
-    usernameButton.setId(users.get(pageIndex).getID().toString());
+    userIconButton.setId(users.get(pageIndex).getId().toString());
+    usernameButton.setId(users.get(pageIndex).getId().toString());
 
     // set style
     setButtonStyle(userIconButton, "userIconButton");
@@ -141,7 +141,7 @@ public class UserProfilesScreenController {
 
   /** Switches to new user screen */
   @FXML
-  private void onNewUser() {
+  private void onCreateNewUser() {
     App.setView(View.NEWUSER);
   }
 }

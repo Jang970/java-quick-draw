@@ -12,8 +12,9 @@ import java.util.Map;
 /** This class loads a csv file with key value pairs into a map */
 public class CSVKeyValuePairLoader<K, V> {
 
-  Transformer<String, K> keyTransformer;
-  Transformer<String, V> valueTransformer;
+  private Transformer<String, K> keyTransformer;
+  private Transformer<String, V> valueTransformer;
+
   /**
    * @param fileLocation the location of the csv with the values and their associated keys.
    */

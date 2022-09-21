@@ -163,3 +163,52 @@
 	-fx-border-radius: 40px;
     -fx-border-color: rgb(102, 140, 255);
 }
+
+/* User Stats Screen */
+.fastestWinLabel {
+	-fx-background-color: #668cff;
+	-fx-background-radius: 30px;
+	-fx-text-fill:  #ebe9dd;
+	-fx-font-size: 25px;
+}
+/* Word History Screen */
+
+.list-view {
+    -fx-background-color: #ebe9dd;
+	-fx-alignment: center;
+	-fx-font-size: 18px;
+	-fx-background-radius: 40px;
+}
+
+.list-view .scroll-bar {
+	-fx-background-color: #ebe9dd;
+}
+
+.list-view .scroll-bar .thumb{
+	-fx-background-color: rgb(102, 140, 255);
+}
+
+.list-view .scroll-bar .increment-button:hover, .decrement-button:hover{
+	-fx-background-color:  #dad8cc;
+}
+
+.list-one .scroll-bar {
+	-fx-scale-x: 0;
+}
+
+.list-cell:odd{
+	-fx-cell-size: 30 ;
+	-fx-background-color: #ebe9dd;
+	-fx-alignment: center;
+}
+
+.list-cell:even{
+	-fx-cell-size: 30;
+	-fx-background-color: #dad8cc;
+	-fx-alignment: center;
+}
+
+.list-cell:empty{
+	-fx-background-color: #ebe9dd;
+}
+
