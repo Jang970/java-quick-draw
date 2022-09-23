@@ -1,7 +1,10 @@
 package nz.ac.auckland.se206.controllers;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
@@ -66,5 +69,21 @@ public class CategoryScreenController {
   @FXML
   private void onReadyToPlay() {
     App.setView(View.GAME);
+  }
+
+  @FXML
+  private void onHowToPlay() {
+    // shows an information alert pop up on how to play when button is clicked
+    Alert howToPlayAlert = new Alert(AlertType.INFORMATION);
+    DialogPane dialogPane = howToPlayAlert.getDialogPane();
+    dialogPane
+        .getStylesheets()
+        .add(getClass().getResource("/css/application.css").toExternalForm());
+
+    howToPlayAlert.setTitle("How to Play");
+    howToPlayAlert.setHeaderText("How to Play");
+    howToPlayAlert.setContentText(
+        "Once you click the \"I'm Ready!\" button, the timer will start immediately and you can start drawing on the canvas. Good luck!");
+    howToPlayAlert.showAndWait();
   }
 }
