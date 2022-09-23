@@ -47,7 +47,7 @@
                   <Font size="20.0" />
                </font>
             </Label>
-            <Label fx:id="timeRemainingLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="27.0" prefWidth="215.0" styleClass="subHeaders" text="Time Remaining: 0:00" textAlignment="CENTER">
+            <Label fx:id="timeRemainingLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="27.0" prefWidth="215.0" styleClass="subHeaders" text="Time Remaining: 0:00" textAlignment="CENTER" textFill="RED">
                <font>
                   <Font size="20.0" />
                </font>

@@ -64,9 +64,12 @@ public class CanvasManager {
     canvas.setOnMouseDragged((e) -> handleDragEvent(e));
     canvas.setOnMouseReleased((e) -> isHolding = false);
     canvas.setOnMouseClicked((e) -> handleClickEvent(e));
+    canvas.setOnMouseMoved(
+        e -> {
+          setCursor();
+        });
 
     clearCanvas();
-    canvas.setCursor(Cursor.CROSSHAIR);
   }
 
   /**
@@ -84,22 +87,25 @@ public class CanvasManager {
   public void setDrawMode(DrawMode drawMode) {
     this.drawMode = drawMode;
     this.isHolding = false;
-    setCursor(drawMode);
   }
 
   /**
-   * Sets the cursor based on the drawmode
+   * Sets the cursor based on the drawmode or default if drawing is not enabled
    *
    * @param drawMode
    */
-  private void setCursor(DrawMode drawMode) {
+  private void setCursor() {
 
-    if (drawMode == DrawMode.DRAWING) {
+    if (!isDrawingEnabled()) {
+      canvas.setCursor(Cursor.DEFAULT);
+    } else if (drawMode == DrawMode.DRAWING) {
       canvas.setCursor(Cursor.CROSSHAIR);
     } else {
       // gets eraser icon for cursor
-      Image img = new Image("/images/eraserIcon.png", 20, 20, true, true);
-      Cursor eraser = new ImageCursor(img, img.getWidth() / 2, img.getHeight() / 2);
+      Image eraserImage = new Image("/images/eraserIcon.png", 20, 20, true, true);
+      // sets hotspot as center of eraser image
+      Cursor eraser =
+          new ImageCursor(eraserImage, eraserImage.getWidth() / 2, eraserImage.getHeight() / 2);
 
       canvas.setCursor(eraser);
     }
@@ -180,6 +186,7 @@ public class CanvasManager {
   public void clearOnlyIfDrawingEnabled() {
     if (drawingEnabled) {
       clearCanvas();
+      drawMode = DrawMode.DRAWING;
     }
   }
 
