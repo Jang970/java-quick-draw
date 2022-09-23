@@ -5,6 +5,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.Cursor;
+import javafx.scene.ImageCursor;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -64,6 +66,7 @@ public class CanvasManager {
     canvas.setOnMouseClicked((e) -> handleClickEvent(e));
 
     clearCanvas();
+    canvas.setCursor(Cursor.CROSSHAIR);
   }
 
   /**
@@ -81,6 +84,25 @@ public class CanvasManager {
   public void setDrawMode(DrawMode drawMode) {
     this.drawMode = drawMode;
     this.isHolding = false;
+    setCursor(drawMode);
+  }
+
+  /**
+   * Sets the cursor based on the drawmode
+   *
+   * @param drawMode
+   */
+  private void setCursor(DrawMode drawMode) {
+
+    if (drawMode == DrawMode.DRAWING) {
+      canvas.setCursor(Cursor.CROSSHAIR);
+    } else {
+      // gets eraser icon for cursor
+      Image img = new Image("/images/eraserIcon.png", 20, 20, true, true);
+      Cursor eraser = new ImageCursor(img, img.getWidth() / 2, img.getHeight() / 2);
+
+      canvas.setCursor(eraser);
+    }
   }
 
   /**
