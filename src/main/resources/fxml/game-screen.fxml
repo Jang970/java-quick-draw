@@ -7,6 +7,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -53,7 +54,7 @@
             </Label>
          </children>
       </HBox>
-      <HBox prefHeight="247.0" prefWidth="600.0">
+      <HBox prefHeight="243.0" prefWidth="600.0">
          <children>
             <VBox alignment="CENTER" prefHeight="221.0" prefWidth="79.0">
                <children>
@@ -73,14 +74,18 @@
                   <Insets />
                </HBox.margin>
             </VBox>
-            <Pane fx:id="canvasContainerPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="243.0" prefWidth="400.0" styleClass="canvas">
+            <StackPane prefHeight="243.0" prefWidth="400.0">
                <children>
                   <Canvas fx:id="canvas" height="243.0" width="400.0" />
+                  <Pane fx:id="canvasContainerPane" disable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="243.0" prefWidth="400.0" styleClass="canvas">
+                     <StackPane.margin>
+                        <Insets />
+                     </StackPane.margin></Pane>
                </children>
                <HBox.margin>
-                  <Insets left="5.0" />
+                  <Insets left="10.0" />
                </HBox.margin>
-            </Pane>
+            </StackPane>
          </children>
          <padding>
             <Insets left="25.0" />

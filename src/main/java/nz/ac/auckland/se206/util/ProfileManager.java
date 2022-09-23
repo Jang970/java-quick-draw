@@ -58,7 +58,7 @@ public class ProfileManager {
       profiles.add(newProfile);
 
       // lets assume we want to use the newly created profile
-      setCurrentProfile(newProfile.getID());
+      setCurrentProfile(newProfile.getId());
 
       saveProfilesToFile();
 
@@ -101,7 +101,7 @@ public class ProfileManager {
     for (int i = 0; i < profiles.size(); i++) {
 
       // checks if the two UUID's are equal
-      if (profiles.get(i).getID().equals(userID)) {
+      if (profiles.get(i).getId().equals(userID)) {
         currentProfileIndex = i;
         break;
       }
