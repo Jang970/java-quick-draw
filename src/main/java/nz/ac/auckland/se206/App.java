@@ -1,6 +1,7 @@
 package nz.ac.auckland.se206;
 
 import ai.djl.ModelException;
+import java.io.File;
 import java.io.IOException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -30,6 +31,7 @@ public class App extends Application {
   private static GameLogicManager gameLogicManager;
   private static EventEmitter<WindowEvent> appTerminationEmitter = new EventEmitter<WindowEvent>();
   private static Stage stage;
+  private static File userProfiles = new File(".userprofiles");
 
   private static ProfileManager profileManager;
 
@@ -139,8 +141,11 @@ public class App extends Application {
     gameLogicManager.setNumTopGuessNeededToWin(3);
     gameLogicManager.setGameLengthSeconds(60);
 
+    userProfiles.mkdir();
+
     try {
-      profileManager = new ProfileManager(App.getResourcePath("profiles.json"));
+      profileManager =
+          new ProfileManager(userProfiles.getAbsolutePath() + File.separator + "profiles.json");
     } catch (IOException e2) {
       App.expect("profiles.json is a file name, not a directory", e2);
     }
