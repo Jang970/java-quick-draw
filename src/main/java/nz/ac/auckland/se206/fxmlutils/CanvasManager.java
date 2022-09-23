@@ -13,6 +13,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.DirectoryChooser;
 import javax.imageio.ImageIO;
 import nz.ac.auckland.se206.App;
+import nz.ac.auckland.se206.util.EventEmitter;
+import nz.ac.auckland.se206.util.EventListener;
 
 /**
  * The purpose of this class is to isolate all functionality of the canvas from the controller
@@ -42,6 +44,8 @@ public class CanvasManager {
 
   /** This helps keep track of the mouse being held down and released */
   private boolean isHolding = false;
+
+  private static EventEmitter<Boolean> canvasDrawnEmitter = new EventEmitter<Boolean>();
 
   // tracks if canvas is drawn on or not
   private static boolean isDrawn = false;
@@ -110,6 +114,7 @@ public class CanvasManager {
           context.setStroke(Color.BLACK);
           context.setLineWidth(brushSize * 0.8);
           isDrawn = true;
+          canvasDrawnEmitter.emit(isDrawn);
         } else if (drawMode == DrawMode.ERASING) {
           // TODO: Extract this hard coded specific color
           context.setStroke(Color.rgb(235, 233, 221));
@@ -244,5 +249,15 @@ public class CanvasManager {
   /** resets is drawn to false */
   public void resetIsDrawn() {
     isDrawn = false;
+    canvasDrawnEmitter.emit(isDrawn);
+  }
+
+  /**
+   * Subscribes to canvas drawn to keep track of when canvas is drawn on
+   *
+   * @param listener
+   */
+  public static void subscribeToCanvasDrawn(EventListener<Boolean> listener) {
+    canvasDrawnEmitter.subscribe(listener);
   }
 }
