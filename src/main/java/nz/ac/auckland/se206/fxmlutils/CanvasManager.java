@@ -189,6 +189,11 @@ public class CanvasManager {
     // and save it anywhere on their pc
     FileChooser fileChooser = new FileChooser();
     fileChooser.setTitle("Save Image");
+    fileChooser.setInitialFileName(
+        App.getProfileManager().getCurrentProfile().getName()
+            + "'s "
+            + App.getGameLogicManager().getCurrentCategory()
+            + " drawing");
 
     final File directory = fileChooser.showSaveDialog(App.getStage());
 
