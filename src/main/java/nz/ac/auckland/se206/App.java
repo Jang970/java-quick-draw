@@ -32,6 +32,7 @@ public class App extends Application {
   private static GameLogicManager gameLogicManager;
   private static EventEmitter<WindowEvent> appTerminationEmitter = new EventEmitter<WindowEvent>();
   private static Stage stage;
+  // used for creation of folder to store user profiles
   private static File userProfiles = new File(".userprofiles");
 
   private static ProfileManager profileManager;
@@ -140,9 +141,11 @@ public class App extends Application {
     gameLogicManager.setNumTopGuessNeededToWin(3);
     gameLogicManager.setGameLengthSeconds(60);
 
+    // create folder to store json file in if not already existing
     userProfiles.mkdir();
 
     try {
+      // this creates the json file containing the list of user profiles
       profileManager =
           new ProfileManager(userProfiles.getAbsolutePath() + File.separator + "profiles.json");
     } catch (IOException e2) {
