@@ -72,7 +72,7 @@ public class CategoryScreenController {
   }
 
   @FXML
-  private void onHowToPlay() {
+  private void onPressHowToPlay() {
     // shows an information alert pop up on how to play when button is clicked
     Alert howToPlayAlert = new Alert(AlertType.INFORMATION);
     DialogPane dialogPane = howToPlayAlert.getDialogPane();
