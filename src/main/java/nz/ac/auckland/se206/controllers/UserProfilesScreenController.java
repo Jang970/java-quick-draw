@@ -17,7 +17,7 @@ public class UserProfilesScreenController {
 
   @FXML private Button newGameButton;
   @FXML private Pagination profilesPagination;
-  @FXML private VBox profilesVBox;
+  @FXML private VBox profilesVbox;
 
   private List<Profile> users;
 

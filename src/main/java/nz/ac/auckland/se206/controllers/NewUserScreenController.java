@@ -19,7 +19,7 @@ public class NewUserScreenController {
   @FXML private Button newGameButton;
   @FXML private Button backButton;
   @FXML private Pagination profilesPagination;
-  @FXML private VBox profilesVBox;
+  @FXML private VBox profilesVbox;
   @FXML private Pane newUserPane;
   @FXML private TextField usernameTextField;
   @FXML private ColorPicker colorPicker;
