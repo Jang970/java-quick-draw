@@ -11,7 +11,15 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
-import nz.ac.auckland.se206.util.*;
+import nz.ac.auckland.se206.fxmlutils.CanvasManager;
+import nz.ac.auckland.se206.util.CSVKeyValuePairLoader;
+import nz.ac.auckland.se206.util.CountdownTimer;
+import nz.ac.auckland.se206.util.DataSource;
+import nz.ac.auckland.se206.util.EmptyEventEmitter;
+import nz.ac.auckland.se206.util.EmptyEventListener;
+import nz.ac.auckland.se206.util.EventEmitter;
+import nz.ac.auckland.se206.util.EventListener;
+import nz.ac.auckland.se206.util.PredictionManager;
 
 /**
  * This class contains all of the logic for the QuickDraw Game. It manages game state and
@@ -98,13 +106,20 @@ public class GameLogicManager {
       categories =
           new CSVKeyValuePairLoader<CategoryType, String>(
                   (keyString) -> {
-                    if (keyString.equals("E")) return CategoryType.EASY;
-                    if (keyString.equals("M")) return CategoryType.MEDIUM;
-                    if (keyString.equals("H")) return CategoryType.HARD;
+                    if (keyString.equals("E")) {
+                      return CategoryType.EASY;
+                    }
+                    if (keyString.equals("M")) {
+                      return CategoryType.MEDIUM;
+                    }
+                    if (keyString.equals("H")) {
+                      return CategoryType.HARD;
+                    }
                     return null;
                   },
                   (v) -> v)
               .loadCategoriesFromFile(App.getResourcePath("category_difficulty.csv"), true);
+
     } catch (CsvException e) {
       App.expect("Category CSV is in the resource folder and is not empty", e);
     }
@@ -150,7 +165,8 @@ public class GameLogicManager {
     int range = Math.min(predictions.size(), numTopGuessNeededToWin);
     for (int i = 0; i < range; i++) {
       String prediction = predictions.get(i).getClassName().replace('_', ' ');
-      if (prediction.equals(categoryToGuess)) {
+      // wins only if prediction matchs and if canvas is drawn on
+      if (prediction.equals(categoryToGuess) && CanvasManager.getIsDrawn()) {
         endGame(WinState.WIN);
       }
     }

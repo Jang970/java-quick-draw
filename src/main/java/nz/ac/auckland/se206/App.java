@@ -24,7 +24,8 @@ public class App extends Application {
     NEWUSER,
     CATEGORY,
     GAME,
-    USERSTATS
+    USERSTATS,
+    CATEGORYHISTORY
   }
 
   private static ViewManager<View> viewManager;
@@ -133,9 +134,7 @@ public class App extends Application {
     try {
       gameLogicManager = new GameLogicManager(10);
     } catch (IOException | ModelException e1) {
-      App.expect(
-          "The machine learning model exists on file and the class should have no issue reading or writing from it",
-          e1);
+      App.expect("The machine learning model exists on file", e1);
     }
 
     gameLogicManager.setNumTopGuessNeededToWin(3);
@@ -189,6 +188,7 @@ public class App extends Application {
       viewManager.addView(View.USERPROFILES, loadFxml("userprofiles-screen"));
       viewManager.addView(View.NEWUSER, loadFxml("newuser-screen"));
       viewManager.addView(View.USERSTATS, loadFxml("userstats-screen"));
+      viewManager.addView(View.CATEGORYHISTORY, loadFxml("categoryhistory-screen"));
 
     } catch (IOException e1) {
       App.expect("All of the previously listed files should exists", e1);
