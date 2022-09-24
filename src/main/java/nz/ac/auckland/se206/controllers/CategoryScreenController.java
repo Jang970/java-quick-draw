@@ -28,12 +28,15 @@ public class CategoryScreenController {
     App.subscribeToViewChange(
         (View view) -> {
           if (view == View.CATEGORY) {
+            // When the app laods changes to the catgory screen, we genereate a new category and
+            // make display updates
             usernameLabel.setText("Hi, " + App.getProfileManager().getCurrentProfile().getName());
             generateNewCategoryAndUpdateLabel();
             updateGameTimeLabel();
           }
         });
 
+    // When text the app terminates, we turn the text to speech off.
     App.subscribeToAppTermination(
         (e) -> {
           // TODO: Make the TextToSpeech class handle this automatically
@@ -43,7 +46,6 @@ public class CategoryScreenController {
 
   private void updateGameTimeLabel() {
     int numSeconds = gameLogicManager.getGameLengthSeconds();
-
     drawTimeLabel.setText("Draw in " + numSeconds + " seconds");
   }
 
@@ -51,10 +53,13 @@ public class CategoryScreenController {
 
     Profile profile = App.getProfileManager().getCurrentProfile();
 
+    // We need to make sure that we are generating a new category which the player has not already
+    // played.
     String newCategory;
     try {
       newCategory = gameLogicManager.selectNewRandomCategory(profile.getCategoryHistory());
     } catch (FilterTooStrictException e) {
+      // reset the category history if they have played every word
       profile.resetCategoryHistory();
       newCategory = gameLogicManager.selectNewRandomCategory();
     }

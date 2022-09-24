@@ -95,7 +95,7 @@
          <children>
             <Button mnemonicParsing="false" onAction="#onPlayAgain" prefHeight="33.0" prefWidth="145.0" text="Play again!" />
             <Button mnemonicParsing="false" onAction="#onSwitchToProfiles" prefHeight="33.0" prefWidth="145.0" text="Switch Profile" />
-            <Button mnemonicParsing="false" onAction="#onCategoryHistory" text="Category History" />
+            <Button mnemonicParsing="false" onAction="#onSwitchToCategoryHistory" text="Category History" />
          </children>
          <VBox.margin>
             <Insets top="20.0" />

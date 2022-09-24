@@ -62,7 +62,7 @@ public class UserStatsScreenController {
 
   /** Switches view to category history */
   @FXML
-  private void onCategoryHistory() {
+  private void onSwitchToCategoryHistory() {
     App.setView(View.CATEGORYHISTORY);
   }
 }
