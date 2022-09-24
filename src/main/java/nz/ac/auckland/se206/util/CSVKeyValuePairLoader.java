@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 /** This class loads a csv file with key value pairs into a map */
-public class CSVKeyValuePairLoader<K, V> {
+public class CsvKeyValuePairLoader<K, V> {
 
   private Transformer<String, K> keyTransformer;
   private Transformer<String, V> valueTransformer;
@@ -18,7 +18,7 @@ public class CSVKeyValuePairLoader<K, V> {
   /**
    * @param fileLocation the location of the csv with the values and their associated keys.
    */
-  public CSVKeyValuePairLoader(
+  public CsvKeyValuePairLoader(
       Transformer<String, K> keyTransformer, Transformer<String, V> valueTransformer) {
     this.keyTransformer = keyTransformer;
     this.valueTransformer = valueTransformer;
@@ -40,11 +40,13 @@ public class CSVKeyValuePairLoader<K, V> {
 
     CSVReader reader = new CSVReader(new FileReader(pathToFile));
 
+    // Read all items from the file
     List<String[]> entries = reader.readAll();
 
     Map<K, List<V>> map = new HashMap<>();
 
     for (String[] entry : entries) {
+      // Transform the values from strings to the correct types using the given transformers
       K key = keyTransformer.transform(entry[reverseOrder ? 1 : 0]);
       V value = valueTransformer.transform(entry[reverseOrder ? 0 : 1]);
 

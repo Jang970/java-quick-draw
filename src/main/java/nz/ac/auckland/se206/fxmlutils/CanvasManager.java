@@ -35,6 +35,28 @@ public class CanvasManager {
     ERASING
   }
 
+  // tracks if canvas is drawn on or not
+  private static boolean isDrawn = false;
+  private static EventEmitter<Boolean> canvasDrawnEmitter = new EventEmitter<Boolean>();
+
+  /**
+   * Returns if the canvas has been drawn or not
+   *
+   * @return
+   */
+  public static boolean getIsDrawn() {
+    return isDrawn;
+  }
+
+  /**
+   * Subscribes to canvas drawn to keep track of when canvas is drawn on
+   *
+   * @param listener
+   */
+  public static void subscribeToCanvasDrawn(EventListener<Boolean> listener) {
+    canvasDrawnEmitter.subscribe(listener);
+  }
+
   private final GraphicsContext context;
   private final Canvas canvas;
   private DrawMode drawMode = DrawMode.DRAWING;
@@ -46,11 +68,6 @@ public class CanvasManager {
 
   /** This helps keep track of the mouse being held down and released */
   private boolean isHolding = false;
-
-  private static EventEmitter<Boolean> canvasDrawnEmitter = new EventEmitter<Boolean>();
-
-  // tracks if canvas is drawn on or not
-  private static boolean isDrawn = false;
 
   /**
    * The canvas manager is bound to one canvas which is given through this constructor
@@ -272,27 +289,9 @@ public class CanvasManager {
     this.drawingEnabled = drawingEnabled;
   }
 
-  /**
-   * Returns if the canvas has been drawn or not
-   *
-   * @return
-   */
-  public static boolean getIsDrawn() {
-    return isDrawn;
-  }
-
   /** resets is drawn to false */
   public void resetIsDrawn() {
     isDrawn = false;
     canvasDrawnEmitter.emit(isDrawn);
-  }
-
-  /**
-   * Subscribes to canvas drawn to keep track of when canvas is drawn on
-   *
-   * @param listener
-   */
-  public static void subscribeToCanvasDrawn(EventListener<Boolean> listener) {
-    canvasDrawnEmitter.subscribe(listener);
   }
 }

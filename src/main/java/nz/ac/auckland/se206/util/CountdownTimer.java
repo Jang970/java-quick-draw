@@ -64,12 +64,14 @@ public class CountdownTimer {
 
     countdownCurrentCount = countToCountdownFrom;
 
+    // this sets a timer to decrease the count every period milliseconds
     timer.scheduleAtFixedRate(
         new TimerTask() {
 
           @Override
           public void run() {
 
+            // run relevant functions
             if (onChangeEvent != null) {
               onChangeEvent.run(countdownCurrentCount);
             }
@@ -79,6 +81,7 @@ public class CountdownTimer {
               }
               timer.cancel();
             }
+            // Decrement count at the end
             countdownCurrentCount--;
           }
         },

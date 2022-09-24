@@ -130,20 +130,24 @@ public class App extends Application {
   public void start(final Stage stage) {
 
     try {
+      // Try create the game logic manager
       gameLogicManager = new GameLogicManager(10);
     } catch (IOException | ModelException e1) {
       App.expect("The machine learning model exists on file", e1);
     }
 
+    // Setting up initial settings
     gameLogicManager.setNumTopGuessNeededToWin(3);
     gameLogicManager.setGameLengthSeconds(60);
 
     try {
+      // Try create a profile manager
       profileManager = new ProfileManager(App.getResourcePath("profiles.json"));
     } catch (IOException e2) {
       App.expect("profiles.json is a file name, not a directory", e2);
     }
 
+    // Update profile details when the game ends and save to file
     gameLogicManager.subscribeToGameEnd(
         (gameInfo) -> {
           Profile currentProfile = profileManager.getCurrentProfile();
@@ -171,6 +175,7 @@ public class App extends Application {
     Parent defaultParent;
     Scene scene = null;
 
+    // JavaFX Admin
     try {
 
       defaultParent = loadFxml("home-screen");

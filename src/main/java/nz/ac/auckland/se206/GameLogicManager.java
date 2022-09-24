@@ -12,8 +12,8 @@ import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import nz.ac.auckland.se206.fxmlutils.CanvasManager;
-import nz.ac.auckland.se206.util.CSVKeyValuePairLoader;
 import nz.ac.auckland.se206.util.CountdownTimer;
+import nz.ac.auckland.se206.util.CsvKeyValuePairLoader;
 import nz.ac.auckland.se206.util.DataSource;
 import nz.ac.auckland.se206.util.EmptyEventEmitter;
 import nz.ac.auckland.se206.util.EmptyEventListener;
@@ -104,7 +104,7 @@ public class GameLogicManager {
 
     try {
       categories =
-          new CSVKeyValuePairLoader<CategoryType, String>(
+          new CsvKeyValuePairLoader<CategoryType, String>(
                   (keyString) -> {
                     if (keyString.equals("E")) {
                       return CategoryType.EASY;
@@ -123,8 +123,6 @@ public class GameLogicManager {
     } catch (CsvException e) {
       App.expect("Category CSV is in the resource folder and is not empty", e);
     }
-
-    if (categories.isEmpty()) {}
 
     countdownTimer = new CountdownTimer();
     countdownTimer.setOnChange(
@@ -146,11 +144,12 @@ public class GameLogicManager {
   }
 
   private void endGame(WinState winState) {
+    // get info
     int secondsRemaining = countdownTimer.getRemainingCount();
-
     predictionManager.stopMakingPredictions();
     countdownTimer.cancelCountdown();
 
+    // send the end game information
     gameEndedEmitter.emit(
         new GameEndInfo(
             winState,
@@ -186,14 +185,17 @@ public class GameLogicManager {
 
     List<String> easyCategories = categories.get(CategoryType.EASY);
 
+    // Removes all the items which are also in the filter set (set subtraction)
     List<String> possibleCategories =
         easyCategories.stream()
             .filter((category) -> !categoryFilter.contains(category))
             .collect(Collectors.toList());
 
-    if (possibleCategories.isEmpty())
+    if (possibleCategories.isEmpty()) {
       throw new FilterTooStrictException("The filter filtered out all categories");
+    }
 
+    // Get random index from remaining items
     int randomIndexFromList = ThreadLocalRandom.current().nextInt(possibleCategories.size());
 
     categoryToGuess = possibleCategories.get(randomIndexFromList);
