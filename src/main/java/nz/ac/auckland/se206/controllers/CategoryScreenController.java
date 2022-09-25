@@ -85,10 +85,13 @@ public class CategoryScreenController {
         .getStylesheets()
         .add(getClass().getResource("/css/application.css").toExternalForm());
 
+    // setting display values
     howToPlayAlert.setTitle("How to Play");
     howToPlayAlert.setHeaderText("How to Play");
     howToPlayAlert.setContentText(
-        "Once you click the \"I'm Ready!\" button, the timer will start immediately and you can start drawing on the canvas. Good luck!");
+        "Once you click the \"I'm Ready!\" button, "
+            + "the timer will start immediately and you "
+            + "can start drawing on the canvas. Good luck!");
     howToPlayAlert.showAndWait();
   }
 }
