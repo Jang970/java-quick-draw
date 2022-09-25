@@ -41,6 +41,7 @@ public class GameScreenController {
 
   @FXML private VBox guessLabelCol1;
   @FXML private VBox guessLabelCol2;
+  @FXML private VBox predictionVbox;
 
   private Label[] guessLabels = new Label[10];
 
@@ -103,6 +104,13 @@ public class GameScreenController {
             gameLogicManager.cancelGame();
           }
         });
+
+    // when canvas drawn changes between true and false have predictionsVbox do the same.
+    // only starts showing predictions when user draws
+    CanvasManager.subscribeToCanvasDrawn(
+        (Boolean isDrawn) -> {
+          predictionVbox.setVisible(isDrawn);
+        });
   }
 
   /** Gets colour and sets css background colour */
@@ -145,6 +153,7 @@ public class GameScreenController {
           gameActionButton.setText("Cancel Game");
           setCanvasButtonsDisabled(false);
           canvasManager.setDrawingEnabled(true);
+          canvasManager.setDrawMode(DrawMode.DRAWING);
           gameActionButton.setDisable(false);
           whatToDrawLabel.getStyleClass().remove("stateHeaders");
         });

@@ -47,7 +47,7 @@
                   <Font size="20.0" />
                </font>
             </Label>
-            <Label fx:id="timeRemainingLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="27.0" prefWidth="215.0" styleClass="subHeaders" text="Time Remaining: 0:00" textAlignment="CENTER">
+            <Label fx:id="timeRemainingLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="27.0" prefWidth="215.0" styleClass="subHeaders" text="Time Remaining: 0:00" textAlignment="CENTER" textFill="RED">
                <font>
                   <Font size="20.0" />
                </font>
@@ -92,7 +92,7 @@
          </padding>
       </HBox>
 
-            <VBox alignment="CENTER_RIGHT" prefHeight="122.0" prefWidth="456.0" styleClass="canvasSubHeaders">
+            <VBox fx:id="predictionVbox" alignment="CENTER_RIGHT" prefHeight="122.0" prefWidth="456.0" styleClass="canvasSubHeaders" visible="false">
          <children>
             <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="10000.0" styleClass="subHeaders" text="Top Guesses" textAlignment="CENTER" VBox.vgrow="ALWAYS">
                <VBox.margin>

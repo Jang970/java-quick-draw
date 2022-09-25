@@ -5,6 +5,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.Cursor;
+import javafx.scene.ImageCursor;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -13,6 +15,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javax.imageio.ImageIO;
 import nz.ac.auckland.se206.App;
+import nz.ac.auckland.se206.util.EventEmitter;
+import nz.ac.auckland.se206.util.EventListener;
 
 /**
  * The purpose of this class is to isolate all functionality of the canvas from the controller
@@ -33,6 +37,7 @@ public class CanvasManager {
 
   // tracks if canvas is drawn on or not
   private static boolean isDrawn = false;
+  private static EventEmitter<Boolean> canvasDrawnEmitter = new EventEmitter<Boolean>();
 
   /**
    * Returns if the canvas has been drawn or not
@@ -41,6 +46,15 @@ public class CanvasManager {
    */
   public static boolean getIsDrawn() {
     return isDrawn;
+  }
+
+  /**
+   * Subscribes to canvas drawn to keep track of when canvas is drawn on
+   *
+   * @param listener
+   */
+  public static void subscribeToCanvasDrawn(EventListener<Boolean> listener) {
+    canvasDrawnEmitter.subscribe(listener);
   }
 
   private final GraphicsContext context;
@@ -67,6 +81,10 @@ public class CanvasManager {
     canvas.setOnMouseDragged((e) -> handleDragEvent(e));
     canvas.setOnMouseReleased((e) -> isHolding = false);
     canvas.setOnMouseClicked((e) -> handleClickEvent(e));
+    canvas.setOnMouseMoved(
+        e -> {
+          setCursor();
+        });
 
     clearCanvas();
   }
@@ -86,6 +104,28 @@ public class CanvasManager {
   public void setDrawMode(DrawMode drawMode) {
     this.drawMode = drawMode;
     this.isHolding = false;
+  }
+
+  /**
+   * Sets the cursor based on the drawmode or default if drawing is not enabled
+   *
+   * @param drawMode
+   */
+  private void setCursor() {
+
+    if (!isDrawingEnabled()) {
+      canvas.setCursor(Cursor.DEFAULT);
+    } else if (drawMode == DrawMode.DRAWING) {
+      canvas.setCursor(Cursor.CROSSHAIR);
+    } else {
+      // gets eraser icon for cursor
+      Image eraserImage = new Image("/images/eraserIcon.png", 20, 20, true, true);
+      // sets hotspot as center of eraser image
+      Cursor eraser =
+          new ImageCursor(eraserImage, eraserImage.getWidth() / 2, eraserImage.getHeight() / 2);
+
+      canvas.setCursor(eraser);
+    }
   }
 
   /**
@@ -119,6 +159,7 @@ public class CanvasManager {
           context.setStroke(Color.BLACK);
           context.setLineWidth(brushSize * 0.8);
           isDrawn = true;
+          canvasDrawnEmitter.emit(isDrawn);
         } else if (drawMode == DrawMode.ERASING) {
           // TODO: Extract this hard coded specific color
           context.setStroke(Color.rgb(235, 233, 221));
@@ -162,6 +203,7 @@ public class CanvasManager {
   public void clearOnlyIfDrawingEnabled() {
     if (drawingEnabled) {
       clearCanvas();
+      drawMode = DrawMode.DRAWING;
     }
   }
 
@@ -250,5 +292,6 @@ public class CanvasManager {
   /** resets is drawn to false */
   public void resetIsDrawn() {
     isDrawn = false;
+    canvasDrawnEmitter.emit(isDrawn);
   }
 }
