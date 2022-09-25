@@ -25,7 +25,7 @@
             <Insets top="-10.0" />
          </VBox.margin>
       </Label>
-      <VBox fx:id="profilesVBox" alignment="TOP_CENTER" prefHeight="471.0" prefWidth="600.0" spacing="10.0">
+      <VBox fx:id="profilesVbox" alignment="TOP_CENTER" prefHeight="471.0" prefWidth="600.0" spacing="10.0">
          <children>
             <Label styleClass="subHeaders" text="Click your profile to play">
                <font>

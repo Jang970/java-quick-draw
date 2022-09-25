@@ -92,16 +92,16 @@ public class ProfileManager {
    * Use this method to set the reference of currentUser to wanted user profile / object Can also be
    * used to switch between user profiles
    *
-   * @param userID unique ID of the User profile we want to set to / use
+   * @param userId unique ID of the User profile we want to set to / use
    */
-  public void setCurrentProfile(UUID userID) {
+  public void setCurrentProfile(UUID userId) {
 
     // iterate through and find user object with same ID and update our currentUserIndex instance
     // field
     for (int i = 0; i < profiles.size(); i++) {
 
       // checks if the two UUID's are equal
-      if (profiles.get(i).getId().equals(userID)) {
+      if (profiles.get(i).getId().equals(userId)) {
         currentProfileIndex = i;
         break;
       }

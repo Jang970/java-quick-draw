@@ -48,9 +48,10 @@ public class GameScreenController {
   private TextToSpeech textToSpeech;
   private GameLogicManager gameLogicManager;
 
-  /** JavaFX calls this method once the GUI elements are loaded. */
   public void initialize() {
 
+    // This gets the guess labels from the two columns and concatenates them into a single array for
+    // easy use.
     guessLabels =
         Stream.concat(guessLabelCol1.getChildren().stream(), guessLabelCol2.getChildren().stream())
             .toArray(Label[]::new);
@@ -60,6 +61,7 @@ public class GameScreenController {
 
     gameLogicManager = App.getGameLogicManager();
 
+    // Creates a task which gives the game logic manager a way of accessing the canvas image.
     gameLogicManager.setImageSource(
         () -> {
           FutureTask<BufferedImage> getImage =
@@ -73,6 +75,7 @@ public class GameScreenController {
           }
         });
 
+    // Subscribe to relevant changes so we can update the display accordingly
     gameLogicManager.subscribeToPredictionsChange(
         (List<Classification> predictions) -> onPredictionsChange(predictions));
     gameLogicManager.subscribeToTimeChange((Integer seconds) -> onTimeChange(seconds));
@@ -111,8 +114,12 @@ public class GameScreenController {
   }
 
   private void onGameEnd(WinState winState) {
+    // Run this after the game ends
     Platform.runLater(
         () -> {
+
+          // Update all dislay items correctly
+
           canvasManager.setDrawingEnabled(false);
           setCanvasButtonsDisabled(true);
 
@@ -134,6 +141,7 @@ public class GameScreenController {
   private void onGameStart() {
     Platform.runLater(
         () -> {
+          // When the game starts, we do the following
           gameActionButton.setText("Cancel Game");
           setCanvasButtonsDisabled(false);
           canvasManager.setDrawingEnabled(true);
@@ -145,6 +153,7 @@ public class GameScreenController {
   private void onPredictionsChange(List<Classification> classificationList) {
     Platform.runLater(
         () -> {
+          // When we are given new predictions, we update the predictions text
           int range = Math.min(classificationList.size(), guessLabels.length);
 
           for (int i = 0; i < range; i++) {

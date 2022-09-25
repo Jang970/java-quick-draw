@@ -67,6 +67,7 @@ public class Profile {
    */
   public Boolean updateFastestGameIfBeatsCurrent(int newPossibleFastestWinTime, String category) {
 
+    // This should be fairly self explanatory
     if (newPossibleFastestWinTime < fastestWinTime || fastestWinTime == -1) {
       fastestWinTime = newPossibleFastestWinTime;
       categoryOfFastestWin = category;

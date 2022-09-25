@@ -31,6 +31,18 @@ public class CanvasManager {
     ERASING
   }
 
+  // tracks if canvas is drawn on or not
+  private static boolean isDrawn = false;
+
+  /**
+   * Returns if the canvas has been drawn or not
+   *
+   * @return
+   */
+  public static boolean getIsDrawn() {
+    return isDrawn;
+  }
+
   private final GraphicsContext context;
   private final Canvas canvas;
   private DrawMode drawMode = DrawMode.DRAWING;
@@ -42,9 +54,6 @@ public class CanvasManager {
 
   /** This helps keep track of the mouse being held down and released */
   private boolean isHolding = false;
-
-  // tracks if canvas is drawn on or not
-  private static boolean isDrawn = false;
 
   /**
    * The canvas manager is bound to one canvas which is given through this constructor
@@ -236,15 +245,6 @@ public class CanvasManager {
    */
   public void setDrawingEnabled(boolean drawingEnabled) {
     this.drawingEnabled = drawingEnabled;
-  }
-
-  /**
-   * Returns if the canvas has been drawn or not
-   *
-   * @return
-   */
-  public static boolean getIsDrawn() {
-    return isDrawn;
   }
 
   /** resets is drawn to false */
