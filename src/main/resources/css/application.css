@@ -171,6 +171,23 @@
 	-fx-text-fill:  #ebe9dd;
 	-fx-font-size: 25px;
 }
+
+.playButton {
+	-fx-font-family: 'Gaegu';
+	-fx-background-color: #668cff;
+	-fx-background-radius: 40px;
+	-fx-text-fill: black;
+	-fx-font-size: 20px;
+	-fx-border-color: black;
+	-fx-border-radius: 40px;
+}
+
+.playButton:hover {
+	-fx-background-color: black;
+	-fx-text-fill: #668cff;
+	-fx-border-color: #668cff;
+
+}
 /* Word History Screen */
 
 .list-view {

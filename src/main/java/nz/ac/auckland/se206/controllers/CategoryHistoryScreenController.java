@@ -70,6 +70,6 @@ public class CategoryHistoryScreenController {
 
   @FXML
   private void onBackToStats() {
-    App.setView(View.USERSTATS);
+    App.setView(View.USER);
   }
 }

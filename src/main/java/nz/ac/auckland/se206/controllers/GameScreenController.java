@@ -212,7 +212,7 @@ public class GameScreenController {
 
   @FXML
   private void onUserStats() {
-    App.setView(View.USERSTATS);
+    App.setView(View.USER);
   }
 
   @FXML

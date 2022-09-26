@@ -27,7 +27,7 @@
       </Label>
       <VBox fx:id="profilesVbox" alignment="TOP_CENTER" prefHeight="471.0" prefWidth="600.0" spacing="10.0">
          <children>
-            <Label styleClass="subHeaders" text="Click your profile to play">
+            <Label styleClass="subHeaders" text="Click your icon to view your profile and play!">
                <font>
                   <Font size="18.0" />
                </font>
