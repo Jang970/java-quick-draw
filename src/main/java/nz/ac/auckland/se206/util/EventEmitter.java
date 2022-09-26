@@ -3,10 +3,9 @@ package nz.ac.auckland.se206.util;
 import java.util.HashMap;
 import java.util.Map;
 
-public class EventEmitter<Data> {
+public class EventEmitter<D> {
 
-  private Map<Integer, EventListener<Data>> eventListeners =
-      new HashMap<Integer, EventListener<Data>>();
+  private Map<Integer, EventListener<D>> eventListeners = new HashMap<Integer, EventListener<D>>();
   private int idCount = 0;
 
   /**
@@ -14,8 +13,8 @@ public class EventEmitter<Data> {
    *
    * @param data the data to be sent to the observers
    */
-  public void emit(Data data) {
-    for (EventListener<Data> eventListener : eventListeners.values()) {
+  public void emit(D data) {
+    for (EventListener<D> eventListener : eventListeners.values()) {
       eventListener.update(data);
     }
   }
@@ -27,7 +26,7 @@ public class EventEmitter<Data> {
    * @param listener the EventListener to be notified when an event is emitted
    * @return the subscription ID for unsubscribing
    */
-  public int subscribe(EventListener<Data> listener) {
+  public int subscribe(EventListener<D> listener) {
     int id = idCount;
     idCount = idCount + 1;
 
