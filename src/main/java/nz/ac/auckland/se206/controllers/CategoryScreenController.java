@@ -77,6 +77,11 @@ public class CategoryScreenController {
   }
 
   @FXML
+  private void onBackToUserScreen() {
+    App.setView(View.USER);
+  }
+
+  @FXML
   private void onPressHowToPlay() {
     // shows an information alert pop up on how to play when button is clicked
     Alert howToPlayAlert = new Alert(AlertType.INFORMATION);
