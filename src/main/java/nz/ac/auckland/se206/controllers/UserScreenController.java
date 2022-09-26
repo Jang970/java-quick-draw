@@ -6,7 +6,7 @@ import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
 import nz.ac.auckland.se206.util.Profile;
 
-public class UserStatsScreenController {
+public class UserScreenController {
 
   @FXML private Label statsHeaderLabel;
   @FXML private Label fastestWinLabel;
@@ -19,12 +19,12 @@ public class UserStatsScreenController {
     // every time view is changes to user stats it gets the recent user stats and displays them
     App.subscribeToViewChange(
         (View view) -> {
-          if (view == View.USERSTATS) {
+          if (view == View.USER) {
 
             Profile currentProfile = App.getProfileManager().getCurrentProfile();
 
             // sets all labels of the user stats and users name
-            statsHeaderLabel.setText(currentProfile.getName() + "'s Stats");
+            statsHeaderLabel.setText(currentProfile.getName());
 
             // fastest win label
             if (currentProfile.getFastestWin() == -1) {
