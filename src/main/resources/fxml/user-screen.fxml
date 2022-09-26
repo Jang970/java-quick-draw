@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="TOP_CENTER" minHeight="570.0" prefHeight="570.0" prefWidth="600.0" spacing="10.0" stylesheets="@../css/application.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.UserStatsScreenController">
+<VBox alignment="TOP_CENTER" minHeight="570.0" prefHeight="570.0" prefWidth="600.0" spacing="10.0" stylesheets="@../css/application.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.UserScreenController">
    <children>
       <Label styleClass="headers" text="Quick, Draw!" textFill="#668cff">
          <font>
@@ -26,12 +26,12 @@
             <Insets top="-10.0" />
          </VBox.margin>
       </Label>
-      <Label fx:id="statsHeaderLabel" alignment="CENTER" prefHeight="49.0" prefWidth="608.0" styleClass="headers" text="Username's Stats" textAlignment="CENTER">
+      <Label fx:id="statsHeaderLabel" alignment="CENTER" prefHeight="49.0" prefWidth="600.0" styleClass="headers" text="Username" textAlignment="CENTER">
          <font>
-            <Font size="40.0" />
+            <Font size="50.0" />
          </font>
          <VBox.margin>
-            <Insets top="30.0" />
+            <Insets top="20.0" />
          </VBox.margin>
       </Label>
       <Label fx:id="fastestWinLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="76.0" prefWidth="481.0" text="Your fastest win is in 0 seconds when you had to draw 'category'!" textAlignment="CENTER" wrapText="true">
@@ -91,14 +91,18 @@
             <Insets top="20.0" />
          </VBox.margin>
       </HBox>
-      <HBox alignment="CENTER" prefHeight="93.0" prefWidth="600.0" spacing="30.0">
+      <Button mnemonicParsing="false" onAction="#onPlayAgain" prefHeight="33.0" prefWidth="145.0" styleClass="playButton" text="Let's Play!">
+         <VBox.margin>
+            <Insets top="20.0" />
+         </VBox.margin>
+      </Button>
+      <HBox alignment="CENTER" prefHeight="65.0" prefWidth="600.0" spacing="30.0">
          <children>
-            <Button mnemonicParsing="false" onAction="#onPlayAgain" prefHeight="33.0" prefWidth="145.0" text="Play again!" />
             <Button mnemonicParsing="false" onAction="#onSwitchToProfiles" prefHeight="33.0" prefWidth="145.0" text="Switch Profile" />
             <Button mnemonicParsing="false" onAction="#onSwitchToCategoryHistory" text="Category History" />
          </children>
          <VBox.margin>
-            <Insets top="20.0" />
+            <Insets />
          </VBox.margin>
       </HBox>
    </children>

@@ -134,7 +134,7 @@ public class UserProfilesScreenController {
             }
 
             // gets controller to update category
-            App.setView(View.CATEGORY);
+            App.setView(View.USER);
           }
         });
   }

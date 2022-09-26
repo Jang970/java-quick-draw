@@ -38,7 +38,7 @@
       </VBox>
       <HBox alignment="CENTER" prefHeight="62.0" prefWidth="600.0" spacing="30.0">
          <children>
-            <Button mnemonicParsing="false" onAction="#onPlayAgain" prefHeight="33.0" prefWidth="145.0" text="Play again!" />
+            <Button mnemonicParsing="false" onAction="#onPlayAgain" prefHeight="33.0" prefWidth="145.0" text="Let's play!" />
             <Button mnemonicParsing="false" onAction="#onBackToStats" prefHeight="33.0" prefWidth="150.0" text="Back to Stats" />
          </children>
       </HBox>
