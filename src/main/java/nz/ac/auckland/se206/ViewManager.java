@@ -6,15 +6,15 @@ import javafx.scene.Scene;
 import nz.ac.auckland.se206.util.EventEmitter;
 import nz.ac.auckland.se206.util.EventListener;
 
-public class ViewManager<View extends Enum<View>> {
-  public interface ViewChangeSubscription<View> {
-    public void run(View view);
+public class ViewManager<V extends Enum<V>> {
+  public interface ViewChangeSubscription<V> {
+    public void run(V view);
   }
 
   // TODO: Refactor so creating a view manager makes more sense
 
-  private EventEmitter<View> viewChangeEmitter = new EventEmitter<View>();
-  private HashMap<View, Parent> viewMap = new HashMap<View, Parent>();
+  private EventEmitter<V> viewChangeEmitter = new EventEmitter<V>();
+  private HashMap<V, Parent> viewMap = new HashMap<V, Parent>();
   private Scene scene;
 
   /**
@@ -32,7 +32,7 @@ public class ViewManager<View extends Enum<View>> {
    * @param view the user defined id of the view
    * @param root the parent node that will be reused
    */
-  public void addView(View view, Parent root) {
+  public void addView(V view, Parent root) {
     viewMap.put(view, root);
   }
 
@@ -41,7 +41,7 @@ public class ViewManager<View extends Enum<View>> {
    *
    * @param view the id of the view to remove
    */
-  public void removeView(View view) {
+  public void removeView(V view) {
     viewMap.remove(view);
   }
 
@@ -51,7 +51,7 @@ public class ViewManager<View extends Enum<View>> {
    *
    * @param view the id of the view to load onto the scene
    */
-  public void loadView(View view) {
+  public void loadView(V view) {
     Parent parent = viewMap.get(view);
 
     if (parent != null) {
@@ -62,7 +62,7 @@ public class ViewManager<View extends Enum<View>> {
     }
   }
 
-  public int subscribeToViewChange(EventListener<View> listener) {
+  public int subscribeToViewChange(EventListener<V> listener) {
     return viewChangeEmitter.subscribe(listener);
   }
 

@@ -1,5 +1,5 @@
 package nz.ac.auckland.se206.util;
 
-public interface DataSource<Data> {
-  Data getData();
+public interface DataSource<D> {
+  D getData();
 }
