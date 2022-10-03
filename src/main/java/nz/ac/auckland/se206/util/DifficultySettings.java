@@ -1,6 +1,7 @@
 package nz.ac.auckland.se206.util;
 
 import nz.ac.auckland.se206.GameLogicManager.CategoryType;
+import nz.ac.auckland.se206.util.Difficulties.Accuracy;
 
 /**
  * This class will house the difficulty settings for a given profile This will be stored within the
@@ -33,8 +34,9 @@ public class DifficultySettings {
     return this.wordCategory;
   }
 
-  public void changeAccuracyLevel(int newAccuracy) {
-    this.accuracyLevel = newAccuracy;
+  // example: maybe something like currentProfileSettings.changeAccuracyLevel(Accuracy.HARD)
+  public void changeAccuracyLevel(Accuracy newAccuracy) {
+    this.accuracyLevel = newAccuracy.getAccuracyLevel(newAccuracy);
   }
 
   public void changeTimeToDraw(int newTime) {
