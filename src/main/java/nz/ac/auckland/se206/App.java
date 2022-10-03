@@ -186,7 +186,7 @@ public class App extends Application {
     try {
 
       defaultParent = loadFxml("home-screen");
-      scene = new Scene(defaultParent, 600, 570);
+      scene = new Scene(defaultParent, 900, 700);
 
       viewManager = new ViewManager<View>(scene);
       viewManager.addView(View.HOME, defaultParent);
