@@ -2,6 +2,8 @@ package nz.ac.auckland.se206.util;
 
 import nz.ac.auckland.se206.GameLogicManager.CategoryType;
 import nz.ac.auckland.se206.util.Difficulties.Accuracy;
+import nz.ac.auckland.se206.util.Difficulties.Confidence;
+import nz.ac.auckland.se206.util.Difficulties.Time;
 
 /**
  * This class will house the difficulty settings for a given profile This will be stored within the
@@ -36,15 +38,15 @@ public class DifficultySettings {
 
   // example: maybe something like currentProfileSettings.changeAccuracyLevel(Accuracy.HARD)
   public void changeAccuracyLevel(Accuracy newAccuracy) {
-    this.accuracyLevel = newAccuracy.getAccuracyLevel(newAccuracy);
+    this.accuracyLevel = newAccuracy.getAccuracyRequired(newAccuracy);
   }
 
-  public void changeTimeToDraw(int newTime) {
-    this.timeToDraw = newTime;
+  public void changeTimeToDraw(Time newTime) {
+    this.timeToDraw = newTime.getTimeGiven(newTime);
   }
 
-  public void changeConfidenceLevel(double newConfidence) {
-    this.confidenceLevel = newConfidence;
+  public void changeConfidenceLevel(Confidence newConfidence) {
+    this.confidenceLevel = newConfidence.getConfidenceRequired(newConfidence);
   }
 
   public void changeCategoryOfWords(CategoryType category) {

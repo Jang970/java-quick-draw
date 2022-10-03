@@ -21,6 +21,7 @@ public class Profile {
   private String categoryOfFastestWin;
   private Set<String> categoryHistory = new HashSet<String>();
   private int numberOfHistoryResets = 0;
+  private DifficultySettings difficultySettings = new DifficultySettings();
 
   public Profile(String name, String colour) {
 
@@ -39,6 +40,10 @@ public class Profile {
 
   public String getColour() {
     return colour;
+  }
+
+  public DifficultySettings getSettings() {
+    return this.difficultySettings;
   }
 
   public void updateName(String newName) {
