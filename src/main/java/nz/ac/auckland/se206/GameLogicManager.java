@@ -2,18 +2,11 @@ package nz.ac.auckland.se206;
 
 import ai.djl.ModelException;
 import ai.djl.modality.Classifications.Classification;
-import com.opencsv.exceptions.CsvException;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Collectors;
 import nz.ac.auckland.se206.fxmlutils.CanvasManager;
 import nz.ac.auckland.se206.util.CountdownTimer;
-import nz.ac.auckland.se206.util.CsvKeyValuePairLoader;
 import nz.ac.auckland.se206.util.DataSource;
 import nz.ac.auckland.se206.util.EmptyEventEmitter;
 import nz.ac.auckland.se206.util.EmptyEventListener;
@@ -26,13 +19,6 @@ import nz.ac.auckland.se206.util.PredictionManager;
  * transitions between those states
  */
 public class GameLogicManager {
-
-  public class FilterTooStrictException extends Exception {
-    public FilterTooStrictException(String message) {
-      super(message);
-    }
-  }
-
   public record GameEndInfo(
       WinState winState, String category, int timeTaken, int secondsRemaining) {}
 
@@ -41,14 +27,6 @@ public class GameLogicManager {
     LOOSE,
     CANCEL,
   }
-
-  public enum CategoryType {
-    EASY,
-    MEDIUM,
-    HARD,
-  }
-
-  private Map<CategoryType, List<String>> categories;
 
   private int gameLengthSeconds;
   private int numTopGuessNeededToWin;
@@ -72,28 +50,6 @@ public class GameLogicManager {
    * @throws ModelException If the model cannot be found on the file system.
    */
   public GameLogicManager(int numPredictions) throws IOException, ModelException {
-
-    try {
-      categories =
-          new CsvKeyValuePairLoader<CategoryType, String>(
-                  (keyString) -> {
-                    if (keyString.equals("E")) {
-                      return CategoryType.EASY;
-                    }
-                    if (keyString.equals("M")) {
-                      return CategoryType.MEDIUM;
-                    }
-                    if (keyString.equals("H")) {
-                      return CategoryType.HARD;
-                    }
-                    return null;
-                  },
-                  (v) -> v)
-              .loadCategoriesFromFile(App.getResourcePath("category_difficulty.csv"), true);
-
-    } catch (CsvException e) {
-      App.expect("Category CSV is in the resource folder and is not empty", e);
-    }
 
     countdownTimer = new CountdownTimer();
     countdownTimer.setOnChange(
@@ -142,44 +98,6 @@ public class GameLogicManager {
     }
 
     this.predictionChangeEmitter.emit(predictions);
-  }
-
-  /**
-   * This generates a new random category, updates the category for the class and returns the value
-   * of the new category. It will not use any values in the provided set
-   *
-   * @param categoryFilter
-   * @return
-   */
-  public String selectNewRandomCategory(Set<String> categoryFilter)
-      throws FilterTooStrictException {
-
-    List<String> easyCategories = categories.get(CategoryType.EASY);
-
-    // Removes all the items which are also in the filter set (set subtraction)
-    List<String> possibleCategories =
-        easyCategories.stream()
-            .filter((category) -> !categoryFilter.contains(category))
-            .collect(Collectors.toList());
-
-    if (possibleCategories.isEmpty()) {
-      throw new FilterTooStrictException("The filter filtered out all categories");
-    }
-
-    // Get random index from remaining items
-    int randomIndexFromList = ThreadLocalRandom.current().nextInt(possibleCategories.size());
-
-    categoryToGuess = possibleCategories.get(randomIndexFromList);
-
-    return categoryToGuess;
-  }
-
-  public String selectNewRandomCategory() {
-    try {
-      return this.selectNewRandomCategory(new HashSet<String>());
-    } catch (FilterTooStrictException e) {
-      return (String) App.expect("The filter is empty so it cannot be too strict");
-    }
   }
 
   /** Ends the game if it is ongoing with a win state of CANCEL */
@@ -273,5 +191,9 @@ public class GameLogicManager {
 
   public void subscribeToPredictionsChange(EventListener<List<Classification>> listener) {
     predictionChangeEmitter.subscribe(listener);
+  }
+
+  public void initializeGame() {
+    categoryToGuess = predictionManager.selectNewRandomCategory();
   }
 }

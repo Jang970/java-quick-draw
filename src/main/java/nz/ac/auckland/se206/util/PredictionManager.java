@@ -3,9 +3,16 @@ package nz.ac.auckland.se206.util;
 import ai.djl.ModelException;
 import ai.djl.modality.Classifications.Classification;
 import ai.djl.translate.TranslateException;
+import com.opencsv.exceptions.CsvException;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
+import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.ml.DoodlePrediction;
 
 public class PredictionManager {
@@ -19,6 +26,8 @@ public class PredictionManager {
   private long pollInterval;
 
   private boolean isMakingPredictions = false;
+
+  private Map<CategoryType, List<String>> categories;
 
   /**
    * The manager uses the snapshot provider to get images and then runs a prediction on those
@@ -34,6 +43,28 @@ public class PredictionManager {
    */
   public PredictionManager(long pollInterval, int numTopGuesses)
       throws IOException, ModelException {
+
+    try {
+      categories =
+          new CsvKeyValuePairLoader<CategoryType, String>(
+                  (keyString) -> {
+                    if (keyString.equals("E")) {
+                      return CategoryType.EASY;
+                    }
+                    if (keyString.equals("M")) {
+                      return CategoryType.MEDIUM;
+                    }
+                    if (keyString.equals("H")) {
+                      return CategoryType.HARD;
+                    }
+                    return null;
+                  },
+                  (v) -> v)
+              .loadCategoriesFromFile(App.getResourcePath("category_difficulty.csv"), true);
+
+    } catch (CsvException e) {
+      App.expect("Category CSV is in the resource folder and is not empty", e);
+    }
 
     model = new DoodlePrediction();
 
@@ -125,5 +156,41 @@ public class PredictionManager {
 
   public boolean isMakingPredictions() {
     return isMakingPredictions;
+  }
+
+  /**
+   * This generates a new random category, updates the category for the class and returns the value
+   * of the new category. It will not use any values in the provided set
+   *
+   * @param categoryFilter
+   * @return
+   */
+  public String selectNewRandomCategory(Set<String> categoryFilter)
+      throws FilterTooStrictException {
+
+    List<String> easyCategories = categories.get(CategoryType.EASY);
+
+    // Removes all the items which are also in the filter set (set subtraction)
+    List<String> possibleCategories =
+        easyCategories.stream()
+            .filter((category) -> !categoryFilter.contains(category))
+            .collect(Collectors.toList());
+
+    if (possibleCategories.isEmpty()) {
+      throw new FilterTooStrictException("The filter filtered out all categories");
+    }
+
+    // Get random index from remaining items
+    int randomIndexFromList = ThreadLocalRandom.current().nextInt(possibleCategories.size());
+
+    return possibleCategories.get(randomIndexFromList);
+  }
+
+  public String selectNewRandomCategory() {
+    try {
+      return this.selectNewRandomCategory(new HashSet<String>());
+    } catch (FilterTooStrictException e) {
+      return (String) App.expect("The filter is empty so it cannot be too strict");
+    }
   }
 }

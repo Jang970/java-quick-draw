@@ -9,7 +9,6 @@ import javafx.scene.control.Label;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
 import nz.ac.auckland.se206.GameLogicManager;
-import nz.ac.auckland.se206.GameLogicManager.FilterTooStrictException;
 import nz.ac.auckland.se206.speech.TextToSpeech;
 import nz.ac.auckland.se206.util.Profile;
 
@@ -34,7 +33,7 @@ public class CategoryScreenController {
             // When the app laods changes to the catgory screen, we genereate a new category and
             // make display updates
             usernameLabel.setText("Hi, " + App.getProfileManager().getCurrentProfile().getName());
-            generateNewCategoryAndUpdateLabel();
+            initialiseGameAndUpdateLabels();
             updateGameTimeLabel();
           }
         });
@@ -52,23 +51,17 @@ public class CategoryScreenController {
     drawTimeLabel.setText("Draw in " + numSeconds + " seconds");
   }
 
-  private void generateNewCategoryAndUpdateLabel() {
+  private void initialiseGameAndUpdateLabels() {
 
     Profile profile = App.getProfileManager().getCurrentProfile();
 
     // We need to make sure that we are generating a new category which the player has not already
     // played.
-    String newCategory;
-    try {
-      newCategory = gameLogicManager.selectNewRandomCategory(profile.getCategoryHistory());
-    } catch (FilterTooStrictException e) {
-      // reset the category history if they have played every word
-      profile.resetCategoryHistory();
-      newCategory = gameLogicManager.selectNewRandomCategory();
-    }
 
-    categoryLabel.setText(newCategory);
-    textToSpeech.speakAsync("Draw " + newCategory);
+    gameLogicManager.initializeGame();
+
+    categoryLabel.setText(gameLogicManager.getCurrentCategory());
+    textToSpeech.speakAsync("Draw " + gameLogicManager.getCurrentCategory());
   }
 
   @FXML
