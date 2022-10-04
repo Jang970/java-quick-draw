@@ -33,37 +33,8 @@ public class GameLogicManager {
     }
   }
 
-  public class GameEndInfo {
-    private WinState winState;
-
-    private String category;
-
-    private int timeTaken;
-    private int secondsRemaining;
-
-    GameEndInfo(WinState winState, String category, int timeTaken, int secondsRemaining) {
-      this.winState = winState;
-      this.category = category;
-      this.timeTaken = timeTaken;
-      this.secondsRemaining = secondsRemaining;
-    }
-
-    public int getTimeTaken() {
-      return timeTaken;
-    }
-
-    public int getSecondsRemaining() {
-      return secondsRemaining;
-    }
-
-    public WinState getWinState() {
-      return winState;
-    }
-
-    public String getCategory() {
-      return category;
-    }
-  }
+  public record GameEndInfo(
+      WinState winState, String category, int timeTaken, int secondsRemaining) {}
 
   public enum WinState {
     WIN,
