@@ -20,7 +20,6 @@ import nz.ac.auckland.se206.GameLogicManager;
 import nz.ac.auckland.se206.GameLogicManager.WinState;
 import nz.ac.auckland.se206.fxmlutils.CanvasManager;
 import nz.ac.auckland.se206.fxmlutils.CanvasManager.DrawMode;
-import nz.ac.auckland.se206.speech.TextToSpeech;
 
 public class GameScreenController {
 
@@ -46,7 +45,6 @@ public class GameScreenController {
   private Label[] guessLabels = new Label[10];
 
   private CanvasManager canvasManager;
-  private TextToSpeech textToSpeech;
   private GameLogicManager gameLogicManager;
 
   public void initialize() {
@@ -58,7 +56,6 @@ public class GameScreenController {
             .toArray(Label[]::new);
 
     canvasManager = new CanvasManager(canvas);
-    textToSpeech = new TextToSpeech();
 
     gameLogicManager = App.getGameLogicManager();
 
@@ -82,11 +79,6 @@ public class GameScreenController {
     gameLogicManager.subscribeToTimeChange((Integer seconds) -> onTimeChange(seconds));
     gameLogicManager.subscribeToGameStart(() -> onGameStart());
     gameLogicManager.subscribeToGameEnd((gameInfo) -> onGameEnd(gameInfo.winState()));
-
-    App.subscribeToAppTermination(
-        (e) -> {
-          textToSpeech.terminate();
-        });
 
     App.subscribeToViewChange(
         (View newView) -> {
@@ -136,10 +128,10 @@ public class GameScreenController {
 
           if (winState == WinState.WIN) {
             whatToDrawLabel.setText("You got it!");
-            textToSpeech.speakAsync("You got it!");
+            App.getTextToSpeech().speakAsync("You got it!");
           } else if (winState == WinState.LOOSE) {
             whatToDrawLabel.setText("Sorry, you ran out of time!");
-            textToSpeech.speakAsync("Sorry, you ran out of time!");
+            App.getTextToSpeech().speakAsync("Sorry, you ran out of time!");
           } else {
             whatToDrawLabel.setText("Game cancelled.");
           }

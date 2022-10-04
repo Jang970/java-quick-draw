@@ -9,7 +9,6 @@ import javafx.scene.control.Label;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
 import nz.ac.auckland.se206.GameLogicManager;
-import nz.ac.auckland.se206.speech.TextToSpeech;
 
 public class CategoryScreenController {
 
@@ -18,13 +17,11 @@ public class CategoryScreenController {
   @FXML private Label categoryLabel;
   @FXML private Label usernameLabel;
 
-  private TextToSpeech textToSpeech;
   private GameLogicManager gameLogicManager;
 
   public void initialize() {
 
     gameLogicManager = App.getGameLogicManager();
-    textToSpeech = new TextToSpeech();
 
     App.subscribeToViewChange(
         (View view) -> {
@@ -35,13 +32,6 @@ public class CategoryScreenController {
             initialiseGameAndUpdateLabels();
             updateGameTimeLabel();
           }
-        });
-
-    // When text the app terminates, we turn the text to speech off.
-    App.subscribeToAppTermination(
-        (e) -> {
-          // TODO: Make the TextToSpeech class handle this automatically
-          textToSpeech.terminate();
         });
   }
 
@@ -58,7 +48,7 @@ public class CategoryScreenController {
     gameLogicManager.initializeGame();
 
     categoryLabel.setText(gameLogicManager.getCurrentCategory());
-    textToSpeech.speakAsync("Draw " + gameLogicManager.getCurrentCategory());
+    App.getTextToSpeech().speakAsync("Draw " + gameLogicManager.getCurrentCategory());
   }
 
   @FXML
