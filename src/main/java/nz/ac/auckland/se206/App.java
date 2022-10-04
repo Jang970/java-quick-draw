@@ -9,7 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import nz.ac.auckland.se206.GameLogicManager.WinState;
+import nz.ac.auckland.se206.GameLogicManager.EndGameState;
 import nz.ac.auckland.se206.speech.TextToSpeech;
 import nz.ac.auckland.se206.util.EventEmitter;
 import nz.ac.auckland.se206.util.EventListener;
@@ -162,14 +162,14 @@ public class App extends Application {
         (gameInfo) -> {
           Profile currentProfile = profileManager.getCurrentProfile();
 
-          if (gameInfo.winState() == WinState.WIN) {
+          if (gameInfo.winState() == EndGameState.WIN) {
 
             currentProfile.updateFastestGameIfBeatsCurrent(
                 gameInfo.timeTaken(), gameInfo.category());
 
             currentProfile.incrementGamesWon();
 
-          } else if (gameInfo.winState() == WinState.LOOSE) {
+          } else if (gameInfo.winState() == EndGameState.LOOSE) {
             currentProfile.incrementGamesLost();
           }
 

@@ -17,7 +17,7 @@ import javafx.scene.layout.VBox;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
 import nz.ac.auckland.se206.GameLogicManager;
-import nz.ac.auckland.se206.GameLogicManager.WinState;
+import nz.ac.auckland.se206.GameLogicManager.EndGameState;
 import nz.ac.auckland.se206.fxmlutils.CanvasManager;
 import nz.ac.auckland.se206.fxmlutils.CanvasManager.DrawMode;
 
@@ -113,7 +113,7 @@ public class GameScreenController {
             + ";");
   }
 
-  private void onGameEnd(WinState winState) {
+  private void onGameEnd(EndGameState winState) {
     // Run this after the game ends
     Platform.runLater(
         () -> {
@@ -126,10 +126,10 @@ public class GameScreenController {
           gameActionButton.setText("New Game");
           whatToDrawLabel.getStyleClass().add("stateHeaders");
 
-          if (winState == WinState.WIN) {
+          if (winState == EndGameState.WIN) {
             whatToDrawLabel.setText("You got it!");
             App.getTextToSpeech().speakAsync("You got it!");
-          } else if (winState == WinState.LOOSE) {
+          } else if (winState == EndGameState.LOOSE) {
             whatToDrawLabel.setText("Sorry, you ran out of time!");
             App.getTextToSpeech().speakAsync("Sorry, you ran out of time!");
           } else {

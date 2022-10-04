@@ -20,12 +20,13 @@ import nz.ac.auckland.se206.util.PredictionManager;
  */
 public class GameLogicManager {
   public record GameEndInfo(
-      WinState winState, String category, int timeTaken, int secondsRemaining) {}
+      EndGameState winState, String category, int timeTaken, int secondsRemaining) {}
 
-  public enum WinState {
+  public enum EndGameState {
     WIN,
     LOOSE,
     CANCEL,
+    NOT_APPLICABLE
   }
 
   private int gameLengthSeconds;
@@ -55,21 +56,49 @@ public class GameLogicManager {
         (secondsRemaining) -> {
           timeChangedEmitter.emit(secondsRemaining);
         });
-
     countdownTimer.setOnComplete(
         () -> {
-          endGame(WinState.LOOSE);
+          onOutOfTime();
         });
 
     predictionManager = new PredictionManager(100, 10);
-
     predictionManager.setPredictionListener(
         (predictions) -> {
-          handlePredictionsReceived(predictions);
+          int range = Math.min(predictions.size(), numTopGuessNeededToWin);
+          for (int i = 0; i < range; i++) {
+            String prediction = predictions.get(i).getClassName().replace('_', ' ');
+            // wins only if prediction matchs and if canvas is drawn on
+            if (prediction.equals(categoryToGuess) && CanvasManager.getIsDrawn()) {
+              onCorrectPrediction();
+            }
+          }
+
+          this.predictionChangeEmitter.emit(predictions);
         });
   }
 
-  private void endGame(WinState winState) {
+  ///////////////////////////// GAME STATE TRANSISTIONS /////////////////////////////
+
+  public void initializeGame() {
+    categoryToGuess = predictionManager.selectNewRandomEasyCategory();
+  }
+
+  /** Starts the countdown, and enables the prediction server */
+  public void startGame() {
+    countdownTimer.startCountdown(gameLengthSeconds);
+    predictionManager.startMakingPredictions();
+    gameStartedEmitter.emit();
+    isPlaying = true;
+  }
+
+  /** Ends the game if it is ongoing with a win state of CANCEL */
+  public void cancelGame() {
+    if (isPlaying) {
+      this.endGame(EndGameState.CANCEL);
+    }
+  }
+
+  private void endGame(EndGameState winState) {
     // get info
     int secondsRemaining = countdownTimer.getRemainingCount();
     predictionManager.stopMakingPredictions();
@@ -86,33 +115,15 @@ public class GameLogicManager {
     isPlaying = false;
   }
 
-  private void handlePredictionsReceived(List<Classification> predictions) {
-    int range = Math.min(predictions.size(), numTopGuessNeededToWin);
-    for (int i = 0; i < range; i++) {
-      String prediction = predictions.get(i).getClassName().replace('_', ' ');
-      // wins only if prediction matchs and if canvas is drawn on
-      if (prediction.equals(categoryToGuess) && CanvasManager.getIsDrawn()) {
-        endGame(WinState.WIN);
-      }
-    }
-
-    this.predictionChangeEmitter.emit(predictions);
+  private void onCorrectPrediction() {
+    endGame(EndGameState.WIN);
   }
 
-  /** Ends the game if it is ongoing with a win state of CANCEL */
-  public void cancelGame() {
-    if (isPlaying) {
-      this.endGame(WinState.CANCEL);
-    }
+  private void onOutOfTime() {
+    endGame(EndGameState.LOOSE);
   }
 
-  /** Starts the countdown, and enables the prediction server */
-  public void startGame() {
-    countdownTimer.startCountdown(gameLengthSeconds);
-    predictionManager.startMakingPredictions();
-    gameStartedEmitter.emit();
-    isPlaying = true;
-  }
+  ///////////////////////////// GETTING AND SETTING GAME DATA /////////////////////////////
 
   public int getRemainingSeconds() {
     return countdownTimer.getRemainingCount();
@@ -190,9 +201,5 @@ public class GameLogicManager {
 
   public void subscribeToPredictionsChange(EventListener<List<Classification>> listener) {
     predictionChangeEmitter.subscribe(listener);
-  }
-
-  public void initializeGame() {
-    categoryToGuess = predictionManager.selectNewRandomEasyCategory();
   }
 }
