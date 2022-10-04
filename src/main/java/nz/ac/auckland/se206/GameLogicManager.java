@@ -45,11 +45,10 @@ public class GameLogicManager {
   private EmptyEventEmitter gameStartedEmitter = new EmptyEventEmitter();
 
   /**
-   * @param numPredictions the number of predictions the game should make for each snapshot image
    * @throws IOException If there is an error in reading the input/output of the DL model.
    * @throws ModelException If the model cannot be found on the file system.
    */
-  public GameLogicManager(int numPredictions) throws IOException, ModelException {
+  public GameLogicManager() throws IOException, ModelException {
 
     countdownTimer = new CountdownTimer();
     countdownTimer.setOnChange(
@@ -62,7 +61,7 @@ public class GameLogicManager {
           endGame(WinState.LOOSE);
         });
 
-    predictionManager = new PredictionManager(100, numPredictions);
+    predictionManager = new PredictionManager(100, 10);
 
     predictionManager.setPredictionListener(
         (predictions) -> {

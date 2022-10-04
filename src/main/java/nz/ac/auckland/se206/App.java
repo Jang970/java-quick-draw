@@ -134,7 +134,7 @@ public class App extends Application {
 
     try {
       // Try create the game logic manager
-      gameLogicManager = new GameLogicManager(10);
+      gameLogicManager = new GameLogicManager();
     } catch (IOException | ModelException e1) {
       App.expect("The machine learning model exists on file", e1);
     }

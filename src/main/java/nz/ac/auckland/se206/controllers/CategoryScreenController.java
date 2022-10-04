@@ -10,7 +10,6 @@ import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
 import nz.ac.auckland.se206.GameLogicManager;
 import nz.ac.auckland.se206.speech.TextToSpeech;
-import nz.ac.auckland.se206.util.Profile;
 
 public class CategoryScreenController {
 
@@ -52,8 +51,6 @@ public class CategoryScreenController {
   }
 
   private void initialiseGameAndUpdateLabels() {
-
-    Profile profile = App.getProfileManager().getCurrentProfile();
 
     // We need to make sure that we are generating a new category which the player has not already
     // played.
