@@ -193,6 +193,6 @@ public class GameLogicManager {
   }
 
   public void initializeGame() {
-    categoryToGuess = predictionManager.selectNewRandomCategory();
+    categoryToGuess = predictionManager.selectNewRandomEasyCategory();
   }
 }

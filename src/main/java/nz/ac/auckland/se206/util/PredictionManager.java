@@ -6,6 +6,7 @@ import ai.djl.translate.TranslateException;
 import com.opencsv.exceptions.CsvException;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -165,14 +166,25 @@ public class PredictionManager {
    * @param categoryFilter
    * @return
    */
-  public String selectNewRandomCategory(Set<String> categoryFilter)
+  public String selectNewRandomCategory(
+      Set<String> categoryFilter, boolean includeEasy, boolean includeMedium, boolean includeHard)
       throws FilterTooStrictException {
 
-    List<String> easyCategories = categories.get(CategoryType.EASY);
+    List<String> possibleCategories = new ArrayList<String>();
+
+    if (includeEasy) {
+      possibleCategories.addAll(categories.get(CategoryType.EASY));
+    }
+    if (includeMedium) {
+      possibleCategories.addAll(categories.get(CategoryType.MEDIUM));
+    }
+    if (includeHard) {
+      possibleCategories.addAll(categories.get(CategoryType.HARD));
+    }
 
     // Removes all the items which are also in the filter set (set subtraction)
-    List<String> possibleCategories =
-        easyCategories.stream()
+    possibleCategories =
+        possibleCategories.stream()
             .filter((category) -> !categoryFilter.contains(category))
             .collect(Collectors.toList());
 
@@ -186,9 +198,9 @@ public class PredictionManager {
     return possibleCategories.get(randomIndexFromList);
   }
 
-  public String selectNewRandomCategory() {
+  public String selectNewRandomEasyCategory() {
     try {
-      return this.selectNewRandomCategory(new HashSet<String>());
+      return this.selectNewRandomCategory(new HashSet<String>(), true, false, false);
     } catch (FilterTooStrictException e) {
       return (String) App.expect("The filter is empty so it cannot be too strict");
     }
