@@ -9,7 +9,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import nz.ac.auckland.se206.GameLogicManager.EndGameState;
+import nz.ac.auckland.se206.gamelogicmanager.EndGameState;
+import nz.ac.auckland.se206.gamelogicmanager.GameLogicManager;
 import nz.ac.auckland.se206.speech.TextToSpeech;
 import nz.ac.auckland.se206.util.EventEmitter;
 import nz.ac.auckland.se206.util.EventListener;
@@ -141,10 +142,6 @@ public class App extends Application {
     } catch (IOException | ModelException e1) {
       App.expect("The machine learning model exists on file", e1);
     }
-
-    // Setting up initial settings
-    gameLogicManager.setNumTopGuessNeededToWin(3);
-    gameLogicManager.setGameLengthSeconds(60);
 
     // create folder to store json file in if not already existing
     userProfiles.mkdir();

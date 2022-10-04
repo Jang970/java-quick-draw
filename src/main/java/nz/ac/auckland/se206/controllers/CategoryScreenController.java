@@ -1,5 +1,6 @@
 package nz.ac.auckland.se206.controllers;
 
+import java.util.List;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -8,7 +9,9 @@ import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
-import nz.ac.auckland.se206.GameLogicManager;
+import nz.ac.auckland.se206.gamelogicmanager.GameLogicManager;
+import nz.ac.auckland.se206.gamelogicmanager.GameMode;
+import nz.ac.auckland.se206.gamelogicmanager.GameProfile;
 
 public class CategoryScreenController {
 
@@ -36,7 +39,7 @@ public class CategoryScreenController {
   }
 
   private void updateGameTimeLabel() {
-    int numSeconds = gameLogicManager.getGameLengthSeconds();
+    int numSeconds = gameLogicManager.getCurrentGameProfile().gameLengthSeconds();
     drawTimeLabel.setText("Draw in " + numSeconds + " seconds");
   }
 
@@ -45,7 +48,7 @@ public class CategoryScreenController {
     // We need to make sure that we are generating a new category which the player has not already
     // played.
 
-    gameLogicManager.initializeGame();
+    gameLogicManager.initializeGame(new GameProfile(30, 3, GameMode.BASIC, List.of()));
 
     categoryLabel.setText(gameLogicManager.getCurrentCategory());
     App.getTextToSpeech().speakAsync("Draw " + gameLogicManager.getCurrentCategory());

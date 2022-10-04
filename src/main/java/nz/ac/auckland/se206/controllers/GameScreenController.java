@@ -16,10 +16,10 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
-import nz.ac.auckland.se206.GameLogicManager;
-import nz.ac.auckland.se206.GameLogicManager.EndGameState;
 import nz.ac.auckland.se206.fxmlutils.CanvasManager;
 import nz.ac.auckland.se206.fxmlutils.CanvasManager.DrawMode;
+import nz.ac.auckland.se206.gamelogicmanager.EndGameState;
+import nz.ac.auckland.se206.gamelogicmanager.GameLogicManager;
 
 public class GameScreenController {
 

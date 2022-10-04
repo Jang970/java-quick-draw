@@ -1,4 +1,4 @@
-package nz.ac.auckland.se206;
+package nz.ac.auckland.se206.gamelogicmanager;
 
 import ai.djl.ModelException;
 import ai.djl.modality.Classifications.Classification;
@@ -19,25 +19,14 @@ import nz.ac.auckland.se206.util.PredictionManager;
  * transitions between those states
  */
 public class GameLogicManager {
-  public record GameEndInfo(
-      EndGameState winState, String category, int timeTaken, int secondsRemaining) {}
-
-  public enum EndGameState {
-    WIN,
-    LOOSE,
-    CANCEL,
-    NOT_APPLICABLE
-  }
-
-  private int gameLengthSeconds;
-  private int numTopGuessNeededToWin;
-
   private Boolean isPlaying = false;
 
   private String categoryToGuess;
 
   private PredictionManager predictionManager;
   private CountdownTimer countdownTimer;
+
+  private GameProfile currentGameProfile;
 
   private EventEmitter<List<Classification>> predictionChangeEmitter =
       new EventEmitter<List<Classification>>();
@@ -64,7 +53,7 @@ public class GameLogicManager {
     predictionManager = new PredictionManager(100, 10);
     predictionManager.setPredictionListener(
         (predictions) -> {
-          int range = Math.min(predictions.size(), numTopGuessNeededToWin);
+          int range = Math.min(predictions.size(), currentGameProfile.numTopGuessNeededToWin());
           for (int i = 0; i < range; i++) {
             String prediction = predictions.get(i).getClassName().replace('_', ' ');
             // wins only if prediction matchs and if canvas is drawn on
@@ -79,13 +68,14 @@ public class GameLogicManager {
 
   ///////////////////////////// GAME STATE TRANSISTIONS /////////////////////////////
 
-  public void initializeGame() {
+  public void initializeGame(GameProfile profile) {
+    currentGameProfile = profile;
     categoryToGuess = predictionManager.selectNewRandomEasyCategory();
   }
 
   /** Starts the countdown, and enables the prediction server */
   public void startGame() {
-    countdownTimer.startCountdown(gameLengthSeconds);
+    countdownTimer.startCountdown(currentGameProfile.gameLengthSeconds());
     predictionManager.startMakingPredictions();
     gameStartedEmitter.emit();
     isPlaying = true;
@@ -109,7 +99,7 @@ public class GameLogicManager {
         new GameEndInfo(
             winState,
             this.categoryToGuess,
-            gameLengthSeconds - secondsRemaining - 1,
+            currentGameProfile.gameLengthSeconds() - secondsRemaining - 1,
             secondsRemaining));
 
     isPlaying = false;
@@ -127,43 +117,6 @@ public class GameLogicManager {
 
   public int getRemainingSeconds() {
     return countdownTimer.getRemainingCount();
-  }
-
-  /**
-   * Gets the number of seconds that the game should run for when starting
-   *
-   * @return the number of seconds that the game should run for before ending
-   */
-  public int getGameLengthSeconds() {
-    return gameLengthSeconds;
-  }
-
-  /**
-   * Sets how long the game should last when starting a new game
-   *
-   * @param gameLengthSeconds the number of seconds the game should run for
-   */
-  public void setGameLengthSeconds(int gameLengthSeconds) {
-    this.gameLengthSeconds = gameLengthSeconds;
-  }
-
-  /**
-   * Gets where the correct guess needs to be in the top guesses in order to win.
-   *
-   * @return the number which if the player predictor gets the guess in that range, they win
-   */
-  public int getNumTopGuessNeededToWin() {
-    return numTopGuessNeededToWin;
-  }
-
-  /**
-   * Sets where the correct guess needs to be in the top guesses in order to win.
-   *
-   * @param numTopGuessNeededToWin the number which if the player predictor gets the guess in that
-   *     range, they win
-   */
-  public void setNumTopGuessNeededToWin(int numTopGuessNeededToWin) {
-    this.numTopGuessNeededToWin = numTopGuessNeededToWin;
   }
 
   /**
@@ -185,6 +138,10 @@ public class GameLogicManager {
 
   public Boolean isPlaying() {
     return isPlaying;
+  }
+
+  public GameProfile getCurrentGameProfile() {
+    return this.currentGameProfile;
   }
 
   public void subscribeToGameEnd(EventListener<GameEndInfo> listener) {
