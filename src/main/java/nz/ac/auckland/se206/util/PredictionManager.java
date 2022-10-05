@@ -216,12 +216,4 @@ public class PredictionManager {
 
     return new Category(category, categoryType);
   }
-
-  public Category selectNewRandomEasyCategory() {
-    try {
-      return this.getNewRandomCategory(new HashSet<String>(), true, false, false);
-    } catch (FilterTooStrictException e) {
-      return (Category) App.expect("The filter is empty so it cannot be too strict");
-    }
-  }
 }
