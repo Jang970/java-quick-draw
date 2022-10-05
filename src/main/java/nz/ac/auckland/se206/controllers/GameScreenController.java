@@ -95,7 +95,7 @@ public class GameScreenController {
             setUserButtonStyle();
             // When the view changes to game, we start a new game and clear the canvas
             gameLogicManager.startGame();
-            whatToDrawLabel.setText("To Draw: " + gameLogicManager.getCurrentCategory());
+            whatToDrawLabel.setText("TO DRAW: " + gameLogicManager.getCurrentCategory());
             canvasManager.clearCanvas();
             canvasManager.resetIsDrawn();
 
@@ -131,7 +131,7 @@ public class GameScreenController {
           canvasManager.setDrawingEnabled(false);
           setCanvasButtonsDisabled(true);
 
-          gameActionButton.setText("New Game");
+          gameActionButton.setText("NEW GAME");
           whatToDrawLabel.getStyleClass().add("stateHeaders");
 
           if (winState == WinState.WIN) {
@@ -141,7 +141,7 @@ public class GameScreenController {
             whatToDrawLabel.setText("Sorry, you ran out of time!");
             textToSpeech.speakAsync("Sorry, you ran out of time!");
           } else {
-            whatToDrawLabel.setText("Game cancelled.");
+            whatToDrawLabel.setText("Game cancelled");
           }
         });
   }
@@ -150,7 +150,7 @@ public class GameScreenController {
     Platform.runLater(
         () -> {
           // When the game starts, we do the following
-          gameActionButton.setText("Cancel Game");
+          gameActionButton.setText("CANCEL GAME");
           setCanvasButtonsDisabled(false);
           canvasManager.setDrawingEnabled(true);
           canvasManager.setDrawMode(DrawMode.DRAWING);
@@ -167,7 +167,7 @@ public class GameScreenController {
 
           for (int i = 0; i < range; i++) {
             String guessText = classificationList.get(i).getClassName().replace('_', ' ');
-            guessLabels[i].setText((i + 1) + ": " + guessText);
+            guessLabels[i].setText(((i + 1) + ": " + guessText).toUpperCase());
           }
         });
   }
@@ -181,7 +181,7 @@ public class GameScreenController {
 
   private void updateTimeRemainingLabel(int numberSeconds) {
     timeRemainingLabel.setText(
-        "Time Remaining: " + String.format("%2d", numberSeconds).replace(' ', '0'));
+        "TIME REMAINING: " + String.format("%2d", numberSeconds).replace(' ', '0'));
   }
 
   private void setCanvasButtonsDisabled(boolean disabled) {

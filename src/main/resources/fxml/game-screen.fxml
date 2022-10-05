@@ -15,34 +15,39 @@
    <children>
       <ImageView disable="true" fitHeight="700.0" fitWidth="900.0" pickOnBounds="true" preserveRatio="true" styleClass="gameScreen" />
       <Canvas fx:id="canvas" height="243.0" layoutX="249.0" layoutY="188.0" width="400.0" />
-      <Label layoutX="12.0" layoutY="6.0" prefHeight="118.0" prefWidth="139.0" styleClass="headers" text="Quick, Draw!" textFill="#ebe9dd" wrapText="true">
+      <Label layoutX="9.0" layoutY="10.0" prefHeight="66.0" prefWidth="124.0" styleClass="headers" text="Quick, " textAlignment="CENTER" wrapText="true">
          <font>
-            <Font size="35.0" />
+            <Font size="40.0" />
          </font>
       </Label>
-      <Label layoutX="17.0" layoutY="628.0" prefHeight="69.0" prefWidth="128.0" styleClass="headers" text="SE206 Edition" textFill="#ebe9dd" wrapText="true">
+      <Label layoutX="29.0" layoutY="53.0" prefHeight="66.0" prefWidth="124.0" styleClass="headers" text="Draw!" textAlignment="CENTER" wrapText="true">
          <font>
-            <Font size="23.0" />
+            <Font size="40.0" />
          </font>
       </Label>
-      <VBox alignment="CENTER" layoutX="209.0" layoutY="11.0" prefHeight="94.0" prefWidth="483.0" styleClass="subHeadersCanvas">
-         <children>
-            <Label fx:id="whatToDrawLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="94.0" prefWidth="483.0" styleClass="subHeaders" text="To Draw: ..." textAlignment="CENTER" wrapText="true">
-               <font>
-                  <Font size="36.0" />
-               </font>
-            </Label>
-         </children>
-      </VBox>
+      <Label fx:id="timeRemainingLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="343.0" layoutY="135.0" prefHeight="30.0" prefWidth="227.0" styleClass="subHeaders" text="TIME REMAINING: 0:00" textAlignment="CENTER" textFill="#e76f51">
+         <font>
+            <Font size="28.0" />
+         </font>
+      </Label>
       <Button fx:id="userButton" alignment="BOTTOM_CENTER" contentDisplay="CENTER" layoutX="771.0" layoutY="16.0" mnemonicParsing="false" onAction="#onUserStats" prefHeight="96.0" prefWidth="102.0" textAlignment="CENTER">
          <styleClass>
             <String fx:value="userIconButtonCanvas" />
             <String fx:value="userIconButton" />
          </styleClass>
       </Button>
-      <VBox alignment="CENTER" layoutX="135.0" layoutY="200.0" prefHeight="221.0" prefWidth="79.0">
+      <VBox alignment="CENTER" layoutX="209.0" layoutY="11.0" prefHeight="103.0" prefWidth="483.0" styleClass="subHeadersCanvas">
          <children>
-            <Button fx:id="pencilButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onPencilSelected" prefWidth="10000.0" text="Pencil" VBox.vgrow="ALWAYS">
+            <Label fx:id="whatToDrawLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="94.0" prefWidth="483.0" styleClass="subHeaders" text="TO DRAW: ..." textAlignment="CENTER" wrapText="true">
+               <font>
+                  <Font size="36.0" />
+               </font>
+            </Label>
+         </children>
+      </VBox>
+      <VBox alignment="CENTER" layoutX="123.0" layoutY="205.0" prefHeight="221.0" prefWidth="101.0">
+         <children>
+            <Button fx:id="pencilButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onPencilSelected" prefWidth="10000.0" text="PENCIL" VBox.vgrow="ALWAYS">
                <VBox.margin>
                   <Insets bottom="5.0" />
                </VBox.margin>
@@ -50,12 +55,12 @@
                   <Font size="16.0" />
                </font>
             </Button>
-            <Button fx:id="eraserButton" mnemonicParsing="false" onAction="#onEraserSelected" prefHeight="33.0" prefWidth="79.0" text="Eraser" VBox.vgrow="ALWAYS">
+            <Button fx:id="eraserButton" mnemonicParsing="false" onAction="#onEraserSelected" prefHeight="45.0" prefWidth="104.0" text="ERASER" VBox.vgrow="ALWAYS">
                <font>
                   <Font size="16.0" />
                </font>
             </Button>
-            <Button fx:id="clearButton" mnemonicParsing="false" onAction="#onClearCanvas" prefWidth="10000.0" text="Clear" VBox.vgrow="ALWAYS">
+            <Button fx:id="clearButton" mnemonicParsing="false" onAction="#onClearCanvas" prefWidth="10000.0" text="CLEAR" VBox.vgrow="ALWAYS">
                <VBox.margin>
                   <Insets top="30.0" />
                </VBox.margin>
@@ -66,9 +71,9 @@
          </children>
       </VBox>
 
-                  <VBox fx:id="predictionVbox" alignment="CENTER_RIGHT" layoutX="224.0" layoutY="501.0" prefHeight="122.0" prefWidth="456.0" styleClass="subHeadersCanvas">
+                  <VBox fx:id="predictionVbox" alignment="CENTER_RIGHT" layoutX="224.0" layoutY="493.0" prefHeight="122.0" prefWidth="456.0" styleClass="subHeadersCanvas">
          <children>
-            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="10000.0" styleClass="subHeaders" text="Top Guesses" textAlignment="CENTER" VBox.vgrow="ALWAYS">
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="10000.0" styleClass="subHeaders" text="TOP GUESSES" textAlignment="CENTER" VBox.vgrow="ALWAYS">
                <VBox.margin>
                   <Insets bottom="5.0" />
                </VBox.margin>
@@ -143,25 +148,20 @@
             </HBox>
          </children>
       </VBox>
-      <HBox alignment="CENTER" layoutX="193.0" layoutY="650.0" prefHeight="48.0" prefWidth="515.0">
+      <HBox alignment="CENTER" layoutX="193.0" layoutY="643.0" prefHeight="48.0" prefWidth="515.0" spacing="10.0">
          <children>
-            <Button fx:id="userProfilesButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onUserProfiles" prefHeight="36.0" prefWidth="151.0" text="Switch Profiles" textAlignment="CENTER">
+            <Button fx:id="userProfilesButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onUserProfiles" prefHeight="45.0" prefWidth="187.0" text="SWITCH PROFILES" textAlignment="CENTER">
                <HBox.margin>
-                  <Insets right="20.0" />
+                  <Insets />
                </HBox.margin>
             </Button>
-            <Button fx:id="gameActionButton" mnemonicParsing="false" onAction="#onGameAction" prefHeight="26.0" prefWidth="124.0" text="Cancel Game">
+            <Button fx:id="gameActionButton" mnemonicParsing="false" onAction="#onGameAction" prefHeight="45.0" prefWidth="147.0" text="CANCEL GAME">
                <HBox.margin>
-                  <Insets right="20.0" />
+                  <Insets />
                </HBox.margin>
             </Button>
-            <Button fx:id="downloadImageButton" mnemonicParsing="false" onAction="#onDownloadImage" prefHeight="26.0" prefWidth="121.0" text="Save Image" />
+            <Button fx:id="downloadImageButton" mnemonicParsing="false" onAction="#onDownloadImage" prefHeight="45.0" prefWidth="137.0" text="SAVE IMAGE" />
          </children>
       </HBox>
-      <Label fx:id="timeRemainingLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="343.0" layoutY="135.0" prefHeight="30.0" prefWidth="227.0" styleClass="subHeaders" text="Time Remaining: 0:00" textAlignment="CENTER" textFill="#e76f51">
-         <font>
-            <Font size="28.0" />
-         </font>
-      </Label>
    </children>
 </Pane>

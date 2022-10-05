@@ -8,23 +8,22 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <Pane stylesheets="@../css/application.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.CategoryScreenController">
    <children>
       <ImageView fitHeight="700.0" fitWidth="900.0" pickOnBounds="true" preserveRatio="true" styleClass="categoryScreen" />
-      <Label fx:id="drawTimeLabel" layoutX="293.0" layoutY="232.0" prefHeight="52.0" prefWidth="399.0" styleClass="subHeaders" text="Draw in 60 seconds">
+      <Label fx:id="drawTimeLabel" layoutX="293.0" layoutY="232.0" prefHeight="52.0" prefWidth="399.0" styleClass="subHeaders" text="DRAW IN 60 SECONDS">
          <font>
             <Font size="50.0" />
          </font>
       </Label>
-      <Label fx:id="categoryLabel" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="144.0" layoutY="296.0" prefHeight="211.0" prefWidth="620.0" styleClass="headers" text="category" textAlignment="CENTER" textFill="#e76f51" wrapText="true">
+      <Label fx:id="categoryLabel" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="89.0" layoutY="289.0" prefHeight="266.0" prefWidth="721.0" styleClass="headers" text="category" textAlignment="CENTER" textFill="#e76f51" wrapText="true">
          <font>
             <Font size="80.0" />
          </font>
       </Label>
-      <Label fx:id="usernameLabel" alignment="CENTER" layoutX="183.0" layoutY="57.0" prefHeight="43.0" prefWidth="542.0" styleClass="headers" text="Hi, username" textAlignment="CENTER">
+      <Label fx:id="usernameLabel" alignment="CENTER" layoutX="58.0" layoutY="54.0" prefHeight="62.0" prefWidth="778.0" styleClass="headers" text="Hi, username" textAlignment="CENTER">
          <font>
-            <Font size="40.0" />
+            <Font size="54.0" />
          </font>
       </Label>
       <HBox alignment="CENTER" layoutX="256.0" layoutY="500.0" prefHeight="35.0" prefWidth="422.0" spacing="20.0" />
@@ -37,13 +36,13 @@
             </Pane>
          </children>
       </VBox>
-      <Button alignment="CENTER" layoutX="616.0" layoutY="165.0" mnemonicParsing="false" onAction="#onPressHowToPlay" prefHeight="33.0" prefWidth="156.0" text="How to play?" textAlignment="CENTER">
+      <Button alignment="CENTER" layoutX="616.0" layoutY="165.0" mnemonicParsing="false" onAction="#onPressHowToPlay" prefHeight="33.0" prefWidth="156.0" text="HOW TO PLAY" textAlignment="CENTER">
          <font>
             <Font size="26.0" />
          </font>
       </Button>
-      <Button layoutX="127.0" layoutY="165.0" mnemonicParsing="false" onAction="#onBackToUserScreen" text="Back" />
-      <Button fx:id="playButton" alignment="CENTER" layoutX="352.0" layoutY="595.0" mnemonicParsing="false" onAction="#onReadyToPlay" prefHeight="48.0" prefWidth="207.0" text="I'm Ready!" textAlignment="CENTER">
+      <Button layoutX="127.0" layoutY="165.0" mnemonicParsing="false" onAction="#onBackToUserScreen" text="BACK TO PROFILE" />
+      <Button fx:id="playButton" alignment="CENTER" layoutX="376.0" layoutY="594.0" mnemonicParsing="false" onAction="#onReadyToPlay" prefHeight="48.0" prefWidth="174.0" text="I'M READY!" textAlignment="CENTER">
          <font>
             <Font size="25.0" />
          </font>

@@ -3,11 +3,7 @@
 
 /* All the fonts used (Google Fonts) */
 @font-face {
-	src: url('../fonts/broken-console/Broken-Console-Bold.ttf');
-}
-
-@font-face {
-	src: url('../fonts/retronoid/Retronoid-Italic.ttf');
+	src: url('../fonts/Magic-Retro/Magic-Retro.ttf');
 }
 
 @font-face {
@@ -22,16 +18,12 @@
 }
 
 .headers{
-	-fx-font-family: 'broken console bold';
+	-fx-font-family: 'Magic Retro';
 }
+
 
 .subHeaders{
 	-fx-font-family: 'VT323', monospace;
-}
-
-.stateHeaders{
-	-fx-background-color: #668cff;
-	-fx-background-radius: 40px;
 }
 
 .button {
@@ -39,12 +31,13 @@
 	-fx-background-color: #264653;
 	-fx-border-color: #F4A261;
 	-fx-text-fill: #E9C46A;
-	-fx-font-size: 20px;
+	-fx-font-size: 25px;
 }
 
 .button:hover{
-	-fx-background-color: rgb(102, 140, 255);
-	-fx-text-fill: black;
+	-fx-background-color: #F4A261;
+	-fx-text-fill: #264653;
+	-fx-border-color:  #264653;
 }
 
 .button:hover, .userIconButton:hover, .usernameButton:hover, .pagination .toggle-button:hover, .color-picker:hover{
@@ -54,8 +47,12 @@
 /* Main Menu scene */
 
 /* Adds the splash */
-.splash {
-	-fx-image: url('../images/splash.png');
+.mainMenuOn {
+	-fx-image: url('../images/main-menu-screen-on.png');
+}
+
+.mainMenuOff {
+	-fx-image: url('../images/main-menu-screen-off.png');
 }
 
 /*TODO: Should we use this or not*/
@@ -70,78 +67,103 @@
 
 /* User Profile scene*/
 
+.userProfile {
+	-fx-image: url('../images/user-profiles-screen.png');
+}
+
+.profilesPane{
+	-fx-border-color: black;
+	-fx-border-radius: 35;
+	-fx-border-width: 4;
+	-fx-pref-width: 290;
+	-fx-pref-height: 409;
+}
+
 .userIconButton{
 	-fx-shape: "m 360 127 h -180 v 65 h 180 z m -64 -64 h -32 v 161 h 32 z m -32 161 h -64 v 33 h 64 z m 32 -224 h -32 v 33 h 32 z m 33 97 h -38 v 33 h 38 z m 31 93 h -32 v 33 h 32 z m -95 -158 h -33 v 65 h 33 z m -33 32 h -52 v 63 h 52 z m 65 -1 h -117 v 33 h 117 z m -297 64 h 180 v 65 h -180 z m 64 -64 h 32 v 161 h -32 z m 32 161 h 64 v 33 h -64 z m -32 -224 h 32 v 33 h -32 z m -33 97 h 38 v 33 h -38 z m -31 93 h 32 v 33 h -32 z m 95 -158 h 33 v 65 h -33 z m 33 32 h 52 v 63 h -52 z m -65 -1 h 117 v 33 h -117 z";
-    -fx-pref-width: 300;
-	-fx-pref-height: 270;
+    -fx-pref-width: 150;
+	-fx-pref-height: 100;
     -fx-alignment: bottom-center;
 	-fx-text-fill: none;
+	-fx-translate-x: 70;
+	-fx-translate-y: 130;
 }
 
 .usernameButton{
-	-fx-font-family: 'Londrina Solid';
+	-fx-font-family: 'VT323';
 	-fx-text-fill: black;
-	-fx-font-size: 18px;
+	-fx-font-size: 40px;
+	-fx-text-alignment: center;
 	-fx-alignment: bottom-center;
     -fx-wrap-text: true;
+	-fx-pref-width: 290;
+	-fx-translate-y: 300;
 }
 
 .pagination {
-	-fx-font-family: 'Gaegu';
-	-fx-font-size: 18px;
+	-fx-font-family: 'VT323';
+	-fx-font-size: 30px;
 	-fx-page-information-visible: false;
 	-fx-tooltip-visible: false;
 	}
 
 .pagination .toggle-button  {
-	-fx-color:black ;
-	-fx-background-radius: 20px;
+	-fx-color: #2A9D8F;
+	-fx-background-radius: 40px;
+	
 }
 
 .pagination .toggle-button:selected{
- 	 -fx-color: rgb(102, 140, 255);
+ 	 -fx-color: #F4A261;
 }
 
 .pagination .toggle-button:hover {
- 	 -fx-background-color: rgb(102, 140, 255);
+ 	 -fx-background-color:  #F4A261;
 }
 
 .pagination .pagination-control .left-arrow, .right-arrow{
-    -fx-background-color: black, rgb(102, 140, 255);
-	-fx-min-width: 20;
-	-fx-min-height: 20;
+    -fx-background-color: #2A9D8F, #F4A261;
+	-fx-min-width: 40;
+	-fx-min-height: 40;	
+}
+
+.pagination .pagination-control .control-box{
+    -fx-spacing: 10;
 }
 
 .pagination .button {
 	-fx-background-color: none;
+	-fx-border-color: null;
 }
 
 .pagination .pagination-control .left-arrow:hover, .right-arrow:hover{
-    -fx-background-color: rgb(102, 140, 255), black;
-	-fx-min-width: 25;
-	-fx-min-height: 25;
+    -fx-background-color: #F4A261, #2A9D8F;
 	-fx-cursor: hand;
 }
 
+/* New user scene */
+
+.newUserScreen {
+	-fx-image: url('../images/new-user-screen.png');
+}
 .text-field, .color-picker {
-	-fx-font-family: 'Gaegu';
-   	-fx-font-size: 18px;
-	-fx-background-color: rgb(235, 233, 221);
-	-fx-background-radius: 40px;
+	-fx-font-family: 'VT323';
+   	-fx-font-size: 25px;
+	-fx-background-color: #ebe9dd;
 }
 
 /* Error Message Scene */
 
 .dialog-pane{
-  	-fx-font-family: 'Gaegu';
+  	-fx-font-family: 'VT323';
 	-fx-font-size: 18px;
 	-fx-background-color: rgb(235, 233, 221);
  }
  
  .dialog-pane .header-panel{
-	-fx-font-family: 'Londrina Solid';
+	-fx-font-family: 'Magic Retro';
 	-fx-font-size: 20px;
-	-fx-background-color:  rgb(102, 140, 255);
+	-fx-background-color:   #E9C46A;
  }
 
  .dialog-pane .label {
@@ -164,51 +186,82 @@
 	-fx-background-color: #E9C46A;
 }
 
+.stateHeaders{
+	-fx-background-color: #264653;
+	-fx-font-family: 'Magic Retro';
+	-fx-text-fill: #E9C46A;
+}
+
 .userIconButtonCanvas {
 	-fx-pref-width: 100;
 	-fx-pref-height: 90;
 	-fx-background-color: white;
-	-fx-border-color: white;
+	-fx-border-color: null;
+	-fx-translate-x: 0;
+	-fx-translate-y: 0;
 }
 
-.resultSplash {
-	-fx-image: url('../images/resultSplash.png');
+.userIconButton:hover{
+	-fx-border-color: none;
 }
 
 /* Adds border to canvas so user can see where to draw */
 .canvas {
 	-fx-border-radius: 40px;
-    -fx-border-color: rgb(102, 140, 255);
+    -fx-border-color: #E76F51;
 }
 
-/* User Stats Screen */
+/* User  Screen */
+.userScreen {
+	-fx-image: url('../images/user-screen.png');
+}
 .fastestWinLabel {
-	-fx-background-color: #668cff;
-	-fx-background-radius: 30px;
-	-fx-text-fill:  #ebe9dd;
-	-fx-font-size: 25px;
+	-fx-background-color: #e9c46a;
+	-fx-font-size: 30px;
 }
 
-.playButton {
-	-fx-font-family: 'Gaegu';
-	-fx-background-color: #668cff;
-	-fx-background-radius: 40px;
-	-fx-text-fill: black;
+.userButton {
+	-fx-font-family: 'VT323';
+	-fx-background-color: #E76F51;
+	-fx-border-color: #264653;
+	-fx-text-fill: #264653;
 	-fx-font-size: 20px;
-	-fx-border-color: black;
-	-fx-border-radius: 40px;
 }
 
-.playButton:hover {
-	-fx-background-color: black;
-	-fx-text-fill: #668cff;
-	-fx-border-color: #668cff;
+.userButton:hover {
+	-fx-background-color: #F4A261;
+	-fx-text-fill: #264653;
+	-fx-border-color: #E76F51;
 
 }
+
+.userCircleButton{
+	-fx-background-radius: 200px;
+	-fx-font-family: 'VT323';
+	-fx-background-color: #E76F51;
+	-fx-border-color: #264653;
+	-fx-border-radius: 200px;
+	-fx-text-fill: #264653;
+	-fx-font-size: 20px;
+}
+
+
 /* Word History Screen */
 
+.wordHistoryScreen{
+	-fx-image: url('../images/category-history/category-history-screen.png');
+}
+
+.slider{
+	-fx-image: url('../images/category-history/slider.png');
+}
+
+.ball {
+	-fx-image: url('../images/category-history/ball.png');
+}
+
 .list-view {
-    -fx-background-color: #ebe9dd;
+    -fx-background-color: #2A9D8F;
 	-fx-alignment: center;
 	-fx-font-size: 18px;
 	-fx-background-radius: 40px;
@@ -219,7 +272,7 @@
 }
 
 .list-view .scroll-bar .thumb{
-	-fx-background-color: rgb(102, 140, 255);
+	-fx-background-color: #E76F51;
 }
 
 .list-view .scroll-bar .increment-button:hover, .decrement-button:hover{
@@ -232,17 +285,22 @@
 
 .list-cell:odd{
 	-fx-cell-size: 30 ;
-	-fx-background-color: #ebe9dd;
+	-fx-background-color: #264653;
 	-fx-alignment: center;
+	-fx-border-color: #ebe9dd;
+	-fx-text-fill: white;
 }
 
 .list-cell:even{
 	-fx-cell-size: 30;
-	-fx-background-color: #dad8cc;
+	-fx-background-color: #E76F51;
 	-fx-alignment: center;
+	-fx-border-color: #ebe9dd;
+	-fx-text-fill: white;
 }
 
 .list-cell:empty{
-	-fx-background-color: #ebe9dd;
+	-fx-background-color: #2A9D8F;
+	-fx-border-color: #2A9D8F;
 }
 

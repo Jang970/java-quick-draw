@@ -5,9 +5,9 @@ import java.util.UUID;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Pagination;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
@@ -61,10 +61,10 @@ public class UserProfilesScreenController {
    * @param pageIndex
    * @return
    */
-  public VBox createProfile(int pageIndex) {
-    // create vBox for ever page
-    VBox box = new VBox(5);
-    box.setAlignment(Pos.CENTER);
+  public Pane createProfile(int pageIndex) {
+    // create pane for every page
+    Pane pane = new Pane();
+    pane.getStyleClass().add("profilesPane");
 
     // create user buttons
     Button userIconButton = new Button("userIconButton");
@@ -77,27 +77,28 @@ public class UserProfilesScreenController {
     // set style
     setButtonStyle(userIconButton, "userIconButton");
     setButtonStyle(usernameButton, "usernameButton");
-    userIconButton.setStyle(getBackgroundColor(users.get(pageIndex).getColour()));
+    userIconButton.setStyle("-fx-background-color: " + getColor(users.get(pageIndex).getColour()));
+    pane.setStyle("-fx-border-color: " + getColor(users.get(pageIndex).getColour()));
 
-    // adds buttons to vBox
-    box.getChildren().add(userIconButton);
-    box.getChildren().add(usernameButton);
+    // adds buttons to pane
+    pane.getChildren().add(userIconButton);
+    pane.getChildren().add(usernameButton);
 
     // set on action of buttons
     onUserButtonsClicked(userIconButton);
     onUserButtonsClicked(usernameButton);
 
-    return box;
+    return pane;
   }
 
   /**
-   * Returns the desired format for css background color string
+   * Returns the desired format for css color string
    *
    * @param color given background color of user
    * @return
    */
-  private String getBackgroundColor(String color) {
-    return "-fx-background-color: " + color.replace("0x", "#") + ";";
+  private String getColor(String color) {
+    return color.replace("0x", "#") + ";";
   }
 
   /**

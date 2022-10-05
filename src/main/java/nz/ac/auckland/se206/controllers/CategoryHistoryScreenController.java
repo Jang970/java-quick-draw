@@ -6,6 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollBar;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
@@ -15,6 +16,7 @@ public class CategoryHistoryScreenController {
   @FXML private ListView<String> categoryHistoryListViewOne;
   @FXML private ListView<String> categoryHistoryListViewTwo;
   @FXML private HBox historyHbox;
+  @FXML private ImageView ballImageView;
 
   private List<String> categoryHistory;
 
