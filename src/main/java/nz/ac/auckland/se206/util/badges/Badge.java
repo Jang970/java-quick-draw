@@ -11,6 +11,7 @@ public abstract class Badge {
 
   protected String name;
   protected String description;
+  protected int id;
   protected GameEndInfo gameInfo;
 
   public Badge(GameEndInfo gameInfo) {
@@ -23,6 +24,10 @@ public abstract class Badge {
 
   public String getDescription() {
     return this.description;
+  }
+
+  public int getId() {
+    return this.id;
   }
 
   public Boolean isEarned() {

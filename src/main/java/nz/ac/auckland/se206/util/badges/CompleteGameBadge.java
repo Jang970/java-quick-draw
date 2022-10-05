@@ -8,6 +8,7 @@ public class CompleteGameBadge extends Badge {
     super(gameInfo);
     this.name = "Complete Game";
     this.description = "Earned all badges available";
+    this.id = 5;
   }
 
   @Override

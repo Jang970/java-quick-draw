@@ -8,6 +8,7 @@ public class MaxDifficultyBadge extends Badge {
     super(gameInfo);
     this.name = "Max Difficulty";
     this.description = "Won a game on max difficulty for each setting";
+    this.id = 4;
   }
 
   @Override

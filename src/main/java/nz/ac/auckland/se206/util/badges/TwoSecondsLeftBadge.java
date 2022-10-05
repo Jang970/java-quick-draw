@@ -9,6 +9,7 @@ public class TwoSecondsLeftBadge extends Badge {
     super(gameInfo);
     this.name = "Two Seconds Left";
     this.description = "Won a game with two seconds left on the timer";
+    this.id = 2;
   }
 
   @Override
