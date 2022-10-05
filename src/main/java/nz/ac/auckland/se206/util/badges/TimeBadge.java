@@ -5,7 +5,7 @@ import nz.ac.auckland.se206.GameLogicManager.GameEndInfo;
 /** This badge will be contain the information regarding under x seconds win badge type. */
 public class TimeBadge implements Badge {
 
-  private String name = "Won in under x seconds";
+  private String name = "Under x Seconds";
   private String description = "Won a game in under x seconds";
   private GameEndInfo gameinfo;
   private int timeTaken;
@@ -30,10 +30,11 @@ public class TimeBadge implements Badge {
 
   @Override
   public Boolean isEarned() {
-    // TODO Auto-generated method stub
+    // TODO Implement Logic
     return null;
   }
 
+  // TODO: have to check if this method is plausible
   public int getHighestTier() {
 
     return this.highestTier;
