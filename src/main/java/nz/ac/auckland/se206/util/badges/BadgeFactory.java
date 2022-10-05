@@ -1,5 +1,7 @@
 package nz.ac.auckland.se206.util.badges;
 
+import java.util.ArrayList;
+import java.util.List;
 import nz.ac.auckland.se206.GameLogicManager.GameEndInfo;
 
 /** Making use of Factory design pattern to handle creation of badges */
@@ -27,5 +29,18 @@ public class BadgeFactory {
         System.out.println("Error! No Badge of that type found");
         return null;
     }
+  }
+
+  public static List<Badge> createListOfBadges(GameEndInfo gameInfo) {
+
+    List<Badge> badges = new ArrayList<>();
+
+    badges.add(new TimeBadge(gameInfo));
+    badges.add(new AllCategoriesBadge(gameInfo));
+    badges.add(new MaxDifficultyBadge(gameInfo));
+    badges.add(new TwoSecondsLeftBadge(gameInfo));
+    badges.add(new CompleteGameBadge(gameInfo));
+
+    return badges;
   }
 }
