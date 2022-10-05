@@ -210,8 +210,8 @@ public class PredictionManager {
       categoryType = CategoryType.EASY;
     } else if (categories.get(CategoryType.MEDIUM).contains(category)) {
       categoryType = CategoryType.MEDIUM;
-    } else if (categories.get(CategoryType.MEDIUM).contains(category)) {
-      categoryType = CategoryType.MEDIUM;
+    } else if (categories.get(CategoryType.HARD).contains(category)) {
+      categoryType = CategoryType.HARD;
     }
 
     return new Category(category, categoryType);
