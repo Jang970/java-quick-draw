@@ -7,7 +7,7 @@ import nz.ac.auckland.se206.GameLogicManager.GameEndInfo;
 /** Making use of Factory design pattern to handle creation of badges */
 public class BadgeFactory {
 
-  public static Badge createBadge(int type, GameEndInfo gameInfo) {
+  private static Badge createBadge(int type, GameEndInfo gameInfo) {
 
     switch (type) {
       case 1:
@@ -36,11 +36,11 @@ public class BadgeFactory {
 
     List<Badge> badges = new ArrayList<>();
 
-    badges.add(new TimeBadge(gameInfo));
-    badges.add(new AllCategoriesBadge(gameInfo));
-    badges.add(new MaxDifficultyBadge(gameInfo));
-    badges.add(new TwoSecondsLeftBadge(gameInfo));
-    badges.add(new CompleteGameBadge(gameInfo));
+    int numberOfBadges = 5;
+    for (int i = 1; i <= numberOfBadges; i++) {
+
+      badges.add(createBadge(i, gameInfo));
+    }
 
     return badges;
   }
