@@ -51,4 +51,30 @@ public class BadgeManager {
 
     return null;
   }
+
+  /**
+   * This method will return a list of all badges that have been earned. Will give null if no badges
+   * have been earned
+   *
+   * @return list of badges earned
+   */
+  public List<Badge> allBadgesEarned() {
+
+    List<Badge> badgesEarned = new ArrayList<>();
+
+    // loop through all badges and append to our new list if their requirement has been met
+    for (Badge badge : badges) {
+
+      if (badge.isEarned()) {
+
+        badgesEarned.add(badge);
+      }
+    }
+
+    if (badgesEarned.isEmpty()) {
+      return null;
+    }
+
+    return badgesEarned;
+  }
 }
