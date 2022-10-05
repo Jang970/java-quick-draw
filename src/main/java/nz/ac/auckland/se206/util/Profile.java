@@ -72,8 +72,8 @@ public class Profile {
   public void addGameToHistory(GameEndInfo gameInfo) {
 
     // This should be fairly self explanatory
-    if (gameInfo.winState() == EndGameState.WIN
-        && (fastestGame == null || gameInfo.timeTaken() < fastestGame.timeTaken())) {
+    if (gameInfo.winState == EndGameState.WIN
+        && (fastestGame == null || gameInfo.timeTaken < fastestGame.timeTaken)) {
       fastestGame = gameInfo;
     }
 
@@ -113,7 +113,7 @@ public class Profile {
 
   public Set<String> getCategoryHistory() {
     return previousGames.stream()
-        .map((game) -> game.category().categoryString())
+        .map((game) -> game.category.categoryString)
         .collect(Collectors.toSet());
   }
 }

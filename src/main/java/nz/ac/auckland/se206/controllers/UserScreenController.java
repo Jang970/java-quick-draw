@@ -33,9 +33,9 @@ public class UserScreenController {
             } else {
               fastestWinLabel.setText(
                   "Your fastest win is in "
-                      + currentProfile.getFastestGame().timeTaken()
+                      + currentProfile.getFastestGame().timeTaken
                       + " seconds when you had to draw '"
-                      + currentProfile.getFastestGame().category().categoryString()
+                      + currentProfile.getFastestGame().category.categoryString
                       + "'!");
             }
 
