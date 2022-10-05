@@ -3,29 +3,17 @@ package nz.ac.auckland.se206.util.badges;
 import nz.ac.auckland.se206.GameLogicManager.GameEndInfo;
 
 /** This badge will be contain the information regarding under x seconds win badge type. */
-public class TimeBadge implements Badge {
+public class TimeBadge extends Badge {
 
-  private String name = "Under x Seconds";
-  private String description = "Won a game in under x seconds";
-  private GameEndInfo gameinfo;
   private int timeTaken;
   private int highestTier;
 
   public TimeBadge(GameEndInfo gameInfo) {
-
-    this.gameinfo = gameInfo;
-    this.timeTaken = this.gameinfo.getTimeTaken();
+    super(gameInfo);
+    this.name = "Under x Seconds";
+    this.description = "Won a game in under x seconds";
+    this.timeTaken = gameInfo.getTimeTaken();
     this.highestTier = updateBadgeInfo();
-  }
-
-  @Override
-  public String getName() {
-    return this.name;
-  }
-
-  @Override
-  public String getDescription() {
-    return this.description;
   }
 
   @Override

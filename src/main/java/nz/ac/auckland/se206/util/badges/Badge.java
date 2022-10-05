@@ -1,14 +1,31 @@
 package nz.ac.auckland.se206.util.badges;
 
+import nz.ac.auckland.se206.GameLogicManager.GameEndInfo;
+
 /**
- * This will be the interface that is implemented by each badge we want in our game It will contain
- * methods that must be implemented by each badge.
+ * This will be the abstract class that is extendeds by each badge we want in our game It will
+ * contain methods that are the same for each badge isEarned will be overriden by each badge with
+ * their own corresponding logic for it.
  */
-public interface Badge {
+public abstract class Badge {
 
-  public String getName();
+  protected String name;
+  protected String description;
+  protected GameEndInfo gameInfo;
 
-  public String getDescription();
+  public Badge(GameEndInfo gameInfo) {
+    this.gameInfo = gameInfo;
+  }
 
-  public Boolean isEarned();
+  public String getName() {
+    return this.name;
+  }
+
+  public String getDescription() {
+    return this.description;
+  }
+
+  public Boolean isEarned() {
+    return null;
+  }
 }

@@ -2,24 +2,12 @@ package nz.ac.auckland.se206.util.badges;
 
 import nz.ac.auckland.se206.GameLogicManager.GameEndInfo;
 
-public class CompleteGameBadge implements Badge {
-
-  private String name = "Complete Game";
-  private String description = "Earned all badges available";
-  private GameEndInfo gameInfo;
+public class CompleteGameBadge extends Badge {
 
   public CompleteGameBadge(GameEndInfo gameInfo) {
-    this.gameInfo = gameInfo;
-  }
-
-  @Override
-  public String getName() {
-    return this.name;
-  }
-
-  @Override
-  public String getDescription() {
-    return this.description;
+    super(gameInfo);
+    this.name = "Complete Game";
+    this.description = "Earned all badges available";
   }
 
   @Override

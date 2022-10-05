@@ -2,24 +2,12 @@ package nz.ac.auckland.se206.util.badges;
 
 import nz.ac.auckland.se206.GameLogicManager.GameEndInfo;
 
-public class AllCategoriesBadge implements Badge {
-
-  private String name = "All Categories";
-  private String description = "Played all categories of all difficulties";
-  private GameEndInfo gameInfo;
+public class AllCategoriesBadge extends Badge {
 
   public AllCategoriesBadge(GameEndInfo gameInfo) {
-    this.gameInfo = gameInfo;
-  }
-
-  @Override
-  public String getName() {
-    return this.name;
-  }
-
-  @Override
-  public String getDescription() {
-    return this.description;
+    super(gameInfo);
+    this.name = "All Categories";
+    this.description = "Played all categories of all difficulties";
   }
 
   @Override
