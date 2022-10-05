@@ -31,6 +31,7 @@ public class BadgeFactory {
     }
   }
 
+  // method to create all badges and store in a list
   public static List<Badge> createListOfBadges(GameEndInfo gameInfo) {
 
     List<Badge> badges = new ArrayList<>();
