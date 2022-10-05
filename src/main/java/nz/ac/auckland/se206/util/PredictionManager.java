@@ -7,6 +7,7 @@ import com.opencsv.exceptions.CsvException;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +29,7 @@ public class PredictionManager {
 
   private boolean isMakingPredictions = false;
 
-  private Map<CategoryType, List<String>> categories;
+  private Map<CategoryType, Set<String>> categories;
 
   /**
    * The manager uses the snapshot provider to get images and then runs a prediction on those
@@ -46,7 +47,8 @@ public class PredictionManager {
       throws IOException, ModelException {
 
     try {
-      categories =
+
+      Map<CategoryType, List<String>> loaded =
           new CsvKeyValuePairLoader<CategoryType, String>(
                   (keyString) -> {
                     if (keyString.equals("E")) {
@@ -62,6 +64,11 @@ public class PredictionManager {
                   },
                   (v) -> v)
               .loadCategoriesFromFile(App.getResourcePath("category_difficulty.csv"), true);
+
+      categories = new HashMap<CategoryType, Set<String>>();
+      categories.put(CategoryType.EASY, new HashSet<String>(loaded.get(CategoryType.EASY)));
+      categories.put(CategoryType.MEDIUM, new HashSet<String>(loaded.get(CategoryType.MEDIUM)));
+      categories.put(CategoryType.HARD, new HashSet<String>(loaded.get(CategoryType.HARD)));
 
     } catch (CsvException e) {
       App.expect("Category CSV is in the resource folder and is not empty", e);
@@ -166,7 +173,7 @@ public class PredictionManager {
    * @param categoryFilter
    * @return
    */
-  public String selectNewRandomCategory(
+  public Category getNewRandomCategory(
       Set<String> categoryFilter, boolean includeEasy, boolean includeMedium, boolean includeHard)
       throws FilterTooStrictException {
 
@@ -195,14 +202,26 @@ public class PredictionManager {
     // Get random index from remaining items
     int randomIndexFromList = ThreadLocalRandom.current().nextInt(possibleCategories.size());
 
-    return possibleCategories.get(randomIndexFromList);
+    String category = possibleCategories.get(randomIndexFromList);
+
+    CategoryType categoryType = CategoryType.EASY;
+
+    if (categories.get(CategoryType.EASY).contains(category)) {
+      categoryType = CategoryType.EASY;
+    } else if (categories.get(CategoryType.MEDIUM).contains(category)) {
+      categoryType = CategoryType.MEDIUM;
+    } else if (categories.get(CategoryType.MEDIUM).contains(category)) {
+      categoryType = CategoryType.MEDIUM;
+    }
+
+    return new Category(category, categoryType);
   }
 
-  public String selectNewRandomEasyCategory() {
+  public Category selectNewRandomEasyCategory() {
     try {
-      return this.selectNewRandomCategory(new HashSet<String>(), true, false, false);
+      return this.getNewRandomCategory(new HashSet<String>(), true, false, false);
     } catch (FilterTooStrictException e) {
-      return (String) App.expect("The filter is empty so it cannot be too strict");
+      return (Category) App.expect("The filter is empty so it cannot be too strict");
     }
   }
 }

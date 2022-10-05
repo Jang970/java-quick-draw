@@ -5,13 +5,17 @@ import ai.djl.modality.Classifications.Classification;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import nz.ac.auckland.se206.fxmlutils.CanvasManager;
+import nz.ac.auckland.se206.util.Category;
 import nz.ac.auckland.se206.util.CountdownTimer;
 import nz.ac.auckland.se206.util.DataSource;
 import nz.ac.auckland.se206.util.EmptyEventEmitter;
 import nz.ac.auckland.se206.util.EmptyEventListener;
 import nz.ac.auckland.se206.util.EventEmitter;
 import nz.ac.auckland.se206.util.EventListener;
+import nz.ac.auckland.se206.util.FilterTooStrictException;
 import nz.ac.auckland.se206.util.PredictionManager;
 
 /**
@@ -21,7 +25,7 @@ import nz.ac.auckland.se206.util.PredictionManager;
 public class GameLogicManager {
   private Boolean isPlaying = false;
 
-  private String categoryToGuess;
+  private Category categoryToGuess;
 
   private PredictionManager predictionManager;
   private CountdownTimer countdownTimer;
@@ -30,6 +34,8 @@ public class GameLogicManager {
 
   private EventEmitter<List<Classification>> predictionChangeEmitter =
       new EventEmitter<List<Classification>>();
+  private EventEmitter<Category> categoryChangeEmitter = new EventEmitter<Category>();
+
   private EventEmitter<GameEndInfo> gameEndedEmitter = new EventEmitter<GameEndInfo>();
   private EventEmitter<Integer> timeChangedEmitter = new EventEmitter<Integer>();
   private EmptyEventEmitter gameStartedEmitter = new EmptyEventEmitter();
@@ -57,7 +63,7 @@ public class GameLogicManager {
           for (int i = 0; i < range; i++) {
             String prediction = predictions.get(i).getClassName().replace('_', ' ');
             // wins only if prediction matchs and if canvas is drawn on
-            if (prediction.equals(categoryToGuess) && CanvasManager.getIsDrawn()) {
+            if (prediction.equals(categoryToGuess.categoryString()) && CanvasManager.getIsDrawn()) {
               onCorrectPrediction();
             }
           }
@@ -70,7 +76,36 @@ public class GameLogicManager {
 
   public void initializeGame(GameProfile profile) {
     currentGameProfile = profile;
-    categoryToGuess = predictionManager.selectNewRandomEasyCategory();
+    boolean inclE = false;
+    boolean inclM = false;
+    boolean inclH = false;
+
+    if (profile.difficulty() == Difficulty.EASY) {
+      inclE = true;
+    }
+    if (profile.difficulty() == Difficulty.MEDIUM) {
+      inclE = true;
+      inclM = true;
+    }
+    if (profile.difficulty() == Difficulty.HARD) {
+      inclE = true;
+      inclM = true;
+      inclH = true;
+    }
+    if (profile.difficulty() == Difficulty.MASTER) {
+      inclH = true;
+    }
+
+    Set<String> categories =
+        profile.gameHistory().stream()
+            .map((game) -> game.category().categoryString())
+            .collect(Collectors.toSet());
+
+    try {
+      categoryToGuess = predictionManager.getNewRandomCategory(categories, inclE, inclM, inclH);
+    } catch (FilterTooStrictException e) {
+      e.printStackTrace();
+    }
   }
 
   /** Starts the countdown, and enables the prediction server */
@@ -98,7 +133,7 @@ public class GameLogicManager {
     gameEndedEmitter.emit(
         new GameEndInfo(
             winState,
-            this.categoryToGuess,
+            categoryToGuess,
             currentGameProfile.gameLengthSeconds() - secondsRemaining - 1,
             secondsRemaining));
 
@@ -132,7 +167,7 @@ public class GameLogicManager {
   /**
    * @return the category that the player need to draw
    */
-  public String getCurrentCategory() {
+  public Category getCurrentCategory() {
     return categoryToGuess;
   }
 
@@ -141,7 +176,7 @@ public class GameLogicManager {
   }
 
   public GameProfile getCurrentGameProfile() {
-    return this.currentGameProfile;
+    return currentGameProfile;
   }
 
   public void subscribeToGameEnd(EventListener<GameEndInfo> listener) {
@@ -158,5 +193,9 @@ public class GameLogicManager {
 
   public void subscribeToPredictionsChange(EventListener<List<Classification>> listener) {
     predictionChangeEmitter.subscribe(listener);
+  }
+
+  public void subscribeToCategoryChange(EventListener<Category> listener) {
+    categoryChangeEmitter.subscribe(listener);
   }
 }

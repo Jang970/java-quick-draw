@@ -252,7 +252,7 @@ public class CanvasManager {
     fileChooser.setInitialFileName(
         App.getProfileManager().getCurrentProfile().getName()
             + "'s "
-            + App.getGameLogicManager().getCurrentCategory()
+            + App.getGameLogicManager().getCurrentCategory().categoryString()
             + " drawing");
 
     final File directory = fileChooser.showSaveDialog(App.getStage());

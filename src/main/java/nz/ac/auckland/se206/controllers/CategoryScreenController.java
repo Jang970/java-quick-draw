@@ -9,6 +9,7 @@ import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
+import nz.ac.auckland.se206.gamelogicmanager.Difficulty;
 import nz.ac.auckland.se206.gamelogicmanager.GameLogicManager;
 import nz.ac.auckland.se206.gamelogicmanager.GameMode;
 import nz.ac.auckland.se206.gamelogicmanager.GameProfile;
@@ -48,10 +49,12 @@ public class CategoryScreenController {
     // We need to make sure that we are generating a new category which the player has not already
     // played.
 
-    gameLogicManager.initializeGame(new GameProfile(30, 3, GameMode.BASIC, List.of()));
+    gameLogicManager.initializeGame(
+        new GameProfile(30, 3, Difficulty.EASY, GameMode.BASIC, List.of()));
 
-    categoryLabel.setText(gameLogicManager.getCurrentCategory());
-    App.getTextToSpeech().speakAsync("Draw " + gameLogicManager.getCurrentCategory());
+    categoryLabel.setText(gameLogicManager.getCurrentCategory().categoryString());
+    App.getTextToSpeech()
+        .speakAsync("Draw " + gameLogicManager.getCurrentCategory().categoryString());
   }
 
   @FXML

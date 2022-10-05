@@ -1,4 +1,6 @@
 package nz.ac.auckland.se206.gamelogicmanager;
 
+import nz.ac.auckland.se206.util.Category;
+
 public record GameEndInfo(
-    EndGameState winState, String category, int timeTaken, int secondsRemaining) {}
+    EndGameState winState, Category category, int timeTaken, int secondsRemaining) {}
