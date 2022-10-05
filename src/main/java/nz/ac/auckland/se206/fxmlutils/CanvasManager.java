@@ -157,7 +157,7 @@ public class CanvasManager {
         // extract to simple function
         if (drawMode == DrawMode.DRAWING) {
           context.setStroke(Color.BLACK);
-          context.setLineWidth(brushSize * 0.8);
+          context.setLineWidth(brushSize);
           isDrawn = true;
           canvasDrawnEmitter.emit(isDrawn);
         } else if (drawMode == DrawMode.ERASING) {
