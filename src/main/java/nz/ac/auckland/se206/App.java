@@ -161,16 +161,13 @@ public class App extends Application {
 
           if (gameInfo.winState() == EndGameState.WIN) {
 
-            currentProfile.updateFastestGameIfBeatsCurrent(
-                gameInfo.timeTaken(), gameInfo.category());
-
             currentProfile.incrementGamesWon();
 
           } else if (gameInfo.winState() == EndGameState.LOOSE) {
             currentProfile.incrementGamesLost();
           }
 
-          currentProfile.addToCategoryHistory(gameInfo.category());
+          currentProfile.addGameToHistory(gameInfo);
 
           profileManager.saveProfilesToFile();
         });
