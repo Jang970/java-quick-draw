@@ -20,7 +20,7 @@ public class BadgeFactory {
         return new MaxDifficultyBadge(gameInfo);
 
       case 4:
-        return new TwoSecondsLeftBadge(gameInfo);
+        return new JustInTimeBadge(gameInfo);
 
       case 5:
         return new CompleteGameBadge(gameInfo);

@@ -6,7 +6,7 @@ public class MaxDifficultyBadge extends Badge {
 
   public MaxDifficultyBadge(GameEndInfo gameInfo) {
     super(gameInfo);
-    this.name = "Max Difficulty";
+    this.name = "maxDifficulty";
     this.description = "Won a game on max difficulty for each setting";
     this.id = 4;
   }
