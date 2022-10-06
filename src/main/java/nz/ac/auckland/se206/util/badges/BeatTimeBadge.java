@@ -7,7 +7,7 @@ public class BeatTimeBadge extends Badge {
   public BeatTimeBadge(GameEndInfo gameInfo) {
     super(gameInfo);
     this.name = "beatTime";
-    this.description = "Beat your previous time for this word";
+    this.description = "Beat your previous fastest win time";
   }
 
   @Override
