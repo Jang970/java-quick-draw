@@ -344,5 +344,54 @@
 	-fx-image: url('../images/badges/justInTime.png');
 }
 
+/* Difficulty Screen */
+.difficultyScreen {
+	-fx-image: url('../images/difficulty-screen/difficulty-screen.png');
+}
+
+.easyButton {
+	-fx-background-image: url('../images/difficulty-screen/easy.png');
+	-fx-background-color: null;
+	-fx-background-repeat: no-repeat;
+	-fx-border-color: null;
+	-fx-text-fill: black;
+}
+
+.mediumButton {
+	-fx-background-image: url('../images/difficulty-screen/medium.png');
+	-fx-background-color: null;
+	-fx-background-repeat: no-repeat;
+	-fx-border-color: null;
+	-fx-text-fill: black;
+}
+
+.hardButton {
+	-fx-background-image: url('../images/difficulty-screen/hard.png');
+	-fx-background-color: null;
+	-fx-background-repeat: no-repeat;
+	-fx-border-color: null;
+	-fx-text-fill: black;
+}
+
+.masterButton {
+	-fx-background-image: url('../images/difficulty-screen/master.png');
+	-fx-background-color: null;
+	-fx-background-repeat: no-repeat;
+	-fx-border-color: null;
+	-fx-text-fill: black;
+}
+
+.easyButton:hover , .mediumButton:hover , .hardButton:hover , .masterButton:hover {
+	-fx-background-color: rgb(60, 59, 59);
+	-fx-border-color: null;
+}
+
+.selectedButton {
+	-fx-border-insets: 0 0 -20px 0;
+	-fx-border-style: hidden hidden solid hidden;
+	-fx-border-color: rgb(60, 59, 59);
+	-fx-border-width: 10;
+}
+
 
 

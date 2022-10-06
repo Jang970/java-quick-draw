@@ -26,7 +26,8 @@ public class App extends Application {
     GAME,
     USER,
     CATEGORYHISTORY,
-    BADGES
+    BADGES,
+    DIFFICULTY
   }
 
   private static ViewManager<View> viewManager;
@@ -198,6 +199,7 @@ public class App extends Application {
       viewManager.addView(View.USER, loadFxml("user-screen"));
       viewManager.addView(View.CATEGORYHISTORY, loadFxml("categoryhistory-screen"));
       viewManager.addView(View.BADGES, loadFxml("badges-screen"));
+      viewManager.addView(View.DIFFICULTY, loadFxml("difficulty-screen"));
 
     } catch (IOException e1) {
       App.expect("All of the previously listed files should exists", e1);

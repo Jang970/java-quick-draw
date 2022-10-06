@@ -52,7 +52,7 @@ public class UserScreenController {
   /** Switches view to category */
   @FXML
   private void onPlayAgain() {
-    App.setView(View.CATEGORY);
+    App.setView(View.DIFFICULTY);
   }
 
   /** Switches view to user profiles */
