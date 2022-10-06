@@ -7,6 +7,7 @@ import nz.ac.auckland.se206.GameLogicManager.GameEndInfo;
 /** Making use of Factory design pattern to handle creation of badges */
 public class BadgeFactory {
 
+  // TODO: account for new badges
   private static Badge createBadge(int type, GameEndInfo gameInfo) {
 
     switch (type) {
