@@ -2,7 +2,7 @@ package nz.ac.auckland.se206.util.badges;
 
 import java.util.ArrayList;
 import java.util.List;
-import nz.ac.auckland.se206.GameLogicManager.GameEndInfo;
+import nz.ac.auckland.se206.gamelogicmanager.GameEndInfo;
 
 /** Making use of Factory design pattern to handle creation of badges */
 public class BadgeFactory {

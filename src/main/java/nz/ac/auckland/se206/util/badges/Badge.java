@@ -1,6 +1,6 @@
 package nz.ac.auckland.se206.util.badges;
 
-import nz.ac.auckland.se206.GameLogicManager.GameEndInfo;
+import nz.ac.auckland.se206.gamelogicmanager.GameEndInfo;
 
 /**
  * This will be the abstract class that is extendeds by each badge we want in our game It will
