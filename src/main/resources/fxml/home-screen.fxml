@@ -9,7 +9,7 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="900.0" stylesheets="@../css/application.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.HomeScreenController">
    <children>
-      <ImageView fx:id="mainMenu" fitHeight="700.0" fitWidth="900.0" layoutX="-3.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true" styleClass="mainMenuOn" />
+      <ImageView fx:id="mainMenu" fitHeight="700.0" fitWidth="900.0" pickOnBounds="true" preserveRatio="true" styleClass="mainMenuOn" />
       <Label fx:id="quickDrawLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="432.0" layoutY="108.0" prefHeight="143.0" prefWidth="440.0" styleClass="headers" text="Quick, Draw!" textAlignment="CENTER" wrapText="true">
          <font>
             <Font size="70.0" />

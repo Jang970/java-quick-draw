@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Pagination?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="900.0" stylesheets="@../css/application.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.BadgesScreenController">
+   <children>
+      <ImageView fx:id="mainMenu" fitHeight="700.0" fitWidth="900.0" pickOnBounds="true" preserveRatio="true" styleClass="badgesScreen" />
+      <Pagination fx:id="badgesPagination" maxPageIndicatorCount="3" pageCount="0" prefHeight="701.0" prefWidth="902.0" />
+      <Pane prefHeight="700.0" prefWidth="900.0" visible="false">
+         <children>
+            <Pane fx:id="badgesPane1" layoutX="1.0" prefHeight="700.0" prefWidth="899.0">
+               <children>
+                  <ImageView fx:id="completeGame" disable="true" fitHeight="161.0" fitWidth="173.0" layoutX="373.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true">
+                     <styleClass>
+                        <String fx:value="completeGame" />
+                        <String fx:value="badges" />
+                     </styleClass>
+                  </ImageView>
+                  <ImageView disable="true" fitHeight="204.0" fitWidth="208.0" layoutX="350.0" layoutY="375.0" pickOnBounds="true" preserveRatio="true">
+                     <styleClass>
+                        <String fx:value="maxDifficulty" />
+                        <String fx:value="badges" />
+                     </styleClass>
+                  </ImageView>
+                  <ImageView disable="true" fitHeight="165.0" fitWidth="170.0" layoutX="375.0" layoutY="199.0" pickOnBounds="true" preserveRatio="true">
+                     <styleClass>
+                        <String fx:value="justInTime" />
+                        <String fx:value="badges" />
+                     </styleClass>
+                  </ImageView>
+                  <Label alignment="CENTER" layoutX="319.0" layoutY="372.0" prefHeight="35.0" prefWidth="297.0" style="-fx-background-color: #F4A261;" styleClass="subHeaders" text="WIN JUST IN TIME">
+                     <font>
+                        <Font size="30.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="154.0" layoutY="571.0" prefHeight="35.0" prefWidth="623.0" style="-fx-background-color: #E9C46A;" styleClass="subHeaders" text="WIN A GAME IN MAX DIFFICULTY FOR ALL SETTINGS">
+                     <font>
+                        <Font size="30.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" layoutX="319.0" layoutY="173.0" prefHeight="35.0" prefWidth="297.0" style="-fx-background-color: #2A9D8F;" styleClass="subHeaders" text="COMPLETE THE GAME!">
+                     <font>
+                        <Font size="30.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Pane>
+            <Pane fx:id="badgesPane0" prefHeight="700.0" prefWidth="900.0">
+               <children>
+                  <ImageView disable="true" fitHeight="151.0" fitWidth="147.0" layoutX="205.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
+                     <styleClass>
+                        <String fx:value="allCategories" />
+                        <String fx:value="badges" />
+                     </styleClass>
+                  </ImageView>
+                  <ImageView disable="true" fitHeight="161.0" fitWidth="173.0" layoutX="557.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true">
+                     <styleClass>
+                        <String fx:value="beatTime" />
+                        <String fx:value="badges" />
+                     </styleClass>
+                  </ImageView>
+                  <ImageView disable="true" fitHeight="204.0" fitWidth="208.0" layoutX="242.0" layoutY="387.0" pickOnBounds="true" preserveRatio="true">
+                     <styleClass>
+                        <String fx:value="consecutiveWins" />
+                        <String fx:value="badges" />
+                     </styleClass>
+                  </ImageView>
+                  <ImageView disable="true" fitHeight="204.0" fitWidth="208.0" layoutX="437.0" layoutY="386.0" pickOnBounds="true" preserveRatio="true">
+                     <styleClass>
+                        <String fx:value="consecutiveWins" />
+                        <String fx:value="badges" />
+                     </styleClass>
+                  </ImageView>
+                  <ImageView disable="true" fitHeight="204.0" fitWidth="208.0" layoutX="639.0" layoutY="386.0" pickOnBounds="true" preserveRatio="true">
+                     <styleClass>
+                        <String fx:value="consecutiveWins" />
+                        <String fx:value="badges" />
+                     </styleClass>
+                  </ImageView>
+                  <ImageView disable="true" fitHeight="165.0" fitWidth="170.0" layoutX="78.0" layoutY="195.0" pickOnBounds="true" preserveRatio="true">
+                     <styleClass>
+                        <String fx:value="underXSecondsWin" />
+                        <String fx:value="badges" />
+                     </styleClass>
+                  </ImageView>
+                  <ImageView disable="true" fitHeight="165.0" fitWidth="170.0" layoutX="259.0" layoutY="195.0" pickOnBounds="true" preserveRatio="true">
+                     <styleClass>
+                        <String fx:value="underXSecondsWin" />
+                        <String fx:value="badges" />
+                     </styleClass>
+                  </ImageView>
+                  <ImageView disable="true" fitHeight="165.0" fitWidth="170.0" layoutX="455.0" layoutY="193.0" pickOnBounds="true" preserveRatio="true">
+                     <styleClass>
+                        <String fx:value="underXSecondsWin" />
+                        <String fx:value="badges" />
+                     </styleClass>
+                  </ImageView>
+                  <ImageView disable="true" fitHeight="165.0" fitWidth="170.0" layoutX="652.0" layoutY="194.0" pickOnBounds="true" preserveRatio="true">
+                     <styleClass>
+                        <String fx:value="underXSecondsWin" />
+                        <String fx:value="badges" />
+                     </styleClass>
+                  </ImageView>
+                  <ImageView disable="true" fitHeight="204.0" fitWidth="208.0" layoutX="54.0" layoutY="386.0" pickOnBounds="true" preserveRatio="true">
+                     <styleClass>
+                        <String fx:value="consecutiveWins" />
+                        <String fx:value="badges" />
+                     </styleClass>
+                  </ImageView>
+                  <Label alignment="CENTER" layoutX="117.0" layoutY="371.0" prefHeight="17.0" prefWidth="669.0" style="-fx-background-color: #F4A261;" styleClass="subHeaders" text="WIN A GAME UNDER 30, 15, 10, AND 5 SECONDS">
+                     <font>
+                        <Font size="30.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" layoutX="129.0" layoutY="572.0" prefHeight="17.0" prefWidth="669.0" style="-fx-background-color: #E9C46A;" styleClass="subHeaders" text="GET 2, 5, 10, AND 20 CONSECUTIVE WINS">
+                     <font>
+                        <Font size="30.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" layoutX="120.0" layoutY="172.0" prefHeight="35.0" prefWidth="309.0" style="-fx-background-color: #2A9D8F;" styleClass="subHeaders" text="PLAY ALL CATEGORIES">
+                     <font>
+                        <Font size="30.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="CENTER" layoutX="477.0" layoutY="173.0" prefHeight="35.0" prefWidth="309.0" style="-fx-background-color: #2A9D8F;" styleClass="subHeaders" text="BEAT YOUR PREVIOUS TIME">
+                     <font>
+                        <Font size="30.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Pane>
+         </children>
+      </Pane>
+      <Button layoutX="43.0" layoutY="644.0" mnemonicParsing="false" onAction="#onSwitchToProfile" text="BACK TO PROFILE" />
+      <Button layoutX="707.0" layoutY="646.0" mnemonicParsing="false" onAction="#onLetsPlay" text="LET'S PLAY!" />
+   </children>
+</Pane>

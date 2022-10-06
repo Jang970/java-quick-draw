@@ -77,7 +77,7 @@
       <Button layoutX="382.0" layoutY="497.0" mnemonicParsing="false" onAction="#onPlayAgain" prefHeight="33.0" prefWidth="145.0" text="LET'S PLAY!" />
       <VBox layoutX="207.0" layoutY="570.0" spacing="20.0">
          <children>
-            <Button mnemonicParsing="false" prefHeight="45.0" prefWidth="108.0" styleClass="userButton" text="BADGES" />
+            <Button fx:id="badgesButton" mnemonicParsing="false" onAction="#onSwitchToBadges" prefHeight="45.0" prefWidth="108.0" styleClass="userButton" text="BADGES" />
             <Button mnemonicParsing="false" onAction="#onSwitchToCategoryHistory" prefHeight="45.0" prefWidth="108.0" styleClass="userButton" text="HISTORY" />
          </children>
       </VBox>

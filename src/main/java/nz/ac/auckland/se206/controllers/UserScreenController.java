@@ -66,4 +66,9 @@ public class UserScreenController {
   private void onSwitchToCategoryHistory() {
     App.setView(View.CATEGORYHISTORY);
   }
+
+  @FXML
+  private void onSwitchToBadges() {
+    App.setView(View.BADGES);
+  }
 }

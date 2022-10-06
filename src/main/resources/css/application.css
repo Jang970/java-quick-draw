@@ -110,6 +110,8 @@
 .pagination .toggle-button  {
 	-fx-color: #2A9D8F;
 	-fx-background-radius: 40px;
+	-fx-min-width: 40;
+	-fx-min-height: 40;
 	
 }
 
@@ -123,8 +125,8 @@
 
 .pagination .pagination-control .left-arrow, .right-arrow{
     -fx-background-color: #2A9D8F, #F4A261;
-	-fx-min-width: 40;
-	-fx-min-height: 40;	
+	-fx-min-width: 30;
+	-fx-min-height: 30;	
 }
 
 .pagination .pagination-control .control-box{
@@ -303,4 +305,44 @@
 	-fx-background-color: #2A9D8F;
 	-fx-border-color: #2A9D8F;
 }
+
+/* Badges Screen */
+
+.badgesScreen {
+	-fx-image: url('../images/badges/badges-screen.png');
+}
+
+.badges:disabled{
+	-fx-opacity: 0.4;
+}
+
+.completeGame {
+	-fx-image: url('../images/badges/completeGame.png');
+}
+
+.allCategories {
+	-fx-image: url('../images/badges/allCategories.png');
+}
+
+.consecutiveWins {
+	-fx-image: url('../images/badges/consecutiveWins.png');
+}
+
+.underXSecondsWin {
+	-fx-image: url('../images/badges/underXSecondsWin.png');
+}
+
+.maxDifficulty {
+	-fx-image: url('../images/badges/maxDifficulty.png');
+}
+
+.beatTime {
+	-fx-image: url('../images/badges/beatTime.png');
+}
+
+.justInTime {
+	-fx-image: url('../images/badges/justInTime.png');
+}
+
+
 
