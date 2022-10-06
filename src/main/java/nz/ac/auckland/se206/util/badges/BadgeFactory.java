@@ -8,26 +8,50 @@ import nz.ac.auckland.se206.GameLogicManager.GameEndInfo;
 public class BadgeFactory {
 
   // TODO: account for new badges
-  private static Badge createBadge(int type, GameEndInfo gameInfo) {
+  private static Badge createBadge(int badgeNumber, GameEndInfo gameInfo) {
 
-    switch (type) {
+    switch (badgeNumber) {
+      case 0:
+        return new BeatTimeBadge(gameInfo);
+
       case 1:
-        return new Under5SecondsBadge(gameInfo);
-
-      case 2:
         return new AllCategoriesBadge(gameInfo);
 
-      case 3:
+      case 2:
         return new MaxDifficultyBadge(gameInfo);
 
-      case 4:
+      case 3:
         return new JustInTimeBadge(gameInfo);
 
-      case 5:
+      case 4:
         return new CompleteGameBadge(gameInfo);
 
+      case 5:
+        return new Under5SecondsBadge(gameInfo);
+
+      case 6:
+        return new Under10SecondsBadge(gameInfo);
+
+      case 7:
+        return new Under15SecondsBadge(gameInfo);
+
+      case 8:
+        return new Under30SecondsBadge(gameInfo);
+
+      case 9:
+        return new TwoConsecutiveWinsBadge(gameInfo);
+
+      case 10:
+        return new FiveConsecutiveWinsBadge(gameInfo);
+
+      case 11:
+        return new TenConsecutiveWinsBadge(gameInfo);
+
+      case 12:
+        return new FifteenConsecutiveWinsBadge(gameInfo);
+
       default:
-        System.out.println("Error! No Badge of that type found");
+        System.out.println("Error! Ran out of badges.");
         return null;
     }
   }
@@ -37,8 +61,8 @@ public class BadgeFactory {
 
     List<Badge> badges = new ArrayList<>();
 
-    int numberOfBadges = 5;
-    for (int i = 1; i <= numberOfBadges; i++) {
+    int numberOfBadges = 13;
+    for (int i = 0; i < numberOfBadges; i++) {
 
       badges.add(createBadge(i, gameInfo));
     }
