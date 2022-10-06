@@ -16,11 +16,10 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
-import nz.ac.auckland.se206.GameLogicManager;
-import nz.ac.auckland.se206.GameLogicManager.WinState;
 import nz.ac.auckland.se206.fxmlutils.CanvasManager;
 import nz.ac.auckland.se206.fxmlutils.CanvasManager.DrawMode;
-import nz.ac.auckland.se206.speech.TextToSpeech;
+import nz.ac.auckland.se206.gamelogicmanager.EndGameState;
+import nz.ac.auckland.se206.gamelogicmanager.GameLogicManager;
 
 public class GameScreenController {
 
@@ -46,7 +45,6 @@ public class GameScreenController {
   private Label[] guessLabels = new Label[10];
 
   private CanvasManager canvasManager;
-  private TextToSpeech textToSpeech;
   private GameLogicManager gameLogicManager;
 
   public void initialize() {
@@ -58,7 +56,6 @@ public class GameScreenController {
             .toArray(Label[]::new);
 
     canvasManager = new CanvasManager(canvas);
-    textToSpeech = new TextToSpeech();
 
     gameLogicManager = App.getGameLogicManager();
 
@@ -81,12 +78,7 @@ public class GameScreenController {
         (List<Classification> predictions) -> onPredictionsChange(predictions));
     gameLogicManager.subscribeToTimeChange((Integer seconds) -> onTimeChange(seconds));
     gameLogicManager.subscribeToGameStart(() -> onGameStart());
-    gameLogicManager.subscribeToGameEnd((gameInfo) -> onGameEnd(gameInfo.getWinState()));
-
-    App.subscribeToAppTermination(
-        (e) -> {
-          textToSpeech.terminate();
-        });
+    gameLogicManager.subscribeToGameEnd((gameInfo) -> onGameEnd(gameInfo.winState));
 
     App.subscribeToViewChange(
         (View newView) -> {
@@ -95,7 +87,8 @@ public class GameScreenController {
             setUserButtonStyle();
             // When the view changes to game, we start a new game and clear the canvas
             gameLogicManager.startGame();
-            whatToDrawLabel.setText("To Draw: " + gameLogicManager.getCurrentCategory());
+            whatToDrawLabel.setText(
+                "To Draw: " + gameLogicManager.getCurrentCategory().categoryString);
             canvasManager.clearCanvas();
             canvasManager.resetIsDrawn();
 
@@ -121,7 +114,7 @@ public class GameScreenController {
             + ";");
   }
 
-  private void onGameEnd(WinState winState) {
+  private void onGameEnd(EndGameState winState) {
     // Run this after the game ends
     Platform.runLater(
         () -> {
@@ -134,12 +127,12 @@ public class GameScreenController {
           gameActionButton.setText("New Game");
           whatToDrawLabel.getStyleClass().add("stateHeaders");
 
-          if (winState == WinState.WIN) {
+          if (winState == EndGameState.WIN) {
             whatToDrawLabel.setText("You got it!");
-            textToSpeech.speakAsync("You got it!");
-          } else if (winState == WinState.LOOSE) {
+            App.getTextToSpeech().speakAsync("You got it!");
+          } else if (winState == EndGameState.LOOSE) {
             whatToDrawLabel.setText("Sorry, you ran out of time!");
-            textToSpeech.speakAsync("Sorry, you ran out of time!");
+            App.getTextToSpeech().speakAsync("Sorry, you ran out of time!");
           } else {
             whatToDrawLabel.setText("Game cancelled.");
           }

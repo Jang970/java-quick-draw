@@ -1,5 +1,6 @@
 package nz.ac.auckland.se206.controllers;
 
+import java.util.List;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -8,10 +9,10 @@ import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
-import nz.ac.auckland.se206.GameLogicManager;
-import nz.ac.auckland.se206.GameLogicManager.FilterTooStrictException;
-import nz.ac.auckland.se206.speech.TextToSpeech;
-import nz.ac.auckland.se206.util.Profile;
+import nz.ac.auckland.se206.gamelogicmanager.Difficulty;
+import nz.ac.auckland.se206.gamelogicmanager.GameLogicManager;
+import nz.ac.auckland.se206.gamelogicmanager.GameMode;
+import nz.ac.auckland.se206.gamelogicmanager.GameProfile;
 
 public class CategoryScreenController {
 
@@ -20,13 +21,11 @@ public class CategoryScreenController {
   @FXML private Label categoryLabel;
   @FXML private Label usernameLabel;
 
-  private TextToSpeech textToSpeech;
   private GameLogicManager gameLogicManager;
 
   public void initialize() {
 
     gameLogicManager = App.getGameLogicManager();
-    textToSpeech = new TextToSpeech();
 
     App.subscribeToViewChange(
         (View view) -> {
@@ -34,41 +33,28 @@ public class CategoryScreenController {
             // When the app laods changes to the catgory screen, we genereate a new category and
             // make display updates
             usernameLabel.setText("Hi, " + App.getProfileManager().getCurrentProfile().getName());
-            generateNewCategoryAndUpdateLabel();
+            initialiseGameAndUpdateLabels();
             updateGameTimeLabel();
           }
-        });
-
-    // When text the app terminates, we turn the text to speech off.
-    App.subscribeToAppTermination(
-        (e) -> {
-          // TODO: Make the TextToSpeech class handle this automatically
-          textToSpeech.terminate();
         });
   }
 
   private void updateGameTimeLabel() {
-    int numSeconds = gameLogicManager.getGameLengthSeconds();
+    int numSeconds = gameLogicManager.getCurrentGameProfile().gameLengthSeconds();
     drawTimeLabel.setText("Draw in " + numSeconds + " seconds");
   }
 
-  private void generateNewCategoryAndUpdateLabel() {
-
-    Profile profile = App.getProfileManager().getCurrentProfile();
+  private void initialiseGameAndUpdateLabels() {
 
     // We need to make sure that we are generating a new category which the player has not already
     // played.
-    String newCategory;
-    try {
-      newCategory = gameLogicManager.selectNewRandomCategory(profile.getCategoryHistory());
-    } catch (FilterTooStrictException e) {
-      // reset the category history if they have played every word
-      profile.resetCategoryHistory();
-      newCategory = gameLogicManager.selectNewRandomCategory();
-    }
 
-    categoryLabel.setText(newCategory);
-    textToSpeech.speakAsync("Draw " + newCategory);
+    gameLogicManager.initializeGame(
+        new GameProfile(30, 3, Difficulty.EASY, GameMode.BASIC, List.of()));
+
+    categoryLabel.setText(gameLogicManager.getCurrentCategory().categoryString);
+    App.getTextToSpeech()
+        .speakAsync("Draw " + gameLogicManager.getCurrentCategory().categoryString);
   }
 
   @FXML
