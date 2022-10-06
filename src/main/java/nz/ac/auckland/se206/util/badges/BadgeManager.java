@@ -9,6 +9,7 @@ public class BadgeManager {
 
   List<Badge> badges = new ArrayList<>();
 
+  // instantiation of all badges through creation of BadgeManager instance
   public BadgeManager(GameEndInfo gameInfo) {
 
     this.badges = BadgeFactory.createListOfBadges(gameInfo);
@@ -20,7 +21,7 @@ public class BadgeManager {
    *
    * @return list of badges earned
    */
-  public List<Badge> allBadgesEarned() {
+  public List<Badge> getAllBadgesEarned() {
 
     List<Badge> badgesEarned = new ArrayList<>();
 
