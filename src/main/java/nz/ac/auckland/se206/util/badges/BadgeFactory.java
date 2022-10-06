@@ -11,7 +11,7 @@ public class BadgeFactory {
 
     switch (type) {
       case 1:
-        return new TimeBadge(gameInfo);
+        return new Under5SecondsBadge(gameInfo);
 
       case 2:
         return new AllCategoriesBadge(gameInfo);
