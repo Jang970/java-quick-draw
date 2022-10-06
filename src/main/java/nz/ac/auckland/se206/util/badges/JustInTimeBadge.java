@@ -9,7 +9,6 @@ public class JustInTimeBadge extends Badge {
     super(gameInfo);
     this.name = "justInTime";
     this.description = "Won a game with two seconds left on the timer";
-    this.id = 2;
   }
 
   @Override

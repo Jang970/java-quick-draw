@@ -8,7 +8,6 @@ public class AllCategoriesBadge extends Badge {
     super(gameInfo);
     this.name = "allCategories";
     this.description = "Played all categories of all difficulties";
-    this.id = 3;
   }
 
   @Override

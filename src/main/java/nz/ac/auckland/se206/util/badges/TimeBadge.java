@@ -12,7 +12,6 @@ public class TimeBadge extends Badge {
     super(gameInfo);
     this.name = "Under x Seconds";
     this.description = "Won a game in under x seconds";
-    this.id = 1;
     this.timeTaken = gameInfo.getTimeTaken();
     this.highestTier = updateBadgeInfo();
   }

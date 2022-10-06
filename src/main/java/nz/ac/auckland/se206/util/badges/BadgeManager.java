@@ -15,44 +15,6 @@ public class BadgeManager {
   }
 
   /**
-   * This method allows you to get the name of a specific badge
-   *
-   * @param badgeId ID of the badge you want
-   * @return name of badge
-   */
-  public String getBadgeName(int badgeId) {
-
-    for (Badge badge : badges) {
-
-      if (badge.getId() == badgeId) {
-
-        return badge.getName();
-      }
-    }
-
-    return null;
-  }
-
-  /**
-   * This method allows you to get the description of a badge
-   *
-   * @param badgeId ID of the badge
-   * @return description of badge
-   */
-  public String getBadgeDesc(int badgeId) {
-
-    for (Badge badge : badges) {
-
-      if (badge.getId() == badgeId) {
-
-        return badge.getDescription();
-      }
-    }
-
-    return null;
-  }
-
-  /**
    * This method will return a list of all badges that have been earned. Will give null if no badges
    * have been earned
    *
