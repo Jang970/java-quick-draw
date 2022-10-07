@@ -14,23 +14,29 @@ public class Difficulties {
    * <p>then we will have two methods, one to get the requirement and one to get the label.
    */
   public enum Accuracy {
-    EASY(3),
-    MEDIUM(2),
-    HARD(1);
+    EASY("easyAccuracy", 3),
+    MEDIUM("mediumAccuracy", 2),
+    HARD("hardAccuracy", 1);
 
-    // have a hashmap to store the values associate to each difficulty level
+    // have a hashmaps, one to store the requirement at each level and another to store the label at
+    // each level
     private static final HashMap<Accuracy, Integer> difficultyLevels = new HashMap<>();
+    private static final HashMap<Accuracy, String> difficultyLabels = new HashMap<>();
 
     private final int topNumGuesses;
+    private final String label;
 
-    // store values into hashmap
+    // store  relevant values into hashmap
     static {
       for (Accuracy difficulty : values()) {
         difficultyLevels.put(difficulty, difficulty.getTopNumGuesses());
+        difficultyLabels.put(difficulty, difficulty.getLabel());
       }
     }
 
-    private Accuracy(int topNumGuesses) {
+    // essentially creates all the different enum types
+    private Accuracy(String label, int topNumGuesses) {
+      this.label = label;
       this.topNumGuesses = topNumGuesses;
     }
 
@@ -38,10 +44,30 @@ public class Difficulties {
       return this.topNumGuesses;
     }
 
-    // basically only have to call this method with which level we want to set our accuracy instance
-    // field in DifficultySettings to
+    private String getLabel() {
+      return this.label;
+    }
+
+    /**
+     * This method can be called when you want the requirement at a given difficulty level e.g if
+     * parameter is Accuracy.EASY, it will return 3
+     *
+     * @param difficulty enum of type accuracy that indicates the level e.g Accuracy.EASY
+     * @return requirement associated to that difficulty level
+     */
     public int getAccuracyRequired(Accuracy difficulty) {
       return difficultyLevels.get(difficulty);
+    }
+
+    /**
+     * This method can be used when you want to get the label of the difficulty e.g if parameter is
+     * Accuracy.MEDIUM, you will get mediumAccuracy
+     *
+     * @param difficulty enum of type accuracy that indicates the level e.g Accuracy.EASY
+     * @return label of current difficulty level
+     */
+    public String getDifficultyLabel(Accuracy difficulty) {
+      return difficultyLabels.get(difficulty);
     }
   }
 
