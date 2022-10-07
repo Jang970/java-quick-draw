@@ -105,8 +105,7 @@ public class DifficultyScreenController {
   private void onGoBack() {
     switch (currentType) {
       case ACCURACY:
-        // TODO: CHANGE TO GAME MODE ONCE IMPLEMENTED
-        App.setView(View.USER);
+        App.setView(View.GAMEMODES);
         break;
 
       case WORDS:

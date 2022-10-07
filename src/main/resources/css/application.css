@@ -393,5 +393,60 @@
 	-fx-border-width: 10;
 }
 
+/* Game modes Screen */
+.gameModesScreen {
+	-fx-image: url('../images/game-modes/gamemodes-screen.png');
+	-fx-background-color: null;
+	-fx-background-repeat: no-repeat;
+	-fx-border-color: null;
+	-fx-text-fill: black;
+}
+
+.classic {
+	-fx-background-image: url('../images/game-modes/classic.png');
+	-fx-background-color: null;
+	-fx-background-repeat: no-repeat;
+	-fx-border-color: null;
+	-fx-text-fill: black;
+	-fx-font-size: 40px;
+	-fx-background-position: center top;
+}
+
+.zen {
+	-fx-background-image: url('../images/game-modes/zen.png');
+	-fx-background-color: null;
+	-fx-background-repeat: no-repeat;
+	-fx-border-color: null;
+	-fx-text-fill: black;
+	-fx-font-size: 40px;
+}
+
+.hiddenWord {
+	-fx-background-image: url('../images/game-modes/hiddenWord.png');
+	-fx-background-color: null;
+	-fx-background-repeat: no-repeat;
+	-fx-border-color: null;
+	-fx-text-fill: black;
+	-fx-font-size: 40px;
+	-fx-background-size: 140;
+	-fx-background-position: center top;
+}
+
+.crane {
+	-fx-image: url('../images/game-modes/crane.png');
+}
+
+.tooltip{
+	 -fx-background: rgba(30,30,30);
+    -fx-text-fill: white;
+    -fx-background-color: rgba(30,30,30,0.8);
+    -fx-background-radius: 6px;
+    -fx-background-insets: 0;
+    -fx-padding: 0.667em 0.75em 0.667em 0.75em; /* 10px */
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.5) , 10, 0.0 , 0 , 3 );
+    -fx-font-size: 0.85em;
+}
+
+
 
 
