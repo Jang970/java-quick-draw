@@ -1,8 +1,12 @@
 package nz.ac.auckland.se206.util;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import nz.ac.auckland.se206.gamelogicmanager.EndGameState;
+import nz.ac.auckland.se206.gamelogicmanager.GameEndInfo;
 
 /**
  * This class will be used to create objects for each new profile containing all information related
@@ -17,9 +21,11 @@ public class Profile {
 
   private int gamesWon = 0;
   private int gamesLost = 0;
-  private int fastestWinTime = -1;
-  private String categoryOfFastestWin;
-  private Set<String> categoryHistory = new HashSet<String>();
+
+  private GameEndInfo fastestGame;
+
+  private List<GameEndInfo> previousGames = new ArrayList<GameEndInfo>();
+
   private int numberOfHistoryResets = 0;
   private DifficultySettings difficultySettings = new DifficultySettings();
 
@@ -63,39 +69,26 @@ public class Profile {
   }
 
   /**
-   * This method will update the fastestWin and bestCategory variables Can be called when the player
-   * wins at a faster time than the current time stored in fastestWin
-   *
-   * @param newPossibleFastestWinTime the time to update fastestWin to
-   * @param category the word that the profile had to draw
-   * @return true or false depending if update was successful or not
-   */
-  public Boolean updateFastestGameIfBeatsCurrent(int newPossibleFastestWinTime, String category) {
-
-    // This should be fairly self explanatory
-    if (newPossibleFastestWinTime < fastestWinTime || fastestWinTime == -1) {
-      fastestWinTime = newPossibleFastestWinTime;
-      categoryOfFastestWin = category;
-
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  /**
    * This method will be used to add the current category/word to draw to list of previous words Can
    * be called everytime a new category appears
    *
-   * @param category current category/word that profile must draw
+   * @param gameInfo current category/word that profile must draw
    */
-  public void addToCategoryHistory(String category) {
-    categoryHistory.add(category);
+  public void addGameToHistory(GameEndInfo gameInfo) {
+
+    // This should be fairly self explanatory
+    if (gameInfo.winState == EndGameState.WIN
+        && (fastestGame == null || gameInfo.timeTaken < fastestGame.timeTaken)) {
+      fastestGame = gameInfo;
+    }
+
+    previousGames.add(gameInfo);
   }
 
   /** Use this to reset the category history to 0 and increment the number of resets by 1 */
-  public void resetCategoryHistory() {
-    categoryHistory.clear();
+  public void resetStats() {
+    previousGames.clear();
+
     numberOfHistoryResets++;
   }
 
@@ -119,15 +112,13 @@ public class Profile {
    *
    * @return the fastest win time
    */
-  public int getFastestWin() {
-    return fastestWinTime;
-  }
-
-  public String getCategoryOfFastestWin() {
-    return categoryOfFastestWin;
+  public GameEndInfo getFastestGame() {
+    return this.fastestGame;
   }
 
   public Set<String> getCategoryHistory() {
-    return categoryHistory;
+    return previousGames.stream()
+        .map((game) -> game.category.categoryString)
+        .collect(Collectors.toSet());
   }
 }
