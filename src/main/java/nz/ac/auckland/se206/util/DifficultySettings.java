@@ -41,7 +41,7 @@ public class DifficultySettings {
   }
 
   public void changeTimeToDraw(Time newTime) {
-    this.timeToDraw = newTime.getTimeGiven(newTime);
+    this.timeToDraw = newTime.getTimeAllowed(newTime);
   }
 
   public void changeConfidenceLevel(Confidence newConfidence) {
