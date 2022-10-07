@@ -5,6 +5,14 @@ import java.util.HashMap;
 /** This class will house the various enums to be used in DifficultySettings */
 public class Difficulties {
 
+  /**
+   * Each enum will have the following instance variables label: the name and level of the
+   * difficulty in a string format requirement: this will store the requirement of that difficulty
+   * at specified level so for example: Accuracy.MEDIUM requirement will have 2 as it will make it
+   * so the drawing as to be in the top 2 guesses to be considered a win.
+   *
+   * <p>then we will have two methods, one to get the requirement and one to get the label.
+   */
   public enum Accuracy {
     EASY(3),
     MEDIUM(2),

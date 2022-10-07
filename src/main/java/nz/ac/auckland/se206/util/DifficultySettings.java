@@ -1,6 +1,5 @@
 package nz.ac.auckland.se206.util;
 
-import nz.ac.auckland.se206.GameLogicManager.CategoryType;
 import nz.ac.auckland.se206.util.Difficulties.Accuracy;
 import nz.ac.auckland.se206.util.Difficulties.Confidence;
 import nz.ac.auckland.se206.util.Difficulties.Time;
