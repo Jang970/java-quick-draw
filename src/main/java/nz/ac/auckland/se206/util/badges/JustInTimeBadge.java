@@ -1,5 +1,6 @@
 package nz.ac.auckland.se206.util.badges;
 
+import nz.ac.auckland.se206.gamelogicmanager.EndGameState;
 import nz.ac.auckland.se206.gamelogicmanager.GameEndInfo;
 
 public class JustInTimeBadge extends Badge {
@@ -12,7 +13,6 @@ public class JustInTimeBadge extends Badge {
 
   @Override
   public Boolean isEarned() {
-    // TODO: implement logic
-    return null;
+    return (gameInfo.winState == EndGameState.WIN) && (gameInfo.secondsRemaining == 2);
   }
 }

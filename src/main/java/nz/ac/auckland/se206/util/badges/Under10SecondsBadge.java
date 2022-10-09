@@ -1,5 +1,6 @@
 package nz.ac.auckland.se206.util.badges;
 
+import nz.ac.auckland.se206.gamelogicmanager.EndGameState;
 import nz.ac.auckland.se206.gamelogicmanager.GameEndInfo;
 
 public class Under10SecondsBadge extends Badge {
@@ -14,7 +15,6 @@ public class Under10SecondsBadge extends Badge {
 
   @Override
   public Boolean isEarned() {
-    // TODO Implement Logic
-    return null;
+    return (gameInfo.winState == EndGameState.WIN) && (gameInfo.timeTaken < 10);
   }
 }
