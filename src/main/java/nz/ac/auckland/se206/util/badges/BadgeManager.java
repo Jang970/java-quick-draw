@@ -8,11 +8,17 @@ import nz.ac.auckland.se206.gamelogicmanager.GameEndInfo;
 public class BadgeManager {
 
   List<Badge> badges = new ArrayList<>();
+  // this list of booleans will store the result of each badge's isEarned
+  // will be useful when we want to save / load a profile's earned badges as we do not have to
+  // figure out how to save enums using gson
+  // we can just instead save a list of booleans and load badges earned from that
+  List<Boolean> badgesStatus = new ArrayList<>();
 
   // instantiation of all badges through creation of BadgeManager instance
   public BadgeManager(GameEndInfo gameInfo) {
 
     this.badges = BadgeFactory.createListOfBadges(gameInfo);
+    initialiseBadgesStatusField();
   }
 
   /**
@@ -26,11 +32,10 @@ public class BadgeManager {
     List<Badge> badgesEarned = new ArrayList<>();
 
     // loop through all badges and append to our new list if their requirement has been met
-    for (Badge badge : badges) {
+    for (int i = 0; i < badges.size(); i++) {
 
-      if (badge.isEarned()) {
-
-        badgesEarned.add(badge);
+      if (badgesStatus.get(i)) {
+        badgesEarned.add(badges.get(i));
       }
     }
 
@@ -39,5 +44,35 @@ public class BadgeManager {
     }
 
     return badgesEarned;
+  }
+
+  public void saveBadgesStatus() {
+
+    for (int i = 0; i < badges.size(); i++) {
+
+      if (badges.get(i).isEarned()) {
+        badgesStatus.set(i, true);
+      }
+    }
+  }
+
+  public void loadBadgesStatus() {
+
+    List<Badge> badgesEarned = new ArrayList<>();
+
+    for (int i = 0; i < badges.size(); i++) {
+
+      if (badgesStatus.get(i)) {
+        badgesEarned.add(badges.get(i));
+      }
+    }
+  }
+
+  private void initialiseBadgesStatusField() {
+
+    for (int i = 0; i < badges.size(); i++) {
+
+      badgesStatus.add(false);
+    }
   }
 }
