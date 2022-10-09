@@ -26,6 +26,12 @@ public class Profile {
 
   private List<GameEndInfo> previousGames = new ArrayList<GameEndInfo>();
 
+  // this list of booleans will store the result of each badge's isEarned
+  // will be useful when we want to save / load a profile's earned badges as we do not have to
+  // figure out how to save enums using gson
+  // we can just instead save a list of booleans and load badges earned from that
+  private List<Boolean> badgesStatus = new ArrayList<>();
+
   private int numberOfHistoryResets = 0;
 
   public Profile(String name, String colour) {
@@ -115,5 +121,15 @@ public class Profile {
     return previousGames.stream()
         .map((game) -> game.category.categoryString)
         .collect(Collectors.toSet());
+  }
+
+  // the getter and setter for badgesStatus have the purpose of being used to save and load badges
+  // earned for a profile
+  public void setBadgesStatus(List<Boolean> badgesStatus) {
+    this.badgesStatus = badgesStatus;
+  }
+
+  public List<Boolean> getBadgesStatus() {
+    return this.badgesStatus;
   }
 }
