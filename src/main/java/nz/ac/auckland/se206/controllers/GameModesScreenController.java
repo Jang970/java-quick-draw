@@ -21,13 +21,13 @@ public class GameModesScreenController {
     translateOne.setFromX(0);
     translateOne.setFromY(0);
     translateOne.setByX(moveX);
-    translateOne.setDuration(Duration.seconds(2));
+    translateOne.setDuration(Duration.seconds(1));
 
     TranslateTransition translateTwo = new TranslateTransition();
     translateTwo.setFromX(moveX);
     translateTwo.setFromY(0);
     translateTwo.setByY(30);
-    translateTwo.setDuration(Duration.seconds(2));
+    translateTwo.setDuration(Duration.seconds(0.5));
     translateTwo.play();
 
     sequence = new SequentialTransition(craneImageView, translateOne, translateTwo);
@@ -41,7 +41,7 @@ public class GameModesScreenController {
     translate.setFromY(0);
     translate.setByX(0);
     translate.setByY(0);
-    translate.setDuration(Duration.seconds(1));
+    translate.setDuration(Duration.seconds(0.5));
     translate.play();
   }
 
@@ -75,7 +75,7 @@ public class GameModesScreenController {
     translate.setFromX(0);
     translate.setFromY(0);
     translate.setByY(30);
-    translate.setDuration(Duration.seconds(2));
+    translate.setDuration(Duration.seconds(0.5));
     translate.play();
 
     translate.setOnFinished(
@@ -94,12 +94,12 @@ public class GameModesScreenController {
   @FXML
   private void onHoverClassic() {
     descriptionLabel.setText(
-        "CLASSIC MODE IS THE ORIGINAL GAME. THERE IS TIMER AND YOU GET GIVEN THE WORD TO DRAW.");
+        "CLASSIC MODE IS THE ORIGINAL GAME. THERE IS A TIMER AND YOU GET GIVEN THE WORD TO DRAW.");
   }
 
   @FXML
   private void onHoverZen() {
-    descriptionLabel.setText("ZEN MODE HAS NO TIMER AND YOU CAN DRAW ENDLESSLY");
+    descriptionLabel.setText("ZEN MODE HAS NO TIMER AND YOU CAN DRAW FOR AS LONG AS YOU LIKE");
   }
 
   @FXML

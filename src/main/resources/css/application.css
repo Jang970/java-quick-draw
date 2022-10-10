@@ -1,9 +1,8 @@
 /* Stylesheet for all fxml pages */
-/* Note: all images are drawn by me */
 
-/* All the fonts used (Google Fonts) */
 @font-face {
-	src: url('../fonts/Magic-Retro/Magic-Retro.ttf');
+	-fx-font-family: 'Normandy', italic;
+	src: url('../fonts/normandy_beach/normandybeach.ttf');
 }
 
 @font-face {
@@ -18,7 +17,7 @@
 }
 
 .headers{
-	-fx-font-family: 'Magic Retro';
+	-fx-font-family: 'Normandy Beach';
 }
 
 
@@ -163,7 +162,7 @@
  }
  
  .dialog-pane .header-panel{
-	-fx-font-family: 'Magic Retro';
+	-fx-font-family: 'Normandy Beach';
 	-fx-font-size: 20px;
 	-fx-background-color:   #E9C46A;
  }
@@ -190,7 +189,7 @@
 
 .stateHeaders{
 	-fx-background-color: #264653;
-	-fx-font-family: 'Magic Retro';
+	-fx-font-family: 'Normandy Beach';
 	-fx-text-fill: #E9C46A;
 }
 
@@ -274,7 +273,7 @@
 }
 
 .list-view .scroll-bar .thumb{
-	-fx-background-color: #E76F51;
+	-fx-background-color: #e9c46a;
 }
 
 .list-view .scroll-bar .increment-button:hover, .decrement-button:hover{
@@ -349,48 +348,53 @@
 	-fx-image: url('../images/difficulty-screen/difficulty-screen.png');
 }
 
-.easyButton {
-	-fx-background-image: url('../images/difficulty-screen/easy.png');
-	-fx-background-color: null;
-	-fx-background-repeat: no-repeat;
-	-fx-border-color: null;
-	-fx-text-fill: black;
+.accuracyImage {
+	-fx-image: url('../images/difficulty-screen/accuracy.png');
 }
 
-.mediumButton {
-	-fx-background-image: url('../images/difficulty-screen/medium.png');
-	-fx-background-color: null;
-	-fx-background-repeat: no-repeat;
-	-fx-border-color: null;
-	-fx-text-fill: black;
+.wordsImage {
+	-fx-image: url('../images/difficulty-screen/words.png');
 }
 
-.hardButton {
-	-fx-background-image: url('../images/difficulty-screen/hard.png');
-	-fx-background-color: null;
-	-fx-background-repeat: no-repeat;
-	-fx-border-color: null;
-	-fx-text-fill: black;
+.timeImage {
+	-fx-image: url('../images/difficulty-screen/time.png');
 }
 
-.masterButton {
-	-fx-background-image: url('../images/difficulty-screen/master.png');
-	-fx-background-color: null;
-	-fx-background-repeat: no-repeat;
-	-fx-border-color: null;
-	-fx-text-fill: black;
+.confidenceImage {
+	-fx-image: url('../images/difficulty-screen/confidence.png');
 }
 
-.easyButton:hover , .mediumButton:hover , .hardButton:hover , .masterButton:hover {
-	-fx-background-color: rgb(60, 59, 59);
-	-fx-border-color: null;
+.choice-box {
+	-fx-background-color:#ebe9dd;
+	-fx-font-family: 'VT323', monospace;
+	-fx-font-size: 30px;
+	-fx-border-radius: 30px;
 }
 
-.selectedButton {
-	-fx-border-insets: 0 0 -20px 0;
-	-fx-border-style: hidden hidden solid hidden;
-	-fx-border-color: rgb(60, 59, 59);
-	-fx-border-width: 10;
+.choice-box:hover {
+	-fx-background-color:#e9c46a;
+	-fx-background-radius: 30px;
+	-fx-border-radius: 30px;
+}
+
+.choice-box .label {
+	-fx-text-fill: #2A9D8F;
+}
+
+.choice-box .context-menu {
+	-fx-background-color:#ebe9dd;
+	-fx-background-radius: 30px;
+	-fx-border-radius: 30px;
+}
+
+.choice-box .menu-item {
+	-fx-background-color:#ebe9dd;
+	-fx-background-radius: 30px;
+}
+
+.choice-box .menu-item:hover {
+	-fx-background-color: #F4A261;
+	-fx-background-radius: 30px;
 }
 
 /* Game modes Screen */
@@ -436,15 +440,10 @@
 	-fx-image: url('../images/game-modes/crane.png');
 }
 
-.tooltip{
-	 -fx-background: rgba(30,30,30);
-    -fx-text-fill: white;
-    -fx-background-color: rgba(30,30,30,0.8);
-    -fx-background-radius: 6px;
-    -fx-background-insets: 0;
-    -fx-padding: 0.667em 0.75em 0.667em 0.75em; /* 10px */
-    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.5) , 10, 0.0 , 0 , 3 );
-    -fx-font-size: 0.85em;
+.zen:hover, .hiddenWord:hover, .classic:hover {
+	-fx-background-color: null;
+	-fx-text-fill: #E76F51;
+	-fx-border-color: none;
 }
 
 

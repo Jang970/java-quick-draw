@@ -14,12 +14,12 @@
       <Button alignment="BOTTOM_CENTER" contentDisplay="BOTTOM" layoutX="502.0" layoutY="318.0" mnemonicParsing="false" onAction="#onSelectHiddenWord" onMouseEntered="#onHoverHiddenWord" onMouseExited="#onMouseExited" prefHeight="244.0" prefWidth="235.0" styleClass="hiddenWord" text="HIDDEN WORD" textAlignment="CENTER" />
       <Button alignment="BOTTOM_LEFT" layoutX="179.0" layoutY="325.0" mnemonicParsing="false" onAction="#onSelectClassic" onMouseEntered="#onHoverClassic" onMouseExited="#onMouseExited" prefHeight="236.0" prefWidth="170.0" styleClass="classic" text="CLASSIC" />
       <Button alignment="BOTTOM_CENTER" contentDisplay="TOP" layoutX="378.0" layoutY="324.0" mnemonicParsing="false" onAction="#onSelectZen" onMouseEntered="#onHoverZen" onMouseExited="#onMouseExited" prefHeight="236.0" prefWidth="122.0" styleClass="zen" text="ZEN" textAlignment="CENTER" />
-      <ImageView fx:id="craneImageView" fitHeight="160.0" fitWidth="102.0" layoutX="394.0" layoutY="147.0" pickOnBounds="true" preserveRatio="true" styleClass="crane" />
       <Label fx:id="descriptionLabel" alignment="CENTER" layoutX="64.0" layoutY="42.0" prefHeight="82.0" prefWidth="776.0" styleClass="subHeaders" text="CLICK ON THE GAME MODE TO PLAY.&#10;HOVER OVER EACH GAME MODE TO SEE DESCRIPTION." textAlignment="CENTER" wrapText="true">
          <font>
             <Font size="30.0" />
          </font>
       </Label>
-      <Rectangle arcHeight="90.0" arcWidth="90.0" disable="true" fill="#2a9c8b38" height="413.72" layoutX="90.0" layoutY="143.0" stroke="TRANSPARENT" strokeType="INSIDE" width="719.22" />
+      <ImageView fx:id="craneImageView" fitHeight="160.0" fitWidth="102.0" layoutX="394.0" layoutY="147.0" pickOnBounds="true" preserveRatio="true" styleClass="crane" />
+      <Rectangle arcHeight="90.0" arcWidth="90.0" disable="true" fill="#2a9c8b30" height="413.72" layoutX="90.0" layoutY="143.0" stroke="TRANSPARENT" strokeType="INSIDE" width="719.22" />
    </children>
 </Pane>

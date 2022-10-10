@@ -62,7 +62,7 @@ public class BadgesScreenController {
 
   @FXML
   private void onLetsPlay() {
-    App.setView(View.CATEGORY);
+    App.setView(View.GAMEMODES);
   }
 
   @FXML

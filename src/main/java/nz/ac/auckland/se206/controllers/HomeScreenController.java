@@ -1,10 +1,17 @@
 package nz.ac.auckland.se206.controllers;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.ImageView;
+import javafx.scene.media.AudioClip;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
 
@@ -16,8 +23,27 @@ public class HomeScreenController {
   @FXML private Label editionLabel;
   @FXML private Label creditLabel;
 
+  private MediaPlayer player;
+
+  public void initialize() {
+    Media sound =
+        new Media(
+            getClass().getClassLoader().getResource("sounds/gameOpener.mp3").toExternalForm());
+    player = new MediaPlayer(sound);
+    player.setCycleCount(AudioClip.INDEFINITE);
+    player.play();
+  }
+
   @FXML
   private void onStartNewGame() {
+
+    Timeline timeline =
+        new Timeline(new KeyFrame(Duration.seconds(3), new KeyValue(player.volumeProperty(), 0)));
+    timeline.play();
+    timeline.setOnFinished(
+        e -> {
+          player.stop();
+        });
 
     if (App.getProfileManager().getProfiles().isEmpty()) {
       App.setView(View.NEWUSER);

@@ -14,6 +14,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
 import nz.ac.auckland.se206.GameLogicManager;
@@ -48,6 +50,8 @@ public class GameScreenController {
   private CanvasManager canvasManager;
   private TextToSpeech textToSpeech;
   private GameLogicManager gameLogicManager;
+  private Media sound;
+  private MediaPlayer mediaPlayer;
 
   public void initialize() {
 
@@ -136,10 +140,21 @@ public class GameScreenController {
 
           if (winState == WinState.WIN) {
             whatToDrawLabel.setText("You got it!");
-            textToSpeech.speakAsync("You got it!");
+            sound =
+                new Media(
+                    getClass().getClassLoader().getResource("sounds/gameWin.mp3").toExternalForm());
+            mediaPlayer = new MediaPlayer(sound);
+            mediaPlayer.play();
           } else if (winState == WinState.LOOSE) {
             whatToDrawLabel.setText("Sorry, you ran out of time!");
-            textToSpeech.speakAsync("Sorry, you ran out of time!");
+            sound =
+                new Media(
+                    getClass()
+                        .getClassLoader()
+                        .getResource("sounds/gameLost.mp3")
+                        .toExternalForm());
+            mediaPlayer = new MediaPlayer(sound);
+            mediaPlayer.play();
           } else {
             whatToDrawLabel.setText("Game cancelled");
           }
@@ -220,7 +235,7 @@ public class GameScreenController {
     if (gameLogicManager.isPlaying()) {
       gameLogicManager.cancelGame();
     } else {
-      App.setView(View.CATEGORY);
+      App.setView(View.GAMEMODES);
     }
   }
 

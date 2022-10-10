@@ -31,10 +31,6 @@ public class CategoryHistoryScreenController {
                 new ArrayList<String>(
                     App.getProfileManager().getCurrentProfile().getCategoryHistory());
 
-            // TODO: Find a better way to do this resizing
-            // dynamically resize list hbox height (doesn't show more cells than necessary)
-            historyHbox.setPrefHeight((categoryHistory.size() + 1) * 15 + 2);
-
             bindScrollBars();
 
             setCategoryHistoryLists();
@@ -67,7 +63,7 @@ public class CategoryHistoryScreenController {
 
   @FXML
   private void onPlayAgain() {
-    App.setView(View.CATEGORY);
+    App.setView(View.GAMEMODES);
   }
 
   @FXML

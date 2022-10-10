@@ -1,91 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="900.0" stylesheets="@../css/application.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.DifficultyScreenController">
    <children>
       <ImageView fx:id="mainMenu" fitHeight="700.0" fitWidth="900.0" pickOnBounds="true" preserveRatio="true" styleClass="difficultyScreen" />
-      <StackPane prefHeight="700.0" prefWidth="900.0">
-         <children>
-            <Pane fx:id="accuracyPane" prefHeight="700.0" prefWidth="900.0">
-               <children>
-                  <Label fx:id="difficultyLabel3" alignment="CENTER" layoutX="111.0" layoutY="52.0" prefHeight="74.0" prefWidth="685.0" styleClass="headers" text="Accuracy">
-                     <font>
-                        <Font size="70.0" />
-                     </font>
-                  </Label>
-                  <Button alignment="CENTER" contentDisplay="CENTER" layoutX="247.0" layoutY="237.0" mnemonicParsing="false" onAction="#onMediumAccuracy" prefHeight="398.0" prefWidth="174.0" style="-fx-font-size: 30px;" styleClass="mediumButton" text="TOP 2&#10;GUESSES" textAlignment="CENTER" wrapText="true" />
-                  <Button alignment="CENTER" contentDisplay="CENTER" disable="true" layoutX="694.0" layoutY="303.0" mnemonicParsing="false" prefHeight="335.0" prefWidth="174.0" style="-fx-font-size: 30px;" styleClass="masterButton" textAlignment="CENTER" wrapText="true" />
-                  <Button alignment="CENTER" contentDisplay="CENTER" layoutX="448.0" layoutY="355.0" mnemonicParsing="false" onAction="#onHardAccuracy" prefHeight="285.0" prefWidth="219.0" style="-fx-font-size: 30px;" styleClass="hardButton" text="TOP 1 GUESS" textAlignment="CENTER" wrapText="true" />
-                  <Button fx:id="easyAccuracy" alignment="CENTER" contentDisplay="CENTER" layoutX="38.0" layoutY="300.0" mnemonicParsing="false" onAction="#onEasyAccuracy" prefHeight="334.0" prefWidth="185.0" style="-fx-font-size: 30px;" styleClass="easyButton" text="TOP 3&#10;GUESSES" textAlignment="CENTER" wrapText="true" />
-                  <Label fx:id="descriptionLabel3" layoutX="191.0" layoutY="163.0" styleClass="subHeaders" text="YOU WIN THE GAME IF THE WORD TO DRAW IS IN:">
-                     <font>
-                        <Font size="30.0" />
-                     </font>
-                  </Label>
-               </children>
-            </Pane>
-            <Pane fx:id="wordsPane" prefHeight="700.0" prefWidth="900.0" visible="false">
-               <children>
-                  <Label fx:id="difficultyLabel312" alignment="CENTER" layoutX="111.0" layoutY="52.0" prefHeight="74.0" prefWidth="685.0" styleClass="headers" text="Words">
-                     <font>
-                        <Font size="70.0" />
-                     </font>
-                  </Label>
-                  <Button alignment="CENTER" contentDisplay="CENTER" layoutX="247.0" layoutY="237.0" mnemonicParsing="false" onAction="#onMediumWords" prefHeight="398.0" prefWidth="174.0" style="-fx-font-size: 30px;" styleClass="mediumButton" text="EASY&#10;OR&#10;MEDIUM" textAlignment="CENTER" />
-                  <Button alignment="CENTER" contentDisplay="CENTER" layoutX="694.0" layoutY="303.0" mnemonicParsing="false" onAction="#onMasterWords" prefHeight="335.0" prefWidth="174.0" style="-fx-font-size: 30px;" styleClass="masterButton" text="HARD" textAlignment="CENTER" wrapText="true" />
-                  <Button alignment="CENTER" contentDisplay="CENTER" layoutX="448.0" layoutY="355.0" mnemonicParsing="false" onAction="#onHardWords" prefHeight="285.0" prefWidth="219.0" style="-fx-font-size: 30px;" styleClass="hardButton" text="EASY,&#10;MEDIUM,&#10;OR HARD" textAlignment="CENTER" wrapText="true" />
-                  <Button alignment="CENTER" contentDisplay="CENTER" layoutX="38.0" layoutY="300.0" mnemonicParsing="false" onAction="#onEasyWords" prefHeight="334.0" prefWidth="185.0" style="-fx-font-size: 30px;" styleClass="easyButton" text="EASY" textAlignment="CENTER" wrapText="true" />
-                  <Label fx:id="descriptionLabel312" layoutX="191.0" layoutY="163.0" styleClass="subHeaders" text="THE GAME ONLY SELECTS CATEGORIES CLASSIFIED AS:">
-                     <font>
-                        <Font size="30.0" />
-                     </font>
-                  </Label>
-               </children>
-            </Pane>
-            <Pane fx:id="timePane" prefHeight="700.0" prefWidth="900.0" visible="false">
-               <children>
-                  <Label fx:id="difficultyLabel31" alignment="CENTER" layoutX="111.0" layoutY="52.0" prefHeight="74.0" prefWidth="685.0" styleClass="headers" text="Time">
-                     <font>
-                        <Font size="70.0" />
-                     </font>
-                  </Label>
-                  <Button alignment="CENTER" contentDisplay="CENTER" layoutX="247.0" layoutY="237.0" mnemonicParsing="false" onAction="#onMediumTime" prefHeight="398.0" prefWidth="174.0" style="-fx-font-size: 35px;" styleClass="mediumButton" text="45 SECONDS" textAlignment="CENTER" wrapText="true" />
-                  <Button alignment="CENTER" contentDisplay="CENTER" layoutX="694.0" layoutY="303.0" mnemonicParsing="false" onAction="#onMasterTime" prefHeight="335.0" prefWidth="174.0" style="-fx-font-size: 35px;" styleClass="masterButton" text="15 SECONDS" textAlignment="CENTER" wrapText="true" />
-                  <Button alignment="CENTER" contentDisplay="CENTER" layoutX="448.0" layoutY="355.0" mnemonicParsing="false" onAction="#onHardTime" prefHeight="285.0" prefWidth="219.0" style="-fx-font-size: 35px;" styleClass="hardButton" text="30 SECONDS" textAlignment="CENTER" wrapText="true" />
-                  <Button alignment="CENTER" contentDisplay="CENTER" layoutX="38.0" layoutY="300.0" mnemonicParsing="false" onAction="#onEasyTime" prefHeight="334.0" prefWidth="185.0" style="-fx-font-size: 35px;" styleClass="easyButton" text="60 SECONDS" textAlignment="CENTER" wrapText="true" />
-                  <Label fx:id="descriptionLabel31" layoutX="118.0" layoutY="162.0" styleClass="subHeaders" text="THE TIME IN WHICH YOU HAVE TO DRAW PICTURE CORRECTLY IN:">
-                     <font>
-                        <Font size="30.0" />
-                     </font>
-                  </Label>
-               </children>
-            </Pane>
-            <Pane fx:id="confidencePane" prefHeight="700.0" prefWidth="900.0" visible="false">
-               <children>
-                  <Label fx:id="difficultyLabel311" alignment="CENTER" layoutX="111.0" layoutY="52.0" prefHeight="74.0" prefWidth="685.0" styleClass="headers" text="Confidence">
-                     <font>
-                        <Font size="70.0" />
-                     </font>
-                  </Label>
-                  <Button alignment="CENTER" contentDisplay="CENTER" layoutX="247.0" layoutY="237.0" mnemonicParsing="false" onAction="#onMediumConfidence" prefHeight="398.0" prefWidth="174.0" style="-fx-font-size: 35px;" styleClass="mediumButton" text="10%" textAlignment="CENTER" wrapText="true" />
-                  <Button alignment="CENTER" contentDisplay="CENTER" layoutX="694.0" layoutY="303.0" mnemonicParsing="false" onAction="#onMasterConfidence" prefHeight="335.0" prefWidth="174.0" style="-fx-font-size: 35px;" styleClass="masterButton" text="50%" textAlignment="CENTER" wrapText="true" />
-                  <Button alignment="CENTER" contentDisplay="CENTER" layoutX="448.0" layoutY="355.0" mnemonicParsing="false" onAction="#onHardConfidence" prefHeight="285.0" prefWidth="219.0" style="-fx-font-size: 35px;" styleClass="hardButton" text="25%" textAlignment="CENTER" wrapText="true" />
-                  <Button alignment="CENTER" contentDisplay="CENTER" layoutX="38.0" layoutY="300.0" mnemonicParsing="false" onAction="#onEasyConfidence" prefHeight="334.0" prefWidth="185.0" style="-fx-font-size: 35px;" styleClass="easyButton" text="1%" textAlignment="CENTER" wrapText="true" />
-                  <Label fx:id="descriptionLabel311" layoutX="55.0" layoutY="150.0" styleClass="subHeaders" text="THE CONFIDENCE LEVEL OF THE CORRECT PREDICTION SHOULD BE AT LEAST:">
-                     <font>
-                        <Font size="30.0" />
-                     </font>
-                  </Label>
-               </children>
-            </Pane>
-         </children>
-      </StackPane>
-      <Button layoutX="72.0" layoutY="26.0" mnemonicParsing="false" onAction="#onGoBack" text="BACK" />
+      <Button layoutX="51.0" layoutY="19.0" mnemonicParsing="false" onAction="#onGoBack" text="BACK" />
+      <ImageView fitHeight="492.0" fitWidth="350.0" layoutX="5.0" layoutY="148.0" pickOnBounds="true" preserveRatio="true" styleClass="accuracyImage" />
+      <ImageView fitHeight="455.0" fitWidth="213.0" layoutX="222.0" layoutY="184.0" pickOnBounds="true" preserveRatio="true" styleClass="wordsImage" />
+      <ImageView fitHeight="485.0" fitWidth="210.0" layoutX="438.0" layoutY="157.0" pickOnBounds="true" preserveRatio="true" styleClass="timeImage" />
+      <ImageView fitHeight="497.0" fitWidth="263.0" layoutX="656.0" layoutY="140.0" pickOnBounds="true" preserveRatio="true" styleClass="confidenceImage" />
+      <ChoiceBox fx:id="wordsChoiceBox" layoutX="253.0" layoutY="356.0" prefHeight="38.0" prefWidth="150.0" />
+      <ChoiceBox fx:id="accuracyChoiceBox" layoutX="34.0" layoutY="334.0" prefHeight="38.0" prefWidth="150.0" />
+      <ChoiceBox fx:id="timeChoiceBox" layoutX="467.0" layoutY="338.0" prefHeight="38.0" prefWidth="150.0" />
+      <ChoiceBox fx:id="confidenceChoiceBox" layoutX="699.0" layoutY="347.0" prefHeight="38.0" prefWidth="150.0" />
+      <Label layoutX="265.0" layoutY="9.0" styleClass="headers" text="DIFFICULTY">
+         <font>
+            <Font size="70.0" />
+         </font>
+      </Label>
+      <Label alignment="CENTER" layoutX="21.0" layoutY="478.0" prefHeight="148.0" prefWidth="175.0" style="-fx-background-color: #E76F51;" styleClass="subHeaders" text="THE TOP NUMBER OF PREDICTIONS THE WORD NEEDS TO BE IN" textAlignment="CENTER" wrapText="true">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Label>
+      <Label alignment="CENTER" layoutX="135.0" layoutY="79.0" prefHeight="45.0" prefWidth="623.0" styleClass="subHeaders" text="SELECT EACH DIFFICULTY SETTING BY CLICKING ON DROP DOWN ARROW" textAlignment="CENTER" wrapText="true">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Label>
+      <Label alignment="CENTER" layoutX="231.0" layoutY="499.0" prefHeight="124.0" prefWidth="189.0" style="-fx-background-color: #e9c46a;" styleClass="subHeaders" text="THE CLASSIFICATION LEVEL OF THE WORD" textAlignment="CENTER" wrapText="true">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Label>
+      <Label alignment="CENTER" layoutX="450.0" layoutY="497.0" prefHeight="124.0" prefWidth="189.0" style="-fx-background-color: #2A9D8F;" styleClass="subHeaders" text="THE TIME YOU HAVE TO DRAW" textAlignment="CENTER" wrapText="true">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Label>
+      <Label alignment="CENTER" layoutX="668.0" layoutY="519.0" prefHeight="104.0" prefWidth="211.0" style="-fx-background-color: #F4A261;" styleClass="subHeaders" text="THE CONFIDENCE LEVEL THE WORD NEEDS TO BE IN" textAlignment="CENTER" wrapText="true">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Label>
+      <Button layoutX="365.0" layoutY="645.0" mnemonicParsing="false" onAction="#onSwitchToCategory" prefHeight="45.0" prefWidth="173.0" text="LET'S PLAY!" />
    </children>
 </Pane>
