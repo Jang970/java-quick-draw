@@ -102,6 +102,8 @@ public class Difficulties {
     /**
      * Call this method when you want to get the confidence requirement at a specific confidence
      * level e.g input: Confidence.HARD output: percentage of how 'confident' the ML model must be
+     * Will return a whole number for now that must be divided 100, can change this as you see fit
+     * though
      *
      * @param difficulty enum of type Confidence that you want to get the required confidence for
      *     e.g Confidence.HARD

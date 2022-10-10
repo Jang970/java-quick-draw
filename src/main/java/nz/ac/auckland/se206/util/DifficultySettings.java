@@ -11,43 +11,71 @@ import nz.ac.auckland.se206.util.Difficulties.Time;
 public class DifficultySettings {
 
   // instance fields, we will have default difficulty values for each setting
-  private int accuracyLevel = 3;
-  private int timeToDraw = 60;
-  private double confidenceLevel = 1;
+  private int accuracyLevel = Accuracy.EASY.getTopNumGuesses();
+  private String accuracyLabel = Accuracy.EASY.getLabel();
+
+  private int timeToDraw = Time.EASY.getTimeToDraw();
+  private String timeLabel = Time.EASY.getLabel();
+
+  private double confidenceLevel = Confidence.EASY.getProbabilityLevel();
+  private String confidenceLabel = Confidence.EASY.getLabel();
+
   private CategoryType wordCategory = CategoryType.EASY;
 
   public DifficultySettings() {}
 
   // getters and setters for each instance field
-  public int getAccuracy() {
+  public int getAccuracyLevel() {
     return this.accuracyLevel;
+  }
+
+  public String getAccuracyLabel() {
+    return this.accuracyLabel;
   }
 
   public int getTimeToDraw() {
     return this.timeToDraw;
   }
 
+  public String getTimeLabel() {
+    return this.timeLabel;
+  }
+
   public double getConfidence() {
     return this.confidenceLevel;
+  }
+
+  public String getConfidenceLabel() {
+    return this.confidenceLabel;
   }
 
   public CategoryType getCategoryOfWords() {
     return this.wordCategory;
   }
 
-  public void changeAccuracyLevel(Accuracy newAccuracy) {
+  /**
+   * these methods will update the corresponding difficulty level and label to the respective input
+   * given
+   *
+   * @param newAccuracy e.g Accuracy.MEDIUM This will update accuracyLevel to 2 and the label to
+   *     mediumAccuracy
+   */
+  public void updateAccuracyLevel(Accuracy newAccuracy) {
     this.accuracyLevel = newAccuracy.getTopNumGuesses();
+    this.accuracyLabel = newAccuracy.getLabel();
   }
 
-  public void changeTimeToDraw(Time newTime) {
+  public void updateTimeToDraw(Time newTime) {
     this.timeToDraw = newTime.getTimeToDraw();
+    this.timeLabel = newTime.getLabel();
   }
 
-  public void changeConfidenceLevel(Confidence newConfidence) {
+  public void updateConfidenceLevel(Confidence newConfidence) {
     this.confidenceLevel = newConfidence.getProbabilityLevel();
+    this.confidenceLabel = newConfidence.getLabel();
   }
 
-  public void changeCategoryOfWords(CategoryType category) {
+  public void updateCategoryOfWords(CategoryType category) {
     this.wordCategory = category;
   }
 }
