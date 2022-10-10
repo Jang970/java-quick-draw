@@ -161,6 +161,6 @@
             <Button fx:id="downloadImageButton" mnemonicParsing="false" onAction="#onDownloadImage" prefHeight="45.0" prefWidth="137.0" text="SAVE IMAGE" />
          </children>
       </HBox>
-      <ProgressBar fx:id="predictionBar" layoutX="577.0" layoutY="314.0" prefHeight="20.0" prefWidth="297.0" progress="0.0" rotate="90.0" />
+      <ProgressBar fx:id="predictionBar" layoutX="572.0" layoutY="306.0" prefHeight="31.0" prefWidth="305.0" progress="0.0" rotate="90.0" />
    </children>
 </Pane>

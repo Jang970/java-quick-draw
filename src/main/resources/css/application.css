@@ -212,6 +212,15 @@
     -fx-border-color: #E76F51;
 }
 
+.progress-bar .track{ 
+	-fx-background-color: #E76F51;
+	-fx-background-radius: 40px;
+}
+
+.progress-bar .bar{ 
+	-fx-background-color: #264653;
+}
+
 /* User  Screen */
 .userScreen {
 	-fx-image: url('../images/user-screen.png');
@@ -298,6 +307,11 @@
 	-fx-alignment: center;
 	-fx-border-color: #ebe9dd;
 	-fx-text-fill: white;
+}
+
+.list-cell:filled:hover {
+	-fx-background-color: #e9c46a;
+	-fx-border-color: #F4A261;
 }
 
 .list-cell:empty{

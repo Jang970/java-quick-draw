@@ -26,7 +26,8 @@ public class DifficultyScreenController {
           }
         });
 
-    // TODO: probably could make this cleaner not sure though
+    // TODO: probably could make this cleaner not sure though (one method with choice box and enum
+    // parameters?)
     accuracyChoiceBox
         .getSelectionModel()
         .selectedItemProperty()

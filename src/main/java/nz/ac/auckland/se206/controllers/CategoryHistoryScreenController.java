@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.image.ImageView;
@@ -35,6 +36,32 @@ public class CategoryHistoryScreenController {
 
             setCategoryHistoryLists();
           }
+        });
+
+    setOnCellClick(categoryHistoryListViewOne);
+    setOnCellClick(categoryHistoryListViewTwo);
+  }
+
+  private void setOnCellClick(ListView<String> categoryHistoryList) {
+    categoryHistoryList.setCellFactory(
+        lv -> {
+          ListCell<String> cell =
+              new ListCell<String>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                  super.updateItem(item, empty);
+                  setText(item);
+                }
+              };
+          cell.setOnMouseClicked(
+              e -> {
+                if (!cell.isEmpty()) {
+                  // TODO: Send category word to category screen
+                  System.out.println("You clicked on " + cell.getItem());
+                  e.consume();
+                }
+              });
+          return cell;
         });
   }
 
