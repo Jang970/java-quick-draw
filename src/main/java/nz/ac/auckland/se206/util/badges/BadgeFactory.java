@@ -1,71 +1,95 @@
 package nz.ac.auckland.se206.util.badges;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import nz.ac.auckland.se206.gamelogicmanager.EndGameState;
 import nz.ac.auckland.se206.gamelogicmanager.GameEndInfo;
 
 /** Making use of Factory design pattern to handle creation of badges */
 public class BadgeFactory {
 
-  private static Badge createBadge(int badgeNumber, GameEndInfo gameInfo) {
-
-    switch (badgeNumber) {
-      case 0:
-        return new BeatTimeBadge(gameInfo);
-
-      case 1:
-        return new AllCategoriesBadge(gameInfo);
-
-      case 2:
-        return new MaxDifficultyBadge(gameInfo);
-
-      case 3:
-        return new JustInTimeBadge(gameInfo);
-
-      case 4:
-        return new CompleteGameBadge(gameInfo);
-
-      case 5:
-        return new Under5SecondsBadge(gameInfo);
-
-      case 6:
-        return new Under10SecondsBadge(gameInfo);
-
-      case 7:
-        return new Under15SecondsBadge(gameInfo);
-
-      case 8:
-        return new Under30SecondsBadge(gameInfo);
-
-      case 9:
-        return new TwoConsecutiveWinsBadge(gameInfo);
-
-      case 10:
-        return new FiveConsecutiveWinsBadge(gameInfo);
-
-      case 11:
-        return new TenConsecutiveWinsBadge(gameInfo);
-
-      case 12:
-        return new FifteenConsecutiveWinsBadge(gameInfo);
-
-      default:
-        System.out.println("Error! Ran out of badges.");
-        return null;
-    }
-  }
-
   // method to create all badges and store in a list
-  public static List<Badge> createListOfBadges(GameEndInfo gameInfo) {
+  public static HashMap<String, Badge> createBadgeList() {
 
-    List<Badge> badges = new ArrayList<>();
+    List<Badge> tempBadges = new ArrayList<Badge>();
 
-    int numberOfBadges = 13;
-    for (int i = 0; i < numberOfBadges; i++) {
+    tempBadges.add(createNConsecutiveWinBadge(2));
+    tempBadges.add(createNConsecutiveWinBadge(5));
+    tempBadges.add(createNConsecutiveWinBadge(10));
+    tempBadges.add(createNConsecutiveWinBadge(15));
+    tempBadges.add(createNConsecutiveWinBadge(20));
 
-      badges.add(createBadge(i, gameInfo));
+    tempBadges.add(createJustInTimeBadge());
+
+    tempBadges.add(createUnderNSecondsBadge(1));
+    tempBadges.add(createUnderNSecondsBadge(2));
+    tempBadges.add(createUnderNSecondsBadge(5));
+    tempBadges.add(createUnderNSecondsBadge(10));
+
+    tempBadges.add(createMaxDifficultyBadge());
+
+    HashMap<String, Badge> badges = new HashMap<String, Badge>();
+
+    for (Badge badge : tempBadges) {
+      badges.put(badge.getId(), badge);
     }
 
     return badges;
+  }
+
+  private static Badge createMaxDifficultyBadge() {
+    return new Badge(
+        "max_dif",
+        "Maximum difficulty",
+        "The player won a game on the hardest difficulty settings") {
+
+      @Override
+      public boolean earned(List<GameEndInfo> gameHistory) {
+        return false;
+      }
+    };
+  }
+
+  private static Badge createNConsecutiveWinBadge(int n) {
+    return new Badge(
+        "consec_" + "n", n + " Consecutive Wins", "The player won " + n + " games consecutively") {
+
+      @Override
+      public boolean earned(List<GameEndInfo> gameHistory) {
+        if (gameHistory.size() >= n) {
+          for (int i = 0; i < n; i++) {
+            if (gameHistory.get(i).winState != EndGameState.WIN) {
+              return false;
+            }
+          }
+          return true;
+        }
+        return false;
+      }
+    };
+  }
+
+  private static Badge createUnderNSecondsBadge(int n) {
+    return new Badge(
+        "under" + n + "sec",
+        "Under " + n + "seconds",
+        "The player won a game in less than " + n + " seconds") {
+
+      @Override
+      public boolean earned(List<GameEndInfo> gameHistory) {
+        return gameHistory.get(0).timeTaken <= n;
+      }
+    };
+  }
+
+  private static Badge createJustInTimeBadge() {
+    return new Badge("just_in", "Just in time", "The player had lest then 2 seconds remaining") {
+
+      @Override
+      public boolean earned(List<GameEndInfo> gameHistory) {
+        return gameHistory.get(0).secondsRemaining <= 2;
+      }
+    };
   }
 }

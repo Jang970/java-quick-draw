@@ -1,5 +1,6 @@
 package nz.ac.auckland.se206.util.badges;
 
+import java.util.List;
 import nz.ac.auckland.se206.gamelogicmanager.GameEndInfo;
 
 /**
@@ -9,23 +10,27 @@ import nz.ac.auckland.se206.gamelogicmanager.GameEndInfo;
  */
 public abstract class Badge {
 
-  protected String name;
-  protected String description;
-  protected GameEndInfo gameInfo;
+  private final String displayTitle;
+  private final String description;
+  private final String id;
 
-  public Badge(GameEndInfo gameInfo) {
-    this.gameInfo = gameInfo;
+  public Badge(String id, String name, String desciption) {
+    this.id = id;
+    this.displayTitle = name;
+    this.description = desciption;
   }
 
-  public String getName() {
-    return this.name;
+  public final String getId() {
+    return this.id;
   }
 
-  public String getDescription() {
+  public final String getDisplayTitle() {
+    return this.displayTitle;
+  }
+
+  public final String getDescription() {
     return this.description;
   }
 
-  public Boolean isEarned() {
-    return null;
-  }
+  public abstract boolean earned(List<GameEndInfo> gameHistory);
 }

@@ -1,6 +1,7 @@
 package nz.ac.auckland.se206.util;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -30,7 +31,7 @@ public class Profile {
   // will be useful when we want to save / load a profile's earned badges as we do not have to
   // figure out how to save enums using gson
   // we can just instead save a list of booleans and load badges earned from that
-  private List<Boolean> badgesStatus = new ArrayList<>();
+  private Set<String> badgesEarned = new HashSet<String>();
 
   private int numberOfHistoryResets = 0;
 
@@ -123,13 +124,19 @@ public class Profile {
         .collect(Collectors.toSet());
   }
 
-  // the getter and setter for badgesStatus have the purpose of being used to save and load badges
-  // earned for a profile
-  public void setBadgesStatus(List<Boolean> badgesStatus) {
-    this.badgesStatus = badgesStatus;
+  /**
+   * @param badge the badge to award to the player
+   * @return true if the player did not have the badge and false if they did have the badge
+   */
+  public boolean awardBadge(String badgeId) {
+    if (!this.badgesEarned.contains(badgeId)) {
+      this.badgesEarned.add(badgeId);
+      return true;
+    }
+    return false;
   }
 
-  public List<Boolean> getBadgesStatus() {
-    return this.badgesStatus;
+  public Set<String> getEarnedBadgeIds() {
+    return this.badgesEarned;
   }
 }
