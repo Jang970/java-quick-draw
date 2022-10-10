@@ -27,15 +27,15 @@ public class UserScreenController {
             statsHeaderLabel.setText(currentProfile.getName());
 
             // fastest win label
-            if (currentProfile.getFastestWin() == -1) {
+            if (currentProfile.getFastestGame() == null) {
               fastestWinLabel.setText(
                   "YOU HAVEN'T WON A GAME YET! KEEP PRACTISING, YOU GOT THIS! :)");
             } else {
               fastestWinLabel.setText(
                   ("Your fastest win is in "
-                          + currentProfile.getFastestWin()
+                          + currentProfile.getFastestGame().timeTaken
                           + " seconds when you had to draw '"
-                          + currentProfile.getCategoryOfFastestWin()
+                          + currentProfile.getFastestGame().category.categoryString
                           + "'!")
                       .toUpperCase());
             }

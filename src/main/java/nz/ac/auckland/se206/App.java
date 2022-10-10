@@ -9,7 +9,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import nz.ac.auckland.se206.GameLogicManager.WinState;
+import nz.ac.auckland.se206.gamelogicmanager.EndGameState;
+import nz.ac.auckland.se206.gamelogicmanager.GameLogicManager;
+import nz.ac.auckland.se206.speech.TextToSpeech;
 import nz.ac.auckland.se206.util.EventEmitter;
 import nz.ac.auckland.se206.util.EventListener;
 import nz.ac.auckland.se206.util.Profile;
@@ -39,6 +41,8 @@ public class App extends Application {
   private static File userProfiles = new File(".userprofiles");
 
   private static ProfileManager profileManager;
+
+  private static TextToSpeech textToSpeech = new TextToSpeech();
 
   public static ProfileManager getProfileManager() {
     return profileManager;
@@ -137,14 +141,10 @@ public class App extends Application {
 
     try {
       // Try create the game logic manager
-      gameLogicManager = new GameLogicManager(10);
+      gameLogicManager = new GameLogicManager();
     } catch (IOException | ModelException e1) {
       App.expect("The machine learning model exists on file", e1);
     }
-
-    // Setting up initial settings
-    gameLogicManager.setNumTopGuessNeededToWin(3);
-    gameLogicManager.setGameLengthSeconds(60);
 
     // create folder to store json file in if not already existing
     userProfiles.mkdir();
@@ -162,25 +162,26 @@ public class App extends Application {
         (gameInfo) -> {
           Profile currentProfile = profileManager.getCurrentProfile();
 
-          if (gameInfo.getWinState() == WinState.WIN) {
-
-            currentProfile.updateFastestGameIfBeatsCurrent(
-                gameInfo.getTimeTaken(), gameInfo.getCategory());
+          if (gameInfo.winState == EndGameState.WIN) {
 
             currentProfile.incrementGamesWon();
 
-          } else if (gameInfo.getWinState() == WinState.LOOSE) {
+          } else if (gameInfo.winState == EndGameState.LOOSE) {
             currentProfile.incrementGamesLost();
           }
 
-          currentProfile.addToCategoryHistory(gameInfo.getCategory());
+          currentProfile.addGameToHistory(gameInfo);
 
           profileManager.saveProfilesToFile();
         });
 
     App.stage = stage;
 
-    stage.setOnCloseRequest((e) -> appTerminationEmitter.emit(e));
+    stage.setOnCloseRequest(
+        (e) -> {
+          textToSpeech.terminate();
+          appTerminationEmitter.emit(e);
+        });
 
     Parent defaultParent;
     Scene scene = null;
@@ -211,5 +212,9 @@ public class App extends Application {
     stage.setResizable(false);
     stage.setScene(scene);
     stage.show();
+  }
+
+  public static TextToSpeech getTextToSpeech() {
+    return textToSpeech;
   }
 }
