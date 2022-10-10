@@ -35,17 +35,16 @@ public class DifficultySettings {
     return this.wordCategory;
   }
 
-  // example: maybe something like currentProfileSettings.changeAccuracyLevel(Accuracy.HARD)
   public void changeAccuracyLevel(Accuracy newAccuracy) {
-    this.accuracyLevel = newAccuracy.getAccuracyRequired(newAccuracy);
+    this.accuracyLevel = newAccuracy.getTopNumGuesses();
   }
 
   public void changeTimeToDraw(Time newTime) {
-    this.timeToDraw = newTime.getTimeAllowed(newTime);
+    this.timeToDraw = newTime.getTimeToDraw();
   }
 
   public void changeConfidenceLevel(Confidence newConfidence) {
-    this.confidenceLevel = newConfidence.getConfidenceRequired(newConfidence);
+    this.confidenceLevel = newConfidence.getProbabilityLevel();
   }
 
   public void changeCategoryOfWords(CategoryType category) {

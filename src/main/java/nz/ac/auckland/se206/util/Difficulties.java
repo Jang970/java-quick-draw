@@ -1,7 +1,5 @@
 package nz.ac.auckland.se206.util;
 
-import java.util.HashMap;
-
 /** This class will house the various enums to be used in DifficultySettings */
 public class Difficulties {
 
@@ -18,21 +16,8 @@ public class Difficulties {
     MEDIUM("mediumAccuracy", 2),
     HARD("hardAccuracy", 1);
 
-    // have hashmaps, one to store the requirement at each level and another to store the label at
-    // each level
-    private static final HashMap<Accuracy, Integer> difficultyLevels = new HashMap<>();
-    private static final HashMap<Accuracy, String> difficultyLabels = new HashMap<>();
-
     private final int topNumGuesses;
     private final String label;
-
-    // store  relevant values into hashmap
-    static {
-      for (Accuracy difficulty : values()) {
-        difficultyLevels.put(difficulty, difficulty.getTopNumGuesses());
-        difficultyLabels.put(difficulty, difficulty.getLabel());
-      }
-    }
 
     // essentially creates all the different enum types
     private Accuracy(String label, int topNumGuesses) {
@@ -40,23 +25,15 @@ public class Difficulties {
       this.topNumGuesses = topNumGuesses;
     }
 
-    private int getTopNumGuesses() {
-      return this.topNumGuesses;
-    }
-
-    private String getLabel() {
-      return this.label;
-    }
-
     /**
-     * This method can be called when you want the requirement at a given accuracy level e.g if
-     * parameter is Accuracy.EASY, it will return 3
+     * This method can be called when you want to save the requirement at a given accuracy level e.g
+     * if parameter is Accuracy.EASY, it will return 3
      *
      * @param difficulty enum of type accuracy that indicates the level e.g Accuracy.EASY
      * @return requirement associated to that difficulty level
      */
-    public int getAccuracyRequired(Accuracy difficulty) {
-      return difficultyLevels.get(difficulty);
+    public int getTopNumGuesses() {
+      return this.topNumGuesses;
     }
 
     /**
@@ -66,8 +43,8 @@ public class Difficulties {
      * @param difficulty enum of type accuracy that indicates the level e.g Accuracy.EASY
      * @return label of current difficulty level
      */
-    public String getAccuracyDifficultyLabel(Accuracy difficulty) {
-      return difficultyLabels.get(difficulty);
+    public String getLabel() {
+      return this.label;
     }
   }
 
@@ -77,33 +54,12 @@ public class Difficulties {
     HARD("hardTime", 30),
     MASTER("masterTime", 15);
 
-    // have hashmaps, one to store the requirement at each level and another to store the label at
-    // each level
-    private static final HashMap<Time, Integer> difficultyLevels = new HashMap<>();
-    private static final HashMap<Time, String> difficultyLabels = new HashMap<>();
-
     private final int timeToDraw;
     private final String label;
-
-    // store values into hashmap
-    static {
-      for (Time difficulty : values()) {
-        difficultyLevels.put(difficulty, difficulty.getTimeToDraw());
-        difficultyLabels.put(difficulty, difficulty.getLabel());
-      }
-    }
 
     private Time(String label, int time) {
       this.label = label;
       this.timeToDraw = time;
-    }
-
-    private int getTimeToDraw() {
-      return this.timeToDraw;
-    }
-
-    private String getLabel() {
-      return this.label;
     }
 
     /**
@@ -114,8 +70,8 @@ public class Difficulties {
      * @param difficulty enum of type time specifying the level wanted e.g Time.EASY
      * @return int of the amount of time given at stated difficulty level
      */
-    public int getTimeAllowed(Time difficulty) {
-      return difficultyLevels.get(difficulty);
+    public int getTimeToDraw() {
+      return this.timeToDraw;
     }
 
     /**
@@ -124,8 +80,8 @@ public class Difficulties {
      * @param difficulty enum of type Time e.g Time.HARD
      * @return string that specifies the level and difficulty e.g hardTime
      */
-    public String getTimeDifficultyLabel(Time difficulty) {
-      return difficultyLabels.get(difficulty);
+    public String getLabel() {
+      return this.label;
     }
   }
 
@@ -135,33 +91,12 @@ public class Difficulties {
     HARD("hardConfidence", 25),
     MASTER("masterConfidence", 50);
 
-    // have hashmaps, one to store the requirement at each level and another to store the label at
-    // each level
-    private static final HashMap<Confidence, Double> difficultyLevels = new HashMap<>();
-    private static final HashMap<Confidence, String> difficultyLabels = new HashMap<>();
-
     private final double confidenceLevel;
     private final String label;
-
-    // store values into hashmap
-    static {
-      for (Confidence difficulty : values()) {
-        difficultyLevels.put(difficulty, difficulty.getProbabilityLevel());
-        difficultyLabels.put(difficulty, difficulty.getLabel());
-      }
-    }
 
     private Confidence(String label, int confidenceLevel) {
       this.label = label;
       this.confidenceLevel = confidenceLevel;
-    }
-
-    private double getProbabilityLevel() {
-      return this.confidenceLevel;
-    }
-
-    private String getLabel() {
-      return this.label;
     }
 
     /**
@@ -172,8 +107,8 @@ public class Difficulties {
      *     e.g Confidence.HARD
      * @return requirement at wanted confidence level
      */
-    public double getConfidenceRequired(Confidence difficulty) {
-      return difficultyLevels.get(difficulty);
+    public double getProbabilityLevel() {
+      return this.confidenceLevel;
     }
 
     /**
@@ -182,8 +117,8 @@ public class Difficulties {
      * @param difficulty enum of type Confidence with specified level e.g Confidence.EASY
      * @return label of specified level containing the level and difficulty e.g easyConfidence
      */
-    public String getConfidenceDifficultyLabel(Confidence difficulty) {
-      return difficultyLabels.get(difficulty);
+    public String getLabel() {
+      return this.label;
     }
   }
 }
