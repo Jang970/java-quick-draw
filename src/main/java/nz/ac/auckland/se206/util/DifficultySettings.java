@@ -1,8 +1,8 @@
 package nz.ac.auckland.se206.util;
 
-import nz.ac.auckland.se206.util.Difficulties.Accuracy;
-import nz.ac.auckland.se206.util.Difficulties.Confidence;
-import nz.ac.auckland.se206.util.Difficulties.Time;
+import nz.ac.auckland.se206.util.difficulties.Accuracy;
+import nz.ac.auckland.se206.util.difficulties.Confidence;
+import nz.ac.auckland.se206.util.difficulties.Time;
 
 /**
  * This class will house the difficulty settings for a given profile This will be stored within the
