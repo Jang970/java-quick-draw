@@ -1,17 +1,22 @@
 package nz.ac.auckland.se206.util.difficulties;
 
-import com.google.gson.annotations.SerializedName;
 import nz.ac.auckland.se206.util.CategoryType;
 
 public enum WordChoice {
-  @SerializedName("easyWord")
-  EASY,
-  @SerializedName("medWord")
-  MEDIUM,
-  @SerializedName("hardWord")
-  HARD,
-  @SerializedName("mastWord")
-  MASTER;
+  EASY("easy"),
+  MEDIUM("medium"),
+  HARD("hard"),
+  MASTER("master");
+
+  private final String label;
+
+  private WordChoice(String label) {
+    this.label = label;
+  }
+
+  public String getLabel() {
+    return label;
+  }
 
   public boolean categoryShouldBeIncluded(CategoryType type) {
     // TODO: This is probably not the best way of doing this. LMK if you can think of a better

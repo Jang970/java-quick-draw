@@ -1,15 +1,9 @@
 package nz.ac.auckland.se206.util.difficulties;
 
-import com.google.gson.annotations.SerializedName;
-
 public enum Confidence {
-  @SerializedName("easyConf")
   EASY("easy", 0.01),
-  @SerializedName("medConf")
   MEDIUM("medium", 0.10),
-  @SerializedName("hardConf")
   HARD("hard", 0.25),
-  @SerializedName("mastConf")
   MASTER("master", 0.5);
 
   private final double probabilityPercentage;
