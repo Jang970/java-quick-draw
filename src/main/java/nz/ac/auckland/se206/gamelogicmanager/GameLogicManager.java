@@ -63,7 +63,7 @@ public class GameLogicManager {
           for (int i = 0; i < range; i++) {
             String prediction = predictions.get(i).getClassName().replace('_', ' ');
             // wins only if prediction matchs and if canvas is drawn on
-            if (prediction.equals(categoryToGuess.categoryString) && CanvasManager.getIsDrawn()) {
+            if (prediction.equals(categoryToGuess.name) && CanvasManager.getIsDrawn()) {
               onCorrectPrediction();
             }
           }
@@ -98,7 +98,7 @@ public class GameLogicManager {
 
     Set<String> categories =
         profile.gameHistory().stream()
-            .map((game) -> game.category.categoryString)
+            .map((game) -> game.category.name)
             .collect(Collectors.toSet());
 
     try {

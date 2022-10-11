@@ -2,11 +2,13 @@ package nz.ac.auckland.se206.util;
 
 public class Category {
 
-  public String categoryString;
+  public String name;
+  public String description;
   public CategoryType categoryType;
 
-  Category(String categoryString, CategoryType categoryType) {
-    this.categoryString = categoryString;
+  Category(String name, String description, CategoryType categoryType) {
+    this.name = name;
     this.categoryType = categoryType;
+    this.description = description;
   }
 }

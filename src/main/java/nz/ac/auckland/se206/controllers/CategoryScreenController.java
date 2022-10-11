@@ -52,9 +52,8 @@ public class CategoryScreenController {
     gameLogicManager.initializeGame(
         new GameProfile(30, 3, Difficulty.EASY, GameMode.BASIC, List.of()));
 
-    categoryLabel.setText(gameLogicManager.getCurrentCategory().categoryString);
-    App.getTextToSpeech()
-        .speakAsync("Draw " + gameLogicManager.getCurrentCategory().categoryString);
+    categoryLabel.setText(gameLogicManager.getCurrentCategory().name);
+    App.getTextToSpeech().speakAsync("Draw " + gameLogicManager.getCurrentCategory().name);
   }
 
   @FXML

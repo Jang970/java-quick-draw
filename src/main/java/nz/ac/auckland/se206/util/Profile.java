@@ -112,8 +112,6 @@ public class Profile {
   }
 
   public Set<String> getCategoryHistory() {
-    return previousGames.stream()
-        .map((game) -> game.category.categoryString)
-        .collect(Collectors.toSet());
+    return previousGames.stream().map((game) -> game.category.name).collect(Collectors.toSet());
   }
 }
