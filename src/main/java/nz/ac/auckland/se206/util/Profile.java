@@ -27,7 +27,7 @@ public class Profile {
   private List<GameEndInfo> previousGames = new ArrayList<GameEndInfo>();
 
   private int numberOfHistoryResets = 0;
-  private DifficultySettings difficultySettings = new DifficultySettings();
+  private Settings difficultySettings = new Settings();
 
   public Profile(String name, String colour) {
 
@@ -48,7 +48,7 @@ public class Profile {
     return colour;
   }
 
-  public DifficultySettings getSettings() {
+  public Settings getSettings() {
     return this.difficultySettings;
   }
 
