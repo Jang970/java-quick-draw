@@ -1,6 +1,7 @@
 package nz.ac.auckland.se206.util;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -135,6 +136,12 @@ public class Profile {
       return true;
     }
     return false;
+  }
+
+  public void awardBadges(Collection<String> badgeIds) {
+    for (String badgeId : badgeIds) {
+      this.awardBadge(badgeId);
+    }
   }
 
   public Set<String> getEarnedBadgeIds() {

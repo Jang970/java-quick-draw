@@ -4,6 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import nz.ac.auckland.se206.gamelogicmanager.EndGameState;
 import nz.ac.auckland.se206.gamelogicmanager.GameInfo;
+import nz.ac.auckland.se206.util.Profile;
+import nz.ac.auckland.se206.util.Settings;
+import nz.ac.auckland.se206.util.difficulties.Accuracy;
+import nz.ac.auckland.se206.util.difficulties.Confidence;
+import nz.ac.auckland.se206.util.difficulties.Time;
+import nz.ac.auckland.se206.util.difficulties.WordChoice;
 
 /** Making use of Factory design pattern to handle creation of badges */
 public class BadgeFactory {
@@ -27,8 +33,20 @@ public class BadgeFactory {
     badges.add(createUnderNSecondsBadge(10));
 
     badges.add(createMaxDifficultyBadge());
+    badges.add(createGotAllBadgesBadge());
 
     return badges;
+  }
+
+  private static Badge createGotAllBadgesBadge() {
+    return new Badge("won_all", "Won All Badges", "The player has won every badge in the game") {
+
+      @Override
+      public boolean earned(Profile profile) {
+        return false;
+        // TODO: Figure out how to implement this logic
+      }
+    };
   }
 
   private static Badge createMaxDifficultyBadge() {
@@ -38,8 +56,14 @@ public class BadgeFactory {
         "The player won a game on the hardest difficulty settings") {
 
       @Override
-      public boolean earned(List<GameInfo> gameHistory) {
-        return false;
+      public boolean earned(Profile profile) {
+        Settings settings =
+            profile.getGameHistory().get(profile.getGameHistory().size() - 1).getSettings();
+
+        return settings.getAccuracy() == Accuracy.HARD
+            && settings.getConfidence() == Confidence.MASTER
+            && settings.getTime() == Time.MASTER
+            && settings.getWordChoice() == WordChoice.MASTER;
       }
     };
   }
@@ -49,10 +73,12 @@ public class BadgeFactory {
         "consec_" + "n", n + " Consecutive Wins", "The player won " + n + " games consecutively") {
 
       @Override
-      public boolean earned(List<GameInfo> gameHistory) {
+      public boolean earned(Profile profile) {
+        List<GameInfo> gameHistory = profile.getGameHistory();
+
         if (gameHistory.size() >= n) {
-          for (int i = 0; i < n; i++) {
-            if (gameHistory.get(i).getWinState() != EndGameState.WIN) {
+          for (int i = 1; i <= n; i++) {
+            if (gameHistory.get(gameHistory.size() - i).getWinState() != EndGameState.WIN) {
               return false;
             }
           }
@@ -70,8 +96,9 @@ public class BadgeFactory {
         "The player won a game in less than " + n + " seconds") {
 
       @Override
-      public boolean earned(List<GameInfo> gameHistory) {
-        return gameHistory.get(0).getTimeTaken() <= n;
+      public boolean earned(Profile profile) {
+        List<GameInfo> gameHistory = profile.getGameHistory();
+        return gameHistory.get(gameHistory.size() - 1).getTimeTaken() <= n;
       }
     };
   }
@@ -80,8 +107,9 @@ public class BadgeFactory {
     return new Badge("just_in", "Just in time", "The player had lest then 2 seconds remaining") {
 
       @Override
-      public boolean earned(List<GameInfo> gameHistory) {
-        return gameHistory.get(0).getSecondsRemaining() <= 2;
+      public boolean earned(Profile profile) {
+        List<GameInfo> gameHistory = profile.getGameHistory();
+        return gameHistory.get(gameHistory.size() - 1).getSecondsRemaining() <= 2;
       }
     };
   }

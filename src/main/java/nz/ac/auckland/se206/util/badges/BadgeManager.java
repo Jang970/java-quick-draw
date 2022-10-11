@@ -1,10 +1,7 @@
 package nz.ac.auckland.se206.util.badges;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import nz.ac.auckland.se206.gamelogicmanager.GameInfo;
 
 /**
  * This class will handle the badges, intention is to always be creating an instance of this class
@@ -24,18 +21,6 @@ public class BadgeManager {
     for (Badge badge : badgeList) {
       badgeIdMap.put(badge.getId(), badge);
     }
-  }
-
-  public Set<Badge> getBadgesFromGame(List<GameInfo> gameHistory) {
-    Set<Badge> earnedBadges = new HashSet<Badge>();
-
-    for (Badge badge : badgeList) {
-      if (badge.earned(gameHistory)) {
-        earnedBadges.add(badge);
-      }
-    }
-
-    return earnedBadges;
   }
 
   /**
