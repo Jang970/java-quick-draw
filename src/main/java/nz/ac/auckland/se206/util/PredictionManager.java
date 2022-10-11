@@ -51,12 +51,12 @@ public class PredictionManager {
           new CsvObjectLoader<Category>(
                   (row) -> {
                     CategoryType type = CategoryType.EASY;
-                    if (row[1].equals('E')) {
+                    if (row[1].equals("E")) {
                       type = CategoryType.EASY;
-                    } else if (row[1].equals('M')) {
-                      type = CategoryType.EASY;
-                    } else if (row[1].equals('H')) {
-                      type = CategoryType.EASY;
+                    } else if (row[1].equals("M")) {
+                      type = CategoryType.MEDIUM;
+                    } else if (row[1].equals("H")) {
+                      type = CategoryType.HARD;
                     }
                     return new Category(row[0], row[2], type);
                   })
