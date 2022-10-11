@@ -1,8 +1,13 @@
 package nz.ac.auckland.se206.util.difficulties;
 
+import com.google.gson.annotations.SerializedName;
+
 public enum Accuracy {
+  @SerializedName("easyAcc")
   EASY("easy", 3),
+  @SerializedName("medAcc")
   MEDIUM("medium", 2),
+  @SerializedName("hardAcc")
   HARD("hard", 1);
 
   private final int topNumGuesses;

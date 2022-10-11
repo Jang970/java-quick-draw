@@ -1,9 +1,15 @@
 package nz.ac.auckland.se206.util.difficulties;
 
+import com.google.gson.annotations.SerializedName;
+
 public enum Time {
+  @SerializedName("easyTime")
   EASY("easy", 60),
+  @SerializedName("medTime")
   MEDIUM("medium", 45),
+  @SerializedName("hardTime")
   HARD("hard", 30),
+  @SerializedName("mastTime")
   MASTER("master", 15);
 
   private final int timeToDraw;
