@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import nz.ac.auckland.se206.fxmlutils.CanvasManager;
 import nz.ac.auckland.se206.util.Category;
+import nz.ac.auckland.se206.util.CategoryType;
 import nz.ac.auckland.se206.util.CountdownTimer;
 import nz.ac.auckland.se206.util.DataSource;
 import nz.ac.auckland.se206.util.EmptyEventEmitter;
@@ -17,6 +18,7 @@ import nz.ac.auckland.se206.util.EventEmitter;
 import nz.ac.auckland.se206.util.EventListener;
 import nz.ac.auckland.se206.util.FilterTooStrictException;
 import nz.ac.auckland.se206.util.PredictionManager;
+import nz.ac.auckland.se206.util.difficulties.WordChoice;
 
 /**
  * This class contains all of the logic for the QuickDraw Game. It manages game state and
@@ -36,7 +38,7 @@ public class GameLogicManager {
       new EventEmitter<List<Classification>>();
   private EventEmitter<Category> categoryChangeEmitter = new EventEmitter<Category>();
 
-  private EventEmitter<GameEndInfo> gameEndedEmitter = new EventEmitter<GameEndInfo>();
+  private EventEmitter<GameInfo> gameEndedEmitter = new EventEmitter<GameInfo>();
   private EventEmitter<Integer> timeChangedEmitter = new EventEmitter<Integer>();
   private EmptyEventEmitter gameStartedEmitter = new EmptyEventEmitter();
 
@@ -59,11 +61,18 @@ public class GameLogicManager {
     predictionManager = new PredictionManager(100, 10);
     predictionManager.setPredictionListener(
         (predictions) -> {
-          int range = Math.min(predictions.size(), currentGameProfile.numTopGuessNeededToWin());
+          int topNumGuessesNeededToWin =
+              currentGameProfile.settings().getAccuracy().getTopNumGuesses();
+          double confidenceNeededToWin =
+              currentGameProfile.settings().getConfidence().getProbabilityPercentage();
+          int range = Math.min(predictions.size(), topNumGuessesNeededToWin);
           for (int i = 0; i < range; i++) {
             String prediction = predictions.get(i).getClassName().replace('_', ' ');
+            double confidence = predictions.get(i).getProbability();
             // wins only if prediction matchs and if canvas is drawn on
-            if (prediction.equals(categoryToGuess.name) && CanvasManager.getIsDrawn()) {
+            if (prediction.equals(categoryToGuess.name)
+                && confidence >= confidenceNeededToWin
+                && CanvasManager.getIsDrawn()) {
               onCorrectPrediction();
             }
           }
@@ -76,33 +85,21 @@ public class GameLogicManager {
 
   public void initializeGame(GameProfile profile) {
     currentGameProfile = profile;
-    boolean inclE = false;
-    boolean inclM = false;
-    boolean inclH = false;
-
-    if (profile.difficulty() == Difficulty.EASY) {
-      inclE = true;
-    }
-    if (profile.difficulty() == Difficulty.MEDIUM) {
-      inclE = true;
-      inclM = true;
-    }
-    if (profile.difficulty() == Difficulty.HARD) {
-      inclE = true;
-      inclM = true;
-      inclH = true;
-    }
-    if (profile.difficulty() == Difficulty.MASTER) {
-      inclH = true;
-    }
 
     Set<String> categories =
         profile.gameHistory().stream()
-            .map((game) -> game.category.name)
+            .flatMap((game) -> game.categoriesPlayed.stream().map((cat) -> cat.name))
             .collect(Collectors.toSet());
 
+    WordChoice wordChoice = profile.settings().getWordChoice();
+
     try {
-      categoryToGuess = predictionManager.getNewRandomCategory(categories, inclE, inclM, inclH);
+      categoryToGuess =
+          predictionManager.getNewRandomCategory(
+              categories,
+              wordChoice.categoryShouldBeIncluded(CategoryType.EASY),
+              wordChoice.categoryShouldBeIncluded(CategoryType.MEDIUM),
+              wordChoice.categoryShouldBeIncluded(CategoryType.HARD));
     } catch (FilterTooStrictException e) {
       e.printStackTrace();
     }
@@ -110,7 +107,7 @@ public class GameLogicManager {
 
   /** Starts the countdown, and enables the prediction server */
   public void startGame() {
-    countdownTimer.startCountdown(currentGameProfile.gameLengthSeconds());
+    countdownTimer.startCountdown(currentGameProfile.settings().getTime().getTimeToDraw());
     predictionManager.startMakingPredictions();
     gameStartedEmitter.emit();
     isPlaying = true;
@@ -131,11 +128,13 @@ public class GameLogicManager {
 
     // send the end game information
     gameEndedEmitter.emit(
-        new GameEndInfo(
+        new GameInfo(
             winState,
-            categoryToGuess,
-            currentGameProfile.gameLengthSeconds() - secondsRemaining - 1,
-            secondsRemaining));
+            List.of(categoryToGuess),
+            currentGameProfile.settings().getTime().getTimeToDraw() - secondsRemaining - 1,
+            secondsRemaining,
+            currentGameProfile.settings(),
+            currentGameProfile.gameMode()));
 
     isPlaying = false;
   }
@@ -179,7 +178,7 @@ public class GameLogicManager {
     return currentGameProfile;
   }
 
-  public void subscribeToGameEnd(EventListener<GameEndInfo> listener) {
+  public void subscribeToGameEnd(EventListener<GameInfo> listener) {
     gameEndedEmitter.subscribe(listener);
   }
 

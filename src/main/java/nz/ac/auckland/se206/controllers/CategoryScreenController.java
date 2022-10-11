@@ -10,10 +10,14 @@ import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
-import nz.ac.auckland.se206.gamelogicmanager.Difficulty;
 import nz.ac.auckland.se206.gamelogicmanager.GameLogicManager;
 import nz.ac.auckland.se206.gamelogicmanager.GameMode;
 import nz.ac.auckland.se206.gamelogicmanager.GameProfile;
+import nz.ac.auckland.se206.util.Settings;
+import nz.ac.auckland.se206.util.difficulties.Accuracy;
+import nz.ac.auckland.se206.util.difficulties.Confidence;
+import nz.ac.auckland.se206.util.difficulties.Time;
+import nz.ac.auckland.se206.util.difficulties.WordChoice;
 
 public class CategoryScreenController {
 
@@ -41,7 +45,7 @@ public class CategoryScreenController {
   }
 
   private void updateGameTimeLabel() {
-    int numSeconds = gameLogicManager.getCurrentGameProfile().gameLengthSeconds();
+    int numSeconds = gameLogicManager.getCurrentGameProfile().settings().getTime().getTimeToDraw();
     drawTimeLabel.setText("Draw in " + numSeconds + " seconds");
   }
 
@@ -51,7 +55,10 @@ public class CategoryScreenController {
     // played.
 
     gameLogicManager.initializeGame(
-        new GameProfile(30, 3, Difficulty.EASY, GameMode.BASIC, List.of()));
+        new GameProfile(
+            new Settings(Accuracy.EASY, Time.EASY, Confidence.EASY, WordChoice.EASY),
+            GameMode.BASIC,
+            List.of()));
 
     categoryLabel.setText(gameLogicManager.getCurrentCategory().name);
 

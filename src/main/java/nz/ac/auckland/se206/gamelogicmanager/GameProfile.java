@@ -1,10 +1,6 @@
 package nz.ac.auckland.se206.gamelogicmanager;
 
 import java.util.List;
+import nz.ac.auckland.se206.util.Settings;
 
-public record GameProfile(
-    int gameLengthSeconds,
-    int numTopGuessNeededToWin,
-    Difficulty difficulty,
-    GameMode gameMode,
-    List<GameEndInfo> gameHistory) {}
+public record GameProfile(Settings settings, GameMode gameMode, List<GameInfo> gameHistory) {}
