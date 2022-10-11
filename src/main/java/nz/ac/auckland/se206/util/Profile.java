@@ -34,6 +34,7 @@ public class Profile {
   private Set<String> badgesEarned = new HashSet<String>();
 
   private int numberOfHistoryResets = 0;
+  private Settings difficultySettings = new Settings();
 
   public Profile(String name, String colour) {
 
@@ -52,6 +53,10 @@ public class Profile {
 
   public String getColour() {
     return colour;
+  }
+
+  public Settings getSettings() {
+    return this.difficultySettings;
   }
 
   public void updateName(String newName) {
