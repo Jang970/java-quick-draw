@@ -1,9 +1,9 @@
 package nz.ac.auckland.se206.util.difficulties;
 
 public enum Accuracy {
-  EASY("easyAccuracy", 3),
-  MEDIUM("mediumAccuracy", 2),
-  HARD("hardAccuracy", 1);
+  EASY("easy", 3),
+  MEDIUM("medium", 2),
+  HARD("hard", 1);
 
   private final int topNumGuesses;
   private final String label;

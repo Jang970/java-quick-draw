@@ -1,10 +1,10 @@
 package nz.ac.auckland.se206.util.difficulties;
 
 public enum Confidence {
-  EASY("easyConfidence", 1),
-  MEDIUM("mediumConfidence", 10),
-  HARD("hardConfidence", 25),
-  MASTER("masterConfidence", 50);
+  EASY("easy", 1),
+  MEDIUM("medium", 10),
+  HARD("hard", 25),
+  MASTER("master", 50);
 
   private final double confidenceLevel;
   private final String label;

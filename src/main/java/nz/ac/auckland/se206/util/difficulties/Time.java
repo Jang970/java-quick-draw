@@ -1,10 +1,10 @@
 package nz.ac.auckland.se206.util.difficulties;
 
 public enum Time {
-  EASY("easyTime", 60),
-  MEDIUM("mediumTime", 45),
-  HARD("hardTime", 30),
-  MASTER("masterTime", 15);
+  EASY("easy", 60),
+  MEDIUM("medium", 45),
+  HARD("hard", 30),
+  MASTER("master", 15);
 
   private final int timeToDraw;
   private final String label;
