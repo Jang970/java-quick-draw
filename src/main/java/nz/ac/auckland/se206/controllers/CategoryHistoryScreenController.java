@@ -1,7 +1,7 @@
 package nz.ac.auckland.se206.controllers;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
@@ -26,8 +26,9 @@ public class CategoryHistoryScreenController {
           if (view == View.CATEGORYHISTORY) {
 
             categoryHistory =
-                new ArrayList<String>(
-                    App.getProfileManager().getCurrentProfile().getCategoryHistory());
+                App.getProfileManager().getCurrentProfile().getGameHistory().stream()
+                    .flatMap((game) -> game.getCategoriesPlayed().stream().map(cat -> cat.name))
+                    .collect(Collectors.toList());
 
             // TODO: Find a better way to do this resizing
             // dynamically resize list hbox height (doesn't show more cells than necessary)

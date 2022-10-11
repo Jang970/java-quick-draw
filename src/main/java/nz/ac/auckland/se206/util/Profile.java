@@ -3,11 +3,9 @@ package nz.ac.auckland.se206.util;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import nz.ac.auckland.se206.gamelogicmanager.EndGameState;
-import nz.ac.auckland.se206.gamelogicmanager.GameEndInfo;
+import nz.ac.auckland.se206.gamelogicmanager.GameInfo;
 
 /**
  * This class will be used to create objects for each new profile containing all information related
@@ -23,9 +21,9 @@ public class Profile {
   private int gamesWon = 0;
   private int gamesLost = 0;
 
-  private GameEndInfo fastestGame;
+  private GameInfo fastestGame;
 
-  private List<GameEndInfo> previousGames = new ArrayList<GameEndInfo>();
+  private List<GameInfo> gameHistory = new ArrayList<GameInfo>();
 
   // this list of booleans will store the result of each badge's isEarned
   // will be useful when we want to save / load a profile's earned badges as we do not have to
@@ -37,7 +35,6 @@ public class Profile {
   private Settings difficultySettings = new Settings();
 
   public Profile(String name, String colour) {
-
     this.name = name;
     this.id = UUID.randomUUID();
     this.colour = colour;
@@ -81,20 +78,20 @@ public class Profile {
    *
    * @param gameInfo current category/word that profile must draw
    */
-  public void addGameToHistory(GameEndInfo gameInfo) {
+  public void addGameToHistory(GameInfo gameInfo) {
 
     // This should be fairly self explanatory
-    if (gameInfo.winState == EndGameState.WIN
-        && (fastestGame == null || gameInfo.timeTaken < fastestGame.timeTaken)) {
+    if (gameInfo.getWinState() == EndGameState.WIN
+        && (fastestGame == null || gameInfo.getTimeTaken() < fastestGame.getTimeTaken())) {
       fastestGame = gameInfo;
     }
 
-    previousGames.add(gameInfo);
+    gameHistory.add(gameInfo);
   }
 
   /** Use this to reset the category history to 0 and increment the number of resets by 1 */
   public void resetStats() {
-    previousGames.clear();
+    gameHistory.clear();
 
     numberOfHistoryResets++;
   }
@@ -119,14 +116,12 @@ public class Profile {
    *
    * @return the fastest win time
    */
-  public GameEndInfo getFastestGame() {
+  public GameInfo getFastestGame() {
     return this.fastestGame;
   }
 
-  public Set<String> getCategoryHistory() {
-    return previousGames.stream()
-        .map((game) -> game.category.categoryString)
-        .collect(Collectors.toSet());
+  public List<GameInfo> getGameHistory() {
+    return gameHistory;
   }
 
   /**
