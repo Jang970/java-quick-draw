@@ -1,6 +1,5 @@
 package nz.ac.auckland.se206.controllers;
 
-import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -13,11 +12,8 @@ import nz.ac.auckland.se206.App.View;
 import nz.ac.auckland.se206.gamelogicmanager.GameLogicManager;
 import nz.ac.auckland.se206.gamelogicmanager.GameMode;
 import nz.ac.auckland.se206.gamelogicmanager.GameProfile;
-import nz.ac.auckland.se206.util.Settings;
-import nz.ac.auckland.se206.util.difficulties.Accuracy;
-import nz.ac.auckland.se206.util.difficulties.Confidence;
-import nz.ac.auckland.se206.util.difficulties.Time;
-import nz.ac.auckland.se206.util.difficulties.WordChoice;
+import nz.ac.auckland.se206.util.Profile;
+import nz.ac.auckland.se206.util.ProfileManager;
 
 public class CategoryScreenController {
 
@@ -27,17 +23,19 @@ public class CategoryScreenController {
   @FXML private Label usernameLabel;
 
   private GameLogicManager gameLogicManager;
+  private ProfileManager profileManager;
 
   public void initialize() {
 
     gameLogicManager = App.getGameLogicManager();
+    profileManager = App.getProfileManager();
 
     App.subscribeToViewChange(
         (View view) -> {
           if (view == View.CATEGORY) {
             // When the app laods changes to the catgory screen, we genereate a new category and
             // make display updates
-            usernameLabel.setText("Hi, " + App.getProfileManager().getCurrentProfile().getName());
+            usernameLabel.setText("Hi, " + profileManager.getCurrentProfile().getName());
             initialiseGameAndUpdateLabels();
             updateGameTimeLabel();
           }
@@ -54,11 +52,11 @@ public class CategoryScreenController {
     // We need to make sure that we are generating a new category which the player has not already
     // played.
 
+    Profile currentProfile = profileManager.getCurrentProfile();
+
     gameLogicManager.initializeGame(
         new GameProfile(
-            new Settings(Accuracy.EASY, Time.EASY, Confidence.EASY, WordChoice.EASY),
-            GameMode.BASIC,
-            List.of()));
+            currentProfile.getSettings(), GameMode.BASIC, currentProfile.getGameHistory()));
 
     categoryLabel.setText(gameLogicManager.getCurrentCategory().name);
 
