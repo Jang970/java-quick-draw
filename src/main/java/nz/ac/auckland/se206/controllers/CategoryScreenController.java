@@ -1,6 +1,7 @@
 package nz.ac.auckland.se206.controllers;
 
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -53,8 +54,14 @@ public class CategoryScreenController {
         new GameProfile(30, 3, Difficulty.EASY, GameMode.BASIC, List.of()));
 
     categoryLabel.setText(gameLogicManager.getCurrentCategory().categoryString);
-    App.getTextToSpeech()
-        .speakAsync("Draw " + gameLogicManager.getCurrentCategory().categoryString);
+
+    if (ThreadLocalRandom.current().nextInt(100) == 0) {
+      App.getTextToSpeech()
+          .speakAsync("Draw " + gameLogicManager.getCurrentCategory().categoryString + ". Or else");
+    } else {
+      App.getTextToSpeech()
+          .speakAsync("Draw " + gameLogicManager.getCurrentCategory().categoryString);
+    }
   }
 
   @FXML
