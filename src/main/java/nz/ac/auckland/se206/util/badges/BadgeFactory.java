@@ -1,7 +1,6 @@
 package nz.ac.auckland.se206.util.badges;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import nz.ac.auckland.se206.gamelogicmanager.EndGameState;
 import nz.ac.auckland.se206.gamelogicmanager.GameInfo;
@@ -10,30 +9,24 @@ import nz.ac.auckland.se206.gamelogicmanager.GameInfo;
 public class BadgeFactory {
 
   // method to create all badges and store in a list
-  public static HashMap<String, Badge> createBadgeList() {
+  public static List<Badge> createBadgeList() {
 
-    List<Badge> tempBadges = new ArrayList<Badge>();
+    List<Badge> badges = new ArrayList<Badge>();
 
-    tempBadges.add(createNConsecutiveWinBadge(2));
-    tempBadges.add(createNConsecutiveWinBadge(5));
-    tempBadges.add(createNConsecutiveWinBadge(10));
-    tempBadges.add(createNConsecutiveWinBadge(15));
-    tempBadges.add(createNConsecutiveWinBadge(20));
+    badges.add(createNConsecutiveWinBadge(2));
+    badges.add(createNConsecutiveWinBadge(5));
+    badges.add(createNConsecutiveWinBadge(10));
+    badges.add(createNConsecutiveWinBadge(15));
+    badges.add(createNConsecutiveWinBadge(20));
 
-    tempBadges.add(createJustInTimeBadge());
+    badges.add(createJustInTimeBadge());
 
-    tempBadges.add(createUnderNSecondsBadge(1));
-    tempBadges.add(createUnderNSecondsBadge(2));
-    tempBadges.add(createUnderNSecondsBadge(5));
-    tempBadges.add(createUnderNSecondsBadge(10));
+    badges.add(createUnderNSecondsBadge(1));
+    badges.add(createUnderNSecondsBadge(2));
+    badges.add(createUnderNSecondsBadge(5));
+    badges.add(createUnderNSecondsBadge(10));
 
-    tempBadges.add(createMaxDifficultyBadge());
-
-    HashMap<String, Badge> badges = new HashMap<String, Badge>();
-
-    for (Badge badge : tempBadges) {
-      badges.put(badge.getId(), badge);
-    }
+    badges.add(createMaxDifficultyBadge());
 
     return badges;
   }
