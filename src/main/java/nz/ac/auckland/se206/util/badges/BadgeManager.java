@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-import nz.ac.auckland.se206.gamelogicmanager.GameEndInfo;
+import nz.ac.auckland.se206.gamelogicmanager.GameInfo;
 
 /**
  * This class will handle the badges, intention is to always be creating an instance of this class
@@ -21,7 +21,7 @@ public class BadgeManager {
     this.badges = BadgeFactory.createBadgeList();
   }
 
-  public Collection<Badge> getBadgesFromGame(List<GameEndInfo> gameHistory) {
+  public Collection<Badge> getBadgesFromGame(List<GameInfo> gameHistory) {
     List<Badge> earnedBadges = new ArrayList<Badge>();
 
     for (Badge badge : badges.values()) {

@@ -1,7 +1,7 @@
 package nz.ac.auckland.se206.util.badges;
 
 import java.util.List;
-import nz.ac.auckland.se206.gamelogicmanager.GameEndInfo;
+import nz.ac.auckland.se206.gamelogicmanager.GameInfo;
 
 /**
  * This will be the abstract class that is extendeds by each badge we want in our game It will
@@ -32,5 +32,5 @@ public abstract class Badge {
     return this.description;
   }
 
-  public abstract boolean earned(List<GameEndInfo> gameHistory);
+  public abstract boolean earned(List<GameInfo> gameHistory);
 }
