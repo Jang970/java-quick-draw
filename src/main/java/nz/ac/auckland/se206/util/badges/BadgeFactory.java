@@ -70,7 +70,7 @@ public class BadgeFactory {
 
   private static Badge createNConsecutiveWinBadge(int n) {
     return new Badge(
-        "consec_" + "n", n + " Consecutive Wins", "The player won " + n + " games consecutively") {
+        "consec" + n, n + " Consecutive Wins", "The player won " + n + " games consecutively") {
 
       @Override
       public boolean earned(Profile profile) {
@@ -92,7 +92,7 @@ public class BadgeFactory {
   private static Badge createUnderNSecondsBadge(int n) {
     return new Badge(
         "under" + n + "sec",
-        "Under " + n + "seconds",
+        "Under " + n + " seconds",
         "The player won a game in less than " + n + " seconds") {
 
       @Override
