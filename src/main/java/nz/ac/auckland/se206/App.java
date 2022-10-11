@@ -165,11 +165,11 @@ public class App extends Application {
         (gameInfo) -> {
           Profile currentProfile = profileManager.getCurrentProfile();
 
-          if (gameInfo.winState == EndGameState.WIN) {
+          if (gameInfo.getWinState() == EndGameState.WIN) {
 
             currentProfile.incrementGamesWon();
 
-          } else if (gameInfo.winState == EndGameState.LOOSE) {
+          } else if (gameInfo.getWinState() == EndGameState.LOOSE) {
             currentProfile.incrementGamesLost();
           }
 

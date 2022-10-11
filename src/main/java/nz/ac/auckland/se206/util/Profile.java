@@ -74,8 +74,8 @@ public class Profile {
   public void addGameToHistory(GameInfo gameInfo) {
 
     // This should be fairly self explanatory
-    if (gameInfo.winState == EndGameState.WIN
-        && (fastestGame == null || gameInfo.timeTaken < fastestGame.timeTaken)) {
+    if (gameInfo.getWinState() == EndGameState.WIN
+        && (fastestGame == null || gameInfo.getTimeTaken() < fastestGame.getTimeTaken())) {
       fastestGame = gameInfo;
     }
 

@@ -1,6 +1,5 @@
 package nz.ac.auckland.se206.util.difficulties;
 
-
 public enum Accuracy {
   EASY("easy", 3),
   MEDIUM("medium", 2),

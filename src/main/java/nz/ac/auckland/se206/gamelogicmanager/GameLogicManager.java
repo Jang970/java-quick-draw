@@ -88,7 +88,7 @@ public class GameLogicManager {
 
     Set<String> categories =
         profile.gameHistory().stream()
-            .flatMap((game) -> game.categoriesPlayed.stream().map((cat) -> cat.name))
+            .flatMap((game) -> game.getCategoriesPlayed().stream().map((cat) -> cat.name))
             .collect(Collectors.toSet());
 
     WordChoice wordChoice = profile.settings().getWordChoice();
