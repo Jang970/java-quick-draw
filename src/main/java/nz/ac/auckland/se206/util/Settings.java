@@ -3,6 +3,7 @@ package nz.ac.auckland.se206.util;
 import nz.ac.auckland.se206.util.difficulties.Accuracy;
 import nz.ac.auckland.se206.util.difficulties.Confidence;
 import nz.ac.auckland.se206.util.difficulties.Time;
+import nz.ac.auckland.se206.util.difficulties.WordChoice;
 
 /**
  * This class will house the settings for a given profile This will be stored within the Profile
@@ -11,13 +12,24 @@ import nz.ac.auckland.se206.util.difficulties.Time;
 public class Settings {
 
   // instance fields, we will have default difficulty values for each setting
-  private Accuracy accuracy = Accuracy.MEDIUM;
-  private Time time = Time.MEDIUM;
-  private Confidence confidence = Confidence.MEDIUM;
+  private Accuracy accuracy;
+  private Time time;
+  private Confidence confidence;
+  private WordChoice wordChoice;
 
-  private CategoryType wordCategory = CategoryType.EASY;
+  public Settings() {
+    this.accuracy = Accuracy.EASY;
+    this.time = Time.EASY;
+    this.confidence = Confidence.EASY;
+    this.wordChoice = WordChoice.EASY;
+  }
 
-  public Settings() {}
+  public Settings(Accuracy accuracy, Time time, Confidence confidence, WordChoice wordChoice) {
+    this.accuracy = accuracy;
+    this.time = time;
+    this.confidence = confidence;
+    this.wordChoice = wordChoice;
+  }
 
   // getters and setters for each instance field
 
@@ -39,8 +51,8 @@ public class Settings {
     return this.confidence;
   }
 
-  public CategoryType getCategoryOfWords() {
-    return this.wordCategory;
+  public WordChoice getWordChoice() {
+    return this.wordChoice;
   }
 
   /**
@@ -60,7 +72,7 @@ public class Settings {
     this.confidence = newConf;
   }
 
-  public void updateCategoryOfWords(CategoryType category) {
-    this.wordCategory = category;
+  public void updateWordChoice(WordChoice wordChoice) {
+    this.wordChoice = wordChoice;
   }
 }

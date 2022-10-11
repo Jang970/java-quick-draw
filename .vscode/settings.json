@@ -13,5 +13,6 @@
 		"editor.defaultFormatter": null,
 		"editor.tabSize": 2
 	},
-	"java.configuration.updateBuildConfiguration": "automatic"
+	"java.configuration.updateBuildConfiguration": "automatic",
+	"java.dependency.packagePresentation": "hierarchical"
 }
