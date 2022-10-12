@@ -39,8 +39,12 @@ public class GameLogicManager {
   private EventEmitter<Category> categoryChangeEmitter = new EventEmitter<Category>();
 
   private EventEmitter<GameInfo> gameEndedEmitter = new EventEmitter<GameInfo>();
+  private EventEmitter<CategoryPlayedInfo> correctPredictionEmitter =
+      new EventEmitter<CategoryPlayedInfo>();
   private EventEmitter<Integer> timeChangedEmitter = new EventEmitter<Integer>();
   private EmptyEventEmitter gameStartedEmitter = new EmptyEventEmitter();
+
+  private boolean sentPredictionMessage = false;
 
   /**
    * This is the constructor for the GameLogicManager class which contains and handles all the logic
@@ -75,10 +79,18 @@ public class GameLogicManager {
             String prediction = predictions.get(i).getClassName().replace('_', ' ');
             double confidence = predictions.get(i).getProbability();
             // wins only if prediction matchs and if canvas is drawn on
-            if (prediction.equals(categoryToGuess.getName())
-                && confidence >= confidenceNeededToWin
-                && CanvasManager.getIsDrawn()) {
-              onCorrectPrediction();
+            if (CanvasManager.getIsDrawn()) {
+              if (prediction.equals(categoryToGuess.getName())
+                  && confidence >= confidenceNeededToWin) {
+                if (!sentPredictionMessage) {
+                  // Checks if sent so we don't spam the onCorrectPrediction
+                  sentPredictionMessage = true;
+                  onCorrectPrediction();
+                }
+              } else {
+                // Resets when the prediction is no longer true.
+                sentPredictionMessage = false;
+              }
             }
           }
 
@@ -120,16 +132,22 @@ public class GameLogicManager {
 
   /** Starts the countdown, and enables the prediction server */
   public void startGame() {
-    countdownTimer.startCountdown(currentGameProfile.settings().getTime().getTimeToDraw());
+    if (currentGameProfile.gameMode() != GameMode.ZEN) {
+      countdownTimer.startCountdown(currentGameProfile.settings().getTime().getTimeToDraw());
+    }
     predictionManager.startMakingPredictions();
     gameStartedEmitter.emit();
     isPlaying = true;
   }
 
   /** Ends the game if it is ongoing with a win state of CANCEL */
-  public void cancelGame() {
+  public void stopGame() {
     if (isPlaying) {
-      this.endGame(EndGameState.GIVE_UP);
+      if (currentGameProfile.gameMode() == GameMode.ZEN) {
+        endGame(EndGameState.NOT_APPLICABLE);
+      } else {
+        endGame(EndGameState.GIVE_UP);
+      }
     }
   }
 
@@ -164,7 +182,17 @@ public class GameLogicManager {
    * state to be WIN
    */
   private void onCorrectPrediction() {
-    endGame(EndGameState.WIN);
+    if (currentGameProfile.gameMode() == GameMode.ZEN) {
+      correctPredictionEmitter.emit(new CategoryPlayedInfo(-1, -1, categoryToGuess));
+    } else {
+      int secondsRemaining = countdownTimer.getRemainingCount();
+      correctPredictionEmitter.emit(
+          new CategoryPlayedInfo(
+              currentGameProfile.settings().getTime().getTimeToDraw() - secondsRemaining - 1,
+              secondsRemaining,
+              categoryToGuess));
+      endGame(EndGameState.WIN);
+    }
   }
 
   /**
@@ -172,6 +200,9 @@ public class GameLogicManager {
    * state to be LOOSE
    */
   private void onOutOfTime() {
+    assert currentGameProfile.gameMode() != GameMode.ZEN
+        : "Zen mode is not timed so we should not 'run out of time'";
+
     endGame(EndGameState.LOOSE);
   }
 
@@ -223,6 +254,8 @@ public class GameLogicManager {
     return currentGameProfile;
   }
 
+  // TODO: Add unsubscribe methods
+
   /**
    * This method allows us to add a listener to event emitter gameEndedEmitter to keep track of when
    * the tgame ends
@@ -231,6 +264,10 @@ public class GameLogicManager {
    */
   public void subscribeToGameEnd(EventListener<GameInfo> listener) {
     gameEndedEmitter.subscribe(listener);
+  }
+
+  public void subscribeToCorrectPrediction(EventListener<CategoryPlayedInfo> listener) {
+    correctPredictionEmitter.subscribe(listener);
   }
 
   /**

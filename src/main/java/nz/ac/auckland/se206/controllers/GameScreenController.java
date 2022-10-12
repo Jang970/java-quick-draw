@@ -109,7 +109,7 @@ public class GameScreenController {
 
             // doesnt cancel if just looking at user stats
           } else {
-            gameLogicManager.cancelGame();
+            gameLogicManager.stopGame();
           }
         });
 
@@ -321,7 +321,7 @@ public class GameScreenController {
   @FXML
   private void onGameAction() {
     if (gameLogicManager.isPlaying()) {
-      gameLogicManager.cancelGame();
+      gameLogicManager.stopGame();
     } else {
       App.setView(View.GAMEMODES);
     }
