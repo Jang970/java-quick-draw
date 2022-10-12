@@ -247,6 +247,16 @@ public class GameScreenController {
             String guessText = classificationList.get(i).getClassName().replace('_', ' ');
             guessLabels[i].setText(((i + 1) + ": " + guessText).toUpperCase());
           }
+
+          String categoryToGuess = gameLogicManager.getCurrentCategory().name;
+
+          int posInList = 0;
+          while (posInList < classificationList.size()
+              && !classificationList.get(posInList).equals(categoryToGuess)) {
+            posInList++;
+          }
+
+          // TODO: Use pos in list
         });
   }
 

@@ -67,14 +67,18 @@ public class GameLogicManager {
         });
 
     // initialise the prediction manager
-    predictionManager = new PredictionManager(100, 10);
+    predictionManager = new PredictionManager(100, -1);
+
     predictionManager.setPredictionListener(
         (predictions) -> {
           int topNumGuessesNeededToWin =
               currentGameProfile.settings().getAccuracy().getTopNumGuesses();
+
           double confidenceNeededToWin =
               currentGameProfile.settings().getConfidence().getProbabilityPercentage();
+
           int range = Math.min(predictions.size(), topNumGuessesNeededToWin);
+
           for (int i = 0; i < range; i++) {
             String prediction = predictions.get(i).getClassName().replace('_', ' ');
             double confidence = predictions.get(i).getProbability();
@@ -94,7 +98,7 @@ public class GameLogicManager {
             }
           }
 
-          this.predictionChangeEmitter.emit(predictions);
+          predictionChangeEmitter.emit(predictions);
         });
   }
 
