@@ -88,7 +88,10 @@ public class GameLogicManager {
 
     Set<String> categories =
         profile.gameHistory().stream()
-            .flatMap((game) -> game.getCategoriesPlayed().stream().map((cat) -> cat.name))
+            .flatMap(
+                (game) ->
+                    game.getCategoriesPlayed().stream()
+                        .map((categoryPlayed) -> categoryPlayed.getCategory().name))
             .collect(Collectors.toSet());
 
     WordChoice wordChoice = profile.settings().getWordChoice();
@@ -130,9 +133,11 @@ public class GameLogicManager {
     gameEndedEmitter.emit(
         new GameInfo(
             winState,
-            List.of(categoryToGuess),
-            currentGameProfile.settings().getTime().getTimeToDraw() - secondsRemaining - 1,
-            secondsRemaining,
+            List.of(
+                new CategoryPlayedInfo(
+                    currentGameProfile.settings().getTime().getTimeToDraw() - secondsRemaining - 1,
+                    secondsRemaining,
+                    categoryToGuess)),
             currentGameProfile.settings(),
             currentGameProfile.gameMode()));
 
