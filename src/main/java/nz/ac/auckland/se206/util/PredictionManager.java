@@ -73,11 +73,11 @@ public class PredictionManager {
                   })
               .collect(Collectors.toSet()));
       categories.put(
-          CategoryType.HARD,
+          CategoryType.MEDIUM,
           loaded.stream()
               .filter(
                   (cat) -> {
-                    return cat.categoryType == CategoryType.HARD;
+                    return cat.categoryType == CategoryType.MEDIUM;
                   })
               .collect(Collectors.toSet()));
       categories.put(
