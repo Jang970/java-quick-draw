@@ -10,7 +10,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import nz.ac.auckland.se206.gamelogicmanager.EndGameState;
 import nz.ac.auckland.se206.gamelogicmanager.GameLogicManager;
 import nz.ac.auckland.se206.speech.TextToSpeech;
 import nz.ac.auckland.se206.util.EventEmitter;
@@ -168,15 +167,6 @@ public class App extends Application {
     gameLogicManager.subscribeToGameEnd(
         (gameInfo) -> {
           Profile currentProfile = profileManager.getCurrentProfile();
-
-          if (gameInfo.getWinState() == EndGameState.WIN) {
-
-            currentProfile.incrementGamesWon();
-
-          } else if (gameInfo.getWinState() == EndGameState.LOOSE) {
-            currentProfile.incrementGamesLost();
-          }
-
           currentProfile.addGameToHistory(gameInfo);
 
           Set<String> existingBadges = currentProfile.getEarnedBadgeIds();

@@ -23,8 +23,6 @@ public class Profile {
   private int gamesWon = 0;
   private int gamesLost = 0;
 
-  private GameInfo fastestGame;
-
   private List<GameInfo> gameHistory = new ArrayList<GameInfo>();
 
   // this list of booleans will store the result of each badge's isEarned
@@ -80,16 +78,6 @@ public class Profile {
     emitChange();
   }
 
-  public void incrementGamesWon() {
-    gamesWon++;
-    emitChange();
-  }
-
-  public void incrementGamesLost() {
-    gamesLost++;
-    emitChange();
-  }
-
   /**
    * This method will be used to add the current category/word to draw to list of previous words Can
    * be called everytime a new category appears
@@ -97,11 +85,11 @@ public class Profile {
    * @param gameInfo current category/word that profile must draw
    */
   public void addGameToHistory(GameInfo gameInfo) {
-
-    // This should be fairly self explanatory
-    if (gameInfo.getWinState() == EndGameState.WIN
-        && (fastestGame == null || gameInfo.getTimeTaken() < fastestGame.getTimeTaken())) {
-      fastestGame = gameInfo;
+    gameHistory.add(gameInfo);
+    if (gameInfo.getWinState() == EndGameState.WIN) {
+      gamesWon++;
+    } else if (gameInfo.getWinState() != EndGameState.NOT_APPLICABLE) {
+      gamesLost++;
     }
 
     emitChange();
@@ -132,11 +120,21 @@ public class Profile {
 
   /** If the player has not had a fastest win, this will be null */
   public GameInfo getFastestGame() {
-    return this.fastestGame;
+    GameInfo bestGame = null;
+    for (GameInfo game : gameHistory) {
+      if (bestGame == null || game.getTimeTaken() < bestGame.getTimeTaken()) {
+        bestGame = game;
+      }
+    }
+    return bestGame;
   }
 
   public List<GameInfo> getGameHistory() {
     return gameHistory;
+  }
+
+  public GameInfo getMostRecentGame() {
+    return gameHistory.isEmpty() ? null : gameHistory.get(gameHistory.size() - 1);
   }
 
   /**
