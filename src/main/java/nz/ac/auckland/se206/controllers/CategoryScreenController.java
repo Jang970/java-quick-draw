@@ -1,6 +1,5 @@
 package nz.ac.auckland.se206.controllers;
 
-import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -10,10 +9,11 @@ import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
-import nz.ac.auckland.se206.gamelogicmanager.Difficulty;
 import nz.ac.auckland.se206.gamelogicmanager.GameLogicManager;
 import nz.ac.auckland.se206.gamelogicmanager.GameMode;
 import nz.ac.auckland.se206.gamelogicmanager.GameProfile;
+import nz.ac.auckland.se206.util.Profile;
+import nz.ac.auckland.se206.util.ProfileManager;
 
 public class CategoryScreenController {
 
@@ -23,17 +23,19 @@ public class CategoryScreenController {
   @FXML private Label usernameLabel;
 
   private GameLogicManager gameLogicManager;
+  private ProfileManager profileManager;
 
   public void initialize() {
 
     gameLogicManager = App.getGameLogicManager();
+    profileManager = App.getProfileManager();
 
     App.subscribeToViewChange(
         (View view) -> {
           if (view == View.CATEGORY) {
             // When the app laods changes to the catgory screen, we genereate a new category and
             // make display updates
-            usernameLabel.setText("Hi, " + App.getProfileManager().getCurrentProfile().getName());
+            usernameLabel.setText("Hi, " + profileManager.getCurrentProfile().getName());
             initialiseGameAndUpdateLabels();
             updateGameTimeLabel();
           }
@@ -41,7 +43,7 @@ public class CategoryScreenController {
   }
 
   private void updateGameTimeLabel() {
-    int numSeconds = gameLogicManager.getCurrentGameProfile().gameLengthSeconds();
+    int numSeconds = gameLogicManager.getCurrentGameProfile().settings().getTime().getTimeToDraw();
     drawTimeLabel.setText("Draw in " + numSeconds + " seconds");
   }
 
@@ -50,17 +52,19 @@ public class CategoryScreenController {
     // We need to make sure that we are generating a new category which the player has not already
     // played.
 
-    gameLogicManager.initializeGame(
-        new GameProfile(30, 3, Difficulty.EASY, GameMode.BASIC, List.of()));
+    Profile currentProfile = profileManager.getCurrentProfile();
 
-    categoryLabel.setText(gameLogicManager.getCurrentCategory().categoryString);
+    gameLogicManager.initializeGame(
+        new GameProfile(
+            currentProfile.getSettings(), GameMode.BASIC, currentProfile.getGameHistory()));
+
+    categoryLabel.setText(gameLogicManager.getCurrentCategory().name);
 
     if (ThreadLocalRandom.current().nextInt(100) == 0) {
       App.getTextToSpeech()
-          .speakAsync("Draw " + gameLogicManager.getCurrentCategory().categoryString + ". Or else");
+          .speakAsync("Draw " + gameLogicManager.getCurrentCategory().name + ". Or else");
     } else {
-      App.getTextToSpeech()
-          .speakAsync("Draw " + gameLogicManager.getCurrentCategory().categoryString);
+      App.getTextToSpeech().speakAsync("Draw " + gameLogicManager.getCurrentCategory().name);
     }
   }
 

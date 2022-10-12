@@ -90,7 +90,7 @@ public class GameScreenController {
         (List<Classification> predictions) -> onPredictionsChange(predictions));
     gameLogicManager.subscribeToTimeChange((Integer seconds) -> onTimeChange(seconds));
     gameLogicManager.subscribeToGameStart(() -> onGameStart());
-    gameLogicManager.subscribeToGameEnd((gameInfo) -> onGameEnd(gameInfo.winState));
+    gameLogicManager.subscribeToGameEnd((gameInfo) -> onGameEnd(gameInfo.getWinState()));
 
     App.subscribeToViewChange(
         (View newView) -> {
@@ -102,8 +102,7 @@ public class GameScreenController {
 
             // When the view changes to game, we start a new game and clear the canvas
             gameLogicManager.startGame();
-            whatToDrawLabel.setText(
-                "TO DRAW: " + gameLogicManager.getCurrentCategory().categoryString);
+            whatToDrawLabel.setText("TO DRAW: " + gameLogicManager.getCurrentCategory().name);
             canvasManager.clearCanvas();
             canvasManager.resetIsDrawn();
 

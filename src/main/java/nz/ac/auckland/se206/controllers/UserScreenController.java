@@ -33,9 +33,13 @@ public class UserScreenController {
             } else {
               fastestWinLabel.setText(
                   ("Your fastest win is in "
-                          + currentProfile.getFastestGame().timeTaken
+                          + currentProfile.getFastestGame().getTimeTaken()
                           + " seconds when you had to draw '"
-                          + currentProfile.getFastestGame().category.categoryString
+                          + currentProfile
+                              .getFastestGame()
+                              .getCategoriesPlayed()
+                              .get(0)
+                              .name // TODO: Ensure this is the correct logic
                           + "'!")
                       .toUpperCase());
             }
@@ -44,7 +48,7 @@ public class UserScreenController {
             numGamesWonLabel.setText(String.valueOf(currentProfile.getGamesWon()));
             numGamesLostLabel.setText(String.valueOf(currentProfile.getGamesLost()));
             numCategoriesPlayedLabel.setText(
-                String.valueOf(currentProfile.getCategoryHistory().size()));
+                String.valueOf(currentProfile.getGameHistory().size()));
           }
         });
   }

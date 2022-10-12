@@ -33,19 +33,43 @@ public class App extends Application {
     GAMEMODES
   }
 
-  private static ViewManager<View> viewManager;
-  private static GameLogicManager gameLogicManager;
-  private static EventEmitter<WindowEvent> appTerminationEmitter = new EventEmitter<WindowEvent>();
   private static Stage stage;
+  private static ViewManager<View> viewManager;
+  private static final GameLogicManager gameLogicManager = createGameLogicManager();
+  private static final EventEmitter<WindowEvent> appTerminationEmitter =
+      new EventEmitter<WindowEvent>();
   // used for creation of folder to store user profiles
-  private static File userProfiles = new File(".userprofiles");
 
-  private static ProfileManager profileManager;
-
-  private static TextToSpeech textToSpeech = new TextToSpeech();
+  private static final ProfileManager profileManager = createProfileManager();
+  private static final TextToSpeech textToSpeech = new TextToSpeech();
 
   public static ProfileManager getProfileManager() {
     return profileManager;
+  }
+
+  private static ProfileManager createProfileManager() {
+
+    File userProfiles = new File(".userprofiles");
+    // create folder to store json file in if not already existing
+    userProfiles.mkdir();
+
+    try {
+      // this creates the json file containing the list of user profiles
+      return new ProfileManager(userProfiles.getAbsolutePath() + File.separator + "profiles.json");
+    } catch (IOException e2) {
+      App.expect("profiles.json is a file name, not a directory", e2);
+      return null;
+    }
+  }
+
+  private static GameLogicManager createGameLogicManager() {
+    try {
+      // Try create the game logic manager
+      return new GameLogicManager();
+    } catch (IOException | ModelException e1) {
+      App.expect("The machine learning model exists on file", e1);
+      return null;
+    }
   }
 
   public static GameLogicManager getGameLogicManager() {
@@ -139,34 +163,16 @@ public class App extends Application {
   @Override
   public void start(final Stage stage) {
 
-    try {
-      // Try create the game logic manager
-      gameLogicManager = new GameLogicManager();
-    } catch (IOException | ModelException e1) {
-      App.expect("The machine learning model exists on file", e1);
-    }
-
-    // create folder to store json file in if not already existing
-    userProfiles.mkdir();
-
-    try {
-      // this creates the json file containing the list of user profiles
-      profileManager =
-          new ProfileManager(userProfiles.getAbsolutePath() + File.separator + "profiles.json");
-    } catch (IOException e2) {
-      App.expect("profiles.json is a file name, not a directory", e2);
-    }
-
     // Update profile details when the game ends and save to file
     gameLogicManager.subscribeToGameEnd(
         (gameInfo) -> {
           Profile currentProfile = profileManager.getCurrentProfile();
 
-          if (gameInfo.winState == EndGameState.WIN) {
+          if (gameInfo.getWinState() == EndGameState.WIN) {
 
             currentProfile.incrementGamesWon();
 
-          } else if (gameInfo.winState == EndGameState.LOOSE) {
+          } else if (gameInfo.getWinState() == EndGameState.LOOSE) {
             currentProfile.incrementGamesLost();
           }
 

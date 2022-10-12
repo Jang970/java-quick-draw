@@ -62,6 +62,10 @@ public class ViewManager<V extends Enum<V>> {
     }
   }
 
+  public Scene getScene() {
+    return scene;
+  }
+
   public int subscribeToViewChange(EventListener<V> listener) {
     return viewChangeEmitter.subscribe(listener);
   }

@@ -8,7 +8,6 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -29,7 +28,7 @@ public class PredictionManager {
 
   private boolean isMakingPredictions = false;
 
-  private Map<CategoryType, Set<String>> categories;
+  private Map<CategoryType, Set<Category>> categories;
 
   /**
    * The manager uses the snapshot provider to get images and then runs a prediction on those
@@ -48,27 +47,47 @@ public class PredictionManager {
 
     try {
 
-      Map<CategoryType, List<String>> loaded =
-          new CsvKeyValuePairLoader<CategoryType, String>(
-                  (keyString) -> {
-                    if (keyString.equals("E")) {
-                      return CategoryType.EASY;
+      List<Category> loaded =
+          new CsvObjectLoader<Category>(
+                  (row) -> {
+                    CategoryType type = CategoryType.EASY;
+                    if (row[1].equals("E")) {
+                      type = CategoryType.EASY;
+                    } else if (row[1].equals("M")) {
+                      type = CategoryType.MEDIUM;
+                    } else if (row[1].equals("H")) {
+                      type = CategoryType.HARD;
                     }
-                    if (keyString.equals("M")) {
-                      return CategoryType.MEDIUM;
-                    }
-                    if (keyString.equals("H")) {
-                      return CategoryType.HARD;
-                    }
-                    return null;
-                  },
-                  (v) -> v)
-              .loadCategoriesFromFile(App.getResourcePath("category_difficulty.csv"), true);
+                    return new Category(row[0], row[2], type);
+                  })
+              .loadObjectsFromFile(App.getResourcePath("categories.csv"), true);
 
-      categories = new HashMap<CategoryType, Set<String>>();
-      categories.put(CategoryType.EASY, new HashSet<String>(loaded.get(CategoryType.EASY)));
-      categories.put(CategoryType.MEDIUM, new HashSet<String>(loaded.get(CategoryType.MEDIUM)));
-      categories.put(CategoryType.HARD, new HashSet<String>(loaded.get(CategoryType.HARD)));
+      categories = new HashMap<CategoryType, Set<Category>>();
+
+      categories.put(
+          CategoryType.EASY,
+          loaded.stream()
+              .filter(
+                  (cat) -> {
+                    return cat.categoryType == CategoryType.EASY;
+                  })
+              .collect(Collectors.toSet()));
+      categories.put(
+          CategoryType.HARD,
+          loaded.stream()
+              .filter(
+                  (cat) -> {
+                    return cat.categoryType == CategoryType.HARD;
+                  })
+              .collect(Collectors.toSet()));
+      categories.put(
+          CategoryType.HARD,
+          loaded.stream()
+              .filter(
+                  (cat) -> {
+                    return cat.categoryType == CategoryType.HARD;
+                  })
+              .collect(Collectors.toSet()));
 
     } catch (CsvException e) {
       App.expect("Category CSV is in the resource folder and is not empty", e);
@@ -177,7 +196,7 @@ public class PredictionManager {
       Set<String> categoryFilter, boolean includeEasy, boolean includeMedium, boolean includeHard)
       throws FilterTooStrictException {
 
-    List<String> possibleCategories = new ArrayList<String>();
+    List<Category> possibleCategories = new ArrayList<Category>();
 
     if (includeEasy) {
       possibleCategories.addAll(categories.get(CategoryType.EASY));
@@ -192,7 +211,7 @@ public class PredictionManager {
     // Removes all the items which are also in the filter set (set subtraction)
     possibleCategories =
         possibleCategories.stream()
-            .filter((category) -> !categoryFilter.contains(category))
+            .filter((category) -> !categoryFilter.contains(category.name))
             .collect(Collectors.toList());
 
     if (possibleCategories.isEmpty()) {
@@ -202,18 +221,6 @@ public class PredictionManager {
     // Get random index from remaining items
     int randomIndexFromList = ThreadLocalRandom.current().nextInt(possibleCategories.size());
 
-    String category = possibleCategories.get(randomIndexFromList);
-
-    CategoryType categoryType = CategoryType.EASY;
-
-    if (categories.get(CategoryType.EASY).contains(category)) {
-      categoryType = CategoryType.EASY;
-    } else if (categories.get(CategoryType.MEDIUM).contains(category)) {
-      categoryType = CategoryType.MEDIUM;
-    } else if (categories.get(CategoryType.HARD).contains(category)) {
-      categoryType = CategoryType.HARD;
-    }
-
-    return new Category(category, categoryType);
+    return possibleCategories.get(randomIndexFromList);
   }
 }

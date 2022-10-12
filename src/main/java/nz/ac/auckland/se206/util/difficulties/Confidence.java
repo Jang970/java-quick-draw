@@ -1,23 +1,17 @@
 package nz.ac.auckland.se206.util.difficulties;
 
-import com.google.gson.annotations.SerializedName;
-
 public enum Confidence {
-  @SerializedName("easyConf")
-  EASY("easy", 1),
-  @SerializedName("medConf")
-  MEDIUM("medium", 10),
-  @SerializedName("hardConf")
-  HARD("hard", 25),
-  @SerializedName("mastConf")
-  MASTER("master", 50);
+  EASY("easy", 0.01),
+  MEDIUM("medium", 0.10),
+  HARD("hard", 0.25),
+  MASTER("master", 0.5);
 
-  private final double confidenceLevel;
+  private final double probabilityPercentage;
   private final String label;
 
-  private Confidence(String label, int confidenceLevel) {
+  private Confidence(String label, double probabilityPercentage) {
     this.label = label;
-    this.confidenceLevel = confidenceLevel;
+    this.probabilityPercentage = probabilityPercentage;
   }
 
   /**
@@ -29,8 +23,8 @@ public enum Confidence {
    *     Confidence.HARD
    * @return requirement at wanted confidence level
    */
-  public double getProbabilityLevel() {
-    return this.confidenceLevel;
+  public double getProbabilityPercentage() {
+    return this.probabilityPercentage;
   }
 
   /**
