@@ -119,7 +119,7 @@ public class GameLogicManager {
   /** Ends the game if it is ongoing with a win state of CANCEL */
   public void cancelGame() {
     if (isPlaying) {
-      this.endGame(EndGameState.CANCEL);
+      this.endGame(EndGameState.GIVE_UP);
     }
   }
 

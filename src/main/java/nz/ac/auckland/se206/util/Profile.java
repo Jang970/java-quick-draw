@@ -22,9 +22,6 @@ public class Profile {
   private UUID id;
   private String colour;
 
-  private int gamesWon = 0;
-  private int gamesLost = 0;
-
   private List<GameInfo> gameHistory = new ArrayList<GameInfo>();
 
   // this list of booleans will store the result of each badge's isEarned
@@ -88,11 +85,6 @@ public class Profile {
    */
   public void addGameToHistory(GameInfo gameInfo) {
     gameHistory.add(gameInfo);
-    if (gameInfo.getWinState() == EndGameState.WIN) {
-      gamesWon++;
-    } else if (gameInfo.getWinState() != EndGameState.NOT_APPLICABLE) {
-      gamesLost++;
-    }
 
     emitChange();
   }
@@ -113,10 +105,22 @@ public class Profile {
   }
 
   public int getGamesWon() {
+    int gamesWon = 0;
+    for (GameInfo game : gameHistory) {
+      if (game.getWinState() == EndGameState.WIN) {
+        gamesWon++;
+      }
+    }
     return gamesWon;
   }
 
   public int getGamesLost() {
+    int gamesLost = 0;
+    for (GameInfo game : gameHistory) {
+      if (game.getWinState() == EndGameState.LOOSE || game.getWinState() == EndGameState.GIVE_UP) {
+        gamesLost++;
+      }
+    }
     return gamesLost;
   }
 
