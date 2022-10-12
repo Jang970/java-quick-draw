@@ -30,7 +30,9 @@ public class CategoryHistoryScreenController {
 
             categoryHistory =
                 App.getProfileManager().getCurrentProfile().getGameHistory().stream()
-                    .flatMap((game) -> game.getCategoriesPlayed().stream().map(cat -> cat.name))
+                    .flatMap(
+                        (game) ->
+                            game.getCategoriesPlayed().stream().map(cat -> cat.getCategory().name))
                     .collect(Collectors.toList());
 
             bindScrollBars();

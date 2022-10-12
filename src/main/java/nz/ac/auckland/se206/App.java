@@ -3,19 +3,21 @@ package nz.ac.auckland.se206;
 import ai.djl.ModelException;
 import java.io.File;
 import java.io.IOException;
+import java.util.Set;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import nz.ac.auckland.se206.gamelogicmanager.EndGameState;
 import nz.ac.auckland.se206.gamelogicmanager.GameLogicManager;
 import nz.ac.auckland.se206.speech.TextToSpeech;
 import nz.ac.auckland.se206.util.EventEmitter;
 import nz.ac.auckland.se206.util.EventListener;
 import nz.ac.auckland.se206.util.Profile;
 import nz.ac.auckland.se206.util.ProfileManager;
+import nz.ac.auckland.se206.util.badges.Badge;
+import nz.ac.auckland.se206.util.badges.BadgeManager;
 
 /** This is the entry point of the JavaFX application. */
 public class App extends Application {
@@ -34,18 +36,15 @@ public class App extends Application {
   }
 
   private static Stage stage;
-  private static ViewManager<View> viewManager;
-  private static final GameLogicManager gameLogicManager = createGameLogicManager();
   private static final EventEmitter<WindowEvent> appTerminationEmitter =
       new EventEmitter<WindowEvent>();
   // used for creation of folder to store user profiles
 
+  private static ViewManager<View> viewManager;
+  private static final GameLogicManager gameLogicManager = createGameLogicManager();
   private static final ProfileManager profileManager = createProfileManager();
+  private static final BadgeManager badgeManager = new BadgeManager();
   private static final TextToSpeech textToSpeech = new TextToSpeech();
-
-  public static ProfileManager getProfileManager() {
-    return profileManager;
-  }
 
   private static ProfileManager createProfileManager() {
 
@@ -70,6 +69,10 @@ public class App extends Application {
       App.expect("The machine learning model exists on file", e1);
       return null;
     }
+  }
+
+  public static ProfileManager getProfileManager() {
+    return profileManager;
   }
 
   public static GameLogicManager getGameLogicManager() {
@@ -167,18 +170,17 @@ public class App extends Application {
     gameLogicManager.subscribeToGameEnd(
         (gameInfo) -> {
           Profile currentProfile = profileManager.getCurrentProfile();
-
-          if (gameInfo.getWinState() == EndGameState.WIN) {
-
-            currentProfile.incrementGamesWon();
-
-          } else if (gameInfo.getWinState() == EndGameState.LOOSE) {
-            currentProfile.incrementGamesLost();
-          }
-
           currentProfile.addGameToHistory(gameInfo);
 
-          profileManager.saveProfilesToFile();
+          Set<String> existingBadges = currentProfile.getEarnedBadgeIds();
+
+          for (Badge badge : badgeManager.getAllBadges()) {
+            if (!existingBadges.contains(badge.getId())) {
+              if (badge.earned(currentProfile)) {
+                currentProfile.awardBadge(badge.getId());
+              }
+            }
+          }
         });
 
     App.stage = stage;
