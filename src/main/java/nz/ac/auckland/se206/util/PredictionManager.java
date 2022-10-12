@@ -6,7 +6,6 @@ import ai.djl.translate.TranslateException;
 import com.opencsv.exceptions.CsvException;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -201,12 +200,10 @@ public class PredictionManager {
       Set<String> categoryFilter, boolean includeEasy, boolean includeMedium, boolean includeHard)
       throws FilterTooStrictException {
 
-    List<Category> possibleCategories = new ArrayList<Category>();
-
     // will check what words to include, this depends on the difficulty
     // Removes all the items which are also in the filter set (set subtraction)
-    possibleCategories =
-        possibleCategories.stream()
+    List<Category> possibleCategories =
+        categories.stream()
             .filter(
                 (category) -> {
                   CategoryType type = category.getCategoryType();
