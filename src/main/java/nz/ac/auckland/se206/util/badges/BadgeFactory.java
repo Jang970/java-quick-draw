@@ -2,10 +2,12 @@ package nz.ac.auckland.se206.util.badges;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Set;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.gamelogicmanager.EndGameState;
 import nz.ac.auckland.se206.gamelogicmanager.GameInfo;
+import nz.ac.auckland.se206.gamelogicmanager.GameMode;
 import nz.ac.auckland.se206.util.Profile;
 import nz.ac.auckland.se206.util.Settings;
 import nz.ac.auckland.se206.util.difficulties.Accuracy;
@@ -90,15 +92,16 @@ public class BadgeFactory {
       public boolean earned(Profile profile) {
         List<GameInfo> gameHistory = profile.getGameHistory();
 
-        if (gameHistory.size() >= n) {
-          for (int i = 1; i <= n; i++) {
-            if (gameHistory.get(gameHistory.size() - i).getWinState() != EndGameState.WIN) {
-              return false;
-            }
+        ListIterator<GameInfo> gameHistoryIterator = gameHistory.listIterator(gameHistory.size());
+        int count = 0;
+
+        while (gameHistoryIterator.hasPrevious() && count < n) {
+          GameInfo game = gameHistoryIterator.previous();
+          if (game.getGameMode() != GameMode.ZEN && game.getWinState() != EndGameState.WIN) {
+            return false;
           }
-          return true;
         }
-        return false;
+        return true;
       }
     };
   }
@@ -117,11 +120,12 @@ public class BadgeFactory {
   }
 
   private static Badge createJustInTimeBadge() {
-    return new Badge("just_in", "Just in time", "The player had lest then 2 seconds remaining") {
+    return new Badge("just_in", "Just in time", "The player had less than 2 seconds remaining") {
 
       @Override
       public boolean earned(Profile profile) {
-        return profile.getMostRecentGame().getSecondsRemaining() <= 2;
+        return profile.getMostRecentGame().getGameMode() != GameMode.ZEN
+            && profile.getMostRecentGame().getSecondsRemaining() <= 2;
       }
     };
   }
