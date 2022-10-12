@@ -74,8 +74,8 @@ public class CategoryScreenController {
   }
 
   @FXML
-  private void onBackToUserScreen() {
-    App.setView(View.USER);
+  private void onSwitchToSettings() {
+    App.setView(View.DIFFICULTY);
   }
 
   @FXML

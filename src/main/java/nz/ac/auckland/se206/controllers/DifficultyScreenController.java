@@ -94,12 +94,12 @@ public class DifficultyScreenController {
   }
 
   @FXML
-  private void onGoBack() {
-    App.setView(View.GAMEMODES);
+  private void onBackToProfile() {
+    App.setView(View.USER);
   }
 
   @FXML
-  private void onSwitchToCategory() {
-    App.setView(View.CATEGORY);
+  private void onSwitchToGameModes() {
+    App.setView(View.GAMEMODES);
   }
 }

@@ -11,17 +11,17 @@
 <Pane stylesheets="@../css/application.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.CategoryScreenController">
    <children>
       <ImageView fitHeight="700.0" fitWidth="900.0" pickOnBounds="true" preserveRatio="true" styleClass="categoryScreen" />
-      <Label fx:id="drawTimeLabel" layoutX="293.0" layoutY="232.0" prefHeight="52.0" prefWidth="399.0" styleClass="subHeaders" text="DRAW IN 60 SECONDS">
+      <Label fx:id="drawTimeLabel" layoutX="276.0" layoutY="234.0" prefHeight="52.0" prefWidth="363.0" styleClass="subHeaders" text="DRAW IN 60 SECONDS">
          <font>
             <Font size="50.0" />
          </font>
       </Label>
-      <Label fx:id="categoryLabel" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="89.0" layoutY="289.0" prefHeight="266.0" prefWidth="721.0" styleClass="headers" text="category" textAlignment="CENTER" textFill="#e76f51" wrapText="true">
+      <Label fx:id="categoryLabel" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="89.0" layoutY="289.0" prefHeight="266.0" prefWidth="721.0" styleClass="headers" text="category" textAlignment="CENTER" textFill="#e9c46a" wrapText="true">
          <font>
             <Font size="80.0" />
          </font>
       </Label>
-      <Label fx:id="usernameLabel" alignment="CENTER" layoutX="58.0" layoutY="54.0" prefHeight="62.0" prefWidth="778.0" styleClass="headers" text="Hi, username" textAlignment="CENTER">
+      <Label fx:id="usernameLabel" alignment="CENTER" layoutX="64.0" layoutY="51.0" prefHeight="62.0" prefWidth="778.0" styleClass="headers" text="Hi, username" textAlignment="CENTER">
          <font>
             <Font size="54.0" />
          </font>
@@ -41,7 +41,7 @@
             <Font size="26.0" />
          </font>
       </Button>
-      <Button layoutX="127.0" layoutY="165.0" mnemonicParsing="false" onAction="#onBackToUserScreen" text="BACK TO PROFILE" />
+      <Button layoutX="127.0" layoutY="164.0" mnemonicParsing="false" onAction="#onSwitchToSettings" text="SETTINGS" />
       <Button fx:id="playButton" alignment="CENTER" layoutX="376.0" layoutY="594.0" mnemonicParsing="false" onAction="#onReadyToPlay" prefHeight="48.0" prefWidth="174.0" text="I'M READY!" textAlignment="CENTER">
          <font>
             <Font size="25.0" />

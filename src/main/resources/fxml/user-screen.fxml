@@ -94,6 +94,6 @@
          </children>
       </VBox>
       <Button alignment="CENTER" contentDisplay="CENTER" layoutX="506.0" layoutY="600.0" mnemonicParsing="false" onAction="#onSwitchToProfiles" prefHeight="79.0" prefWidth="98.0" styleClass="userCircleButton" text=" SWITCH PROFILE" textAlignment="CENTER" wrapText="true" />
-      <Button alignment="CENTER" contentDisplay="CENTER" layoutX="613.0" layoutY="564.0" mnemonicParsing="false" prefHeight="79.0" prefWidth="98.0" styleClass="userCircleButton" text="SETTINGS" textAlignment="CENTER" wrapText="true" />
+      <Button alignment="CENTER" contentDisplay="CENTER" layoutX="613.0" layoutY="564.0" mnemonicParsing="false" onAction="#onSwitchToSettings" prefHeight="79.0" prefWidth="98.0" styleClass="userCircleButton" text="SETTINGS" textAlignment="CENTER" wrapText="true" />
    </children>
 </Pane>

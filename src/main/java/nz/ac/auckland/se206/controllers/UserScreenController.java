@@ -75,4 +75,9 @@ public class UserScreenController {
   private void onSwitchToBadges() {
     App.setView(View.BADGES);
   }
+
+  @FXML
+  private void onSwitchToSettings() {
+    App.setView(View.DIFFICULTY);
+  }
 }

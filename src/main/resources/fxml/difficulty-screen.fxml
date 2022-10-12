@@ -10,45 +10,45 @@
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="900.0" stylesheets="@../css/application.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.DifficultyScreenController">
    <children>
       <ImageView fx:id="mainMenu" fitHeight="700.0" fitWidth="900.0" pickOnBounds="true" preserveRatio="true" styleClass="difficultyScreen" />
-      <Button layoutX="51.0" layoutY="19.0" mnemonicParsing="false" onAction="#onGoBack" text="BACK" />
-      <ImageView fitHeight="492.0" fitWidth="350.0" layoutX="5.0" layoutY="148.0" pickOnBounds="true" preserveRatio="true" styleClass="accuracyImage" />
-      <ImageView fitHeight="455.0" fitWidth="213.0" layoutX="222.0" layoutY="184.0" pickOnBounds="true" preserveRatio="true" styleClass="wordsImage" />
-      <ImageView fitHeight="485.0" fitWidth="210.0" layoutX="438.0" layoutY="157.0" pickOnBounds="true" preserveRatio="true" styleClass="timeImage" />
-      <ImageView fitHeight="497.0" fitWidth="263.0" layoutX="656.0" layoutY="140.0" pickOnBounds="true" preserveRatio="true" styleClass="confidenceImage" />
-      <ChoiceBox fx:id="wordsChoiceBox" layoutX="253.0" layoutY="356.0" prefHeight="38.0" prefWidth="150.0" />
-      <ChoiceBox fx:id="accuracyChoiceBox" layoutX="34.0" layoutY="334.0" prefHeight="38.0" prefWidth="150.0" />
-      <ChoiceBox fx:id="timeChoiceBox" layoutX="467.0" layoutY="338.0" prefHeight="38.0" prefWidth="150.0" />
-      <ChoiceBox fx:id="confidenceChoiceBox" layoutX="699.0" layoutY="347.0" prefHeight="38.0" prefWidth="150.0" />
-      <Label layoutX="265.0" layoutY="9.0" styleClass="headers" text="DIFFICULTY">
+      <Button layoutX="47.0" layoutY="11.0" mnemonicParsing="false" onAction="#onBackToProfile" prefHeight="45.0" prefWidth="189.0" text="BACK TO PROFILE" />
+      <ImageView fitHeight="476.0" fitWidth="205.0" layoutX="10.0" layoutY="163.0" pickOnBounds="true" preserveRatio="true" styleClass="accuracyImage" />
+      <ImageView fitHeight="431.0" fitWidth="206.0" layoutX="224.0" layoutY="207.0" pickOnBounds="true" preserveRatio="true" styleClass="wordsImage" />
+      <ImageView fitHeight="465.0" fitWidth="208.0" layoutX="440.0" layoutY="171.0" pickOnBounds="true" preserveRatio="true" styleClass="timeImage" />
+      <ImageView fitHeight="478.0" fitWidth="233.0" layoutX="658.0" layoutY="158.0" pickOnBounds="true" preserveRatio="true" styleClass="confidenceImage" />
+      <ChoiceBox fx:id="wordsChoiceBox" layoutX="254.0" layoutY="373.0" prefHeight="51.0" prefWidth="139.0" />
+      <ChoiceBox fx:id="accuracyChoiceBox" layoutX="36.0" layoutY="346.0" prefHeight="38.0" prefWidth="150.0" />
+      <ChoiceBox fx:id="timeChoiceBox" layoutX="466.0" layoutY="349.0" prefHeight="38.0" prefWidth="150.0" />
+      <ChoiceBox fx:id="confidenceChoiceBox" layoutX="697.0" layoutY="358.0" prefHeight="38.0" prefWidth="150.0" />
+      <Label layoutX="265.0" layoutY="33.0" styleClass="headers" text="DIFFICULTY">
          <font>
             <Font size="70.0" />
          </font>
       </Label>
-      <Label alignment="CENTER" layoutX="21.0" layoutY="478.0" prefHeight="148.0" prefWidth="175.0" style="-fx-background-color: #E76F51;" styleClass="subHeaders" text="THE TOP NUMBER OF PREDICTIONS THE WORD NEEDS TO BE IN" textAlignment="CENTER" wrapText="true">
+      <Label alignment="CENTER" contentDisplay="CENTER" graphicTextGap="0.0" layoutX="31.0" layoutY="480.0" prefHeight="148.0" prefWidth="158.0" style="-fx-background-color: #E76F51;" styleClass="subHeaders" text="THE TOP NUMBER OF PREDICTIONS THE WORD NEEDS TO BE IN" textAlignment="CENTER" wrapText="true">
          <font>
             <Font size="25.0" />
          </font>
       </Label>
-      <Label alignment="CENTER" layoutX="135.0" layoutY="79.0" prefHeight="45.0" prefWidth="623.0" styleClass="subHeaders" text="SELECT EACH DIFFICULTY SETTING BY CLICKING ON DROP DOWN ARROW" textAlignment="CENTER" wrapText="true">
+      <Label alignment="CENTER" layoutX="135.0" layoutY="103.0" prefHeight="45.0" prefWidth="623.0" styleClass="subHeaders" text="SELECT EACH DIFFICULTY SETTING BY CLICKING ON DROP DOWN ARROW" textAlignment="CENTER" wrapText="true">
          <font>
             <Font size="25.0" />
          </font>
       </Label>
-      <Label alignment="CENTER" layoutX="231.0" layoutY="499.0" prefHeight="124.0" prefWidth="189.0" style="-fx-background-color: #e9c46a;" styleClass="subHeaders" text="THE CLASSIFICATION LEVEL OF THE WORD" textAlignment="CENTER" wrapText="true">
+      <Label alignment="CENTER" layoutX="240.0" layoutY="503.0" prefHeight="124.0" prefWidth="164.0" style="-fx-background-color: #e9c46a;" styleClass="subHeaders" text="THE CLASSIFICATION LEVEL OF THE WORD" textAlignment="CENTER" wrapText="true">
          <font>
             <Font size="25.0" />
          </font>
       </Label>
-      <Label alignment="CENTER" layoutX="450.0" layoutY="497.0" prefHeight="124.0" prefWidth="189.0" style="-fx-background-color: #2A9D8F;" styleClass="subHeaders" text="THE TIME YOU HAVE TO DRAW" textAlignment="CENTER" wrapText="true">
+      <Label alignment="CENTER" layoutX="461.0" layoutY="497.0" prefHeight="124.0" prefWidth="164.0" style="-fx-background-color: #2A9D8F;" styleClass="subHeaders" text="THE TIME YOU HAVE TO DRAW" textAlignment="CENTER" wrapText="true">
          <font>
             <Font size="25.0" />
          </font>
       </Label>
-      <Label alignment="CENTER" layoutX="668.0" layoutY="519.0" prefHeight="104.0" prefWidth="211.0" style="-fx-background-color: #F4A261;" styleClass="subHeaders" text="THE CONFIDENCE LEVEL THE WORD NEEDS TO BE IN" textAlignment="CENTER" wrapText="true">
+      <Label alignment="CENTER" layoutX="672.0" layoutY="518.0" prefHeight="104.0" prefWidth="199.0" style="-fx-background-color: #F4A261;" styleClass="subHeaders" text="THE CONFIDENCE LEVEL THE WORD NEEDS TO BE IN" textAlignment="CENTER" wrapText="true">
          <font>
             <Font size="25.0" />
          </font>
       </Label>
-      <Button layoutX="365.0" layoutY="645.0" mnemonicParsing="false" onAction="#onSwitchToCategory" prefHeight="45.0" prefWidth="173.0" text="LET'S PLAY!" />
+      <Button layoutX="365.0" layoutY="645.0" mnemonicParsing="false" onAction="#onSwitchToGameModes" prefHeight="45.0" prefWidth="173.0" text="LET'S PLAY!" />
    </children>
 </Pane>

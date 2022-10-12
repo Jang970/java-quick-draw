@@ -52,7 +52,7 @@ public class GameModesScreenController {
     sequence.setOnFinished(
         e -> {
           moveCraneBack();
-          App.setView(View.DIFFICULTY);
+          App.setView(View.CATEGORY);
         });
   }
 
@@ -63,7 +63,7 @@ public class GameModesScreenController {
     sequence.setOnFinished(
         e -> {
           moveCraneBack();
-          App.setView(View.DIFFICULTY);
+          App.setView(View.CATEGORY);
         });
   }
 
