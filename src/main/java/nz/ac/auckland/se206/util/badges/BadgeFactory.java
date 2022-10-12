@@ -33,10 +33,10 @@ public class BadgeFactory {
 
     badges.add(createJustInTimeBadge());
 
+    badges.add(createUnderNSecondsBadge(1));
+    badges.add(createUnderNSecondsBadge(2));
     badges.add(createUnderNSecondsBadge(5));
     badges.add(createUnderNSecondsBadge(10));
-    badges.add(createUnderNSecondsBadge(15));
-    badges.add(createUnderNSecondsBadge(30));
 
     badges.add(createMaxDifficultyBadge());
 
