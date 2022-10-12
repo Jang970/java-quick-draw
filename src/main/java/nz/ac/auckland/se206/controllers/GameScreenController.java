@@ -98,7 +98,7 @@ public class GameScreenController {
             // set color of user profile icon button
             setUserButtonStyle();
             // TODO: Get game mode
-            setGameScreenGui("zen");
+            setGameScreenGui("classic");
 
             // When the view changes to game, we start a new game and clear the canvas
             gameLogicManager.startGame();

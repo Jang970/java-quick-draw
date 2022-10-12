@@ -5,6 +5,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
+import nz.ac.auckland.se206.util.Settings;
+import nz.ac.auckland.se206.util.difficulties.Accuracy;
+import nz.ac.auckland.se206.util.difficulties.Confidence;
+import nz.ac.auckland.se206.util.difficulties.Time;
+import nz.ac.auckland.se206.util.difficulties.WordChoice;
 
 public class DifficultyScreenController {
 
@@ -13,6 +18,8 @@ public class DifficultyScreenController {
   @FXML private ChoiceBox<String> timeChoiceBox;
   @FXML private ChoiceBox<String> confidenceChoiceBox;
 
+  private Settings settings;
+
   public void initialize() {
 
     createChoiceBoxes();
@@ -20,21 +27,36 @@ public class DifficultyScreenController {
     App.subscribeToViewChange(
         (View newView) -> {
           if (newView == View.DIFFICULTY) {
-            // TODO: get previous setting
-            // e.g. replace medium with words.getDifficulty() etc.
-            wordsChoiceBox.getSelectionModel().select("MEDIUM");
+
+            // set selected settings
+            settings = App.getProfileManager().getCurrentProfile().getSettings();
+            accuracyChoiceBox
+                .getSelectionModel()
+                .select(settings.getAccuracy().getLabel().toUpperCase());
+            wordsChoiceBox
+                .getSelectionModel()
+                .select(settings.getWordChoice().name().toUpperCase());
+            timeChoiceBox.getSelectionModel().select(settings.getTime().getLabel().toUpperCase());
+            confidenceChoiceBox
+                .getSelectionModel()
+                .select(settings.getConfidence().getLabel().toUpperCase());
           }
         });
 
-    // TODO: probably could make this cleaner not sure though (one method with choice box and enum
-    // parameters?)
+    updateDifficultySettings();
+  }
+
+  /** adds listener to the choice boxes and gets the selected option and updates each settings */
+  private void updateDifficultySettings() {
+
+    // TODO: how to make this cleaner??
     accuracyChoiceBox
         .getSelectionModel()
         .selectedItemProperty()
         .addListener(
             (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-              // TODO: send setting here
-              System.out.println(newValue);
+              ;
+              settings.updateAccuracy(Accuracy.valueOf(newValue));
             });
 
     wordsChoiceBox
@@ -42,8 +64,7 @@ public class DifficultyScreenController {
         .selectedItemProperty()
         .addListener(
             (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-              // TODO: send word setting here
-              System.out.println(newValue);
+              settings.updateWordChoice(WordChoice.valueOf(newValue));
             });
 
     timeChoiceBox
@@ -51,8 +72,7 @@ public class DifficultyScreenController {
         .selectedItemProperty()
         .addListener(
             (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-              // TODO: send time setting here
-              System.out.println(newValue);
+              settings.updateTime(Time.valueOf(newValue));
             });
 
     confidenceChoiceBox
@@ -60,11 +80,11 @@ public class DifficultyScreenController {
         .selectedItemProperty()
         .addListener(
             (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-              // TODO: send confidence setting here
-              System.out.println(newValue);
+              settings.updateConfidence(Confidence.valueOf(newValue));
             });
   }
 
+  /** Creates choice boxes with the given difficulty options */
   private void createChoiceBoxes() {
 
     accuracyChoiceBox.getItems().addAll("EASY", "MEDIUM", "HARD");
