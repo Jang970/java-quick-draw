@@ -75,7 +75,7 @@ public class GameScreenController {
     gameLogicManager.setImageSource(
         () -> {
           FutureTask<BufferedImage> getImage =
-              new FutureTask<BufferedImage>(() -> canvasManager.getCurrentSnapshot());
+              new FutureTask<BufferedImage>(() -> canvasManager.getCurrentBlackAndWhiteSnapshot());
           Platform.runLater(getImage);
           try {
             return getImage.get();

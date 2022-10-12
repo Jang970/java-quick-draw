@@ -1,7 +1,7 @@
 package nz.ac.auckland.se206.fxmlutils;
 
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
 import javafx.embed.swing.SwingFXUtils;
@@ -221,22 +221,44 @@ public class CanvasManager {
    *
    * @return The BufferedImage corresponding to the current canvas content.
    */
-  public BufferedImage getCurrentSnapshot() {
-    final Image snapshot = canvas.snapshot(null, null);
-    final BufferedImage image = SwingFXUtils.fromFXImage(snapshot, null);
+  public BufferedImage getCurrentBlackAndWhiteSnapshot() {
+
+    final BufferedImage originalImage = SwingFXUtils.fromFXImage(canvas.snapshot(null, null), null);
 
     // Convert into a binary image.
-    final BufferedImage imageBinary =
-        new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_BYTE_BINARY);
+    final BufferedImage blackAndWhiteImage =
+        new BufferedImage(
+            originalImage.getWidth(), originalImage.getHeight(), BufferedImage.TYPE_BYTE_BINARY);
 
-    final Graphics2D graphics = imageBinary.createGraphics();
+    WritableRaster originalRaster = originalImage.getRaster();
+    WritableRaster bwRaster = blackAndWhiteImage.getRaster();
 
-    graphics.drawImage(image, 0, 0, null);
+    int[] pixels = new int[4];
 
-    // To release memory we dispose.
-    graphics.dispose();
+    for (int y = 0; y < originalRaster.getHeight(); y++) {
+      for (int x = 0; x < originalRaster.getWidth(); x++) {
+        originalRaster.getPixel(x, y, pixels);
+        boolean isBlack = pixels[0] < 255 || pixels[1] < 255 || pixels[2] < 255;
+        if (isBlack) {
+          bwRaster.setPixel(x, y, new int[] {0, 0, 0, 0});
+        } else {
+          bwRaster.setPixel(x, y, new int[] {255, 255, 255, 255});
+        }
+      }
+    }
 
-    return imageBinary;
+    return blackAndWhiteImage;
+  }
+
+  /**
+   * Get the current snapshot of the canvas.
+   *
+   * @return The BufferedImage corresponding to the current canvas content.
+   */
+  public BufferedImage getCurrentColourSnapshot() {
+    final Image snapshot = canvas.snapshot(null, null);
+    final BufferedImage image = SwingFXUtils.fromFXImage(snapshot, null);
+    return image;
   }
 
   /**
@@ -266,7 +288,7 @@ public class CanvasManager {
       final File imageToClassify =
           new File(directory.getAbsolutePath() + "/snapshot" + System.currentTimeMillis() + ".bmp");
       // save the image to a file
-      ImageIO.write(getCurrentSnapshot(), "bmp", imageToClassify);
+      ImageIO.write(getCurrentColourSnapshot(), "bmp", imageToClassify);
 
       return imageToClassify;
     }
