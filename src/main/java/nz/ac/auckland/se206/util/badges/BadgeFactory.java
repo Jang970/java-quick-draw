@@ -44,7 +44,7 @@ public class BadgeFactory {
     badges.add(createUnderNSecondsBadge(10));
 
     badges.add(createMaxDifficultyBadge());
-    badges.add(createPlayedAllCategories());
+    badges.add(createPlayedAllCategoriesBadge());
 
     // This one has to go last
     badges.add(createGotAllBadgesBadge());
@@ -85,10 +85,10 @@ public class BadgeFactory {
    *
    * @return instance of the the type badge representing the all categories badge
    */
-  private static Badge createPlayedAllCategories() {
+  private static Badge createPlayedAllCategoriesBadge() {
     return new Badge(
         "all_categories",
-        "Played All Categories Badges",
+        "Played All Categories",
         "The player has played all categories in the game") {
 
       @Override
