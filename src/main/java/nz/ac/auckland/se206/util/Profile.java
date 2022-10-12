@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import nz.ac.auckland.se206.gamelogicmanager.CategoryPlayedInfo;
 import nz.ac.auckland.se206.gamelogicmanager.EndGameState;
 import nz.ac.auckland.se206.gamelogicmanager.GameInfo;
 
@@ -119,13 +121,18 @@ public class Profile {
   }
 
   /** If the player has not had a fastest win, this will be null */
-  public GameInfo getFastestGame() {
-    GameInfo bestGame = null;
-    for (GameInfo game : gameHistory) {
-      if (bestGame == null
-          || game.getCategoryPlayed().getTimeTaken()
-              < bestGame.getCategoryPlayed().getTimeTaken()) {
-        bestGame = game;
+  public CategoryPlayedInfo getFastestCategoryPlayed() {
+    CategoryPlayedInfo bestGame = null;
+
+    // The fancy stuff is just taking a list of games and extracting their lists of categories
+    // plsyed into a new list.
+    for (CategoryPlayedInfo categoryPlayed :
+        gameHistory.stream()
+            .flatMap((game) -> game.getCategoriesPlayed().stream())
+            .collect(Collectors.toList())) {
+
+      if (bestGame == null || categoryPlayed.getTimeTaken() < bestGame.getTimeTaken()) {
+        bestGame = categoryPlayed;
       }
     }
     return bestGame;
