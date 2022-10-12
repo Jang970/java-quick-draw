@@ -1,6 +1,7 @@
 package nz.ac.auckland.se206.util.badges;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
@@ -18,7 +19,7 @@ import nz.ac.auckland.se206.util.difficulties.WordChoice;
 /** Making use of Factory design pattern to handle creation of badges */
 public class BadgeFactory {
 
-  private static Set<String> badgeIds;
+  private static Set<String> badgeIds = new HashSet<String>();
 
   // method to create all badges and store in a list
   public static List<Badge> createBadgeList() {
