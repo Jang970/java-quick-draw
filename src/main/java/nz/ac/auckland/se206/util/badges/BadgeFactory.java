@@ -21,7 +21,11 @@ public class BadgeFactory {
 
   private static Set<String> badgeIds = new HashSet<String>();
 
-  // method to create all badges and store in a list
+  /**
+   * This method creates all badges in our game
+   *
+   * @return list of badges
+   */
   public static List<Badge> createBadgeList() {
 
     List<Badge> badges = new ArrayList<Badge>();
@@ -53,6 +57,11 @@ public class BadgeFactory {
     return badges;
   }
 
+  /**
+   * This creates the got all badges badge
+   *
+   * @return instance of type Badge representing the got all badges badge
+   */
   private static Badge createGotAllBadgesBadge() {
     return new Badge("won_all", "Won All Badges", "The player has won every badge in the game") {
 
@@ -69,6 +78,11 @@ public class BadgeFactory {
     };
   }
 
+  /**
+   * This creates the max difficulty badge
+   *
+   * @return instance of type Badge representing the max difficulty badge
+   */
   private static Badge createMaxDifficultyBadge() {
     return new Badge(
         "max_dif",
@@ -89,6 +103,11 @@ public class BadgeFactory {
     };
   }
 
+  /**
+   * This creates the consecutive wins badges
+   *
+   * @return instance of type Badge representing the consecutive wins badges
+   */
   private static Badge createNConsecutiveWinBadge(int n) {
     return new Badge(
         "consec" + n, n + " Consecutive Wins", "The player won " + n + " games consecutively") {
@@ -111,6 +130,11 @@ public class BadgeFactory {
     };
   }
 
+  /**
+   * This creates the under n seconds badges
+   *
+   * @return instance of type Badge representing the under n seconds badges
+   */
   private static Badge createUnderNSecondsBadge(int n) {
     return new Badge(
         "under" + n + "sec",
@@ -125,6 +149,11 @@ public class BadgeFactory {
     };
   }
 
+  /**
+   * This creates the just in time badge
+   *
+   * @return instance of type Badge representing the just in time badge
+   */
   private static Badge createJustInTimeBadge() {
     return new Badge("just_in", "Just in time", "The player had less than 2 seconds remaining") {
 

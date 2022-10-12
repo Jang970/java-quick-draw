@@ -47,6 +47,7 @@ public class PredictionManager {
 
     try {
 
+      // will load in all words from csv file and sort into respective types
       List<Category> loaded =
           new CsvObjectLoader<Category>(
                   (row) -> {
@@ -95,6 +96,7 @@ public class PredictionManager {
 
     model = new DoodlePrediction();
 
+    //  run predictions on drawing
     pollResultThread =
         new Thread() {
           {
@@ -177,10 +179,15 @@ public class PredictionManager {
     isMakingPredictions = true;
   }
 
+  /** Stop making predictions on the model and sending the results to the prediction listener */
   public void stopMakingPredictions() {
     isMakingPredictions = false;
   }
 
+  /**
+   * Checking if predictions are being made on the model and sending the results to the prediction
+   * listener
+   */
   public boolean isMakingPredictions() {
     return isMakingPredictions;
   }
@@ -192,12 +199,24 @@ public class PredictionManager {
    * @param categoryFilter
    * @return
    */
+  /**
+   * This generates a new random category, updates the category for the class and returns the value
+   * of the new category. It will not use any values in the provided set
+   *
+   * @param categoryFilter used to filter categories
+   * @param includeEasy indicator if easy words should be included
+   * @param includeMedium indicator if medium words should be included
+   * @param includeHard indicator if hard words should be included
+   * @return new random category generate
+   * @throws FilterTooStrictException when all categories have been filtered
+   */
   public Category getNewRandomCategory(
       Set<String> categoryFilter, boolean includeEasy, boolean includeMedium, boolean includeHard)
       throws FilterTooStrictException {
 
     List<Category> possibleCategories = new ArrayList<Category>();
 
+    // will check what words to include, this depends on the difficulty
     if (includeEasy) {
       possibleCategories.addAll(categories.get(CategoryType.EASY));
     }

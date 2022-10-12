@@ -99,6 +99,7 @@ public class CountdownTimer {
     this.startCountdown(seconds, 0, 1000);
   }
 
+  /** This will end the current countdown */
   public void cancelCountdown() {
     if (timer != null) {
       timer.cancel();

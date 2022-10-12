@@ -43,11 +43,15 @@ public class GameLogicManager {
   private EmptyEventEmitter gameStartedEmitter = new EmptyEventEmitter();
 
   /**
+   * This is the constructor for the GameLogicManager class which contains and handles all the logic
+   * for the game.
+   *
    * @throws IOException If there is an error in reading the input/output of the DL model.
    * @throws ModelException If the model cannot be found on the file system.
    */
   public GameLogicManager() throws IOException, ModelException {
 
+    // initialise countdown timer
     countdownTimer = new CountdownTimer();
     countdownTimer.setOnChange(
         (secondsRemaining) -> {
@@ -58,6 +62,7 @@ public class GameLogicManager {
           onOutOfTime();
         });
 
+    // initialise the prediction manager
     predictionManager = new PredictionManager(100, 10);
     predictionManager.setPredictionListener(
         (predictions) -> {
@@ -83,6 +88,11 @@ public class GameLogicManager {
 
   ///////////////////////////// GAME STATE TRANSISTIONS /////////////////////////////
 
+  /**
+   * This method will get the game ready to be played using the current profile
+   *
+   * @param profile current profile playing
+   */
   public void initializeGame(GameProfile profile) {
     currentGameProfile = profile;
 
@@ -123,6 +133,11 @@ public class GameLogicManager {
     }
   }
 
+  /**
+   * This helper method is used to end the game depending on if the game is won, cancelled or lost
+   *
+   * @param winState the state of the game when it ends
+   */
   private void endGame(EndGameState winState) {
     // get info
     int secondsRemaining = countdownTimer.getRemainingCount();
@@ -144,16 +159,29 @@ public class GameLogicManager {
     isPlaying = false;
   }
 
+  /**
+   * This method will be called when the player wins and will end the game and set the end game
+   * state to be WIN
+   */
   private void onCorrectPrediction() {
     endGame(EndGameState.WIN);
   }
 
+  /**
+   * This method will be called when the player losses and will end the game and set the end game
+   * state to be LOOSE
+   */
   private void onOutOfTime() {
     endGame(EndGameState.LOOSE);
   }
 
   ///////////////////////////// GETTING AND SETTING GAME DATA /////////////////////////////
 
+  /**
+   * This method will return the current count of the countdownTimer
+   *
+   * @return current count of countdownTimer
+   */
   public int getRemainingSeconds() {
     return countdownTimer.getRemainingCount();
   }
@@ -169,36 +197,78 @@ public class GameLogicManager {
   }
 
   /**
+   * This method will get the category that the player need to draw
+   *
    * @return the category that the player need to draw
    */
   public Category getCurrentCategory() {
     return categoryToGuess;
   }
 
+  /**
+   * This method will get the state of the isPlaying variable
+   *
+   * @return True or False
+   */
   public Boolean isPlaying() {
     return isPlaying;
   }
 
+  /**
+   * This method will return the current game profile
+   *
+   * @return the current game profile
+   */
   public GameProfile getCurrentGameProfile() {
     return currentGameProfile;
   }
 
+  /**
+   * This method allows us to add a listener to event emitter gameEndedEmitter to keep track of when
+   * the tgame ends
+   *
+   * @param listener the EventListener to be notified when an event is emitted
+   */
   public void subscribeToGameEnd(EventListener<GameInfo> listener) {
     gameEndedEmitter.subscribe(listener);
   }
 
+  /**
+   * This method allows us to add a listener to event emitter gameStartedEmitter to keep track of
+   * when the game starts
+   *
+   * @param listener the EventListener to be notified when an event is emitted
+   */
   public void subscribeToGameStart(EmptyEventListener listener) {
     gameStartedEmitter.subscribe(listener);
   }
 
+  /**
+   * This method allows us to add a listener to event emitter timeChangedEmitter to keep track of
+   * when the time changes
+   *
+   * @param listener the EventListener to be notified when an event is emitted
+   */
   public void subscribeToTimeChange(EventListener<Integer> listener) {
     timeChangedEmitter.subscribe(listener);
   }
 
+  /**
+   * This method allows us to add a listener to event emitter predictionChangeEmitter to keep track
+   * of when the prediction changes
+   *
+   * @param listener the EventListener to be notified when an event is emitted
+   */
   public void subscribeToPredictionsChange(EventListener<List<Classification>> listener) {
     predictionChangeEmitter.subscribe(listener);
   }
 
+  /**
+   * This method allows us to add a listener to event emitter categoryChangeEmitter to keep track of
+   * when the category changes
+   *
+   * @param listener the EventListener to be notified when an event is emitted
+   */
   public void subscribeToCategoryChange(EventListener<Category> listener) {
     categoryChangeEmitter.subscribe(listener);
   }

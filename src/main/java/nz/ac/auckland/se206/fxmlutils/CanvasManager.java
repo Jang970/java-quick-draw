@@ -51,7 +51,7 @@ public class CanvasManager {
   /**
    * Subscribes to canvas drawn to keep track of when canvas is drawn on
    *
-   * @param listener
+   * @param listener the EventListener to be notified when an event is emitted
    */
   public static void subscribeToCanvasDrawn(EventListener<Boolean> listener) {
     canvasDrawnEmitter.subscribe(listener);
@@ -72,7 +72,7 @@ public class CanvasManager {
   /**
    * The canvas manager is bound to one canvas which is given through this constructor
    *
-   * @param canvas
+   * @param canvas canvas to be used in app
    */
   public CanvasManager(Canvas canvas) {
     this.canvas = canvas;
@@ -90,6 +90,8 @@ public class CanvasManager {
   }
 
   /**
+   * This method well get the current draw mode for the canvas
+   *
    * @return the active draw mode for the canvas
    */
   public DrawMode getDrawMode() {
@@ -106,11 +108,7 @@ public class CanvasManager {
     this.isHolding = false;
   }
 
-  /**
-   * Sets the cursor based on the drawmode or default if drawing is not enabled
-   *
-   * @param drawMode
-   */
+  /** Sets the cursor based on the drawmode or default if drawing is not enabled */
   private void setCursor() {
 
     if (!isDrawingEnabled()) {
