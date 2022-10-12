@@ -79,6 +79,10 @@ public class App extends Application {
     return gameLogicManager;
   }
 
+  public static BadgeManager getBadgeManager() {
+    return badgeManager;
+  }
+
   public static Stage getStage() {
     return stage;
   }

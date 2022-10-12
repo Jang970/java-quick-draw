@@ -135,6 +135,17 @@ public class PredictionManager {
   }
 
   /**
+   * Gets the number of categories from the given csv
+   *
+   * @return
+   */
+  public Integer getNumberOfCategories() {
+    return categories.get(CategoryType.EASY).size()
+        + categories.get(CategoryType.MEDIUM).size()
+        + categories.get(CategoryType.HARD).size();
+  }
+
+  /**
    * Sets the image source which will be used to make predictions. If you input null, nothing will
    * happen
    *

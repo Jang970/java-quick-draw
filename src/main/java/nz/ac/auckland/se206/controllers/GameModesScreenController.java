@@ -15,6 +15,11 @@ public class GameModesScreenController {
 
   private SequentialTransition sequence;
 
+  /**
+   * Creates animation to move crane to the specified moveX position
+   *
+   * @param moveX the given postion to move x in (left or right)
+   */
   private void moveCrane(int moveX) {
 
     TranslateTransition translateOne = new TranslateTransition();
@@ -34,6 +39,7 @@ public class GameModesScreenController {
     sequence.play();
   }
 
+  /** moves crane back to intial position so it always start from middle */
   private void moveCraneBack() {
     TranslateTransition translate = new TranslateTransition();
     translate.setNode(craneImageView);
@@ -45,6 +51,7 @@ public class GameModesScreenController {
     translate.play();
   }
 
+  /** sets game mode as classic and goes to category screen */
   @FXML
   private void onSelectClassic() {
     // TODO: set mode as classic
@@ -56,6 +63,7 @@ public class GameModesScreenController {
         });
   }
 
+  /** sets game mode as hidden word and goes to category screen */
   @FXML
   private void onSelectHiddenWord() {
     // TODO: set mode as hidden word
@@ -67,6 +75,7 @@ public class GameModesScreenController {
         });
   }
 
+  /** sets game mode as zen and goes to category screen */
   @FXML
   private void onSelectZen() {
     // TODO: set mode as zen
@@ -85,29 +94,34 @@ public class GameModesScreenController {
         });
   }
 
+  /** Creats a hover transiton which displays instructions */
   @FXML
   private void onMouseExited() {
     descriptionLabel.setText(
         "CLICK ON THE GAME MODE TO PLAY.\nHOVER OVER EACH GAME MODE TO SEE DESCRIPTION.");
   }
 
+  /** Explains how to play classic game mode */
   @FXML
   private void onHoverClassic() {
     descriptionLabel.setText(
         "CLASSIC MODE IS THE ORIGINAL GAME. THERE IS A TIMER AND YOU GET GIVEN THE WORD TO DRAW.");
   }
 
+  /** Explains how to play zen game mode */
   @FXML
   private void onHoverZen() {
     descriptionLabel.setText("ZEN MODE HAS NO TIMER AND YOU CAN DRAW FOR AS LONG AS YOU LIKE");
   }
 
+  /** Explains how to play hidden word game mode */
   @FXML
   private void onHoverHiddenWord() {
     descriptionLabel.setText(
         "HIDDEN MODE YOU GET THE DEFINITION OF THE WORD INSTEAD OF THE WORD ITSELF");
   }
 
+  /** Switch to user profile screen FXML */
   @FXML
   private void onBackToUserScreen() {
     App.setView(View.USER);

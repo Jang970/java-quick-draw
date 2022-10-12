@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
+import java.util.stream.Collectors;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.gamelogicmanager.EndGameState;
 import nz.ac.auckland.se206.gamelogicmanager.GameInfo;
@@ -39,6 +40,7 @@ public class BadgeFactory {
     badges.add(createUnderNSecondsBadge(10));
 
     badges.add(createMaxDifficultyBadge());
+    badges.add(createPlayedAllCategories());
 
     // This one has to go last
     badges.add(createGotAllBadgesBadge());
@@ -64,6 +66,30 @@ public class BadgeFactory {
             return false;
           }
         }
+        return true;
+      }
+    };
+  }
+
+  private static Badge createPlayedAllCategories() {
+    return new Badge(
+        "all_categories",
+        "Played All Categories Badges",
+        "The player has played all categories in the game") {
+
+      @Override
+      public boolean earned(Profile profile) {
+        Set<String> categoryHistory =
+            App.getProfileManager().getCurrentProfile().getGameHistory().stream()
+                .flatMap(
+                    (game) ->
+                        game.getCategoriesPlayed().stream().map(cat -> cat.getCategory().name))
+                .collect(Collectors.toSet());
+
+        if (categoryHistory.size() != App.getGameLogicManager().getNumberOfCategories()) {
+          return false;
+        }
+
         return true;
       }
     };
@@ -104,6 +130,8 @@ public class BadgeFactory {
           GameInfo game = gameHistoryIterator.previous();
           if (game.getGameMode() != GameMode.ZEN && game.getWinState() != EndGameState.WIN) {
             return false;
+          } else if (game.getGameMode() != GameMode.ZEN && game.getWinState() == EndGameState.WIN) {
+            count++;
           }
         }
         return true;

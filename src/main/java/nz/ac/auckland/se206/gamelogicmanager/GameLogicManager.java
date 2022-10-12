@@ -202,4 +202,8 @@ public class GameLogicManager {
   public void subscribeToCategoryChange(EventListener<Category> listener) {
     categoryChangeEmitter.subscribe(listener);
   }
+
+  public Integer getNumberOfCategories() {
+    return predictionManager.getNumberOfCategories();
+  }
 }
