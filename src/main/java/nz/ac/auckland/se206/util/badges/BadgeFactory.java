@@ -115,7 +115,7 @@ public class BadgeFactory {
 
       @Override
       public boolean earned(Profile profile) {
-        return profile.getMostRecentGame().getTimeTaken() <= n;
+        return profile.getMostRecentGame().getCategoryPlayed().getTimeTaken() <= n;
       }
     };
   }
@@ -125,8 +125,11 @@ public class BadgeFactory {
 
       @Override
       public boolean earned(Profile profile) {
-        return profile.getMostRecentGame().getGameMode() != GameMode.ZEN
-            && profile.getMostRecentGame().getSecondsRemaining() <= 2;
+        GameInfo game = profile.getMostRecentGame();
+        GameMode gameMode = game.getGameMode();
+
+        return (gameMode == GameMode.BASIC || gameMode == GameMode.HIDDEN_WORD)
+            && game.getCategoryPlayed().getSecondsRemaining() <= 2;
       }
     };
   }

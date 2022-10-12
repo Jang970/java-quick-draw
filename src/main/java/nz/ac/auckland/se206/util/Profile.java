@@ -122,7 +122,9 @@ public class Profile {
   public GameInfo getFastestGame() {
     GameInfo bestGame = null;
     for (GameInfo game : gameHistory) {
-      if (bestGame == null || game.getTimeTaken() < bestGame.getTimeTaken()) {
+      if (bestGame == null
+          || game.getCategoryPlayed().getTimeTaken()
+              < bestGame.getCategoryPlayed().getTimeTaken()) {
         bestGame = game;
       }
     }
