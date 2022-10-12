@@ -36,10 +36,22 @@ public class Profile {
   private int numberOfHistoryResets = 0;
   private Settings difficultySettings = new Settings();
 
+  private transient EmptyEventListener onChange;
+
   public Profile(String name, String colour) {
     this.name = name;
     this.id = UUID.randomUUID();
     this.colour = colour;
+  }
+
+  protected void setOnChange(EmptyEventListener listener) {
+    onChange = listener;
+  }
+
+  private void emitChange() {
+    if (onChange != null) {
+      onChange.update();
+    }
   }
 
   public String getName() {
@@ -60,18 +72,22 @@ public class Profile {
 
   public void updateName(String newName) {
     name = newName;
+    emitChange();
   }
 
   public void updateColour(String newColour) {
     colour = newColour;
+    emitChange();
   }
 
   public void incrementGamesWon() {
     gamesWon++;
+    emitChange();
   }
 
   public void incrementGamesLost() {
     gamesLost++;
+    emitChange();
   }
 
   /**
@@ -88,14 +104,15 @@ public class Profile {
       fastestGame = gameInfo;
     }
 
-    gameHistory.add(gameInfo);
+    emitChange();
   }
 
   /** Use this to reset the category history to 0 and increment the number of resets by 1 */
   public void resetStats() {
     gameHistory.clear();
-
     numberOfHistoryResets++;
+
+    emitChange();
   }
 
   /**
@@ -113,11 +130,7 @@ public class Profile {
     return gamesLost;
   }
 
-  /**
-   * If the player has not had a fastest win, this will be -1
-   *
-   * @return the fastest win time
-   */
+  /** If the player has not had a fastest win, this will be null */
   public GameInfo getFastestGame() {
     return this.fastestGame;
   }
@@ -130,18 +143,18 @@ public class Profile {
    * @param badge the badge to award to the player
    * @return true if the player did not have the badge and false if they did have the badge
    */
-  public boolean awardBadge(String badgeId) {
+  public void awardBadge(String badgeId) {
     if (!this.badgesEarned.contains(badgeId)) {
       this.badgesEarned.add(badgeId);
-      return true;
+      emitChange();
     }
-    return false;
   }
 
   public void awardBadges(Collection<String> badgeIds) {
     for (String badgeId : badgeIds) {
       this.awardBadge(badgeId);
     }
+    emitChange();
   }
 
   public Set<String> getEarnedBadgeIds() {

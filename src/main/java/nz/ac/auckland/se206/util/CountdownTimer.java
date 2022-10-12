@@ -16,7 +16,8 @@ public class CountdownTimer {
   private CountdownTimerCompleteEvent onCompleteEvent;
   private CountdownTimerChangeEvent onChangeEvent;
 
-  private int countdownCurrentCount;
+  private int countdownCurrentCount = 0;
+  ;
   private Timer timer;
 
   /**
@@ -39,7 +40,7 @@ public class CountdownTimer {
   }
 
   /**
-   * Gets the remaining count
+   * Gets the remaining count. You can guarantee the countdown has ended when this reaches 0.
    *
    * @return the remaining count
    */
@@ -48,7 +49,7 @@ public class CountdownTimer {
   }
 
   /**
-   * Starts a new countdown
+   * Starts a new countdown. Cancels the previous countdown if it was already running.
    *
    * @param countToCountdownFrom the number to countdown from
    * @param delayBeforeStarting the delay before starting the countdown in milliseconds

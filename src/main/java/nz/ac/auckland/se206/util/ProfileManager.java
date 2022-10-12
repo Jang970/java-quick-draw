@@ -22,9 +22,24 @@ import nz.ac.auckland.se206.App;
  */
 public class ProfileManager {
 
+  private class ProfileListSaveObject {
+    protected List<Profile> profileList;
+    protected int activeProfileIndex;
+
+    protected ProfileListSaveObject(List<Profile> profileList, int activeProfileIndex) {
+      this.profileList = profiles;
+      this.activeProfileIndex = activeProfileIndex;
+    }
+  }
+
   private List<Profile> profiles = new ArrayList<Profile>();
   private int currentProfileIndex = 0;
   private File profilesFile;
+  private EmptyEventListener profileUpdateListener =
+      () -> {
+        this.saveChanges();
+      };
+  private CountdownTimer changeSaveCountdown = new CountdownTimer();
 
   /**
    * @param fileNameFullPath
@@ -37,6 +52,11 @@ public class ProfileManager {
       throw new IOException("File " + fileNameFullPath + " is a directory, not a json file");
     }
     loadProfilesFromFile();
+
+    changeSaveCountdown.setOnComplete(
+        () -> {
+          saveProfilesToFile();
+        });
   }
 
   /**
@@ -55,12 +75,14 @@ public class ProfileManager {
 
       // creation of new user instance, adding to our user list
       Profile newProfile = new Profile(name, colour);
+      newProfile.setOnChange(profileUpdateListener);
+
       profiles.add(newProfile);
 
       // lets assume we want to use the newly created profile
       setCurrentProfile(newProfile.getId());
 
-      saveProfilesToFile();
+      saveChanges();
 
       return true;
     }
@@ -82,7 +104,8 @@ public class ProfileManager {
       return false;
     } else { // username is unique, return true
       profiles.get(currentProfileIndex).updateName(newName);
-      saveProfilesToFile();
+
+      saveChanges();
 
       return true;
     }
@@ -106,6 +129,8 @@ public class ProfileManager {
         break;
       }
     }
+
+    saveChanges();
   }
 
   /**
@@ -127,8 +152,15 @@ public class ProfileManager {
     return profiles.get(currentProfileIndex);
   }
 
+  private void saveChanges() {
+    System.out.println("   * Requesting save change");
+    changeSaveCountdown.startCountdown(1);
+  }
+
   /** This method will handle serialising / saving to json file */
-  public void saveProfilesToFile() {
+  private void saveProfilesToFile() {
+
+    System.out.println(" + Saving profiles");
 
     Writer writer = null;
     try {
@@ -136,8 +168,9 @@ public class ProfileManager {
     } catch (IOException e) {
       App.expect("Profiles File should be guaranteed to not be a directory", e);
     }
+
     Gson gson = new GsonBuilder().create();
-    gson.toJson(profiles, writer);
+    gson.toJson(new ProfileListSaveObject(profiles, currentProfileIndex), writer);
 
     // flushing and closing the writer (cleaning)
     try {
@@ -163,10 +196,18 @@ public class ProfileManager {
       }
 
       Gson gson = new Gson();
-      Type listType = new TypeToken<ArrayList<Profile>>() {}.getType();
+      Type listType = new TypeToken<ProfileListSaveObject>() {}.getType();
 
       // converting json string to arraylist of user objects
-      profiles = gson.fromJson(reader, listType);
+      ProfileListSaveObject obj = gson.fromJson(reader, listType);
+
+      profiles = obj.profileList;
+
+      for (Profile profile : profiles) {
+        profile.setOnChange(profileUpdateListener);
+      }
+
+      currentProfileIndex = obj.activeProfileIndex;
 
       // close reader
       reader.close();

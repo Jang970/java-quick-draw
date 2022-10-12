@@ -188,8 +188,6 @@ public class App extends Application {
               }
             }
           }
-
-          profileManager.saveProfilesToFile();
         });
 
     App.stage = stage;
