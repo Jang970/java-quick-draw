@@ -26,6 +26,13 @@ public class ProfileManager {
     protected List<Profile> profileList;
     protected int activeProfileIndex;
 
+    /**
+     * Constructor for ProfileListSaveObject which we use to save to our json the list of profiles
+     * and current profile in use.
+     *
+     * @param profileList list of all profiles
+     * @param activeProfileIndex indicator of which profile in the list is being used
+     */
     protected ProfileListSaveObject(List<Profile> profileList, int activeProfileIndex) {
       this.profileList = profiles;
       this.activeProfileIndex = activeProfileIndex;
@@ -42,7 +49,10 @@ public class ProfileManager {
   private CountdownTimer changeSaveCountdown = new CountdownTimer();
 
   /**
-   * @param fileNameFullPath
+   * Constructor for ProfileManager class which will be used to handle all functionalities relating
+   * to profiles for example, profile creation, saving and loading existing profiles.
+   *
+   * @param fileNameFullPath file path where we want to create the new file
    * @throws IOException - if the file exists but is a directory rather than a regular file, does
    *     not exist but cannot be created, or cannot be opened for any other reason
    */
