@@ -150,13 +150,12 @@ public class BadgeFactory {
         ListIterator<GameInfo> gameHistoryIterator = gameHistory.listIterator(gameHistory.size());
         int count = 0;
 
-        while (gameHistoryIterator.hasPrevious() && count < n) {
+        while (gameHistoryIterator.hasPrevious()) {
           GameInfo game = gameHistoryIterator.previous();
           if (game.getGameMode() != GameMode.ZEN && game.getWinState() != EndGameState.WIN) {
             return false;
           } else if (game.getGameMode() != GameMode.ZEN && game.getWinState() == EndGameState.WIN) {
             count++;
-
             if (count >= n) {
               return true;
             }
