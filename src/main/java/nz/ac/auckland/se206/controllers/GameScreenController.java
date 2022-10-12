@@ -11,11 +11,13 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.paint.Color;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
 import nz.ac.auckland.se206.fxmlutils.CanvasManager;
@@ -43,6 +45,9 @@ public class GameScreenController {
   @FXML private VBox guessLabelCol1;
   @FXML private VBox guessLabelCol2;
   @FXML private VBox predictionVbox;
+  @FXML private VBox toolsVBox;
+
+  @FXML private ColorPicker colorPicker;
 
   private Label[] guessLabels = new Label[10];
 
@@ -60,6 +65,9 @@ public class GameScreenController {
             .toArray(Label[]::new);
 
     canvasManager = new CanvasManager(canvas);
+
+    colorPicker = new ColorPicker(Color.BLACK);
+    colorPicker.getStyleClass().add("canvasColorPicker");
 
     gameLogicManager = App.getGameLogicManager();
 
@@ -89,6 +97,9 @@ public class GameScreenController {
           if (newView == View.GAME) {
             // set color of user profile icon button
             setUserButtonStyle();
+            // TODO: Get game mode
+            setGameScreenGui("zen");
+
             // When the view changes to game, we start a new game and clear the canvas
             gameLogicManager.startGame();
             whatToDrawLabel.setText(
@@ -108,6 +119,52 @@ public class GameScreenController {
         (Boolean isDrawn) -> {
           predictionVbox.setVisible(isDrawn);
         });
+  }
+
+  /**
+   * Sets the game screen gui depending on game mode
+   *
+   * @param string the current game mode
+   */
+  private void setGameScreenGui(String string) {
+    switch (string) {
+      case "classic":
+        whatToDrawLabel.setStyle("-fx-font-size: 35px");
+        timeRemainingLabel.setVisible(true);
+
+        if (toolsVBox.getChildren().contains(colorPicker)) {
+          toolsVBox.getChildren().remove(colorPicker);
+        }
+
+        canvasManager.setPenColor(Color.BLACK);
+
+        break;
+      case "zen":
+        whatToDrawLabel.getStyleClass().add("-fx-font-size: 35px");
+        timeRemainingLabel.setVisible(false);
+        if (!toolsVBox.getChildren().contains(colorPicker)) {
+          toolsVBox.getChildren().add(0, colorPicker);
+        }
+
+        colorPicker
+            .valueProperty()
+            .addListener(
+                (observable, oldValue, newValue) -> {
+                  canvasManager.setPenColor(newValue);
+                });
+
+        break;
+      case "hiddenWord":
+        whatToDrawLabel.setStyle("-fx-font-size: 22px");
+        timeRemainingLabel.setVisible(true);
+
+        if (toolsVBox.getChildren().contains(colorPicker)) {
+          toolsVBox.getChildren().remove(colorPicker);
+        }
+
+        canvasManager.setPenColor(Color.BLACK);
+        break;
+    }
   }
 
   /** Gets colour and sets css background colour */

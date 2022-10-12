@@ -33,13 +33,13 @@
 	-fx-font-size: 25px;
 }
 
-.button:hover{
+.button:hover, .canvasColorPicker:hover{
 	-fx-background-color: #F4A261;
 	-fx-text-fill: #264653;
 	-fx-border-color:  #264653;
 }
 
-.button:hover, .userIconButton:hover, .usernameButton:hover, .pagination .toggle-button:hover, .color-picker:hover{
+.button:hover, .userIconButton:hover, .usernameButton:hover, .pagination .toggle-button:hover, .color-picker:hover, .canvasColorPicker:hover{
 	-fx-cursor: hand;
 }
 
@@ -147,6 +147,7 @@
 .newUserScreen {
 	-fx-image: url('../images/new-user-screen.png');
 }
+
 .text-field, .color-picker {
 	-fx-font-family: 'VT323';
    	-fx-font-size: 25px;
@@ -219,6 +220,28 @@
 
 .progress-bar .bar{ 
 	-fx-background-color: #264653;
+}
+
+.canvasColorPicker {
+	-fx-font-family: 'VT323', monospace;
+	-fx-background-color: #264653;
+	-fx-border-color: #F4A261;
+	-fx-font-size: 25px;
+	-fx-pref-width: 101;
+	-fx-pref-height: 45;
+	-fx-color-rect-width: 50;
+    -fx-color-rect-height: 20;
+	-fx-color-label-visible: false ;
+}
+
+.canvasColorPicker .label{
+	-fx-text-fill: #E9C46A;
+	-fx-font-size: 25px;
+}
+
+.canvasColorPicker .arrow{
+	-fx-translate-x: 8;
+	-fx-background-color: #E76F51;
 }
 
 /* User  Screen */

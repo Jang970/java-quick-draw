@@ -69,6 +69,8 @@ public class CanvasManager {
   /** This helps keep track of the mouse being held down and released */
   private boolean isHolding = false;
 
+  private Color penColor = Color.BLACK;
+
   /**
    * The canvas manager is bound to one canvas which is given through this constructor
    *
@@ -156,7 +158,7 @@ public class CanvasManager {
         // TODO: Extract this to either already be set when drawmode is updated or
         // extract to simple function
         if (drawMode == DrawMode.DRAWING) {
-          context.setStroke(Color.BLACK);
+          context.setStroke(penColor);
           context.setLineWidth(brushSize);
           isDrawn = true;
           canvasDrawnEmitter.emit(isDrawn);
@@ -194,6 +196,7 @@ public class CanvasManager {
     if (drawingEnabled && drawMode == DrawMode.DRAWING) {
       int circleRadius = 6;
       isDrawn = true;
+      context.setFill(penColor);
       context.fillOval(
           event.getX() - circleRadius, event.getY() - circleRadius, circleRadius, circleRadius);
     }
@@ -293,5 +296,9 @@ public class CanvasManager {
   public void resetIsDrawn() {
     isDrawn = false;
     canvasDrawnEmitter.emit(isDrawn);
+  }
+
+  public void setPenColor(Color color) {
+    this.penColor = color;
   }
 }

@@ -46,11 +46,11 @@
             </Label>
          </children>
       </VBox>
-      <VBox alignment="CENTER" layoutX="123.0" layoutY="205.0" prefHeight="221.0" prefWidth="101.0">
+      <VBox fx:id="toolsVBox" alignment="CENTER" layoutX="123.0" layoutY="205.0" prefHeight="221.0" prefWidth="101.0">
          <children>
             <Button fx:id="pencilButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onPencilSelected" prefWidth="10000.0" text="PENCIL" VBox.vgrow="ALWAYS">
                <VBox.margin>
-                  <Insets bottom="5.0" />
+                  <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
                <font>
                   <Font size="16.0" />
