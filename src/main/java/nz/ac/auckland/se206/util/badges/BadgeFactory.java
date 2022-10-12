@@ -132,9 +132,14 @@ public class BadgeFactory {
             return false;
           } else if (game.getGameMode() != GameMode.ZEN && game.getWinState() == EndGameState.WIN) {
             count++;
+
+            if (count >= n) {
+              return true;
+            }
           }
         }
-        return true;
+
+        return false;
       }
     };
   }
