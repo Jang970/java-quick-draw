@@ -36,7 +36,7 @@ public class UserScreenController {
                   "Your fastest win is in "
                       + currentProfile.getFastestCategoryPlayed().getTimeTaken()
                       + " seconds when you had to draw '"
-                      + currentProfile.getFastestCategoryPlayed().getCategory().name
+                      + currentProfile.getFastestCategoryPlayed().getCategory().getName()
                       + "'!");
             }
 

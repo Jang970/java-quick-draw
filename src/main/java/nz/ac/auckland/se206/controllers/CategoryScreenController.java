@@ -67,13 +67,13 @@ public class CategoryScreenController {
         new GameProfile(
             currentProfile.getSettings(), GameMode.BASIC, currentProfile.getGameHistory()));
 
-    categoryLabel.setText(gameLogicManager.getCurrentCategory().name);
+    categoryLabel.setText(gameLogicManager.getCurrentCategory().getName());
 
     if (ThreadLocalRandom.current().nextInt(100) == 0) {
       App.getTextToSpeech()
-          .speakAsync("Draw " + gameLogicManager.getCurrentCategory().name + ". Or else");
+          .speakAsync("Draw " + gameLogicManager.getCurrentCategory().getName() + ". Or else");
     } else {
-      App.getTextToSpeech().speakAsync("Draw " + gameLogicManager.getCurrentCategory().name);
+      App.getTextToSpeech().speakAsync("Draw " + gameLogicManager.getCurrentCategory().getName());
     }
   }
 

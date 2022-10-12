@@ -88,7 +88,7 @@ public class GameScreenController {
             setUserButtonStyle();
             // When the view changes to game, we start a new game and clear the canvas
             gameLogicManager.startGame();
-            whatToDrawLabel.setText("To Draw: " + gameLogicManager.getCurrentCategory().name);
+            whatToDrawLabel.setText("To Draw: " + gameLogicManager.getCurrentCategory().getName());
             canvasManager.clearCanvas();
             canvasManager.resetIsDrawn();
 

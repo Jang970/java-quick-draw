@@ -75,7 +75,7 @@ public class GameLogicManager {
             String prediction = predictions.get(i).getClassName().replace('_', ' ');
             double confidence = predictions.get(i).getProbability();
             // wins only if prediction matchs and if canvas is drawn on
-            if (prediction.equals(categoryToGuess.name)
+            if (prediction.equals(categoryToGuess.getName())
                 && confidence >= confidenceNeededToWin
                 && CanvasManager.getIsDrawn()) {
               onCorrectPrediction();
@@ -101,7 +101,7 @@ public class GameLogicManager {
             .flatMap(
                 (game) ->
                     game.getCategoriesPlayed().stream()
-                        .map((categoryPlayed) -> categoryPlayed.getCategory().name))
+                        .map((categoryPlayed) -> categoryPlayed.getCategory().getName()))
             .collect(Collectors.toSet());
 
     WordChoice wordChoice = profile.settings().getWordChoice();

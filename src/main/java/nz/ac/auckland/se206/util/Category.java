@@ -2,9 +2,9 @@ package nz.ac.auckland.se206.util;
 
 public class Category {
 
-  public String name;
-  public String description;
-  public CategoryType categoryType;
+  private String name;
+  private String description;
+  private CategoryType categoryType;
 
   /**
    * Constructor for Category class which stores the name and description of the category/word as

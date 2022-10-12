@@ -30,7 +30,8 @@ public class CategoryHistoryScreenController {
                 App.getProfileManager().getCurrentProfile().getGameHistory().stream()
                     .flatMap(
                         (game) ->
-                            game.getCategoriesPlayed().stream().map(cat -> cat.getCategory().name))
+                            game.getCategoriesPlayed().stream()
+                                .map(cat -> cat.getCategory().getName()))
                     .collect(Collectors.toList());
 
             // TODO: Find a better way to do this resizing

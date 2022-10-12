@@ -70,7 +70,7 @@ public class PredictionManager {
           loaded.stream()
               .filter(
                   (cat) -> {
-                    return cat.categoryType == CategoryType.EASY;
+                    return cat.getCategoryType() == CategoryType.EASY;
                   })
               .collect(Collectors.toSet()));
       categories.put(
@@ -78,7 +78,7 @@ public class PredictionManager {
           loaded.stream()
               .filter(
                   (cat) -> {
-                    return cat.categoryType == CategoryType.HARD;
+                    return cat.getCategoryType() == CategoryType.HARD;
                   })
               .collect(Collectors.toSet()));
       categories.put(
@@ -86,7 +86,7 @@ public class PredictionManager {
           loaded.stream()
               .filter(
                   (cat) -> {
-                    return cat.categoryType == CategoryType.HARD;
+                    return cat.getCategoryType() == CategoryType.HARD;
                   })
               .collect(Collectors.toSet()));
 
@@ -230,7 +230,7 @@ public class PredictionManager {
     // Removes all the items which are also in the filter set (set subtraction)
     possibleCategories =
         possibleCategories.stream()
-            .filter((category) -> !categoryFilter.contains(category.name))
+            .filter((category) -> !categoryFilter.contains(category.getName()))
             .collect(Collectors.toList());
 
     if (possibleCategories.isEmpty()) {
