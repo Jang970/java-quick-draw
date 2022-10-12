@@ -75,12 +75,14 @@ public class BadgeFactory {
 
       @Override
       public boolean earned(Profile profile) {
+        GameInfo game = profile.getMostRecentGame();
         Settings settings = profile.getMostRecentGame().getSettings();
 
         return settings.getAccuracy() == Accuracy.HARD
             && settings.getConfidence() == Confidence.MASTER
             && settings.getTime() == Time.MASTER
-            && settings.getWordChoice() == WordChoice.MASTER;
+            && settings.getWordChoice() == WordChoice.MASTER
+            && game.getWinState() == EndGameState.WIN;
       }
     };
   }
@@ -115,7 +117,8 @@ public class BadgeFactory {
 
       @Override
       public boolean earned(Profile profile) {
-        return profile.getMostRecentGame().getCategoryPlayed().getTimeTaken() <= n;
+        return (profile.getMostRecentGame().getCategoryPlayed().getTimeTaken() <= n)
+            && (profile.getMostRecentGame().getWinState() == EndGameState.WIN);
       }
     };
   }
@@ -129,7 +132,8 @@ public class BadgeFactory {
         GameMode gameMode = game.getGameMode();
 
         return (gameMode == GameMode.BASIC || gameMode == GameMode.HIDDEN_WORD)
-            && game.getCategoryPlayed().getSecondsRemaining() <= 2;
+            && (game.getCategoryPlayed().getSecondsRemaining() <= 2)
+            && (game.getWinState() == EndGameState.WIN);
       }
     };
   }
