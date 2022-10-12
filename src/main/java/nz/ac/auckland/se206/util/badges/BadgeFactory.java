@@ -2,6 +2,8 @@ package nz.ac.auckland.se206.util.badges;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.gamelogicmanager.EndGameState;
 import nz.ac.auckland.se206.gamelogicmanager.GameInfo;
 import nz.ac.auckland.se206.util.Profile;
@@ -13,6 +15,8 @@ import nz.ac.auckland.se206.util.difficulties.WordChoice;
 
 /** Making use of Factory design pattern to handle creation of badges */
 public class BadgeFactory {
+
+  private static Set<String> badgeIds;
 
   // method to create all badges and store in a list
   public static List<Badge> createBadgeList() {
@@ -31,9 +35,15 @@ public class BadgeFactory {
     badges.add(createUnderNSecondsBadge(2));
     badges.add(createUnderNSecondsBadge(5));
     badges.add(createUnderNSecondsBadge(10));
-
     badges.add(createMaxDifficultyBadge());
     badges.add(createGotAllBadgesBadge());
+
+    for (Badge badge : badges) {
+      if (badgeIds.contains(badge.getId())) {
+        App.expect("Each badge ids should be unique");
+      }
+      badgeIds.add(badge.getId());
+    }
 
     return badges;
   }
@@ -43,8 +53,13 @@ public class BadgeFactory {
 
       @Override
       public boolean earned(Profile profile) {
-        return false;
-        // TODO: Figure out how to implement this logic
+        Set<String> profileBadgeIds = profile.getEarnedBadgeIds();
+        for (String badgeId : BadgeFactory.badgeIds) {
+          if (!badgeId.equals("won_all") && !profileBadgeIds.contains(badgeId)) {
+            return false;
+          }
+        }
+        return true;
       }
     };
   }
@@ -57,8 +72,7 @@ public class BadgeFactory {
 
       @Override
       public boolean earned(Profile profile) {
-        Settings settings =
-            profile.getGameHistory().get(profile.getGameHistory().size() - 1).getSettings();
+        Settings settings = profile.getMostRecentGame().getSettings();
 
         return settings.getAccuracy() == Accuracy.HARD
             && settings.getConfidence() == Confidence.MASTER
@@ -97,8 +111,7 @@ public class BadgeFactory {
 
       @Override
       public boolean earned(Profile profile) {
-        List<GameInfo> gameHistory = profile.getGameHistory();
-        return gameHistory.get(gameHistory.size() - 1).getTimeTaken() <= n;
+        return profile.getMostRecentGame().getTimeTaken() <= n;
       }
     };
   }
@@ -108,8 +121,7 @@ public class BadgeFactory {
 
       @Override
       public boolean earned(Profile profile) {
-        List<GameInfo> gameHistory = profile.getGameHistory();
-        return gameHistory.get(gameHistory.size() - 1).getSecondsRemaining() <= 2;
+        return profile.getMostRecentGame().getSecondsRemaining() <= 2;
       }
     };
   }
