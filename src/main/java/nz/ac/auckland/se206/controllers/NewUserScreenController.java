@@ -24,7 +24,7 @@ public class NewUserScreenController {
   @FXML private TextField usernameTextField;
   @FXML private ColorPicker colorPicker;
 
-  /** Creates pagination */
+  /** Creates pagination for NewUserScreen FXML */
   public void initialize() {
 
     // every time view is changed to user profiles pagination is created again based on the new user
@@ -79,6 +79,7 @@ public class NewUserScreenController {
     }
   }
 
+  /** Navigate user back to UserProfilesScreen FXML */
   @FXML
   private void onBackToProfile() {
     App.setView(View.USERPROFILES);

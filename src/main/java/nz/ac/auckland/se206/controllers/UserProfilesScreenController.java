@@ -21,7 +21,7 @@ public class UserProfilesScreenController {
 
   private List<Profile> users;
 
-  /** Creates pagination */
+  /** Creates pagination for UserProfilesScreen FXML */
   public void initialize() {
 
     // every time view is changed to user profiles pagination is created again based on the new user
@@ -58,8 +58,9 @@ public class UserProfilesScreenController {
   /**
    * Creates each page (profile) from given username and colors
    *
-   * @param pageIndex
-   * @return
+   * @param pageIndex used to map the profile to the page number equal to its position in the list
+   *     of profiles
+   * @return vbox containing the user profile
    */
   public VBox createProfile(int pageIndex) {
     // create vBox for ever page
@@ -94,7 +95,7 @@ public class UserProfilesScreenController {
    * Returns the desired format for css background color string
    *
    * @param color given background color of user
-   * @return
+   * @return the colour chosen in a string format
    */
   private String getBackgroundColor(String color) {
     return "-fx-background-color: " + color.replace("0x", "#") + ";";
@@ -103,7 +104,8 @@ public class UserProfilesScreenController {
   /**
    * Sets specific style class for each button and clears previous style classes
    *
-   * @param button
+   * @param button button we want to style
+   * @param cssClass style class we want to use on the button
    */
   private void setButtonStyle(Button button, String cssClass) {
 
@@ -117,7 +119,7 @@ public class UserProfilesScreenController {
    * When profile is clicked it switches to category screen to play and sends user profile details
    * to profile manager
    *
-   * @param userButton
+   * @param userButton button that the user clicks to select a profile to use
    */
   private void onUserButtonsClicked(Button userButton) {
 

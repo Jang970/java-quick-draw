@@ -25,6 +25,7 @@ public class CategoryScreenController {
   private GameLogicManager gameLogicManager;
   private ProfileManager profileManager;
 
+  /** Method that is run to set up the CategoryScreen FXML everytime it is opened/run. */
   public void initialize() {
 
     gameLogicManager = App.getGameLogicManager();
@@ -42,11 +43,19 @@ public class CategoryScreenController {
         });
   }
 
+  /**
+   * Method that will update the label that displays the time allowed to draw to the set time
+   * relative to the user's saved Time difficulty
+   */
   private void updateGameTimeLabel() {
     int numSeconds = gameLogicManager.getCurrentGameProfile().settings().getTime().getTimeToDraw();
     drawTimeLabel.setText("Draw in " + numSeconds + " seconds");
   }
 
+  /**
+   * This method is used to initialise a new game and the GUI labels relating to displaying the
+   * category to draw respectively
+   */
   private void initialiseGameAndUpdateLabels() {
 
     // We need to make sure that we are generating a new category which the player has not already
@@ -68,16 +77,19 @@ public class CategoryScreenController {
     }
   }
 
+  /** Method relating to the button switch to the GameScreen FXML */
   @FXML
   private void onReadyToPlay() {
     App.setView(View.GAME);
   }
 
+  /** Method relating to the button to switch to the UserScreen FXML */
   @FXML
   private void onBackToUserScreen() {
     App.setView(View.USER);
   }
 
+  /** Method to show the how to play pop up to the user */
   @FXML
   private void onPressHowToPlay() {
     // shows an information alert pop up on how to play when button is clicked

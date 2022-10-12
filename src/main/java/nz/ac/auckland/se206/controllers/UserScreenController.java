@@ -14,6 +14,7 @@ public class UserScreenController {
   @FXML private Label numGamesLostLabel;
   @FXML private Label numCategoriesPlayedLabel;
 
+  /** Method that is run to set up the UserScreen FXML everytime it is opened/run. */
   public void initialize() {
 
     // every time view is changes to user stats it gets the recent user stats and displays them
