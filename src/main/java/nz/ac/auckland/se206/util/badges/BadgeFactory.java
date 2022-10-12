@@ -29,16 +29,18 @@ public class BadgeFactory {
     badges.add(createNConsecutiveWinBadge(2));
     badges.add(createNConsecutiveWinBadge(5));
     badges.add(createNConsecutiveWinBadge(10));
-    badges.add(createNConsecutiveWinBadge(15));
     badges.add(createNConsecutiveWinBadge(20));
 
     badges.add(createJustInTimeBadge());
 
-    badges.add(createUnderNSecondsBadge(1));
-    badges.add(createUnderNSecondsBadge(2));
     badges.add(createUnderNSecondsBadge(5));
     badges.add(createUnderNSecondsBadge(10));
+    badges.add(createUnderNSecondsBadge(15));
+    badges.add(createUnderNSecondsBadge(30));
+
     badges.add(createMaxDifficultyBadge());
+
+    // This one has to go last
     badges.add(createGotAllBadgesBadge());
 
     for (Badge badge : badges) {
