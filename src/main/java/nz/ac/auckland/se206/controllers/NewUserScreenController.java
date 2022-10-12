@@ -24,11 +24,11 @@ public class NewUserScreenController {
   @FXML private TextField usernameTextField;
   @FXML private ColorPicker colorPicker;
 
-  /** Creates pagination for NewUserScreen FXML */
+  /** Initializes the new user screen controller. */
   public void initialize() {
 
-    // every time view is changed to user profiles pagination is created again based on the new user
-    // profiles
+    // Reset input field every time screen is entered and allows a back button to profile screen if
+    // profiles exist
     App.subscribeToViewChange(
         (View view) -> {
           if (view == View.NEWUSER) {
