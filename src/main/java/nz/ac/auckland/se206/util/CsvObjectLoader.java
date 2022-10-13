@@ -29,8 +29,8 @@ public class CsvObjectLoader<T> {
    * @param pathToFile path to the csv file we want to read from
    * @param reverseOrder set this to true if the keys come after the values in the csv
    * @return the map from keys to values
-   * @throws IOException
-   * @throws CsvException
+   * @throws IOException if the file to be read cannot be found
+   * @throws CsvException if the file is not in csv format
    */
   public List<T> loadObjectsFromFile(String pathToFile, boolean reverseOrder)
       throws IOException, CsvException {
