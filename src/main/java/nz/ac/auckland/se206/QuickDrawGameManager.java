@@ -5,12 +5,16 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Set;
 import nz.ac.auckland.se206.gamelogicmanager.GameLogicManager;
+import nz.ac.auckland.se206.gamelogicmanager.GameMode;
 import nz.ac.auckland.se206.util.Profile;
 import nz.ac.auckland.se206.util.ProfileManager;
 import nz.ac.auckland.se206.util.badges.Badge;
 import nz.ac.auckland.se206.util.badges.BadgeManager;
 
 public class QuickDrawGameManager {
+
+  private static GameMode currentlySelectedGameMode = GameMode.BASIC;
+
   private static final GameLogicManager gameLogicManager = createGameLogicManager();
   private static final ProfileManager profileManager = createProfileManager();
   private static final BadgeManager badgeManager = new BadgeManager();
@@ -71,6 +75,14 @@ public class QuickDrawGameManager {
 
   public static BadgeManager getBadgeManager() {
     return badgeManager;
+  }
+
+  public static GameMode getCurrentlySelectedGameMode() {
+    return currentlySelectedGameMode;
+  }
+
+  public static void setCurrentlySelectedGameMode(GameMode currentlySelectedGameMode) {
+    QuickDrawGameManager.currentlySelectedGameMode = currentlySelectedGameMode;
   }
 
   public static void initGame() {

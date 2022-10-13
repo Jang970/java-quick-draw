@@ -233,7 +233,12 @@ public class GameScreenController {
     Platform.runLater(
         () -> {
           // When the game starts, we do the following
-          gameActionButton.setText("CANCEL GAME");
+          if (gameLogicManager.getCurrentGameProfile().gameMode() == GameMode.ZEN) {
+            gameActionButton.setText("I'M DONE");
+          } else {
+            gameActionButton.setText("GIVE UP");
+          }
+
           setCanvasButtonsDisabled(false);
           canvasManager.setDrawingEnabled(true);
           canvasManager.setDrawMode(DrawMode.DRAWING);

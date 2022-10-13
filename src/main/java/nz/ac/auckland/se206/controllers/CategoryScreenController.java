@@ -12,6 +12,8 @@ import nz.ac.auckland.se206.App.View;
 import nz.ac.auckland.se206.QuickDrawGameManager;
 import nz.ac.auckland.se206.gamelogicmanager.GameLogicManager;
 import nz.ac.auckland.se206.gamelogicmanager.GameMode;
+import nz.ac.auckland.se206.gamelogicmanager.GameProfile;
+import nz.ac.auckland.se206.util.Profile;
 import nz.ac.auckland.se206.util.ProfileManager;
 
 public class CategoryScreenController {
@@ -36,7 +38,7 @@ public class CategoryScreenController {
             // When the app laods changes to the catgory screen, we genereate a new category and
             // make display updates
             usernameLabel.setText("Hi, " + profileManager.getCurrentProfile().getName());
-            updateLabels();
+            initGameAndUpdateLabels();
           }
         });
   }
@@ -45,9 +47,14 @@ public class CategoryScreenController {
    * This method is used to initialise a new game and the GUI labels relating to displaying the
    * category to draw respectively
    */
-  private void updateLabels() {
+  private void initGameAndUpdateLabels() {
 
-    GameMode gameMode = gameLogicManager.getCurrentGameProfile().gameMode();
+    Profile profile = profileManager.getCurrentProfile();
+
+    GameMode gameMode = QuickDrawGameManager.getCurrentlySelectedGameMode();
+
+    gameLogicManager.initializeGame(
+        new GameProfile(profile.getSettings(), gameMode, profile.getGameHistory()));
 
     String currentCategoryDisplayString;
 

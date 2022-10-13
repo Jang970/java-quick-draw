@@ -11,7 +11,6 @@ import nz.ac.auckland.se206.App.View;
 import nz.ac.auckland.se206.QuickDrawGameManager;
 import nz.ac.auckland.se206.gamelogicmanager.GameLogicManager;
 import nz.ac.auckland.se206.gamelogicmanager.GameMode;
-import nz.ac.auckland.se206.gamelogicmanager.GameProfile;
 import nz.ac.auckland.se206.util.Profile;
 import nz.ac.auckland.se206.util.ProfileManager;
 
@@ -76,9 +75,7 @@ public class GameModesScreenController {
   @FXML
   private void onSelectClassic() {
 
-    gameLogicManager.initializeGame(
-        new GameProfile(
-            currentProfile.getSettings(), GameMode.BASIC, currentProfile.getGameHistory()));
+    QuickDrawGameManager.setCurrentlySelectedGameMode(GameMode.BASIC);
 
     moveCrane(-180);
     sequence.setOnFinished(
@@ -92,9 +89,7 @@ public class GameModesScreenController {
   @FXML
   private void onSelectHiddenWord() {
 
-    gameLogicManager.initializeGame(
-        new GameProfile(
-            currentProfile.getSettings(), GameMode.HIDDEN_WORD, currentProfile.getGameHistory()));
+    QuickDrawGameManager.setCurrentlySelectedGameMode(GameMode.HIDDEN_WORD);
 
     moveCrane(180);
     sequence.setOnFinished(
@@ -108,9 +103,7 @@ public class GameModesScreenController {
   @FXML
   private void onSelectZen() {
 
-    gameLogicManager.initializeGame(
-        new GameProfile(
-            currentProfile.getSettings(), GameMode.ZEN, currentProfile.getGameHistory()));
+    QuickDrawGameManager.setCurrentlySelectedGameMode(GameMode.ZEN);
 
     TranslateTransition translate = new TranslateTransition();
     translate.setNode(craneImageView);
