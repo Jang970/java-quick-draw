@@ -127,9 +127,11 @@ public class Profile {
    * This method will be used to add the current category/word to draw to list of previous words Can
    * be called everytime a new category appears
    *
-   * @param gameInfo current category/word that profile must draw
+   * @param gameInfo info of the game to add to history
    */
   public void addGameToHistory(GameInfo gameInfo) {
+    // we add to the profiles history of games and simultaneously increment gamesWon or gamesLost
+    // depending on the win state of the game
     gameHistory.add(gameInfo);
     if (gameInfo.getWinState() == EndGameState.WIN) {
       gamesWon++;
@@ -175,14 +177,14 @@ public class Profile {
     return gamesLost;
   }
 
-  /** If the player has not had a fastest win, this will be null */
-
   /**
    * This method will get the fastest category played by the profile
    *
    * @return the fastest category played by the profile
    */
   public CategoryPlayedInfo getFastestCategoryPlayed() {
+
+    /** If the player has not had a fastest win, this will be null */
     CategoryPlayedInfo bestGame = null;
 
     // The fancy stuff is just taking a list of games and extracting their lists of categories
@@ -216,8 +218,7 @@ public class Profile {
    * This method will take a badge Id which correlates to the badge we want to award the profile. It
    * will also check if the profile already has the badge.
    *
-   * @param badge the badge to award to the player
-   * @return true if the player did not have the badge and false if they did have the badge
+   * @param badgeId the badge to award to the player
    */
   public void awardBadge(String badgeId) {
     if (!this.badgesEarned.contains(badgeId)) {
