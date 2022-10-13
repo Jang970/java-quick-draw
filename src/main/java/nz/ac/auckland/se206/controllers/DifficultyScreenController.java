@@ -20,6 +20,8 @@ public class DifficultyScreenController {
 
   private Settings settings;
 
+  private View previousView;
+
   /**
    * Create choice boxes for each difficult setting, sets listener to choice boxes, and gets
    * selected game mode to display
@@ -44,6 +46,8 @@ public class DifficultyScreenController {
             confidenceChoiceBox
                 .getSelectionModel()
                 .select(settings.getConfidence().getLabel().toUpperCase());
+          } else {
+            previousView = newView;
           }
         });
 
@@ -99,13 +103,7 @@ public class DifficultyScreenController {
 
   /** Switches back to user profile screen FXML */
   @FXML
-  private void onBackToProfile() {
-    App.setView(View.USER);
-  }
-
-  /** Switch to game modes screen FXML */
-  @FXML
-  private void onSwitchToGameModes() {
-    App.setView(View.GAMEMODES);
+  private void onBack() {
+    App.setView(previousView);
   }
 }

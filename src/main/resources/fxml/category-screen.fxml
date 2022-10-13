@@ -41,11 +41,12 @@
             <Font size="26.0" />
          </font>
       </Button>
-      <Button layoutX="127.0" layoutY="164.0" mnemonicParsing="false" onAction="#onSwitchToSettings" text="SETTINGS" />
+      <Button layoutX="127.0" layoutY="164.0" mnemonicParsing="false" onAction="#onChangeGameMode" text="CHANGE GAMEMODE" />
       <Button fx:id="playButton" alignment="CENTER" layoutX="376.0" layoutY="594.0" mnemonicParsing="false" onAction="#onReadyToPlay" prefHeight="48.0" prefWidth="174.0" text="I'M READY!" textAlignment="CENTER">
          <font>
             <Font size="25.0" />
          </font>
       </Button>
+      <Button layoutX="486.0" layoutY="165.0" mnemonicParsing="false" onAction="#onSwitchToSettings" text="SETTINGS" textAlignment="CENTER" />
    </children>
 </Pane>

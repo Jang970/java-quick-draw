@@ -10,7 +10,7 @@
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="900.0" stylesheets="@../css/application.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.DifficultyScreenController">
    <children>
       <ImageView fx:id="mainMenu" fitHeight="700.0" fitWidth="900.0" pickOnBounds="true" preserveRatio="true" styleClass="difficultyScreen" />
-      <Button layoutX="47.0" layoutY="11.0" mnemonicParsing="false" onAction="#onBackToProfile" prefHeight="45.0" prefWidth="189.0" text="BACK TO PROFILE" />
+      <Button layoutX="47.0" layoutY="11.0" mnemonicParsing="false" onAction="#onBack" prefHeight="45.0" prefWidth="89.0" text="BACK" />
       <ImageView fitHeight="476.0" fitWidth="205.0" layoutX="10.0" layoutY="163.0" pickOnBounds="true" preserveRatio="true" styleClass="accuracyImage" />
       <ImageView fitHeight="431.0" fitWidth="206.0" layoutX="224.0" layoutY="207.0" pickOnBounds="true" preserveRatio="true" styleClass="wordsImage" />
       <ImageView fitHeight="465.0" fitWidth="208.0" layoutX="440.0" layoutY="171.0" pickOnBounds="true" preserveRatio="true" styleClass="timeImage" />
@@ -49,6 +49,5 @@
             <Font size="25.0" />
          </font>
       </Label>
-      <Button layoutX="365.0" layoutY="645.0" mnemonicParsing="false" onAction="#onSwitchToGameModes" prefHeight="45.0" prefWidth="173.0" text="LET'S PLAY!" />
    </children>
 </Pane>

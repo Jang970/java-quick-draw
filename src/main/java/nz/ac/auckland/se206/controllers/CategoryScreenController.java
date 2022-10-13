@@ -22,7 +22,6 @@ public class CategoryScreenController {
 
   private GameLogicManager gameLogicManager;
   private ProfileManager profileManager;
-  private String currentCategoryDisplayString;
 
   /** Method that is run to set up the CategoryScreen FXML everytime it is opened/run. */
   public void initialize() {
@@ -36,28 +35,22 @@ public class CategoryScreenController {
             // When the app laods changes to the catgory screen, we genereate a new category and
             // make display updates
             usernameLabel.setText("Hi, " + profileManager.getCurrentProfile().getName());
-            initialiseGameAndUpdateLabels();
-            updateGameTimeLabel();
+            updateLabels();
           }
         });
-  }
-
-  /**
-   * Method that will update the label that displays the time allowed to draw to the set time
-   * relative to the user's saved Time difficulty
-   */
-  private void updateGameTimeLabel() {
-    int numSeconds = gameLogicManager.getCurrentGameProfile().settings().getTime().getTimeToDraw();
-    drawTimeLabel.setText("Draw in " + numSeconds + " seconds");
   }
 
   /**
    * This method is used to initialise a new game and the GUI labels relating to displaying the
    * category to draw respectively
    */
-  private void initialiseGameAndUpdateLabels() {
+  private void updateLabels() {
 
-    if (gameLogicManager.getCurrentGameProfile().gameMode() == GameMode.HIDDEN_WORD) {
+    GameMode gameMode = gameLogicManager.getCurrentGameProfile().gameMode();
+
+    String currentCategoryDisplayString;
+
+    if (gameMode == GameMode.HIDDEN_WORD) {
       categoryLabel.setStyle("-fx-font-size: 40px");
       currentCategoryDisplayString = gameLogicManager.getCurrentCategory().getDescription();
     } else {
@@ -72,6 +65,13 @@ public class CategoryScreenController {
     } else {
       App.getTextToSpeech().speakAsync("Draw " + currentCategoryDisplayString);
     }
+    int numSeconds = gameLogicManager.getCurrentGameProfile().settings().getTime().getTimeToDraw();
+
+    if (gameMode == GameMode.ZEN) {
+      drawTimeLabel.setText("DRAW");
+    } else {
+      drawTimeLabel.setText("DRAW IN " + numSeconds + " SECONDS");
+    }
   }
 
   /** Method relating to the button switch to the GameScreen FXML */
@@ -84,6 +84,12 @@ public class CategoryScreenController {
   @FXML
   private void onSwitchToSettings() {
     App.setView(View.DIFFICULTY);
+  }
+
+  /** Method relating to the button to switch to the UserScreen FXML */
+  @FXML
+  private void onChangeGameMode() {
+    App.setView(View.GAMEMODES);
   }
 
   /** Method to show the how to play pop up to the user */

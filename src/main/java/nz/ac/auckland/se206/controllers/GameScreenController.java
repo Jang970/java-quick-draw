@@ -27,7 +27,9 @@ import nz.ac.auckland.se206.fxmlutils.CanvasManager.DrawMode;
 import nz.ac.auckland.se206.gamelogicmanager.EndGameState;
 import nz.ac.auckland.se206.gamelogicmanager.GameLogicManager;
 import nz.ac.auckland.se206.gamelogicmanager.GameMode;
+import nz.ac.auckland.se206.gamelogicmanager.GameProfile;
 import nz.ac.auckland.se206.util.BufferedImageUtils;
+import nz.ac.auckland.se206.util.Profile;
 
 public class GameScreenController {
 
@@ -38,7 +40,7 @@ public class GameScreenController {
   @FXML private Button eraserButton;
   @FXML private Button clearButton;
 
-  @FXML private Button userProfilesButton;
+  @FXML private Button changeGameModeButton;
   @FXML private Button userButton;
   @FXML private Button gameActionButton;
   @FXML private Button downloadImageButton;
@@ -334,13 +336,13 @@ public class GameScreenController {
 
   /** Method relating to the button switch to UserProfilesScreen FXML */
   @FXML
-  private void onUserProfiles() {
-    App.setView(View.USERPROFILES);
+  private void onChangeGameMode() {
+    App.setView(View.GAMEMODES);
   }
 
   /** Method relating to the button switch to UserScreen FXML */
   @FXML
-  private void onUserStats() {
+  private void onUserHome() {
     App.setView(View.USER);
   }
 
@@ -352,8 +354,16 @@ public class GameScreenController {
   private void onGameAction() {
     if (gameLogicManager.isPlaying()) {
       gameLogicManager.stopGame();
+      // End the game
     } else {
-      App.setView(View.GAMEMODES);
+      // Start new game
+      Profile profile = App.getProfileManager().getCurrentProfile();
+      gameLogicManager.initializeGame(
+          new GameProfile(
+              profile.getSettings(),
+              gameLogicManager.getCurrentGameProfile().gameMode(),
+              profile.getGameHistory()));
+      App.setView(View.CATEGORY);
     }
   }
 
