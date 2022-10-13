@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -241,11 +242,16 @@ public class GameScreenController {
 
           gameLogicManager.setPredictionWinningEnabled(imageFilledFraction < 0.98);
 
+          List<String> normalisedClassfications =
+              classificationList.stream()
+                  .map((classification) -> classification.getClassName().replace('_', ' '))
+                  .collect(Collectors.toList());
+
           // When we are given new predictions, we update the predictions text
           int range = Math.min(classificationList.size(), guessLabels.length);
 
           for (int i = 0; i < range; i++) {
-            String guessText = classificationList.get(i).getClassName().replace('_', ' ');
+            String guessText = normalisedClassfications.get(i);
             guessLabels[i].setText(((i + 1) + ": " + guessText).toUpperCase());
           }
 
@@ -253,9 +259,12 @@ public class GameScreenController {
 
           int posInList = 0;
           while (posInList < classificationList.size()
-              && !classificationList.get(posInList).equals(categoryToGuess)) {
+              && !normalisedClassfications.get(posInList).equals(categoryToGuess)) {
             posInList++;
           }
+          posInList++;
+
+          System.out.println("Item is number " + posInList + " in the category list");
 
           // TODO: Use pos in list
         });
