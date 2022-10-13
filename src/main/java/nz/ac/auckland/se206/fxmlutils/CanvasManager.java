@@ -14,6 +14,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javax.imageio.ImageIO;
 import nz.ac.auckland.se206.App;
+import nz.ac.auckland.se206.QuickDrawGameManager;
 import nz.ac.auckland.se206.util.BufferedImageUtils;
 
 /**
@@ -219,9 +220,9 @@ public class CanvasManager {
     FileChooser fileChooser = new FileChooser();
     fileChooser.setTitle("Save Image");
     fileChooser.setInitialFileName(
-        App.getProfileManager().getCurrentProfile().getName()
+        QuickDrawGameManager.getProfileManager().getCurrentProfile().getName()
             + "'s "
-            + App.getGameLogicManager().getCurrentCategory().getName()
+            + QuickDrawGameManager.getGameLogicManager().getCurrentCategory().getName()
             + " drawing");
 
     final File directory = fileChooser.showSaveDialog(App.getStage());

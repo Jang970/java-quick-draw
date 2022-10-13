@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
+import nz.ac.auckland.se206.QuickDrawGameManager;
 import nz.ac.auckland.se206.util.Profile;
 
 public class UserScreenController {
@@ -22,7 +23,7 @@ public class UserScreenController {
         (View view) -> {
           if (view == View.USER) {
 
-            Profile currentProfile = App.getProfileManager().getCurrentProfile();
+            Profile currentProfile = QuickDrawGameManager.getProfileManager().getCurrentProfile();
 
             // sets all labels of the user stats and users name
             statsHeaderLabel.setText(currentProfile.getName());

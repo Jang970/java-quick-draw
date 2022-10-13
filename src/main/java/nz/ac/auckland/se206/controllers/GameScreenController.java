@@ -22,6 +22,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
+import nz.ac.auckland.se206.QuickDrawGameManager;
 import nz.ac.auckland.se206.fxmlutils.CanvasManager;
 import nz.ac.auckland.se206.fxmlutils.CanvasManager.DrawMode;
 import nz.ac.auckland.se206.gamelogicmanager.EndGameState;
@@ -77,7 +78,7 @@ public class GameScreenController {
     colorPicker = new ColorPicker(Color.BLACK);
     colorPicker.getStyleClass().add("canvasColorPicker");
 
-    gameLogicManager = App.getGameLogicManager();
+    gameLogicManager = QuickDrawGameManager.getGameLogicManager();
 
     // Creates a task which gives the game logic manager a way of accessing the canvas image.
     gameLogicManager.setImageSource(
@@ -177,7 +178,10 @@ public class GameScreenController {
   private void setUserButtonStyle() {
     userButton.setStyle(
         "-fx-background-color: "
-            + App.getProfileManager().getCurrentProfile().getColour().replace("0x", "#")
+            + QuickDrawGameManager.getProfileManager()
+                .getCurrentProfile()
+                .getColour()
+                .replace("0x", "#")
             + ";");
   }
 
@@ -357,7 +361,7 @@ public class GameScreenController {
       // End the game
     } else {
       // Start new game
-      Profile profile = App.getProfileManager().getCurrentProfile();
+      Profile profile = QuickDrawGameManager.getProfileManager().getCurrentProfile();
       gameLogicManager.initializeGame(
           new GameProfile(
               profile.getSettings(),

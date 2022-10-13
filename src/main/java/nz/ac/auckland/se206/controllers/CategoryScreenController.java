@@ -9,6 +9,7 @@ import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
+import nz.ac.auckland.se206.QuickDrawGameManager;
 import nz.ac.auckland.se206.gamelogicmanager.GameLogicManager;
 import nz.ac.auckland.se206.gamelogicmanager.GameMode;
 import nz.ac.auckland.se206.util.ProfileManager;
@@ -26,8 +27,8 @@ public class CategoryScreenController {
   /** Method that is run to set up the CategoryScreen FXML everytime it is opened/run. */
   public void initialize() {
 
-    gameLogicManager = App.getGameLogicManager();
-    profileManager = App.getProfileManager();
+    gameLogicManager = QuickDrawGameManager.getGameLogicManager();
+    profileManager = QuickDrawGameManager.getProfileManager();
 
     App.subscribeToViewChange(
         (View view) -> {

@@ -11,6 +11,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
+import nz.ac.auckland.se206.QuickDrawGameManager;
 
 public class CategoryHistoryScreenController {
 
@@ -30,7 +31,10 @@ public class CategoryHistoryScreenController {
           if (view == View.CATEGORYHISTORY) {
 
             categoryHistory =
-                App.getProfileManager().getCurrentProfile().getGameHistory().stream()
+                QuickDrawGameManager.getProfileManager()
+                    .getCurrentProfile()
+                    .getGameHistory()
+                    .stream()
                     .flatMap(
                         (game) ->
                             game.getCategoriesPlayed().stream()

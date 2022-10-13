@@ -14,6 +14,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
+import nz.ac.auckland.se206.QuickDrawGameManager;
 
 public class HomeScreenController {
   @FXML private Button newGameButton;
@@ -49,7 +50,7 @@ public class HomeScreenController {
           player.stop();
         });
 
-    if (App.getProfileManager().getProfiles().isEmpty()) {
+    if (QuickDrawGameManager.getProfileManager().getProfiles().isEmpty()) {
       App.setView(View.NEWUSER);
     } else {
       App.setView(View.USERPROFILES);

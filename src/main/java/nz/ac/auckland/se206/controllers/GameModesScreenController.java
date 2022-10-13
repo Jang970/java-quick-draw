@@ -8,6 +8,7 @@ import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
+import nz.ac.auckland.se206.QuickDrawGameManager;
 import nz.ac.auckland.se206.gamelogicmanager.GameLogicManager;
 import nz.ac.auckland.se206.gamelogicmanager.GameMode;
 import nz.ac.auckland.se206.gamelogicmanager.GameProfile;
@@ -25,8 +26,8 @@ public class GameModesScreenController {
 
   public void initialize() {
 
-    gameLogicManager = App.getGameLogicManager();
-    profileManager = App.getProfileManager();
+    gameLogicManager = QuickDrawGameManager.getGameLogicManager();
+    profileManager = QuickDrawGameManager.getProfileManager();
 
     App.subscribeToViewChange(
         (View view) -> {
