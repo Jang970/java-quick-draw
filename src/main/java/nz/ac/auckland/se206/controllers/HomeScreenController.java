@@ -15,6 +15,7 @@ public class HomeScreenController {
   @FXML
   private void onStartNewGame() {
 
+    // will go to the relevant FXML depending if there are existing profiles or not
     if (App.getProfileManager().getProfiles().isEmpty()) {
       App.setView(View.NEWUSER);
     } else {

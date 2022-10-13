@@ -60,15 +60,18 @@ public class CategoryScreenController {
 
     // We need to make sure that we are generating a new category which the player has not already
     // played.
-
     Profile currentProfile = profileManager.getCurrentProfile();
 
+    // initialise and start a game passing in the profiles settings, the game mode and the word
+    // history
     gameLogicManager.initializeGame(
         new GameProfile(
             currentProfile.getSettings(), GameMode.BASIC, currentProfile.getGameHistory()));
 
     categoryLabel.setText(gameLogicManager.getCurrentCategory().getName());
 
+    // use TTS to speak the category to draw to user
+    // little easter egg that causes the TTS to say 'or else' at the end
     if (ThreadLocalRandom.current().nextInt(100) == 0) {
       App.getTextToSpeech()
           .speakAsync("Draw " + gameLogicManager.getCurrentCategory().getName() + ". Or else");
@@ -99,9 +102,10 @@ public class CategoryScreenController {
         .getStylesheets()
         .add(getClass().getResource("/css/application.css").toExternalForm());
 
-    // setting display values
+    // setting display values when the how to play pop up is shown
     howToPlayAlert.setTitle("How to Play");
     howToPlayAlert.setHeaderText("How to Play");
+    // content to display on the pop up
     howToPlayAlert.setContentText(
         "Once you click the \"I'm Ready!\" button, "
             + "the timer will start immediately and you "

@@ -63,9 +63,11 @@ public class GameScreenController {
     // Creates a task which gives the game logic manager a way of accessing the canvas image.
     gameLogicManager.setImageSource(
         () -> {
+          // access the image drawn on the canvas
           FutureTask<BufferedImage> getImage =
               new FutureTask<BufferedImage>(() -> canvasManager.getCurrentSnapshot());
           Platform.runLater(getImage);
+          // will check for any exceptions but should not really occur
           try {
             return getImage.get();
           } catch (InterruptedException | ExecutionException error) {
@@ -124,22 +126,22 @@ public class GameScreenController {
     // Run this after the game ends
     Platform.runLater(
         () -> {
-
           // Update all dislay items correctly
-
           canvasManager.setDrawingEnabled(false);
           setCanvasButtonsDisabled(true);
 
           gameActionButton.setText("New Game");
           whatToDrawLabel.getStyleClass().add("stateHeaders");
 
+          // this logic handles what the TTS and what the label will contain depending on the
+          // winstate
           if (winState == EndGameState.WIN) {
             whatToDrawLabel.setText("You got it!");
             App.getTextToSpeech().speakAsync("You got it!");
           } else if (winState == EndGameState.LOOSE) {
             whatToDrawLabel.setText("Sorry, you ran out of time!");
             App.getTextToSpeech().speakAsync("Sorry, you ran out of time!");
-          } else {
+          } else { // game is cancelled so player didnt win or lose
             whatToDrawLabel.setText("Game cancelled.");
           }
         });
@@ -152,6 +154,7 @@ public class GameScreenController {
           // When the game starts, we do the following
           gameActionButton.setText("Cancel Game");
           setCanvasButtonsDisabled(false);
+          // allows player to draw on the canvas
           canvasManager.setDrawingEnabled(true);
           canvasManager.setDrawMode(DrawMode.DRAWING);
           gameActionButton.setDisable(false);
