@@ -10,6 +10,14 @@ public class GameInfo {
   private Settings settings;
   private GameMode gameMode;
 
+  /**
+   * This is the GameInfo constructor which stores the relevant game info needed to award badges
+   *
+   * @param winState if player won lost or other
+   * @param categoriesPlayed all categories played
+   * @param settingsUsed the difficulties the game was played
+   * @param gameMode the gamemode the game was played on
+   */
   GameInfo(
       EndGameState winState,
       List<CategoryPlayedInfo> categoriesPlayed,

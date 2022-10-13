@@ -66,10 +66,12 @@ public class GameLogicManager {
     predictionManager = new PredictionManager(100, 10);
     predictionManager.setPredictionListener(
         (predictions) -> {
+          // set variables relative to the difficulty set
           int topNumGuessesNeededToWin =
               currentGameProfile.settings().getAccuracy().getTopNumGuesses();
           double confidenceNeededToWin =
               currentGameProfile.settings().getConfidence().getProbabilityPercentage();
+          // make the predictions and format
           int range = Math.min(predictions.size(), topNumGuessesNeededToWin);
           for (int i = 0; i < range; i++) {
             String prediction = predictions.get(i).getClassName().replace('_', ' ');
@@ -96,6 +98,7 @@ public class GameLogicManager {
   public void initializeGame(GameProfile profile) {
     currentGameProfile = profile;
 
+    // logic to get a set of all categories played by a user
     Set<String> categories =
         profile.gameHistory().stream()
             .flatMap(
@@ -107,6 +110,7 @@ public class GameLogicManager {
     WordChoice wordChoice = profile.settings().getWordChoice();
 
     try {
+      // check which categories to include in generating a new category to play
       categoryToGuess =
           predictionManager.getNewRandomCategory(
               categories,
@@ -120,6 +124,7 @@ public class GameLogicManager {
 
   /** Starts the countdown, and enables the prediction server */
   public void startGame() {
+    // start the count, prediction and send data if the game started
     countdownTimer.startCountdown(currentGameProfile.settings().getTime().getTimeToDraw());
     predictionManager.startMakingPredictions();
     gameStartedEmitter.emit();

@@ -8,6 +8,14 @@ public class CategoryPlayedInfo {
   private int secondsRemaining;
   private Category category;
 
+  /**
+   * This is the constructor for the CategoryPlayedInfo which stores the category, the time taken
+   * and the number of seconds remaining when the game ended.
+   *
+   * @param timeTaken time taken for the game
+   * @param secondsRemaining time left in the game
+   * @param category category played
+   */
   CategoryPlayedInfo(int timeTaken, int secondsRemaining, Category category) {
     this.timeTaken = timeTaken;
     this.secondsRemaining = secondsRemaining;
