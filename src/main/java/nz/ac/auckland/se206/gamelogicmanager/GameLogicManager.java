@@ -25,6 +25,7 @@ import nz.ac.auckland.se206.util.difficulties.WordChoice;
  */
 public class GameLogicManager {
   private Boolean isPlaying = false;
+  private Boolean replayWord = false;
 
   private Category categoryToGuess;
 
@@ -121,16 +122,17 @@ public class GameLogicManager {
             .collect(Collectors.toSet());
 
     WordChoice wordChoice = profile.settings().getWordChoice();
-
-    try {
-      categoryToGuess =
-          predictionManager.getNewRandomCategory(
-              categories,
-              wordChoice.categoryShouldBeIncluded(CategoryType.EASY),
-              wordChoice.categoryShouldBeIncluded(CategoryType.MEDIUM),
-              wordChoice.categoryShouldBeIncluded(CategoryType.HARD));
-    } catch (FilterTooStrictException e) {
-      e.printStackTrace();
+    if (replayWord == false) {
+      try {
+        categoryToGuess =
+            predictionManager.getNewRandomCategory(
+                categories,
+                wordChoice.categoryShouldBeIncluded(CategoryType.EASY),
+                wordChoice.categoryShouldBeIncluded(CategoryType.MEDIUM),
+                wordChoice.categoryShouldBeIncluded(CategoryType.HARD));
+      } catch (FilterTooStrictException e) {
+        e.printStackTrace();
+      }
     }
   }
 
@@ -326,5 +328,25 @@ public class GameLogicManager {
 
   public Integer getNumberOfCategories() {
     return predictionManager.getNumberOfCategories();
+  }
+
+  /**
+   * This method is used to set the category to play for the user
+   *
+   * @param newCategory new category to set the category to play to
+   */
+  public void setCategory(Category newCategory) {
+    categoryToGuess = newCategory;
+    updateReplayWord(true);
+  }
+
+  /**
+   * This method will be used to update the indicator variable which determines if a word is being
+   * replayed or not
+   *
+   * @param newVal true or false depending if a player is replaying a word
+   */
+  public void updateReplayWord(Boolean newVal) {
+    this.replayWord = newVal;
   }
 }
