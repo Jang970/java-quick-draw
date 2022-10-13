@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import nz.ac.auckland.se206.fxmlutils.CanvasManager;
 import nz.ac.auckland.se206.util.Category;
 import nz.ac.auckland.se206.util.CategoryType;
 import nz.ac.auckland.se206.util.CountdownTimer;
@@ -45,6 +44,7 @@ public class GameLogicManager {
   private EmptyEventEmitter gameStartedEmitter = new EmptyEventEmitter();
 
   private boolean sentPredictionMessage = false;
+  private boolean predictionWinningEnabled = true;
 
   /**
    * This is the constructor for the GameLogicManager class which contains and handles all the logic
@@ -71,19 +71,19 @@ public class GameLogicManager {
 
     predictionManager.setPredictionListener(
         (predictions) -> {
-          int topNumGuessesNeededToWin =
-              currentGameProfile.settings().getAccuracy().getTopNumGuesses();
+          if (predictionWinningEnabled) {
+            int topNumGuessesNeededToWin =
+                currentGameProfile.settings().getAccuracy().getTopNumGuesses();
 
-          double confidenceNeededToWin =
-              currentGameProfile.settings().getConfidence().getProbabilityPercentage();
+            double confidenceNeededToWin =
+                currentGameProfile.settings().getConfidence().getProbabilityPercentage();
 
-          int range = Math.min(predictions.size(), topNumGuessesNeededToWin);
+            int range = Math.min(predictions.size(), topNumGuessesNeededToWin);
 
-          for (int i = 0; i < range; i++) {
-            String prediction = predictions.get(i).getClassName().replace('_', ' ');
-            double confidence = predictions.get(i).getProbability();
-            // wins only if prediction matchs and if canvas is drawn on
-            if (CanvasManager.getIsDrawn()) {
+            for (int i = 0; i < range; i++) {
+              String prediction = predictions.get(i).getClassName().replace('_', ' ');
+              double confidence = predictions.get(i).getProbability();
+
               if (prediction.equals(categoryToGuess.getName())
                   && confidence >= confidenceNeededToWin) {
                 if (!sentPredictionMessage) {
@@ -179,6 +179,7 @@ public class GameLogicManager {
             currentGameProfile.gameMode()));
 
     isPlaying = false;
+    predictionWinningEnabled = true;
   }
 
   /**
@@ -232,8 +233,17 @@ public class GameLogicManager {
   }
 
   /**
-   * This method will get the category that the player need to draw
+   * This method enables or disabled the prediction win detector. While it is disables, the
+   * prediction manager will continue to make predictions but the game will simply not check to see
+   * if you have won.
    *
+   * @param enabled whether or not the prediction win detector is enabled
+   */
+  public void setPredictionWinningEnabled(boolean enabled) {
+    predictionWinningEnabled = enabled;
+  }
+
+  /**
    * @return the category that the player need to draw
    */
   public Category getCurrentCategory() {

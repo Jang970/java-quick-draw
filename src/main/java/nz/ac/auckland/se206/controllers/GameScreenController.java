@@ -24,6 +24,7 @@ import nz.ac.auckland.se206.fxmlutils.CanvasManager;
 import nz.ac.auckland.se206.fxmlutils.CanvasManager.DrawMode;
 import nz.ac.auckland.se206.gamelogicmanager.EndGameState;
 import nz.ac.auckland.se206.gamelogicmanager.GameLogicManager;
+import nz.ac.auckland.se206.util.BufferedImageUtils;
 
 public class GameScreenController {
 
@@ -105,19 +106,11 @@ public class GameScreenController {
             gameLogicManager.startGame();
             whatToDrawLabel.setText("TO DRAW: " + gameLogicManager.getCurrentCategory().getName());
             canvasManager.clearCanvas();
-            canvasManager.resetIsDrawn();
 
             // doesnt cancel if just looking at user stats
           } else {
             gameLogicManager.stopGame();
           }
-        });
-
-    // when canvas drawn changes between true and false have predictionsVbox do the same.
-    // only starts showing predictions when user draws
-    CanvasManager.subscribeToCanvasDrawn(
-        (Boolean isDrawn) -> {
-          predictionVbox.setVisible(isDrawn);
         });
   }
 
@@ -240,6 +233,14 @@ public class GameScreenController {
   private void onPredictionsChange(List<Classification> classificationList) {
     Platform.runLater(
         () -> {
+
+          // This makes sure the canvas is at least a little bit filled before allowing detections
+          double imageFilledFraction =
+              BufferedImageUtils.getFilledFraction(
+                  canvasManager.getCurrentBlackAndWhiteSnapshot(), 1);
+
+          gameLogicManager.setPredictionWinningEnabled(imageFilledFraction < 0.98);
+
           // When we are given new predictions, we update the predictions text
           int range = Math.min(classificationList.size(), guessLabels.length);
 
@@ -248,7 +249,7 @@ public class GameScreenController {
             guessLabels[i].setText(((i + 1) + ": " + guessText).toUpperCase());
           }
 
-          String categoryToGuess = gameLogicManager.getCurrentCategory().name;
+          String categoryToGuess = gameLogicManager.getCurrentCategory().getName();
 
           int posInList = 0;
           while (posInList < classificationList.size()

@@ -1,7 +1,6 @@
 package nz.ac.auckland.se206.fxmlutils;
 
 import java.awt.image.BufferedImage;
-import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
 import javafx.embed.swing.SwingFXUtils;
@@ -15,8 +14,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javax.imageio.ImageIO;
 import nz.ac.auckland.se206.App;
-import nz.ac.auckland.se206.util.EventEmitter;
-import nz.ac.auckland.se206.util.EventListener;
+import nz.ac.auckland.se206.util.BufferedImageUtils;
 
 /**
  * The purpose of this class is to isolate all functionality of the canvas from the controller
@@ -33,28 +31,6 @@ public class CanvasManager {
   public enum DrawMode {
     DRAWING,
     ERASING
-  }
-
-  // tracks if canvas is drawn on or not
-  private static boolean isDrawn = false;
-  private static EventEmitter<Boolean> canvasDrawnEmitter = new EventEmitter<Boolean>();
-
-  /**
-   * Returns if the canvas has been drawn or not
-   *
-   * @return
-   */
-  public static boolean getIsDrawn() {
-    return isDrawn;
-  }
-
-  /**
-   * Subscribes to canvas drawn to keep track of when canvas is drawn on
-   *
-   * @param listener the EventListener to be notified when an event is emitted
-   */
-  public static void subscribeToCanvasDrawn(EventListener<Boolean> listener) {
-    canvasDrawnEmitter.subscribe(listener);
   }
 
   private final GraphicsContext context;
@@ -158,8 +134,6 @@ public class CanvasManager {
         if (drawMode == DrawMode.DRAWING) {
           context.setStroke(penColor);
           context.setLineWidth(brushSize);
-          isDrawn = true;
-          canvasDrawnEmitter.emit(isDrawn);
         } else if (drawMode == DrawMode.ERASING) {
           // TODO: Extract this hard coded specific color
           context.setStroke(Color.rgb(235, 233, 221));
@@ -193,7 +167,6 @@ public class CanvasManager {
   private void handleClickEvent(MouseEvent event) {
     if (drawingEnabled && drawMode == DrawMode.DRAWING) {
       int circleRadius = 6;
-      isDrawn = true;
       context.setFill(penColor);
       context.fillOval(
           event.getX() - circleRadius, event.getY() - circleRadius, circleRadius, circleRadius);
@@ -220,32 +193,7 @@ public class CanvasManager {
    * @return The BufferedImage corresponding to the current canvas content.
    */
   public BufferedImage getCurrentBlackAndWhiteSnapshot() {
-
-    final BufferedImage originalImage = SwingFXUtils.fromFXImage(canvas.snapshot(null, null), null);
-
-    // Convert into a binary image.
-    final BufferedImage blackAndWhiteImage =
-        new BufferedImage(
-            originalImage.getWidth(), originalImage.getHeight(), BufferedImage.TYPE_BYTE_BINARY);
-
-    WritableRaster originalRaster = originalImage.getRaster();
-    WritableRaster bwRaster = blackAndWhiteImage.getRaster();
-
-    int[] pixels = new int[4];
-
-    for (int y = 0; y < originalRaster.getHeight(); y++) {
-      for (int x = 0; x < originalRaster.getWidth(); x++) {
-        originalRaster.getPixel(x, y, pixels);
-        boolean isBlack = pixels[0] < 255 || pixels[1] < 255 || pixels[2] < 255;
-        if (isBlack) {
-          bwRaster.setPixel(x, y, new int[] {0, 0, 0, 0});
-        } else {
-          bwRaster.setPixel(x, y, new int[] {255, 255, 255, 255});
-        }
-      }
-    }
-
-    return blackAndWhiteImage;
+    return BufferedImageUtils.convertColourToBlackAndWhite(getCurrentColourSnapshot());
   }
 
   /**
@@ -254,9 +202,7 @@ public class CanvasManager {
    * @return The BufferedImage corresponding to the current canvas content.
    */
   public BufferedImage getCurrentColourSnapshot() {
-    final Image snapshot = canvas.snapshot(null, null);
-    final BufferedImage image = SwingFXUtils.fromFXImage(snapshot, null);
-    return image;
+    return SwingFXUtils.fromFXImage(canvas.snapshot(null, null), null);
   }
 
   /**
@@ -310,12 +256,6 @@ public class CanvasManager {
    */
   public void setDrawingEnabled(boolean drawingEnabled) {
     this.drawingEnabled = drawingEnabled;
-  }
-
-  /** resets is drawn to false */
-  public void resetIsDrawn() {
-    isDrawn = false;
-    canvasDrawnEmitter.emit(isDrawn);
   }
 
   public void setPenColor(Color color) {
