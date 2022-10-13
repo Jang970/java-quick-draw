@@ -11,8 +11,6 @@ import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
 import nz.ac.auckland.se206.gamelogicmanager.GameLogicManager;
 import nz.ac.auckland.se206.gamelogicmanager.GameMode;
-import nz.ac.auckland.se206.gamelogicmanager.GameProfile;
-import nz.ac.auckland.se206.util.Profile;
 import nz.ac.auckland.se206.util.ProfileManager;
 
 public class CategoryScreenController {
@@ -24,6 +22,7 @@ public class CategoryScreenController {
 
   private GameLogicManager gameLogicManager;
   private ProfileManager profileManager;
+  private String currentCategoryDisplayString;
 
   /** Method that is run to set up the CategoryScreen FXML everytime it is opened/run. */
   public void initialize() {
@@ -58,22 +57,20 @@ public class CategoryScreenController {
    */
   private void initialiseGameAndUpdateLabels() {
 
-    // We need to make sure that we are generating a new category which the player has not already
-    // played.
+    if (gameLogicManager.getCurrentGameProfile().gameMode() == GameMode.HIDDEN_WORD) {
+      categoryLabel.setStyle("-fx-font-size: 40px");
+      currentCategoryDisplayString = gameLogicManager.getCurrentCategory().getDescription();
+    } else {
+      categoryLabel.setStyle("-fx-font-size: 90px");
+      currentCategoryDisplayString = gameLogicManager.getCurrentCategory().getName();
+    }
 
-    Profile currentProfile = profileManager.getCurrentProfile();
-
-    gameLogicManager.initializeGame(
-        new GameProfile(
-            currentProfile.getSettings(), GameMode.BASIC, currentProfile.getGameHistory()));
-
-    categoryLabel.setText(gameLogicManager.getCurrentCategory().getName());
+    categoryLabel.setText(currentCategoryDisplayString.toUpperCase());
 
     if (ThreadLocalRandom.current().nextInt(100) == 0) {
-      App.getTextToSpeech()
-          .speakAsync("Draw " + gameLogicManager.getCurrentCategory().getName() + ". Or else");
+      App.getTextToSpeech().speakAsync("Draw " + currentCategoryDisplayString + ". Or else");
     } else {
-      App.getTextToSpeech().speakAsync("Draw " + gameLogicManager.getCurrentCategory().getName());
+      App.getTextToSpeech().speakAsync("Draw " + currentCategoryDisplayString);
     }
   }
 

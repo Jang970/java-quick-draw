@@ -8,13 +8,33 @@ import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
+import nz.ac.auckland.se206.gamelogicmanager.GameLogicManager;
+import nz.ac.auckland.se206.gamelogicmanager.GameMode;
+import nz.ac.auckland.se206.gamelogicmanager.GameProfile;
+import nz.ac.auckland.se206.util.Profile;
+import nz.ac.auckland.se206.util.ProfileManager;
 
 public class GameModesScreenController {
   @FXML private ImageView craneImageView;
   @FXML private Label descriptionLabel;
 
   private SequentialTransition sequence;
+  private GameLogicManager gameLogicManager;
+  private ProfileManager profileManager;
+  private Profile currentProfile;
 
+  public void initialize() {
+
+    gameLogicManager = App.getGameLogicManager();
+    profileManager = App.getProfileManager();
+
+    App.subscribeToViewChange(
+        (View view) -> {
+          if (view == View.GAMEMODES) {
+            currentProfile = profileManager.getCurrentProfile();
+          }
+        });
+  }
   /**
    * Creates animation to move crane to the specified moveX position
    *
@@ -54,7 +74,11 @@ public class GameModesScreenController {
   /** sets game mode as classic and goes to category screen */
   @FXML
   private void onSelectClassic() {
-    // TODO: set mode as classic
+
+    gameLogicManager.initializeGame(
+        new GameProfile(
+            currentProfile.getSettings(), GameMode.BASIC, currentProfile.getGameHistory()));
+
     moveCrane(-180);
     sequence.setOnFinished(
         e -> {
@@ -66,7 +90,11 @@ public class GameModesScreenController {
   /** sets game mode as hidden word and goes to category screen */
   @FXML
   private void onSelectHiddenWord() {
-    // TODO: set mode as hidden word
+
+    gameLogicManager.initializeGame(
+        new GameProfile(
+            currentProfile.getSettings(), GameMode.HIDDEN_WORD, currentProfile.getGameHistory()));
+
     moveCrane(180);
     sequence.setOnFinished(
         e -> {
@@ -78,7 +106,11 @@ public class GameModesScreenController {
   /** sets game mode as zen and goes to category screen */
   @FXML
   private void onSelectZen() {
-    // TODO: set mode as zen
+
+    gameLogicManager.initializeGame(
+        new GameProfile(
+            currentProfile.getSettings(), GameMode.ZEN, currentProfile.getGameHistory()));
+
     TranslateTransition translate = new TranslateTransition();
     translate.setNode(craneImageView);
     translate.setFromX(0);

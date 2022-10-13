@@ -11,14 +11,14 @@
 <Pane stylesheets="@../css/application.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.CategoryScreenController">
    <children>
       <ImageView fitHeight="700.0" fitWidth="900.0" pickOnBounds="true" preserveRatio="true" styleClass="categoryScreen" />
-      <Label fx:id="drawTimeLabel" layoutX="276.0" layoutY="234.0" prefHeight="52.0" prefWidth="363.0" styleClass="subHeaders" text="DRAW IN 60 SECONDS">
+      <Label fx:id="drawTimeLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="218.0" layoutY="232.0" prefHeight="52.0" prefWidth="468.0" styleClass="headers" text="DRAW IN 60 SECONDS" textAlignment="CENTER" textFill="#e9c46a">
          <font>
             <Font size="50.0" />
          </font>
       </Label>
-      <Label fx:id="categoryLabel" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="89.0" layoutY="289.0" prefHeight="266.0" prefWidth="721.0" styleClass="headers" text="category" textAlignment="CENTER" textFill="#e9c46a" wrapText="true">
+      <Label fx:id="categoryLabel" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="97.0" layoutY="291.0" prefHeight="266.0" prefWidth="703.0" styleClass="subHeaders" text="CATEGORY" textAlignment="CENTER" wrapText="true">
          <font>
-            <Font size="80.0" />
+            <Font size="90.0" />
          </font>
       </Label>
       <Label fx:id="usernameLabel" alignment="CENTER" layoutX="64.0" layoutY="51.0" prefHeight="62.0" prefWidth="778.0" styleClass="headers" text="Hi, username" textAlignment="CENTER">
