@@ -22,6 +22,7 @@ public class CategoryScreenController {
   @FXML private Label drawTimeLabel;
   @FXML private Label categoryLabel;
   @FXML private Label usernameLabel;
+  @FXML private Label currentGameModeLabel;
 
   private GameLogicManager gameLogicManager;
   private ProfileManager profileManager;
@@ -80,6 +81,8 @@ public class CategoryScreenController {
     } else {
       drawTimeLabel.setText("DRAW IN " + numSeconds + " SECONDS");
     }
+
+    currentGameModeLabel.setText("CURRENT GAME MODE: " + gameMode.name().replace('_', ' '));
   }
 
   /** Method relating to the button switch to the GameScreen FXML */

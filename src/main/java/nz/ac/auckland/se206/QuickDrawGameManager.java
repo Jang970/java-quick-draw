@@ -13,7 +13,7 @@ import nz.ac.auckland.se206.util.badges.BadgeManager;
 
 public class QuickDrawGameManager {
 
-  private static GameMode currentlySelectedGameMode = GameMode.BASIC;
+  private static GameMode currentlySelectedGameMode = GameMode.CLASSIC;
 
   private static final GameLogicManager gameLogicManager = createGameLogicManager();
   private static final ProfileManager profileManager = createProfileManager();

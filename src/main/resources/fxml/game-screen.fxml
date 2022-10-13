@@ -162,5 +162,10 @@
          </children>
       </HBox>
       <ProgressBar fx:id="predictionBar" layoutX="572.0" layoutY="306.0" prefHeight="31.0" prefWidth="305.0" progress="0.0" rotate="-90.0" />
+      <Label fx:id="gameModeLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="753.0" layoutY="495.0" prefHeight="191.0" prefWidth="138.0" style="-fx-background-color: #2A9D8F;" styleClass="headers" text="GAME MODE" textAlignment="CENTER" wrapText="true">
+         <font>
+            <Font size="35.0" />
+         </font>
+      </Label>
    </children>
 </Pane>

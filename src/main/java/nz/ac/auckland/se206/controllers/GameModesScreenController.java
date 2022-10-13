@@ -9,32 +9,14 @@ import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
 import nz.ac.auckland.se206.QuickDrawGameManager;
-import nz.ac.auckland.se206.gamelogicmanager.GameLogicManager;
 import nz.ac.auckland.se206.gamelogicmanager.GameMode;
-import nz.ac.auckland.se206.util.Profile;
-import nz.ac.auckland.se206.util.ProfileManager;
 
 public class GameModesScreenController {
   @FXML private ImageView craneImageView;
   @FXML private Label descriptionLabel;
 
   private SequentialTransition sequence;
-  private GameLogicManager gameLogicManager;
-  private ProfileManager profileManager;
-  private Profile currentProfile;
 
-  public void initialize() {
-
-    gameLogicManager = QuickDrawGameManager.getGameLogicManager();
-    profileManager = QuickDrawGameManager.getProfileManager();
-
-    App.subscribeToViewChange(
-        (View view) -> {
-          if (view == View.GAMEMODES) {
-            currentProfile = profileManager.getCurrentProfile();
-          }
-        });
-  }
   /**
    * Creates animation to move crane to the specified moveX position
    *
@@ -75,7 +57,7 @@ public class GameModesScreenController {
   @FXML
   private void onSelectClassic() {
 
-    QuickDrawGameManager.setCurrentlySelectedGameMode(GameMode.BASIC);
+    QuickDrawGameManager.setCurrentlySelectedGameMode(GameMode.CLASSIC);
 
     moveCrane(-180);
     sequence.setOnFinished(

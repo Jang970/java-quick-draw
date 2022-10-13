@@ -201,7 +201,7 @@ public class BadgeFactory {
         GameInfo game = profile.getMostRecentGame();
         GameMode gameMode = game.getGameMode();
 
-        return (gameMode == GameMode.BASIC || gameMode == GameMode.HIDDEN_WORD)
+        return (gameMode == GameMode.CLASSIC || gameMode == GameMode.HIDDEN_WORD)
             && (game.getCategoryPlayed().getSecondsRemaining() <= 2)
             && (game.getWinState() == EndGameState.WIN);
       }

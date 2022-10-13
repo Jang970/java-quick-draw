@@ -48,6 +48,7 @@ public class GameScreenController {
 
   @FXML private Label timeRemainingLabel;
   @FXML private Label whatToDrawLabel;
+  @FXML private Label gameModeLabel;
 
   @FXML private VBox guessLabelCol1;
   @FXML private VBox guessLabelCol2;
@@ -134,8 +135,10 @@ public class GameScreenController {
    * @param string the current game mode
    */
   private void setGameScreenGui(GameMode gameMode) {
+
+    gameModeLabel.setText(gameMode.name().replace("_", " "));
     switch (gameMode) {
-      case BASIC:
+      case CLASSIC:
         whatToDrawLabel.setStyle("-fx-font-size: 35px");
         timeRemainingLabel.setVisible(true);
 
