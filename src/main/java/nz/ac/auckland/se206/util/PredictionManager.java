@@ -63,6 +63,11 @@ public class PredictionManager {
 
       categories = new HashMap<CategoryType, Set<Category>>();
 
+      // The following code will map the categories in the CSV with relation to their identified
+      // difficulty
+      // key: category type
+      // value: all words of that category type
+      // map the easy words to the EASY category type
       categories.put(
           CategoryType.EASY,
           loaded.stream()
@@ -71,14 +76,16 @@ public class PredictionManager {
                     return cat.getCategoryType() == CategoryType.EASY;
                   })
               .collect(Collectors.toSet()));
+      // map the easy words to the MEDIUM category type
       categories.put(
-          CategoryType.HARD,
+          CategoryType.MEDIUM,
           loaded.stream()
               .filter(
                   (cat) -> {
-                    return cat.getCategoryType() == CategoryType.HARD;
+                    return cat.getCategoryType() == CategoryType.MEDIUM;
                   })
               .collect(Collectors.toSet()));
+      // map the easy words to the HARD category type
       categories.put(
           CategoryType.HARD,
           loaded.stream()
@@ -107,6 +114,8 @@ public class PredictionManager {
 
               // TODO: Memoize the input image so we are not making unnecessary queires
 
+              // update the listener relating to the event making the predictioner while
+              // isMakingPredictions is true
               if (isMakingPredictions) {
                 try {
                   if (predictionListener != null && imageSource != null) {
