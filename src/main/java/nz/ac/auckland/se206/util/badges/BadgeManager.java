@@ -17,6 +17,8 @@ public class BadgeManager {
    * badges earned status to be false
    */
   public BadgeManager() {
+    // create all badge instances and put into hashmap with the key being the its ID and the value
+    // being the badge itself
     this.badgeList = BadgeFactory.createBadgeList();
 
     badgeIdMap = new HashMap<String, Badge>();
@@ -43,6 +45,7 @@ public class BadgeManager {
    *     with it
    */
   public Badge getBadgeFromId(String badgeId) throws InvalidBadgeIdException {
+    // find the corresponding value (badge) that is tied to the key (badge ID) given in our hashmap
     if (badgeIdMap.containsKey(badgeId)) {
       return badgeIdMap.get(badgeId);
     } else {
