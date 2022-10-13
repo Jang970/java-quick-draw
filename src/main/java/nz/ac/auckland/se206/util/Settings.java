@@ -11,12 +11,14 @@ import nz.ac.auckland.se206.util.difficulties.WordChoice;
  */
 public class Settings {
 
-  // instance fields, we will have default difficulty values for each setting
   private Accuracy accuracy;
   private Time time;
   private Confidence confidence;
   private WordChoice wordChoice;
 
+  /**
+   * Constructor with no parameters, will be used when we want to set default difficulty settings.
+   */
   public Settings() {
     this.accuracy = Accuracy.EASY;
     this.time = Time.EASY;
@@ -24,6 +26,15 @@ public class Settings {
     this.wordChoice = WordChoice.EASY;
   }
 
+  /**
+   * Constructor of Settings with parameters for each difficulty type. Can be used when we want
+   * initialise settings with the non-default.
+   *
+   * @param accuracy accuracy difficulty level we want to save / set to
+   * @param time time difficulty level we want to save / set to
+   * @param confidence confidence difficulty we want to save / set to
+   * @param wordChoice wordChoice difficulty we want to save / set to
+   */
   public Settings(Accuracy accuracy, Time time, Confidence confidence, WordChoice wordChoice) {
     this.accuracy = accuracy;
     this.time = time;
@@ -31,47 +42,78 @@ public class Settings {
     this.wordChoice = wordChoice;
   }
 
-  // getters and setters for each instance field
-
   /**
-   * Getters will return the enum and we can just use the enum methods to get the respective
-   * difficulty requirement and label
+   * This will return the accuracy enum stored and we can just use the enum methods to get the
+   * respective difficulty requirement and label
    *
-   * @return Difficulty enum saved
+   * @return accuracy enum saved for the profile
    */
   public Accuracy getAccuracy() {
     return this.accuracy;
   }
 
+  /**
+   * This will return the time enum stored and we can just use the enum methods to get the
+   * respective difficulty requirement and label
+   *
+   * @return time enum saved for the profile
+   */
   public Time getTime() {
     return this.time;
   }
 
+  /**
+   * This will return the confidence enum stored and we can just use the enum methods to get the
+   * respective difficulty requirement and label
+   *
+   * @return confidence enum saved for the profile
+   */
   public Confidence getConfidence() {
     return this.confidence;
   }
 
+  /**
+   * This will return the word choice enum stored and we can just use the enum methods to get the
+   * respective difficulty requirement and label
+   *
+   * @return word choice enum saved for the profile
+   */
   public WordChoice getWordChoice() {
     return this.wordChoice;
   }
 
   /**
-   * Update methods can be used when you want to save new difficulty settings for a user
+   * Use when you want to save/update to a new accuracy level.
    *
-   * @param newAcc new difficulty enum to save
+   * @param newAcc new accuracy difficulty level to save
    */
   public void updateAccuracy(Accuracy newAcc) {
     this.accuracy = newAcc;
   }
 
+  /**
+   * Use when you want to save/update to a new time level.
+   *
+   * @param newAcc new time difficulty level to save
+   */
   public void updateTime(Time newTime) {
     this.time = newTime;
   }
 
+  /**
+   * Use when you want to save/update to a new confidence level.
+   *
+   * @param newAcc new confidence difficulty level to save
+   */
   public void updateConfidence(Confidence newConf) {
     this.confidence = newConf;
   }
 
+  /**
+   * Use when you want to save/update to a new word choice level.
+   *
+   * @param newAcc new word choice difficulty level to save
+   */
   public void updateWordChoice(WordChoice wordChoice) {
     this.wordChoice = wordChoice;
   }

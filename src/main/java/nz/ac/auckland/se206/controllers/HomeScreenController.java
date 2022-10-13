@@ -8,6 +8,10 @@ import nz.ac.auckland.se206.App.View;
 public class HomeScreenController {
   @FXML private Button newGameButton;
 
+  /**
+   * Method relating to the button that will either navigate to NewUserScreen FXML if there are no
+   * existing profiles but otherwise will go to UserProfilesScreen FXML
+   */
   @FXML
   private void onStartNewGame() {
 
