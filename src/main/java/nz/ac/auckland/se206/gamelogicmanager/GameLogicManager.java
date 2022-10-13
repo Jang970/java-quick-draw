@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import nz.ac.auckland.se206.fxmlutils.CanvasManager;
 import nz.ac.auckland.se206.util.Category;
 import nz.ac.auckland.se206.util.CategoryType;
 import nz.ac.auckland.se206.util.CountdownTimer;
@@ -39,8 +38,13 @@ public class GameLogicManager {
   private EventEmitter<Category> categoryChangeEmitter = new EventEmitter<Category>();
 
   private EventEmitter<GameInfo> gameEndedEmitter = new EventEmitter<GameInfo>();
+  private EventEmitter<CategoryPlayedInfo> correctPredictionEmitter =
+      new EventEmitter<CategoryPlayedInfo>();
   private EventEmitter<Integer> timeChangedEmitter = new EventEmitter<Integer>();
   private EmptyEventEmitter gameStartedEmitter = new EmptyEventEmitter();
+
+  private boolean sentPredictionMessage = false;
+  private boolean predictionWinningEnabled = true;
 
   /**
    * This is the constructor for the GameLogicManager class which contains and handles all the logic
@@ -63,37 +67,52 @@ public class GameLogicManager {
         });
 
     // initialise the prediction manager
-    predictionManager = new PredictionManager(100, 10);
+    predictionManager = new PredictionManager(100, -1);
+
     predictionManager.setPredictionListener(
         (predictions) -> {
-          int topNumGuessesNeededToWin =
-              currentGameProfile.settings().getAccuracy().getTopNumGuesses();
-          double confidenceNeededToWin =
-              currentGameProfile.settings().getConfidence().getProbabilityPercentage();
-          int range = Math.min(predictions.size(), topNumGuessesNeededToWin);
-          for (int i = 0; i < range; i++) {
-            String prediction = predictions.get(i).getClassName().replace('_', ' ');
-            double confidence = predictions.get(i).getProbability();
-            // wins only if prediction matchs and if canvas is drawn on
-            if (prediction.equals(categoryToGuess.getName())
-                && confidence >= confidenceNeededToWin
-                && CanvasManager.getIsDrawn()) {
-              onCorrectPrediction();
+          if (predictionWinningEnabled) {
+            int topNumGuessesNeededToWin =
+                currentGameProfile.settings().getAccuracy().getTopNumGuesses();
+
+            double confidenceNeededToWin =
+                currentGameProfile.settings().getConfidence().getProbabilityPercentage();
+
+            int range = Math.min(predictions.size(), topNumGuessesNeededToWin);
+
+            for (int i = 0; i < range; i++) {
+              String prediction = predictions.get(i).getClassName().replace('_', ' ');
+              double confidence = predictions.get(i).getProbability();
+
+              if (prediction.equals(categoryToGuess.getName())
+                  && confidence >= confidenceNeededToWin) {
+                if (!sentPredictionMessage) {
+                  // Checks if sent so we don't spam the onCorrectPrediction
+                  sentPredictionMessage = true;
+                  onCorrectPrediction();
+                }
+              } else {
+                // Resets when the prediction is no longer true.
+                sentPredictionMessage = false;
+              }
             }
           }
 
-          this.predictionChangeEmitter.emit(predictions);
+          predictionChangeEmitter.emit(predictions);
         });
   }
 
   ///////////////////////////// GAME STATE TRANSISTIONS /////////////////////////////
 
   /**
-   * This method will get the game ready to be played using the current profile
+   * This method will get the game ready to be played using the given profile
    *
    * @param profile current profile playing
    */
   public void initializeGame(GameProfile profile) {
+
+    stopGame();
+
     currentGameProfile = profile;
 
     Set<String> categories =
@@ -120,16 +139,22 @@ public class GameLogicManager {
 
   /** Starts the countdown, and enables the prediction server */
   public void startGame() {
-    countdownTimer.startCountdown(currentGameProfile.settings().getTime().getTimeToDraw());
+    if (currentGameProfile.gameMode() != GameMode.ZEN) {
+      countdownTimer.startCountdown(currentGameProfile.settings().getTime().getTimeToDraw());
+    }
     predictionManager.startMakingPredictions();
     gameStartedEmitter.emit();
     isPlaying = true;
   }
 
   /** Ends the game if it is ongoing with a win state of CANCEL */
-  public void cancelGame() {
+  public void stopGame() {
     if (isPlaying) {
-      this.endGame(EndGameState.CANCEL);
+      if (currentGameProfile.gameMode() == GameMode.ZEN) {
+        endGame(EndGameState.NOT_APPLICABLE);
+      } else {
+        endGame(EndGameState.GIVE_UP);
+      }
     }
   }
 
@@ -157,6 +182,7 @@ public class GameLogicManager {
             currentGameProfile.gameMode()));
 
     isPlaying = false;
+    predictionWinningEnabled = true;
   }
 
   /**
@@ -164,7 +190,17 @@ public class GameLogicManager {
    * state to be WIN
    */
   private void onCorrectPrediction() {
-    endGame(EndGameState.WIN);
+    if (currentGameProfile.gameMode() == GameMode.ZEN) {
+      correctPredictionEmitter.emit(new CategoryPlayedInfo(-1, -1, categoryToGuess));
+    } else {
+      int secondsRemaining = countdownTimer.getRemainingCount();
+      correctPredictionEmitter.emit(
+          new CategoryPlayedInfo(
+              currentGameProfile.settings().getTime().getTimeToDraw() - secondsRemaining - 1,
+              secondsRemaining,
+              categoryToGuess));
+      endGame(EndGameState.WIN);
+    }
   }
 
   /**
@@ -172,6 +208,9 @@ public class GameLogicManager {
    * state to be LOOSE
    */
   private void onOutOfTime() {
+    assert currentGameProfile.gameMode() != GameMode.ZEN
+        : "Zen mode is not timed so we should not 'run out of time'";
+
     endGame(EndGameState.LOOSE);
   }
 
@@ -197,8 +236,17 @@ public class GameLogicManager {
   }
 
   /**
-   * This method will get the category that the player need to draw
+   * This method enables or disabled the prediction win detector. While it is disables, the
+   * prediction manager will continue to make predictions but the game will simply not check to see
+   * if you have won.
    *
+   * @param enabled whether or not the prediction win detector is enabled
+   */
+  public void setPredictionWinningEnabled(boolean enabled) {
+    predictionWinningEnabled = enabled;
+  }
+
+  /**
    * @return the category that the player need to draw
    */
   public Category getCurrentCategory() {
@@ -223,6 +271,8 @@ public class GameLogicManager {
     return currentGameProfile;
   }
 
+  // TODO: Add unsubscribe methods
+
   /**
    * This method allows us to add a listener to event emitter gameEndedEmitter to keep track of when
    * the tgame ends
@@ -231,6 +281,10 @@ public class GameLogicManager {
    */
   public void subscribeToGameEnd(EventListener<GameInfo> listener) {
     gameEndedEmitter.subscribe(listener);
+  }
+
+  public void subscribeToCorrectPrediction(EventListener<CategoryPlayedInfo> listener) {
+    correctPredictionEmitter.subscribe(listener);
   }
 
   /**
@@ -271,5 +325,9 @@ public class GameLogicManager {
    */
   public void subscribeToCategoryChange(EventListener<Category> listener) {
     categoryChangeEmitter.subscribe(listener);
+  }
+
+  public Integer getNumberOfCategories() {
+    return predictionManager.getNumberOfCategories();
   }
 }

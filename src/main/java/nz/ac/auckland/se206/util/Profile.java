@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import nz.ac.auckland.se206.gamelogicmanager.CategoryPlayedInfo;
 import nz.ac.auckland.se206.gamelogicmanager.EndGameState;
 import nz.ac.auckland.se206.gamelogicmanager.GameInfo;
+import nz.ac.auckland.se206.gamelogicmanager.GameMode;
 
 /**
  * This class will be used to create objects for each new profile containing all information related
@@ -21,9 +22,6 @@ public class Profile {
   private String name;
   private UUID id;
   private String colour;
-
-  private int gamesWon = 0;
-  private int gamesLost = 0;
 
   private List<GameInfo> gameHistory = new ArrayList<GameInfo>();
 
@@ -131,11 +129,6 @@ public class Profile {
    */
   public void addGameToHistory(GameInfo gameInfo) {
     gameHistory.add(gameInfo);
-    if (gameInfo.getWinState() == EndGameState.WIN) {
-      gamesWon++;
-    } else if (gameInfo.getWinState() != EndGameState.NOT_APPLICABLE) {
-      gamesLost++;
-    }
 
     emitChange();
   }
@@ -163,6 +156,12 @@ public class Profile {
    * @return number of games won by profile
    */
   public int getGamesWon() {
+    int gamesWon = 0;
+    for (GameInfo game : gameHistory) {
+      if (game.getWinState() == EndGameState.WIN) {
+        gamesWon++;
+      }
+    }
     return gamesWon;
   }
 
@@ -172,6 +171,12 @@ public class Profile {
    * @return number of games lost by profile
    */
   public int getGamesLost() {
+    int gamesLost = 0;
+    for (GameInfo game : gameHistory) {
+      if (game.getWinState() == EndGameState.LOOSE || game.getWinState() == EndGameState.GIVE_UP) {
+        gamesLost++;
+      }
+    }
     return gamesLost;
   }
 
@@ -189,6 +194,7 @@ public class Profile {
     // plsyed into a new list.
     for (CategoryPlayedInfo categoryPlayed :
         gameHistory.stream()
+            .filter(game -> game.getGameMode() != GameMode.ZEN)
             .flatMap((game) -> game.getCategoriesPlayed().stream())
             .collect(Collectors.toList())) {
 

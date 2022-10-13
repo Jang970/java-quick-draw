@@ -1,6 +1,5 @@
 package nz.ac.auckland.se206.fxmlutils;
 
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -15,8 +14,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javax.imageio.ImageIO;
 import nz.ac.auckland.se206.App;
-import nz.ac.auckland.se206.util.EventEmitter;
-import nz.ac.auckland.se206.util.EventListener;
+import nz.ac.auckland.se206.QuickDrawGameManager;
+import nz.ac.auckland.se206.util.BufferedImageUtils;
 
 /**
  * The purpose of this class is to isolate all functionality of the canvas from the controller
@@ -35,28 +34,6 @@ public class CanvasManager {
     ERASING
   }
 
-  // tracks if canvas is drawn on or not
-  private static boolean isDrawn = false;
-  private static EventEmitter<Boolean> canvasDrawnEmitter = new EventEmitter<Boolean>();
-
-  /**
-   * Returns if the canvas has been drawn or not
-   *
-   * @return
-   */
-  public static boolean getIsDrawn() {
-    return isDrawn;
-  }
-
-  /**
-   * Subscribes to canvas drawn to keep track of when canvas is drawn on
-   *
-   * @param listener the EventListener to be notified when an event is emitted
-   */
-  public static void subscribeToCanvasDrawn(EventListener<Boolean> listener) {
-    canvasDrawnEmitter.subscribe(listener);
-  }
-
   private final GraphicsContext context;
   private final Canvas canvas;
   private DrawMode drawMode = DrawMode.DRAWING;
@@ -68,6 +45,8 @@ public class CanvasManager {
 
   /** This helps keep track of the mouse being held down and released */
   private boolean isHolding = false;
+
+  private Color penColor = Color.BLACK;
 
   /**
    * The canvas manager is bound to one canvas which is given through this constructor
@@ -154,10 +133,8 @@ public class CanvasManager {
         // TODO: Extract this to either already be set when drawmode is updated or
         // extract to simple function
         if (drawMode == DrawMode.DRAWING) {
-          context.setStroke(Color.BLACK);
+          context.setStroke(penColor);
           context.setLineWidth(brushSize);
-          isDrawn = true;
-          canvasDrawnEmitter.emit(isDrawn);
         } else if (drawMode == DrawMode.ERASING) {
           // TODO: Extract this hard coded specific color
           context.setStroke(Color.rgb(235, 233, 221));
@@ -191,7 +168,7 @@ public class CanvasManager {
   private void handleClickEvent(MouseEvent event) {
     if (drawingEnabled && drawMode == DrawMode.DRAWING) {
       int circleRadius = 6;
-      isDrawn = true;
+      context.setFill(penColor);
       context.fillOval(
           event.getX() - circleRadius, event.getY() - circleRadius, circleRadius, circleRadius);
     }
@@ -216,22 +193,17 @@ public class CanvasManager {
    *
    * @return The BufferedImage corresponding to the current canvas content.
    */
-  public BufferedImage getCurrentSnapshot() {
-    final Image snapshot = canvas.snapshot(null, null);
-    final BufferedImage image = SwingFXUtils.fromFXImage(snapshot, null);
+  public BufferedImage getCurrentBlackAndWhiteSnapshot() {
+    return BufferedImageUtils.convertColourToBlackAndWhite(getCurrentColourSnapshot());
+  }
 
-    // Convert into a binary image.
-    final BufferedImage imageBinary =
-        new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_BYTE_BINARY);
-
-    final Graphics2D graphics = imageBinary.createGraphics();
-
-    graphics.drawImage(image, 0, 0, null);
-
-    // To release memory we dispose.
-    graphics.dispose();
-
-    return imageBinary;
+  /**
+   * Get the current snapshot of the canvas.
+   *
+   * @return The BufferedImage corresponding to the current canvas content.
+   */
+  public BufferedImage getCurrentColourSnapshot() {
+    return SwingFXUtils.fromFXImage(canvas.snapshot(null, null), null);
   }
 
   /**
@@ -248,9 +220,9 @@ public class CanvasManager {
     FileChooser fileChooser = new FileChooser();
     fileChooser.setTitle("Save Image");
     fileChooser.setInitialFileName(
-        App.getProfileManager().getCurrentProfile().getName()
+        QuickDrawGameManager.getProfileManager().getCurrentProfile().getName()
             + "'s "
-            + App.getGameLogicManager().getCurrentCategory().getName()
+            + QuickDrawGameManager.getGameLogicManager().getCurrentCategory().getName()
             + " drawing");
 
     final File directory = fileChooser.showSaveDialog(App.getStage());
@@ -261,7 +233,7 @@ public class CanvasManager {
       final File imageToClassify =
           new File(directory.getAbsolutePath() + "/snapshot" + System.currentTimeMillis() + ".bmp");
       // save the image to a file
-      ImageIO.write(getCurrentSnapshot(), "bmp", imageToClassify);
+      ImageIO.write(getCurrentColourSnapshot(), "bmp", imageToClassify);
 
       return imageToClassify;
     }
@@ -287,9 +259,7 @@ public class CanvasManager {
     this.drawingEnabled = drawingEnabled;
   }
 
-  /** resets is drawn to false */
-  public void resetIsDrawn() {
-    isDrawn = false;
-    canvasDrawnEmitter.emit(isDrawn);
+  public void setPenColor(Color color) {
+    this.penColor = color;
   }
 }

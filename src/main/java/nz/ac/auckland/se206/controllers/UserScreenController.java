@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
+import nz.ac.auckland.se206.QuickDrawGameManager;
 import nz.ac.auckland.se206.util.Profile;
 
 public class UserScreenController {
@@ -22,7 +23,7 @@ public class UserScreenController {
         (View view) -> {
           if (view == View.USER) {
 
-            Profile currentProfile = App.getProfileManager().getCurrentProfile();
+            Profile currentProfile = QuickDrawGameManager.getProfileManager().getCurrentProfile();
 
             // sets all labels of the user stats and users name
             statsHeaderLabel.setText(currentProfile.getName());
@@ -30,14 +31,15 @@ public class UserScreenController {
             // fastest win label
             if (currentProfile.getFastestCategoryPlayed() == null) {
               fastestWinLabel.setText(
-                  "You haven't won a game yet! Keep practising, you got this :)");
+                  "YOU HAVEN'T WON A GAME YET! KEEP PRACTISING, YOU GOT THIS! :)");
             } else {
               fastestWinLabel.setText(
-                  "Your fastest win is in "
-                      + currentProfile.getFastestCategoryPlayed().getTimeTaken()
-                      + " seconds when you had to draw '"
-                      + currentProfile.getFastestCategoryPlayed().getCategory().getName()
-                      + "'!");
+                  ("Your fastest win is in "
+                          + currentProfile.getFastestCategoryPlayed().getTimeTaken()
+                          + " seconds when you had to draw '"
+                          + currentProfile.getFastestCategoryPlayed().getCategory().getName()
+                          + "'!")
+                      .toUpperCase());
             }
 
             //  rest of user stats label
@@ -52,7 +54,7 @@ public class UserScreenController {
   /** Switches view to category */
   @FXML
   private void onPlayAgain() {
-    App.setView(View.CATEGORY);
+    App.setView(View.GAMEMODES);
   }
 
   /** Switches view to user profiles */
@@ -65,5 +67,15 @@ public class UserScreenController {
   @FXML
   private void onSwitchToCategoryHistory() {
     App.setView(View.CATEGORYHISTORY);
+  }
+
+  @FXML
+  private void onSwitchToBadges() {
+    App.setView(View.BADGES);
+  }
+
+  @FXML
+  private void onSwitchToSettings() {
+    App.setView(View.DIFFICULTY);
   }
 }

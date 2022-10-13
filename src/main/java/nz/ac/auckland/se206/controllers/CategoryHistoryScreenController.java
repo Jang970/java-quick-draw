@@ -4,17 +4,21 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollBar;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
+import nz.ac.auckland.se206.QuickDrawGameManager;
 
 public class CategoryHistoryScreenController {
 
   @FXML private ListView<String> categoryHistoryListViewOne;
   @FXML private ListView<String> categoryHistoryListViewTwo;
   @FXML private HBox historyHbox;
+  @FXML private ImageView ballImageView;
 
   private List<String> categoryHistory;
 
@@ -27,21 +31,46 @@ public class CategoryHistoryScreenController {
           if (view == View.CATEGORYHISTORY) {
 
             categoryHistory =
-                App.getProfileManager().getCurrentProfile().getGameHistory().stream()
+                QuickDrawGameManager.getProfileManager()
+                    .getCurrentProfile()
+                    .getGameHistory()
+                    .stream()
                     .flatMap(
                         (game) ->
                             game.getCategoriesPlayed().stream()
                                 .map(cat -> cat.getCategory().getName()))
                     .collect(Collectors.toList());
 
-            // TODO: Find a better way to do this resizing
-            // dynamically resize list hbox height (doesn't show more cells than necessary)
-            historyHbox.setPrefHeight((categoryHistory.size() + 1) * 15 + 2);
-
             bindScrollBars();
 
             setCategoryHistoryLists();
           }
+        });
+
+    setOnCellClick(categoryHistoryListViewOne);
+    setOnCellClick(categoryHistoryListViewTwo);
+  }
+
+  private void setOnCellClick(ListView<String> categoryHistoryList) {
+    categoryHistoryList.setCellFactory(
+        lv -> {
+          ListCell<String> cell =
+              new ListCell<String>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                  super.updateItem(item, empty);
+                  setText(item);
+                }
+              };
+          cell.setOnMouseClicked(
+              e -> {
+                if (!cell.isEmpty()) {
+                  // TODO: Send category word to category screen
+                  System.out.println("You clicked on " + cell.getItem());
+                  e.consume();
+                }
+              });
+          return cell;
         });
   }
 
@@ -71,7 +100,7 @@ public class CategoryHistoryScreenController {
   /** Method relating to the button switch to the CategoryScreen FXML */
   @FXML
   private void onPlayAgain() {
-    App.setView(View.CATEGORY);
+    App.setView(View.GAMEMODES);
   }
 
   /** Method relating to the button switch to the UserScreen FXML */
