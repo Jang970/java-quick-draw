@@ -6,9 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import nz.ac.auckland.se206.gamelogicmanager.CategoryPlayedInfo;
-import nz.ac.auckland.se206.gamelogicmanager.EndGameState;
+import nz.ac.auckland.se206.gamelogicmanager.EndGameReason;
 import nz.ac.auckland.se206.gamelogicmanager.GameInfo;
 import nz.ac.auckland.se206.gamelogicmanager.GameMode;
 
@@ -158,7 +157,7 @@ public class Profile {
   public int getGamesWon() {
     int gamesWon = 0;
     for (GameInfo game : gameHistory) {
-      if (game.getWinState() == EndGameState.WIN) {
+      if (game.getReasonForGameEnd() == EndGameReason.WIN) {
         gamesWon++;
       }
     }
@@ -173,7 +172,8 @@ public class Profile {
   public int getGamesLost() {
     int gamesLost = 0;
     for (GameInfo game : gameHistory) {
-      if (game.getWinState() == EndGameState.LOOSE || game.getWinState() == EndGameState.GIVE_UP) {
+      if (game.getReasonForGameEnd() == EndGameReason.LOOSE
+          || game.getReasonForGameEnd() == EndGameReason.GIVE_UP) {
         gamesLost++;
       }
     }
@@ -183,25 +183,32 @@ public class Profile {
   /** If the player has not had a fastest win, this will be null */
 
   /**
-   * This method will get the fastest category played by the profile
+   * This method will get the fastest category played by the profile in classic or hidden word mode
    *
    * @return the fastest category played by the profile
    */
   public CategoryPlayedInfo getFastestCategoryPlayed() {
     CategoryPlayedInfo bestGame = null;
 
-    // The fancy stuff is just taking a list of games and extracting their lists of categories
-    // plsyed into a new list.
-    for (CategoryPlayedInfo categoryPlayed :
-        gameHistory.stream()
-            .filter(game -> game.getGameMode() != GameMode.ZEN)
-            .flatMap((game) -> game.getCategoriesPlayed().stream())
-            .collect(Collectors.toList())) {
+    for (GameInfo game : gameHistory) {
+      if (game.getGameMode() == GameMode.CLASSIC
+          || game.getGameMode() == GameMode.HIDDEN_WORD
+          || game.getGameMode() == GameMode.ZEN) {
 
-      if (bestGame == null || categoryPlayed.getTimeTaken() < bestGame.getTimeTaken()) {
-        bestGame = categoryPlayed;
+        CategoryPlayedInfo categoryPlayed = game.getCategoryPlayed();
+        if (bestGame == null || categoryPlayed.getTimeTaken() < bestGame.getTimeTaken()) {
+          bestGame = categoryPlayed;
+        }
+
+      } else if (game.getGameMode() == GameMode.RAPID_FIRE) {
+        for (CategoryPlayedInfo categoryPlayed : game.getCategoriesPlayed()) {
+          if (bestGame == null || categoryPlayed.getTimeTaken() < bestGame.getTimeTaken()) {
+            bestGame = categoryPlayed;
+          }
+        }
       }
     }
+
     return bestGame;
   }
 

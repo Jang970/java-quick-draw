@@ -3,7 +3,11 @@ package nz.ac.auckland.se206;
 import ai.djl.ModelException;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
+import nz.ac.auckland.se206.gamelogicmanager.CategoryPlayedInfo;
+import nz.ac.auckland.se206.gamelogicmanager.GameInfo;
 import nz.ac.auckland.se206.gamelogicmanager.GameLogicManager;
 import nz.ac.auckland.se206.gamelogicmanager.GameMode;
 import nz.ac.auckland.se206.util.Profile;
@@ -102,5 +106,23 @@ public class QuickDrawGameManager {
             }
           }
         });
+  }
+
+  public static List<CategoryPlayedInfo> getCategoriesPlayedForGameMode(
+      List<GameInfo> gameHistory, GameMode gameMode) {
+
+    List<CategoryPlayedInfo> categories = new ArrayList<CategoryPlayedInfo>();
+
+    for (GameInfo gameInfo : gameHistory) {
+      if (gameInfo.getGameMode() == gameMode) {
+        if (gameMode == GameMode.RAPID_FIRE) {
+          categories.addAll(gameInfo.getCategoriesPlayed());
+        } else {
+          categories.add(gameInfo.getCategoryPlayed());
+        }
+      }
+    }
+
+    return categories;
   }
 }

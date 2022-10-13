@@ -1,6 +1,6 @@
 package nz.ac.auckland.se206.gamelogicmanager;
 
-public enum EndGameState {
+public enum EndGameReason {
   WIN,
   LOOSE,
   GIVE_UP,

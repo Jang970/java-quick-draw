@@ -1,7 +1,7 @@
 package nz.ac.auckland.se206.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListCell;
@@ -12,6 +12,8 @@ import javafx.scene.layout.HBox;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
 import nz.ac.auckland.se206.QuickDrawGameManager;
+import nz.ac.auckland.se206.gamelogicmanager.GameInfo;
+import nz.ac.auckland.se206.gamelogicmanager.GameMode;
 
 public class CategoryHistoryScreenController {
 
@@ -30,16 +32,19 @@ public class CategoryHistoryScreenController {
         (View view) -> {
           if (view == View.CATEGORYHISTORY) {
 
-            categoryHistory =
-                QuickDrawGameManager.getProfileManager()
-                    .getCurrentProfile()
-                    .getGameHistory()
-                    .stream()
-                    .flatMap(
-                        (game) ->
-                            game.getCategoriesPlayed().stream()
-                                .map(cat -> cat.getCategory().getName()))
-                    .collect(Collectors.toList());
+            // Sets category history to a list of categories from the the classic and hidden word
+            // game modes
+            categoryHistory = new ArrayList<String>();
+
+            List<GameInfo> gameHistory =
+                QuickDrawGameManager.getProfileManager().getCurrentProfile().getGameHistory();
+
+            for (GameInfo game : gameHistory) {
+              if (game.getGameMode() == GameMode.HIDDEN_WORD
+                  || game.getGameMode() == GameMode.CLASSIC) {
+                categoryHistory.add(game.getCategoryPlayed().getCategory().getName());
+              }
+            }
 
             bindScrollBars();
 

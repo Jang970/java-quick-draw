@@ -25,11 +25,13 @@ import nz.ac.auckland.se206.App.View;
 import nz.ac.auckland.se206.QuickDrawGameManager;
 import nz.ac.auckland.se206.fxmlutils.CanvasManager;
 import nz.ac.auckland.se206.fxmlutils.CanvasManager.DrawMode;
-import nz.ac.auckland.se206.gamelogicmanager.EndGameState;
+import nz.ac.auckland.se206.gamelogicmanager.EndGameReason;
+import nz.ac.auckland.se206.gamelogicmanager.GameInfo;
 import nz.ac.auckland.se206.gamelogicmanager.GameLogicManager;
 import nz.ac.auckland.se206.gamelogicmanager.GameMode;
 import nz.ac.auckland.se206.gamelogicmanager.GameProfile;
 import nz.ac.auckland.se206.util.BufferedImageUtils;
+import nz.ac.auckland.se206.util.Category;
 import nz.ac.auckland.se206.util.Profile;
 
 public class GameScreenController {
@@ -97,10 +99,11 @@ public class GameScreenController {
 
     // Subscribe to relevant changes so we can update the display accordingly
     gameLogicManager.subscribeToPredictionsChange(
-        (List<Classification> predictions) -> onPredictionsChange(predictions));
-    gameLogicManager.subscribeToTimeChange((Integer seconds) -> onTimeChange(seconds));
+        (predictions) -> onPredictionsChange(predictions));
+    gameLogicManager.subscribeToTimeChange((seconds) -> onTimeChange(seconds));
     gameLogicManager.subscribeToGameStart(() -> onGameStart());
-    gameLogicManager.subscribeToGameEnd((gameInfo) -> onGameEnd(gameInfo.getWinState()));
+    gameLogicManager.subscribeToGameEnd((gameInfo) -> onGameEnd(gameInfo));
+    gameLogicManager.subscribeToCategoryChange((category) -> onCategoryUpdate(category));
 
     App.subscribeToViewChange(
         (View newView) -> {
@@ -112,20 +115,26 @@ public class GameScreenController {
             // When the view changes to game, we start a new game and clear the canvas
             gameLogicManager.startGame();
 
-            if (gameLogicManager.getCurrentGameProfile().gameMode() == GameMode.HIDDEN_WORD) {
-              whatToDrawLabel.setText(
-                  "TO DRAW: " + gameLogicManager.getCurrentCategory().getDescription());
-            } else {
-              whatToDrawLabel.setText(
-                  "TO DRAW: " + gameLogicManager.getCurrentCategory().getName());
-            }
-
-            canvasManager.clearCanvas();
-
             // doesnt cancel if just looking at user stats
           } else {
             gameLogicManager.stopGame();
           }
+        });
+  }
+
+  private void onCategoryUpdate(Category category) {
+    Platform.runLater(
+        () -> {
+          if (gameLogicManager.getCurrentGameProfile().gameMode() == GameMode.HIDDEN_WORD) {
+            whatToDrawLabel.setText("TO DRAW: " + category.getDescription());
+          } else {
+            if (gameLogicManager.isPlaying()
+                && gameLogicManager.getCurrentGameProfile().gameMode() == GameMode.RAPID_FIRE) {
+              App.getTextToSpeech().speakAsync("Draw " + category.getName());
+            }
+            whatToDrawLabel.setText("TO DRAW: " + category.getName());
+          }
+          canvasManager.clearCanvas();
         });
   }
 
@@ -137,6 +146,7 @@ public class GameScreenController {
   private void setGameScreenGui(GameMode gameMode) {
 
     gameModeLabel.setText(gameMode.name().replace("_", " "));
+
     switch (gameMode) {
       case CLASSIC:
         whatToDrawLabel.setStyle("-fx-font-size: 35px");
@@ -163,6 +173,16 @@ public class GameScreenController {
                   canvasManager.setPenColor(newValue);
                 });
 
+        break;
+      case RAPID_FIRE:
+        whatToDrawLabel.setStyle("-fx-font-size: 35px");
+        timeRemainingLabel.setVisible(true);
+
+        if (toolsVBox.getChildren().contains(colorPicker)) {
+          toolsVBox.getChildren().remove(colorPicker);
+        }
+
+        canvasManager.setPenColor(Color.BLACK);
         break;
       case HIDDEN_WORD:
         whatToDrawLabel.setStyle("-fx-font-size: 22px");
@@ -194,7 +214,7 @@ public class GameScreenController {
    *
    * @param winState shows if the game was won, lost, cancelled or not applicable
    */
-  private void onGameEnd(EndGameState winState) {
+  private void onGameEnd(GameInfo gameInfo) {
     // Run this after the game ends
     Platform.runLater(
         () -> {
@@ -208,14 +228,43 @@ public class GameScreenController {
           whatToDrawLabel.setStyle("-fx-font-size: 35px");
           whatToDrawLabel.getStyleClass().add("stateHeaders");
 
-          if (winState == EndGameState.WIN) {
+          EndGameReason winState = gameInfo.getReasonForGameEnd();
+
+          if (gameInfo.getGameMode() == GameMode.RAPID_FIRE) {
+            int numThingsDrawn = gameInfo.getCategoriesPlayed().size();
+            if (numThingsDrawn == 0) {
+              whatToDrawLabel.setText("Out of time!");
+              sound =
+                  new Media(
+                      getClass()
+                          .getClassLoader()
+                          .getResource("sounds/gameLost.mp3")
+                          .toExternalForm());
+              mediaPlayer = new MediaPlayer(sound);
+              mediaPlayer.play();
+            } else {
+              sound =
+                  new Media(
+                      getClass()
+                          .getClassLoader()
+                          .getResource("sounds/gameWin.mp3")
+                          .toExternalForm());
+              mediaPlayer = new MediaPlayer(sound);
+              mediaPlayer.play();
+              if (numThingsDrawn == 1) {
+                whatToDrawLabel.setText("You drew 1 thing!");
+              } else if (numThingsDrawn > 1) {
+                whatToDrawLabel.setText("You drew " + numThingsDrawn + " things!");
+              }
+            }
+          } else if (winState == EndGameReason.WIN) {
             whatToDrawLabel.setText("You got it!");
             sound =
                 new Media(
                     getClass().getClassLoader().getResource("sounds/gameWin.mp3").toExternalForm());
             mediaPlayer = new MediaPlayer(sound);
             mediaPlayer.play();
-          } else if (winState == EndGameState.LOOSE) {
+          } else if (winState == EndGameReason.LOOSE) {
             whatToDrawLabel.setText("Sorry, you ran out of time!");
             sound =
                 new Media(

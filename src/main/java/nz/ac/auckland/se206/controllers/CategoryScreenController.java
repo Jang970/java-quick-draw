@@ -78,6 +78,8 @@ public class CategoryScreenController {
 
     if (gameMode == GameMode.ZEN) {
       drawTimeLabel.setText("DRAW");
+    } else if (gameMode == GameMode.RAPID_FIRE) {
+      drawTimeLabel.setText("START BY DRAWING");
     } else {
       drawTimeLabel.setText("DRAW IN " + numSeconds + " SECONDS");
     }
