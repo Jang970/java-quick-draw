@@ -46,6 +46,11 @@ public class App extends Application {
   private static final BadgeManager badgeManager = new BadgeManager();
   private static final TextToSpeech textToSpeech = new TextToSpeech();
 
+  /**
+   * This method will create and return a ProfileManager instance to be used through the application
+   *
+   * @return ProfileManager instance created
+   */
   private static ProfileManager createProfileManager() {
 
     File userProfiles = new File(".userprofiles");
@@ -61,6 +66,12 @@ public class App extends Application {
     }
   }
 
+  /**
+   * This method will create and return a GameLogicManager instance to be used throughout the
+   * application
+   *
+   * @return GameLogicManager instance created
+   */
   private static GameLogicManager createGameLogicManager() {
     try {
       // Try create the game logic manager
@@ -71,10 +82,20 @@ public class App extends Application {
     }
   }
 
+  /**
+   * This method will get the ProfileManager instance
+   *
+   * @return profile manager instance
+   */
   public static ProfileManager getProfileManager() {
     return profileManager;
   }
 
+  /**
+   * This method will get the gameLogicManager instance
+   *
+   * @return game logic manager instance
+   */
   public static GameLogicManager getGameLogicManager() {
     return gameLogicManager;
   }
@@ -83,26 +104,62 @@ public class App extends Application {
     return badgeManager;
   }
 
+  /**
+   * This method will get the current stage
+   *
+   * @return current stage in use
+   */
   public static Stage getStage() {
     return stage;
   }
 
+  /**
+   * This method is used when we want to switch between FXMLs.
+   *
+   * @param view FXML we want to switch to
+   */
   public static void setView(View view) {
     viewManager.loadView(view);
   }
 
+  /**
+   * This method allows us to notify a listener when we update the viewManager event emitter which
+   * handles events when we want to switch FXMLs.
+   *
+   * @param listener the EventListener to be notified when an event is emitted
+   * @return the subscription ID for unsubscribing
+   */
   public static int subscribeToViewChange(EventListener<View> listener) {
     return viewManager.subscribeToViewChange(listener);
   }
 
+  /**
+   * This method allows us to remove a listener/listeners from our viewManager using their
+   * subscription ID.
+   *
+   * @param id the subscription ID for unsubscribing
+   */
   public static void unsubscribeFromViewChange(int id) {
     viewManager.unsubscribeFromViewChange(id);
   }
 
+  /**
+   * This method allows us to notify a listener when we update the appTerminationEmitter event
+   * emitter which handles the termination of the app.
+   *
+   * @param listener the EventListener to be notified when an event is emitted
+   * @return the subscription ID for unsubscribing
+   */
   public static int subscribeToAppTermination(EventListener<WindowEvent> listener) {
     return appTerminationEmitter.subscribe(listener);
   }
 
+  /**
+   * This method allows us to remove a listener/listeners from our appTerminationEmitter using their
+   * subscription ID.
+   *
+   * @param id the subscription ID for unsubscribing
+   */
   public static void unsubscribeFromAppTermination(int id) {
     appTerminationEmitter.unsubscribe(id);
   }
@@ -112,7 +169,7 @@ public class App extends Application {
    * a catch block will never run. If this code is reached, it will exit the app and print the
    * message for why it should not have been reached (which you need to provide)
    *
-   * @param whyThisShouldNeverRun
+   * @param whyThisShouldNeverRun reason as to why the app exited/failed.
    */
   public static Object expect(String whyThisShouldNeverRun) {
     System.out.println(
@@ -127,8 +184,8 @@ public class App extends Application {
    * a catch block will never run. If this code is reached, it will exit the app and print the
    * message for why it should not have been reached (which you need to provide)
    *
-   * @param whyThisShouldNeverRun
-   * @param exception
+   * @param whyThisShouldNeverRun reason as to why the app exited/failed.
+   * @param exception exception to be thrown/shown to the developer when the app fails
    */
   public static Object expect(String whyThisShouldNeverRun, Exception exception) {
     System.out.println(
@@ -160,6 +217,15 @@ public class App extends Application {
   public static void main(final String[] args) {
     // Launch the JavaFX runtime
     launch();
+  }
+
+  /**
+   * This method will retrieve the Text To Speech used in the app
+   *
+   * @return text to speech object being used
+   */
+  public static TextToSpeech getTextToSpeech() {
+    return textToSpeech;
   }
 
   /**
@@ -204,6 +270,7 @@ public class App extends Application {
       defaultParent = loadFxml("home-screen");
       scene = new Scene(defaultParent, 900, 700);
 
+      // adding all FXMLs to a view manager
       viewManager = new ViewManager<View>(scene);
       viewManager.addView(View.HOME, defaultParent);
       viewManager.addView(View.GAME, loadFxml("game-screen"));
@@ -224,9 +291,5 @@ public class App extends Application {
     stage.setResizable(false);
     stage.setScene(scene);
     stage.show();
-  }
-
-  public static TextToSpeech getTextToSpeech() {
-    return textToSpeech;
   }
 }

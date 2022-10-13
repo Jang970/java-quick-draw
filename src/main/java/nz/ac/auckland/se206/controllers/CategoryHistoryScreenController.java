@@ -21,6 +21,7 @@ public class CategoryHistoryScreenController {
 
   private List<String> categoryHistory;
 
+  /** Method that is run to set up the CategoryHistoryScreen FXML everytime it is opened/run. */
   public void initialize() {
 
     // gets category history and displays every time view is changed
@@ -32,7 +33,8 @@ public class CategoryHistoryScreenController {
                 App.getProfileManager().getCurrentProfile().getGameHistory().stream()
                     .flatMap(
                         (game) ->
-                            game.getCategoriesPlayed().stream().map(cat -> cat.getCategory().name))
+                            game.getCategoriesPlayed().stream()
+                                .map(cat -> cat.getCategory().getName()))
                     .collect(Collectors.toList());
 
             bindScrollBars();
@@ -91,11 +93,13 @@ public class CategoryHistoryScreenController {
             categoryHistory.subList((categoryHistory.size() + 1) / 2, categoryHistory.size())));
   }
 
+  /** Method relating to the button switch to the CategoryScreen FXML */
   @FXML
   private void onPlayAgain() {
     App.setView(View.GAMEMODES);
   }
 
+  /** Method relating to the button switch to the UserScreen FXML */
   @FXML
   private void onBackToStats() {
     App.setView(View.USER);

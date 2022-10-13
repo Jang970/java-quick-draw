@@ -56,6 +56,7 @@ public class GameScreenController {
   private Media sound;
   private MediaPlayer mediaPlayer;
 
+  /** Method that is run to set up the GameScreen FXML everytime it is opened/run. */
   public void initialize() {
 
     // This gets the guess labels from the two columns and concatenates them into a single array for
@@ -102,7 +103,7 @@ public class GameScreenController {
 
             // When the view changes to game, we start a new game and clear the canvas
             gameLogicManager.startGame();
-            whatToDrawLabel.setText("TO DRAW: " + gameLogicManager.getCurrentCategory().name);
+            whatToDrawLabel.setText("TO DRAW: " + gameLogicManager.getCurrentCategory().getName());
             canvasManager.clearCanvas();
             canvasManager.resetIsDrawn();
 
@@ -174,6 +175,12 @@ public class GameScreenController {
             + ";");
   }
 
+  /**
+   * This method contains logic to handle what to do when the game ends depending on the result of
+   * the game
+   *
+   * @param winState shows if the game was won, lost, cancelled or not applicable
+   */
   private void onGameEnd(EndGameState winState) {
     // Run this after the game ends
     Platform.runLater(
@@ -210,6 +217,7 @@ public class GameScreenController {
         });
   }
 
+  /** This method contains logic that will be run when a game is started */
   private void onGameStart() {
     Platform.runLater(
         () -> {
@@ -223,6 +231,12 @@ public class GameScreenController {
         });
   }
 
+  /**
+   * This method handles what to do when we are given new predictions/ the predictions are updated
+   * TODO: have to show confidence levels
+   *
+   * @param classificationList list of predictions to display
+   */
   private void onPredictionsChange(List<Classification> classificationList) {
     Platform.runLater(
         () -> {
@@ -236,6 +250,12 @@ public class GameScreenController {
         });
   }
 
+  /**
+   * This method handles functionality relating to when the time to draw changes - updates the time
+   * label respectively
+   *
+   * @param numberSeconds time given to draw
+   */
   void onTimeChange(int numberSeconds) {
     Platform.runLater(
         () -> {
@@ -243,42 +263,61 @@ public class GameScreenController {
         });
   }
 
+  /**
+   * This method will update the time label with the correct formatting to the given time input
+   *
+   * @param numberSeconds time to update label to
+   */
   private void updateTimeRemainingLabel(int numberSeconds) {
     timeRemainingLabel.setText(
         "TIME REMAINING: " + String.format("%2d", numberSeconds).replace(' ', '0'));
   }
 
+  /**
+   * This method will disabled relevant buttons depending on the status of the boolean input
+   *
+   * @param disabled value depends on if we want to enable or disable the buttons
+   */
   private void setCanvasButtonsDisabled(boolean disabled) {
     pencilButton.setDisable(disabled);
     eraserButton.setDisable(disabled);
     clearButton.setDisable(disabled);
   }
 
+  /** Set the 'tool' in use to be the pencil so player can draw */
   @FXML
   private void onPencilSelected() {
     canvasManager.setDrawMode(DrawMode.DRAWING);
   }
 
+  /** Set the 'tool' in use to be the eraser so player can erase */
   @FXML
   private void onEraserSelected() {
     canvasManager.setDrawMode(DrawMode.ERASING);
   }
 
+  /** Remove everything on the canvas i.e return it to a blank state */
   @FXML
   private void onClearCanvas() {
     canvasManager.clearOnlyIfDrawingEnabled();
   }
 
+  /** Method relating to the button switch to UserProfilesScreen FXML */
   @FXML
   private void onUserProfiles() {
     App.setView(View.USERPROFILES);
   }
 
+  /** Method relating to the button switch to UserScreen FXML */
   @FXML
   private void onUserStats() {
     App.setView(View.USER);
   }
 
+  /**
+   * Method relating to the Button that will cancel the current game if playing but otherwise will
+   * return user to CategoryScreen FXML
+   */
   @FXML
   private void onGameAction() {
     if (gameLogicManager.isPlaying()) {
@@ -288,13 +327,12 @@ public class GameScreenController {
     }
   }
 
-  // TODO: Figure out why it breaks when cancelled
+  /** Method relating to the button that will allow user to save the image drawn */
   @FXML
   private void onDownloadImage() {
     try {
       canvasManager.saveCurrentSnapshotOnFile();
     } catch (IOException e) {
-      // TODO: Handle cancellation
       System.out.println("Failed to download");
     }
   }

@@ -12,8 +12,10 @@ public class BadgeManager {
   private final HashMap<String, Badge> badgeIdMap;
   private final List<Badge> badgeList;
 
-  // instantiation of all badges through creation of BadgeManager instance
-  // also initialise all badges earned status to be false
+  /**
+   * instantiation of all badges through creation of BadgeManager instance also initialise all
+   * badges earned status to be false
+   */
   public BadgeManager() {
     this.badgeList = BadgeFactory.createBadgeList();
 
@@ -24,13 +26,23 @@ public class BadgeManager {
   }
 
   /**
-   * @return
+   * This method will get all badges in our app
+   *
+   * @return list of all badges
    */
   public List<Badge> getAllBadges() {
     return this.badgeList;
   }
 
-  Badge getBadgeFromId(String badgeId) throws InvalidBadgeIdException {
+  /**
+   * This method will allow you to get a badge using its unique ID
+   *
+   * @param badgeId id of the badge we want
+   * @return badge we wanted
+   * @throws InvalidBadgeIdException thrown when the ID entered does not have a badge associated
+   *     with it
+   */
+  public Badge getBadgeFromId(String badgeId) throws InvalidBadgeIdException {
     if (badgeIdMap.containsKey(badgeId)) {
       return badgeIdMap.get(badgeId);
     } else {

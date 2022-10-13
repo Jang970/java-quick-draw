@@ -62,14 +62,32 @@ public class ViewManager<V extends Enum<V>> {
     }
   }
 
+  /**
+   * This method will get the current scene
+   *
+   * @return current scene used
+   */
   public Scene getScene() {
     return scene;
   }
 
+  /**
+   * Use this method when we want to add a listener to viewChangeEmitter to keep track if we have
+   * switched views
+   *
+   * @param listener the EventListener to be notified when an event is emitted
+   * @return the subscription ID for unsubscribing
+   */
   public int subscribeToViewChange(EventListener<V> listener) {
     return viewChangeEmitter.subscribe(listener);
   }
 
+  /**
+   * This method allows us to remove a listener/listeners from our viewChangeEmitter using their
+   * subscription ID.
+   *
+   * @param id the subscription ID for unsubscribing
+   */
   public void unsubscribeFromViewChange(int subId) {
     viewChangeEmitter.unsubscribe(subId);
   }

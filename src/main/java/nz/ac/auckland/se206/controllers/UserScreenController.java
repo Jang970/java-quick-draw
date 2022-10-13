@@ -14,6 +14,7 @@ public class UserScreenController {
   @FXML private Label numGamesLostLabel;
   @FXML private Label numCategoriesPlayedLabel;
 
+  /** Method that is run to set up the UserScreen FXML everytime it is opened/run. */
   public void initialize() {
 
     // every time view is changes to user stats it gets the recent user stats and displays them
@@ -35,7 +36,7 @@ public class UserScreenController {
                   ("Your fastest win is in "
                           + currentProfile.getFastestCategoryPlayed().getTimeTaken()
                           + " seconds when you had to draw '"
-                          + currentProfile.getFastestCategoryPlayed().getCategory().name
+                          + currentProfile.getFastestCategoryPlayed().getCategory().getName()
                           + "'!")
                       .toUpperCase());
             }
