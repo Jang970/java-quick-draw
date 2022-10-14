@@ -22,18 +22,18 @@ public class GameModesScreenController {
    *
    * @param moveX the given postion to move x in (left or right)
    */
-  private void moveCrane(int moveX) {
+  private void moveCrane(int moveX, int moveY) {
 
     TranslateTransition translateOne = new TranslateTransition();
     translateOne.setFromX(0);
     translateOne.setFromY(0);
     translateOne.setByX(moveX);
-    translateOne.setDuration(Duration.seconds(1));
+    translateOne.setDuration(Duration.seconds(0.5));
 
     TranslateTransition translateTwo = new TranslateTransition();
     translateTwo.setFromX(moveX);
     translateTwo.setFromY(0);
-    translateTwo.setByY(30);
+    translateTwo.setByY(moveY);
     translateTwo.setDuration(Duration.seconds(0.5));
     translateTwo.play();
 
@@ -59,7 +59,7 @@ public class GameModesScreenController {
 
     QuickDrawGameManager.setCurrentlySelectedGameMode(GameMode.CLASSIC);
 
-    moveCrane(-180);
+    moveCrane(-40, 30);
     sequence.setOnFinished(
         e -> {
           moveCraneBack();
@@ -73,7 +73,7 @@ public class GameModesScreenController {
 
     QuickDrawGameManager.setCurrentlySelectedGameMode(GameMode.HIDDEN_WORD);
 
-    moveCrane(180);
+    moveCrane(-215, 25);
     sequence.setOnFinished(
         e -> {
           moveCraneBack();
@@ -87,15 +87,25 @@ public class GameModesScreenController {
 
     QuickDrawGameManager.setCurrentlySelectedGameMode(GameMode.ZEN);
 
-    TranslateTransition translate = new TranslateTransition();
-    translate.setNode(craneImageView);
-    translate.setFromX(0);
-    translate.setFromY(0);
-    translate.setByY(30);
-    translate.setDuration(Duration.seconds(0.5));
-    translate.play();
+    moveCrane(105, 30);
 
-    translate.setOnFinished(
+    sequence.setOnFinished(
+        e -> {
+          moveCraneBack();
+          App.setView(View.CATEGORY);
+        });
+  }
+
+  /** sets game mode as rapid and goes to category screen */
+  @FXML
+  private void onSelectRapid() {
+
+    // TODO: UNCOMMENT
+    // QuickDrawGameManager.setCurrentlySelectedGameMode(GameMode.RAPID);
+
+    moveCrane(255, 30);
+
+    sequence.setOnFinished(
         e -> {
           moveCraneBack();
           App.setView(View.CATEGORY);

@@ -456,6 +456,7 @@
 
 .zen {
 	-fx-background-image: url('../images/game-modes/zen.png');
+	-fx-background-size: 130px;
 	-fx-background-color: null;
 	-fx-background-repeat: no-repeat;
 	-fx-border-color: null;
@@ -474,11 +475,21 @@
 	-fx-background-position: center top;
 }
 
+.rapid {
+	-fx-background-image: url('../images/game-modes/rapid.png');
+	-fx-background-size: 140px;
+	-fx-background-color: null;
+	-fx-background-repeat: no-repeat;
+	-fx-border-color: null;
+	-fx-text-fill: black;
+	-fx-font-size: 40px;
+}
+
 .crane {
 	-fx-image: url('../images/game-modes/crane.png');
 }
 
-.zen:hover, .hiddenWord:hover, .classic:hover {
+.zen:hover, .hiddenWord:hover, .classic:hover, .rapid:hover {
 	-fx-background-color: null;
 	-fx-text-fill: #E76F51;
 	-fx-border-color: none;
