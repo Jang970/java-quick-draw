@@ -97,7 +97,7 @@ public class BadgeFactory {
             QuickDrawGameManager.getProfileManager().getCurrentProfile().getGameHistory();
 
         for (GameInfo game : gameHistory) {
-          if (game.getReasonForGameEnd() == EndGameReason.WIN
+          if (game.getReasonForGameEnd() == EndGameReason.CORRECT_CATEOGRY
               && (game.getGameMode() == GameMode.HIDDEN_WORD
                   || game.getGameMode() == GameMode.CLASSIC)) {
             categoryHistory.add(game.getCategoryPlayed().getCategory().getName());
@@ -123,7 +123,7 @@ public class BadgeFactory {
     return new Badge(
         "max_dif",
         "Maximum difficulty",
-        "The player won a game on the hardest difficulty settings") {
+        "The player won a game on the hardest difficulty settings in classis or hidden word mode") {
 
       @Override
       public boolean earned(Profile profile) {
@@ -134,7 +134,7 @@ public class BadgeFactory {
             && settings.getConfidence() == Confidence.MASTER
             && settings.getTime() == Time.MASTER
             && settings.getWordChoice() == WordChoice.MASTER
-            && game.getReasonForGameEnd() == EndGameReason.WIN;
+            && game.getReasonForGameEnd() == EndGameReason.CORRECT_CATEOGRY;
       }
     };
   }
@@ -162,7 +162,7 @@ public class BadgeFactory {
           GameMode mode = game.getGameMode();
           if (mode == GameMode.CLASSIC || mode == GameMode.HIDDEN_WORD) {
 
-            if (game.getReasonForGameEnd() == EndGameReason.WIN) {
+            if (game.getReasonForGameEnd() == EndGameReason.CORRECT_CATEOGRY) {
               count++;
               if (count >= n) {
                 return true;
@@ -197,7 +197,7 @@ public class BadgeFactory {
 
         return (gameMode == GameMode.CLASSIC || gameMode == GameMode.HIDDEN_WORD)
             && (game.getCategoryPlayed().getTimeTaken() <= n)
-            && (game.getReasonForGameEnd() == EndGameReason.WIN);
+            && (game.getReasonForGameEnd() == EndGameReason.CORRECT_CATEOGRY);
       }
     };
   }
@@ -218,7 +218,7 @@ public class BadgeFactory {
 
         return (gameMode == GameMode.CLASSIC || gameMode == GameMode.HIDDEN_WORD)
             && (game.getCategoryPlayed().getSecondsRemaining() <= 2)
-            && (game.getReasonForGameEnd() == EndGameReason.WIN);
+            && (game.getReasonForGameEnd() == EndGameReason.CORRECT_CATEOGRY);
       }
     };
   }

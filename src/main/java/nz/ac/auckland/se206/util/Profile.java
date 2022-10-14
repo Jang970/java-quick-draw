@@ -157,8 +157,14 @@ public class Profile {
   public int getGamesWon() {
     int gamesWon = 0;
     for (GameInfo game : gameHistory) {
-      if (game.getReasonForGameEnd() == EndGameReason.WIN) {
-        gamesWon++;
+      if (game.getGameMode() == GameMode.CLASSIC || game.getGameMode() == GameMode.HIDDEN_WORD) {
+        if (game.getReasonForGameEnd() == EndGameReason.CORRECT_CATEOGRY) {
+          gamesWon++;
+        }
+      } else if (game.getGameMode() == GameMode.RAPID_FIRE) {
+        if (game.getCategoriesPlayed().size() > 0) {
+          gamesWon++;
+        }
       }
     }
     return gamesWon;
@@ -172,9 +178,15 @@ public class Profile {
   public int getGamesLost() {
     int gamesLost = 0;
     for (GameInfo game : gameHistory) {
-      if (game.getReasonForGameEnd() == EndGameReason.LOOSE
-          || game.getReasonForGameEnd() == EndGameReason.GIVE_UP) {
-        gamesLost++;
+      if (game.getGameMode() == GameMode.HIDDEN_WORD || game.getGameMode() == GameMode.CLASSIC) {
+        if (game.getReasonForGameEnd() == EndGameReason.OUT_OF_TIME
+            || game.getReasonForGameEnd() == EndGameReason.GAVE_UP_OR_CANCELLED) {
+          gamesLost++;
+        }
+      } else if (game.getGameMode() == GameMode.RAPID_FIRE) {
+        if (game.getCategoriesPlayed().size() == 0) {
+          gamesLost++;
+        }
       }
     }
     return gamesLost;

@@ -220,7 +220,6 @@ public class GameScreenController {
         () -> {
 
           // Update all dislay items correctly
-
           canvasManager.setDrawingEnabled(false);
           setCanvasButtonsDisabled(true);
 
@@ -228,56 +227,50 @@ public class GameScreenController {
           whatToDrawLabel.setStyle("-fx-font-size: 35px");
           whatToDrawLabel.getStyleClass().add("stateHeaders");
 
-          EndGameReason winState = gameInfo.getReasonForGameEnd();
+          EndGameReason reasonForGameEnd = gameInfo.getReasonForGameEnd();
+          GameMode gameMode = gameInfo.getGameMode();
 
-          if (gameInfo.getGameMode() == GameMode.RAPID_FIRE) {
+          if (gameMode == GameMode.HIDDEN_WORD || gameMode == GameMode.CLASSIC) {
+            if (reasonForGameEnd == EndGameReason.CORRECT_CATEOGRY) {
+              whatToDrawLabel.setText("You got it!");
+              playWinSound();
+            } else if (reasonForGameEnd == EndGameReason.OUT_OF_TIME) {
+              whatToDrawLabel.setText("Sorry, you ran out of time!");
+              playLooseSound();
+            } else if (reasonForGameEnd == EndGameReason.GAVE_UP_OR_CANCELLED) {
+              whatToDrawLabel.setText("Game stopped");
+            }
+          } else if (gameMode == GameMode.ZEN) {
+            whatToDrawLabel.setText("What a lovely drawing :)");
+          } else if (gameMode == GameMode.RAPID_FIRE) {
             int numThingsDrawn = gameInfo.getCategoriesPlayed().size();
             if (numThingsDrawn == 0) {
-              whatToDrawLabel.setText("Out of time!");
-              sound =
-                  new Media(
-                      getClass()
-                          .getClassLoader()
-                          .getResource("sounds/gameLost.mp3")
-                          .toExternalForm());
-              mediaPlayer = new MediaPlayer(sound);
-              mediaPlayer.play();
+              whatToDrawLabel.setText("Sorry, you ran out of time!");
+              playLooseSound();
             } else {
-              sound =
-                  new Media(
-                      getClass()
-                          .getClassLoader()
-                          .getResource("sounds/gameWin.mp3")
-                          .toExternalForm());
-              mediaPlayer = new MediaPlayer(sound);
-              mediaPlayer.play();
+              playWinSound();
               if (numThingsDrawn == 1) {
                 whatToDrawLabel.setText("You drew 1 thing!");
               } else if (numThingsDrawn > 1) {
                 whatToDrawLabel.setText("You drew " + numThingsDrawn + " things!");
               }
             }
-          } else if (winState == EndGameReason.WIN) {
-            whatToDrawLabel.setText("You got it!");
-            sound =
-                new Media(
-                    getClass().getClassLoader().getResource("sounds/gameWin.mp3").toExternalForm());
-            mediaPlayer = new MediaPlayer(sound);
-            mediaPlayer.play();
-          } else if (winState == EndGameReason.LOOSE) {
-            whatToDrawLabel.setText("Sorry, you ran out of time!");
-            sound =
-                new Media(
-                    getClass()
-                        .getClassLoader()
-                        .getResource("sounds/gameLost.mp3")
-                        .toExternalForm());
-            mediaPlayer = new MediaPlayer(sound);
-            mediaPlayer.play();
-          } else {
-            whatToDrawLabel.setText("Game stopped");
           }
         });
+  }
+
+  private void playWinSound() {
+    sound =
+        new Media(getClass().getClassLoader().getResource("sounds/gameWin.mp3").toExternalForm());
+    mediaPlayer = new MediaPlayer(sound);
+    mediaPlayer.play();
+  }
+
+  private void playLooseSound() {
+    sound =
+        new Media(getClass().getClassLoader().getResource("sounds/gameLost.mp3").toExternalForm());
+    mediaPlayer = new MediaPlayer(sound);
+    mediaPlayer.play();
   }
 
   /** This method contains logic that will be run when a game is started */

@@ -177,9 +177,7 @@ public class GameLogicManager {
   public void stopGame() {
     if (isPlaying) {
       if (currentGameProfile.gameMode() == GameMode.ZEN) {
-        endGame(EndGameReason.NOT_APPLICABLE);
-      } else {
-        endGame(EndGameReason.GIVE_UP);
+        endGame(EndGameReason.GAVE_UP_OR_CANCELLED);
       }
     }
   }
@@ -247,7 +245,7 @@ public class GameLogicManager {
     correctPredictionEmitter.emit(categoryPlayed);
 
     if (mode == GameMode.CLASSIC || mode == GameMode.HIDDEN_WORD) {
-      endGame(EndGameReason.WIN);
+      endGame(EndGameReason.CORRECT_CATEOGRY);
     }
   }
 
@@ -260,11 +258,10 @@ public class GameLogicManager {
         : "Zen mode is not timed so we should not 'run out of time'";
 
     GameMode gameMode = currentGameProfile.gameMode();
-    if (gameMode == GameMode.CLASSIC || gameMode == GameMode.HIDDEN_WORD) {
-      endGame(EndGameReason.LOOSE);
-    }
-    if (gameMode == GameMode.RAPID_FIRE) {
-      endGame(EndGameReason.NOT_APPLICABLE);
+    if (gameMode == GameMode.CLASSIC
+        || gameMode == GameMode.HIDDEN_WORD
+        || gameMode == GameMode.RAPID_FIRE) {
+      endGame(EndGameReason.OUT_OF_TIME);
     }
   }
 
