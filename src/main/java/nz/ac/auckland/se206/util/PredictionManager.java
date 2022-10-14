@@ -29,14 +29,12 @@ public class PredictionManager {
   private Set<Category> categories = new HashSet<Category>();
 
   /**
-   * The manager uses the snapshot provider to get images and then runs a prediction on those
-   * images. When the prediction is complete, the manager will send the results to the prediction
-   * listener
+   * The prediction manager will be used to make predictions on the current drawing.
    *
    * @param pollInterval how often the manager will send queires to the server to get predictions in
-   *     milliseconds. The poll interval is bound below by 10ms.
-   * @param imageSource a class which implements the {@link DataSouce} interface
-   * @param predictionListener a class which implements the {@link EventListener} interface
+   *     milliseconds. The poll interval is bound below by 10ms
+   * @param numTopGuesses where the drawing has to be in the ML top guesses order for it to be a win
+   *     i.e if it was 3, then the drawing must be top 3 in guesses.
    * @throws IOException If there is an error in reading the input/output of the DL model.
    * @throws ModelException If the model cannot be found on the file system.
    */
@@ -84,6 +82,8 @@ public class PredictionManager {
 
               // TODO: Memoize the input image so we are not making unnecessary queires
 
+              // update the listener relating to the event making the predictioner while
+              // isMakingPredictions is true
               if (isMakingPredictions) {
                 try {
                   if (predictionListener != null && imageSource != null) {
@@ -181,18 +181,13 @@ public class PredictionManager {
   /**
    * Checking if predictions are being made on the model and sending the results to the prediction
    * listener
+   *
+   * @return true or false dependent if predictions are being made
    */
   public boolean isMakingPredictions() {
     return isMakingPredictions;
   }
 
-  /**
-   * This generates a new random category, updates the category for the class and returns the value
-   * of the new category. It will not use any values in the provided set
-   *
-   * @param categoryFilter
-   * @return
-   */
   /**
    * This generates a new random category, updates the category for the class and returns the value
    * of the new category. It will not use any values in the provided set

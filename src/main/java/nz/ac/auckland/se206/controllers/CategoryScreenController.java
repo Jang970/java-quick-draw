@@ -118,9 +118,10 @@ public class CategoryScreenController {
         .getStylesheets()
         .add(getClass().getResource("/css/application.css").toExternalForm());
 
-    // setting display values
+    // setting display values when the how to play pop up is shown
     howToPlayAlert.setTitle("How to Play");
     howToPlayAlert.setHeaderText("How to Play");
+    // content to display on the pop up
     howToPlayAlert.setContentText(
         "Once you click the \"I'm Ready!\" button, "
             + "the timer will start immediately and you "

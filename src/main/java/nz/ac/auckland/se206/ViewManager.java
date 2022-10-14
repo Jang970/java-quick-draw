@@ -95,7 +95,7 @@ public class ViewManager<V extends Enum<V>> {
    * This method allows us to remove a listener/listeners from our viewChangeEmitter using their
    * subscription ID.
    *
-   * @param id the subscription ID for unsubscribing
+   * @param subId the subscription ID for unsubscribing
    */
   public void unsubscribeFromViewChange(int subId) {
     viewChangeEmitter.unsubscribe(subId);

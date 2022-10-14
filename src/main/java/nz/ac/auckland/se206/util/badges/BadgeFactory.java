@@ -30,17 +30,19 @@ public class BadgeFactory {
 
     List<Badge> badges = new ArrayList<Badge>();
 
-    badges.add(createNConsecutiveWinBadge(2));
-    badges.add(createNConsecutiveWinBadge(5));
-    badges.add(createNConsecutiveWinBadge(10));
-    badges.add(createNConsecutiveWinBadge(20));
+    // create the consecutive wins badges
+    badges.add(createNumberOfConsecutiveWinsBadge(2));
+    badges.add(createNumberOfConsecutiveWinsBadge(5));
+    badges.add(createNumberOfConsecutiveWinsBadge(10));
+    badges.add(createNumberOfConsecutiveWinsBadge(20));
 
     badges.add(createJustInTimeBadge());
 
-    badges.add(createUnderNSecondsBadge(1));
-    badges.add(createUnderNSecondsBadge(2));
-    badges.add(createUnderNSecondsBadge(5));
-    badges.add(createUnderNSecondsBadge(10));
+    // create the time badges
+    badges.add(createUnderNumberOfSecondsBadge(1));
+    badges.add(createUnderNumberOfSecondsBadge(2));
+    badges.add(createUnderNumberOfSecondsBadge(5));
+    badges.add(createUnderNumberOfSecondsBadge(10));
 
     badges.add(createMaxDifficultyBadge());
     badges.add(createPlayedAllCategoriesBadge());
@@ -48,6 +50,7 @@ public class BadgeFactory {
     // This one has to go last
     badges.add(createGotAllBadgesBadge());
 
+    // add all badge ids to a list and check for duplicates
     for (Badge badge : badges) {
       assert !badgeIds.contains(badge.getId()) : "Each badge ids should be unique";
       badgeIds.add(badge.getId());
@@ -66,6 +69,8 @@ public class BadgeFactory {
 
       @Override
       public boolean earned(Profile profile) {
+        // logic to check if the profile earned got all badges badge
+        // will simply check if profile has all other badges other than this one
         Set<String> profileBadgeIds = profile.getEarnedBadgeIds();
         for (String badgeId : BadgeFactory.badgeIds) {
           if (!badgeId.equals("won_all") && !profileBadgeIds.contains(badgeId)) {
@@ -127,6 +132,8 @@ public class BadgeFactory {
 
       @Override
       public boolean earned(Profile profile) {
+        // logic to check if the profile earned max difficulty badge
+        // will check if the player played on the hardest difficulties and won
         GameInfo game = profile.getMostRecentGame();
         Settings settings = game.getSettings();
 
@@ -142,9 +149,10 @@ public class BadgeFactory {
   /**
    * This creates the consecutive wins badges
    *
+   * @param n number of wins required
    * @return instance of type Badge representing the consecutive wins badges
    */
-  private static Badge createNConsecutiveWinBadge(int n) {
+  private static Badge createNumberOfConsecutiveWinsBadge(int n) {
     return new Badge(
         "consec" + n,
         n + " Consecutive Wins",
@@ -152,6 +160,9 @@ public class BadgeFactory {
 
       @Override
       public boolean earned(Profile profile) {
+        // logic to check if the profile earned number of consecutive wins badge
+        // will check the previous games of profile and see if they have the appropriate number of
+        // wins in a row
         List<GameInfo> gameHistory = profile.getGameHistory();
 
         ListIterator<GameInfo> gameHistoryIterator = gameHistory.listIterator(gameHistory.size());
@@ -181,9 +192,10 @@ public class BadgeFactory {
   /**
    * This creates the under n seconds badges
    *
+   * @param n number of seconds required
    * @return instance of type Badge representing the under n seconds badges
    */
-  private static Badge createUnderNSecondsBadge(int n) {
+  private static Badge createUnderNumberOfSecondsBadge(int n) {
     return new Badge(
         "under" + n + "sec",
         "Under " + n + " seconds",
@@ -212,7 +224,6 @@ public class BadgeFactory {
 
       @Override
       public boolean earned(Profile profile) {
-
         GameInfo game = profile.getMostRecentGame();
         GameMode gameMode = game.getGameMode();
 

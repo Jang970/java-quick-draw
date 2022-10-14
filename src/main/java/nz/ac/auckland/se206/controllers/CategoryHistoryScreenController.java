@@ -32,8 +32,6 @@ public class CategoryHistoryScreenController {
         (View view) -> {
           if (view == View.CATEGORYHISTORY) {
 
-            // Sets category history to a list of categories from the the classic and hidden word
-            // game modes
             categoryHistory = new ArrayList<String>();
 
             List<GameInfo> gameHistory =
@@ -81,9 +79,11 @@ public class CategoryHistoryScreenController {
 
   /** Binds the scroll bars of the two lists */
   private void bindScrollBars() {
+    // style the two lists
     categoryHistoryListViewOne.applyCss();
     categoryHistoryListViewTwo.applyCss();
 
+    // create scroll bars and bind together so they scroll at the same time
     ScrollBar sb1 = (ScrollBar) categoryHistoryListViewOne.lookup(".scroll-bar");
     ScrollBar sb2 = (ScrollBar) categoryHistoryListViewTwo.lookup(".scroll-bar");
     sb1.valueProperty().bindBidirectional(sb2.valueProperty());

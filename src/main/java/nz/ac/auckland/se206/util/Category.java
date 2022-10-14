@@ -23,7 +23,7 @@ public class Category {
   /**
    * This method will get the name of the category
    *
-   * @return category name
+   * @return the name of the category
    */
   public String getName() {
     return this.name;
@@ -32,7 +32,7 @@ public class Category {
   /**
    * This method will get the description of the category
    *
-   * @return category description
+   * @return description/definition of category
    */
   public String getDescription() {
     return this.description;
@@ -41,7 +41,7 @@ public class Category {
   /**
    * This method will get the category type of the category
    *
-   * @return category type of the category
+   * @return category type of the word
    */
   public CategoryType getCategoryType() {
     return this.categoryType;

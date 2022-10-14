@@ -57,6 +57,9 @@ public class ProfileManager {
    *     not exist but cannot be created, or cannot be opened for any other reason
    */
   public ProfileManager(String fileNameFullPath) throws IOException {
+
+    // this will handle the creation of the file to store our profiles
+    // it will also load in existing profiles if the file has been made
     profilesFile = new File(fileNameFullPath);
     if (profilesFile.isDirectory()) {
       throw new IOException("File " + fileNameFullPath + " is a directory, not a json file");
@@ -162,6 +165,7 @@ public class ProfileManager {
     return profiles.get(currentProfileIndex);
   }
 
+  /** This method will indicate in the console if a save is being made */
   private void saveChanges() {
     System.out.println("   * Requesting save change");
     changeSaveCountdown.startCountdown(1);
@@ -172,6 +176,8 @@ public class ProfileManager {
 
     System.out.println(" + Saving profiles");
 
+    // this logic will handle writing the data of profiles to a file, it will also check if the file
+    // is a directory
     Writer writer = null;
     try {
       writer = new FileWriter(profilesFile);
@@ -179,6 +185,7 @@ public class ProfileManager {
       App.expect("Profiles File should be guaranteed to not be a directory", e);
     }
 
+    // using gson to serialise our information to the json file
     Gson gson = new GsonBuilder().create();
     gson.toJson(new ProfileListSaveObject(profiles, currentProfileIndex), writer);
 
@@ -199,12 +206,15 @@ public class ProfileManager {
 
       Reader reader = null;
 
+      // the following logic will check if the file exists and then will proceed to read the
+      // contents of the json file
       try {
         reader = new FileReader(profilesFile);
       } catch (FileNotFoundException e) {
         App.expect("File should definitely exist");
       }
 
+      // creating a gson instance and customising it to accept the information in our file
       Gson gson = new Gson();
       Type listType = new TypeToken<ProfileListSaveObject>() {}.getType();
 

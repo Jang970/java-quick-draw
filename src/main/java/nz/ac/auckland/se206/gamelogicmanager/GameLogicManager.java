@@ -191,6 +191,7 @@ public class GameLogicManager {
     WordChoice wordChoice = currentGameProfile.settings().getWordChoice();
 
     try {
+      // check which categories to include in generating a new category to play
       categoryToGuess =
           predictionManager.getNewRandomCategory(
               mostPlayedCategories,

@@ -51,6 +51,7 @@ public class CanvasManager {
     this.canvas = canvas;
     this.context = canvas.getGraphicsContext2D();
 
+    // initialise / setup the canvas for the game
     canvas.setOnMouseDragged((e) -> handleDragEvent(e));
     canvas.setOnMouseReleased((e) -> isHolding = false);
     canvas.setOnMouseClicked((e) -> handleClickEvent(e));
@@ -83,7 +84,7 @@ public class CanvasManager {
 
   /** Sets the cursor based on the drawmode or default if drawing is not enabled */
   private void setCursor() {
-
+    // this logic handles the switching between pencil and eraser
     if (!isDrawingEnabled()) {
       canvas.setCursor(Cursor.DEFAULT);
     } else if (drawMode == DrawMode.DRAWING) {
@@ -156,6 +157,7 @@ public class CanvasManager {
    * @param event the click even
    */
   private void handleClickEvent(MouseEvent event) {
+    // draw on the canvas when relevant criteria is met
     if (drawingEnabled && drawMode == DrawMode.DRAWING) {
       int circleRadius = 6;
       context.setFill(penColor);

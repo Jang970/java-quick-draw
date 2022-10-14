@@ -86,9 +86,11 @@ public class GameScreenController {
     // Creates a task which gives the game logic manager a way of accessing the canvas image.
     gameLogicManager.setImageSource(
         () -> {
+          // access the image drawn on the canvas
           FutureTask<BufferedImage> getImage =
               new FutureTask<BufferedImage>(() -> canvasManager.getCurrentBlackAndWhiteSnapshot());
           Platform.runLater(getImage);
+          // will check for any exceptions but should not really occur
           try {
             return getImage.get();
           } catch (InterruptedException | ExecutionException error) {
@@ -228,7 +230,6 @@ public class GameScreenController {
     // Run this after the game ends
     Platform.runLater(
         () -> {
-
           // Update all dislay items correctly
           canvasManager.setDrawingEnabled(false);
           setCanvasButtonsDisabled(true);
@@ -309,6 +310,7 @@ public class GameScreenController {
           }
 
           setCanvasButtonsDisabled(false);
+          // allows player to draw on the canvas
           canvasManager.setDrawingEnabled(true);
           canvasManager.setDrawMode(DrawMode.DRAWING);
           gameActionButton.setDisable(false);

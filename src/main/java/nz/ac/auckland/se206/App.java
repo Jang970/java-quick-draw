@@ -183,6 +183,7 @@ public class App extends Application {
 
     QuickDrawGameManager.initGame();
 
+    // terminates the TTS and fully exits the java app when user presses the 'x' / quits the app
     stage.setOnCloseRequest(
         (e) -> {
           textToSpeech.terminate();
@@ -202,11 +203,13 @@ public class App extends Application {
       viewManager = new ViewManager<View>(scene);
       viewManager.addView(View.HOME, defaultParent);
       viewManager.addView(View.GAME, loadFxml("game-screen"));
+      // adding FXML relating to categories
       viewManager.addView(View.CATEGORY, loadFxml("category-screen"));
+      viewManager.addView(View.CATEGORYHISTORY, loadFxml("categoryhistory-screen"));
+      // adding FXML relating to the user
       viewManager.addView(View.USERPROFILES, loadFxml("userprofiles-screen"));
       viewManager.addView(View.NEWUSER, loadFxml("newuser-screen"));
       viewManager.addView(View.USER, loadFxml("user-screen"));
-      viewManager.addView(View.CATEGORYHISTORY, loadFxml("categoryhistory-screen"));
       viewManager.addView(View.BADGES, loadFxml("badges-screen"));
       viewManager.addView(View.DIFFICULTY, loadFxml("difficulty-screen"));
       viewManager.addView(View.GAMEMODES, loadFxml("gamemodes-screen"));
@@ -215,6 +218,7 @@ public class App extends Application {
       App.expect("All of the previously listed files should exists", e1);
     }
 
+    // set stage settings
     stage.setTitle("Speedy Sketchers");
     stage.setResizable(false);
     stage.setScene(scene);
