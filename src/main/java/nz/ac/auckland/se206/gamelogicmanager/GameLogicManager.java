@@ -125,7 +125,7 @@ public class GameLogicManager {
             .collect(Collectors.toSet());
 
     WordChoice wordChoice = profile.settings().getWordChoice();
-    if (replayWord == false) {
+    if (!replayWord) {
       try {
         categoryToGuess =
             predictionManager.getNewRandomCategory(

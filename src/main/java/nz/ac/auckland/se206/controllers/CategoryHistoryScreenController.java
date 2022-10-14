@@ -1,8 +1,7 @@
 package nz.ac.auckland.se206.controllers;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -25,7 +24,8 @@ public class CategoryHistoryScreenController {
   @FXML private ImageView ballImageView;
 
   private List<String> categoryHistoryAsString;
-  private List<Category> categoriesPlayed;
+  private Set<Category> categoriesPlayed;
+  private Set<String> uniqueCategoriesPlayedAsString;
   private GameLogicManager gameLogicManager;
 
   /** Method that is run to set up the CategoryHistoryScreen FXML everytime it is opened/run. */
@@ -38,7 +38,17 @@ public class CategoryHistoryScreenController {
         (View view) -> {
           if (view == View.CATEGORYHISTORY) {
 
-            categoryHistoryAsString =
+            // first get all categories played by profile as a set and of type Category
+            categoriesPlayed =
+                QuickDrawGameManager.getProfileManager()
+                    .getCurrentProfile()
+                    .getGameHistory()
+                    .stream()
+                    .flatMap(
+                        (game) -> game.getCategoriesPlayed().stream().map(cat -> cat.getCategory()))
+                    .collect(Collectors.toSet());
+            // then we get all categories again but this time just the name of type string
+            uniqueCategoriesPlayedAsString =
                 QuickDrawGameManager.getProfileManager()
                     .getCurrentProfile()
                     .getGameHistory()
@@ -47,19 +57,11 @@ public class CategoryHistoryScreenController {
                         (game) ->
                             game.getCategoriesPlayed().stream()
                                 .map(cat -> cat.getCategory().getName()))
-                    .collect(Collectors.toList());
+                    .collect(Collectors.toSet());
 
-            // removed any duplicates found in our list of strings
-            List<String> noDups = new ArrayList<>();
-            HashSet<String> lookUp = new HashSet<>();
-
-            for (String category : categoryHistoryAsString) {
-              if (lookUp.add(category)) {
-                noDups.add(category);
-              }
-            }
-
-            categoryHistoryAsString = noDups;
+            // convert the set of strings into a list so that other methods work
+            categoryHistoryAsString =
+                uniqueCategoriesPlayedAsString.stream().collect(Collectors.toList());
 
             bindScrollBars();
 
@@ -85,8 +87,6 @@ public class CategoryHistoryScreenController {
           cell.setOnMouseClicked(
               e -> {
                 if (!cell.isEmpty()) {
-                  // TODO: Send category word to category screen
-                  System.out.println("You clicked on " + cell.getItem());
 
                   // search for category clicked in our list of Category objects via the name
                   // if a match was found then we set the category in gameLogicManager to that and
