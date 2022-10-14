@@ -1,5 +1,8 @@
 package nz.ac.auckland.se206.controllers;
 
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -20,17 +23,15 @@ public class LeaderboardScreenController {
   @FXML private TableColumn<Profile, String> namesColumn;
   @FXML private TableColumn<Profile, Integer> percentageColumn;
 
-  /** Creates leaderboard and refereshes leaderboard on view change to leaderboard screen */
+  /** Creates leaderboard and refreshes leaderboard on view change to leaderboard screen */
   public void initialize() {
-
-    createLeaderboardTable();
 
     App.subscribeToViewChange(
         (View view) -> {
           if (view == View.LEADERBOARD) {
-            // TODO: Leaderboard not sorting by win percentage
             // refreshes leaderboard in case win percentage changes and if new profiles are created
             leaderboard.refresh();
+            createLeaderboardTable();
           }
         });
   }
@@ -59,16 +60,24 @@ public class LeaderboardScreenController {
     namesColumn.setReorderable(false);
     namesColumn.setResizable(false);
 
-    // percetane column is the win percentage of each profile
+    // percentage column is the win percentage of each profile
     percentageColumn.setCellValueFactory(
         new PropertyValueFactory<Profile, Integer>("winPercentage"));
     percentageColumn.setReorderable(false);
     percentageColumn.setSortType(TableColumn.SortType.DESCENDING);
     percentageColumn.setResizable(false);
 
-    // sets the items in the leaderboard as all current profiles
-    leaderboard.setItems(
-        FXCollections.observableList(QuickDrawGameManager.getProfileManager().getProfiles()));
+    // we get the list of profiles and then create a new list that contains profiles sorted via
+    // their win percentage
+    List<Profile> profiles = QuickDrawGameManager.getProfileManager().getProfiles();
+    List<Profile> sortedProfiles =
+        profiles.stream()
+            .sorted(Comparator.comparing(Profile::getWinPercentage).reversed())
+            .collect(Collectors.toList());
+
+    // sets the items in the leaderboard as all the profiles in sorted order according to win
+    // percentage
+    leaderboard.setItems(FXCollections.observableList(sortedProfiles));
     // sorts tables by percentage column
     leaderboard.getSortOrder().add(percentageColumn);
   }
