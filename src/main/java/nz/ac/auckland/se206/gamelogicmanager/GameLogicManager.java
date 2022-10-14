@@ -25,7 +25,7 @@ import nz.ac.auckland.se206.util.difficulties.WordChoice;
  */
 public class GameLogicManager {
   private Boolean isPlaying = false;
-  private Boolean replayWord = false;
+  private Boolean overrideCategory = false;
 
   private Category categoryToGuess;
 
@@ -116,16 +116,17 @@ public class GameLogicManager {
 
     currentGameProfile = profile;
 
-    Set<String> categories =
-        profile.gameHistory().stream()
-            .flatMap(
-                (game) ->
-                    game.getCategoriesPlayed().stream()
-                        .map((categoryPlayed) -> categoryPlayed.getCategory().getName()))
-            .collect(Collectors.toSet());
+    if (!overrideCategory) {
 
-    WordChoice wordChoice = profile.settings().getWordChoice();
-    if (!replayWord) {
+      Set<String> categories =
+          profile.gameHistory().stream()
+              .flatMap(
+                  (game) ->
+                      game.getCategoriesPlayed().stream()
+                          .map((categoryPlayed) -> categoryPlayed.getCategory().getName()))
+              .collect(Collectors.toSet());
+
+      WordChoice wordChoice = profile.settings().getWordChoice();
       try {
         categoryToGuess =
             predictionManager.getNewRandomCategory(
@@ -136,6 +137,8 @@ public class GameLogicManager {
       } catch (FilterTooStrictException e) {
         e.printStackTrace();
       }
+
+      overrideCategory = false;
     }
   }
 
@@ -334,22 +337,18 @@ public class GameLogicManager {
   }
 
   /**
-   * This method is used to set the category to play for the user
+   * This method is used to manually override the category that is played for the next game. This
+   * will be reset after the game is initialised. If the player initialises the game, it will use
+   * the reset category. If the game is initialised again, a different word will be used.
    *
    * @param newCategory new category to set the category to play to
    */
-  public void setCategory(Category newCategory) {
-    categoryToGuess = newCategory;
-    updateReplayWord(true);
+  public void forceCategoryForNextInitialisation(Category category) {
+    overrideCategory = true;
+    categoryToGuess = category;
   }
 
-  /**
-   * This method will be used to update the indicator variable which determines if a word is being
-   * replayed or not
-   *
-   * @param newVal true or false depending if a player is replaying a word
-   */
-  public void updateReplayWord(Boolean newVal) {
-    this.replayWord = newVal;
+  public void diableForcedCategory() {
+    overrideCategory = false;
   }
 }
