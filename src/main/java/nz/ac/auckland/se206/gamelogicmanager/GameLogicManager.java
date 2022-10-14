@@ -219,9 +219,7 @@ public class GameLogicManager {
   /** Ends the game if it is ongoing with a win state of CANCEL */
   public void stopGame() {
     if (isPlaying) {
-      if (currentGameProfile.gameMode() == GameMode.ZEN) {
-        endGame(EndGameReason.GAVE_UP_OR_CANCELLED);
-      }
+      endGame(EndGameReason.GAVE_UP_OR_CANCELLED);
     }
   }
 

@@ -342,6 +342,7 @@ public class GameScreenController {
               whatToDrawLabel.setText("Sorry, you ran out of time!");
               playLooseSound();
             } else if (reasonForGameEnd == EndGameReason.GAVE_UP_OR_CANCELLED) {
+              playLooseSound();
               whatToDrawLabel.setText("Game stopped");
             }
           } else if (gameMode == GameMode.ZEN) {

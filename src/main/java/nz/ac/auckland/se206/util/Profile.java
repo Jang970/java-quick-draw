@@ -243,6 +243,18 @@ public class Profile {
     return bestGame;
   }
 
+  public int getHighestRapidFireCount() {
+    int highestCount = 0;
+    for (GameInfo gameInfo : gameHistory) {
+      if (gameInfo.getGameMode() == GameMode.RAPID_FIRE) {
+        if (gameInfo.getCategoriesPlayed().size() > highestCount) {
+          highestCount = gameInfo.getCategoriesPlayed().size();
+        }
+      }
+    }
+    return highestCount;
+  }
+
   /**
    * This method will get the past games of the profile
    *

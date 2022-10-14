@@ -14,6 +14,7 @@ public class UserScreenController {
   @FXML private Label numGamesWonLabel;
   @FXML private Label numGamesLostLabel;
   @FXML private Label numCategoriesPlayedLabel;
+  @FXML private Label bestRapidFireCountLabel;
 
   /** Method that is run to set up the UserScreen FXML everytime it is opened/run. */
   public void initialize() {
@@ -48,6 +49,8 @@ public class UserScreenController {
             numGamesLostLabel.setText(String.valueOf(currentProfile.getGamesLost()));
             numCategoriesPlayedLabel.setText(
                 String.valueOf(currentProfile.getGameHistory().size()));
+            bestRapidFireCountLabel.setText(
+                String.valueOf(currentProfile.getHighestRapidFireCount()));
           }
         });
   }
