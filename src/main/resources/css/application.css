@@ -107,7 +107,7 @@
 	}
 
 .pagination .toggle-button  {
-	-fx-color: #2A9D8F;
+	-fx-color: #F4A261;
 	-fx-background-radius: 40px;
 	-fx-min-width: 40;
 	-fx-min-height: 40;
@@ -115,11 +115,11 @@
 }
 
 .pagination .toggle-button:selected{
- 	 -fx-color: #F4A261;
+	-fx-color: #2A9D8F;
 }
 
 .pagination .toggle-button:hover {
- 	 -fx-background-color:  #F4A261;
+ 	 -fx-background-color:  #2A9D8F;
 }
 
 .pagination .pagination-control .left-arrow, .right-arrow{

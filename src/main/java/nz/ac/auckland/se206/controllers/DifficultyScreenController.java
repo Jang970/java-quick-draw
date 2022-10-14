@@ -1,11 +1,11 @@
 package nz.ac.auckland.se206.controllers;
 
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
 import nz.ac.auckland.se206.QuickDrawGameManager;
+import nz.ac.auckland.se206.util.EventListener;
 import nz.ac.auckland.se206.util.Settings;
 import nz.ac.auckland.se206.util.difficulties.Accuracy;
 import nz.ac.auckland.se206.util.difficulties.Confidence;
@@ -20,7 +20,6 @@ public class DifficultyScreenController {
   @FXML private ChoiceBox<String> confidenceChoiceBox;
 
   private Settings settings;
-
   private View previousView;
 
   /**
@@ -58,44 +57,34 @@ public class DifficultyScreenController {
   /** adds listener to the choice boxes and gets the selected option and updates each settings */
   private void updateDifficultySettings() {
 
-    // TODO: how to make this cleaner??
-    accuracyChoiceBox
-        .getSelectionModel()
-        .selectedItemProperty()
-        .addListener(
-            (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-              ;
-              settings.updateAccuracy(Accuracy.valueOf(newValue));
-            });
+    updateValueOnBoxHelper(
+        accuracyChoiceBox, (newValue) -> settings.updateAccuracy(Accuracy.valueOf(newValue)));
+    updateValueOnBoxHelper(
+        wordsChoiceBox, (newValue) -> settings.updateWordChoice(WordChoice.valueOf(newValue)));
+    updateValueOnBoxHelper(
+        timeChoiceBox, (newValue) -> settings.updateTime(Time.valueOf(newValue)));
+    updateValueOnBoxHelper(
+        confidenceChoiceBox, (newValue) -> settings.updateConfidence(Confidence.valueOf(newValue)));
+  }
 
-    wordsChoiceBox
-        .getSelectionModel()
+  /**
+   * This is a simple helper method which registers an event on the choice box that takes in the
+   * string of the new value.
+   *
+   * @param box the box to register the event on.
+   * @param listener the listener of the event.
+   */
+  private void updateValueOnBoxHelper(ChoiceBox<String> box, EventListener<String> listener) {
+    box.getSelectionModel()
         .selectedItemProperty()
         .addListener(
-            (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-              settings.updateWordChoice(WordChoice.valueOf(newValue));
-            });
-
-    timeChoiceBox
-        .getSelectionModel()
-        .selectedItemProperty()
-        .addListener(
-            (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-              settings.updateTime(Time.valueOf(newValue));
-            });
-
-    confidenceChoiceBox
-        .getSelectionModel()
-        .selectedItemProperty()
-        .addListener(
-            (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-              settings.updateConfidence(Confidence.valueOf(newValue));
+            (observable, oldValue, newValue) -> {
+              listener.update(newValue);
             });
   }
 
   /** Creates choice boxes with the given difficulty options */
   private void createChoiceBoxes() {
-
     accuracyChoiceBox.getItems().addAll("EASY", "MEDIUM", "HARD");
     wordsChoiceBox.getItems().addAll("EASY", "MEDIUM", "HARD", "MASTER");
     timeChoiceBox.getItems().addAll("EASY", "MEDIUM", "HARD", "MASTER");

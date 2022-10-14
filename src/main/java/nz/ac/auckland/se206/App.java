@@ -31,8 +31,6 @@ public class App extends Application {
   private static final TextToSpeech textToSpeech = new TextToSpeech();
   private static final EventEmitter<WindowEvent> appTerminationEmitter =
       new EventEmitter<WindowEvent>();
-  // used for creation of folder to store user profiles
-
   private static ViewManager<View> viewManager;
 
   /**
@@ -45,12 +43,21 @@ public class App extends Application {
   }
 
   /**
-   * This method is used when we want to switch between FXMLs.
+   * This method is used when we want to switch between loaded fxmls.
    *
-   * @param view FXML we want to switch to
+   * @param view View we want to switch to
    */
   public static void setView(View view) {
     viewManager.loadView(view);
+  }
+
+  /**
+   * This method returns the currently loaded view.
+   *
+   * @return the currently loaded view.
+   */
+  public static View getCurrentView() {
+    return viewManager.getCurrentlyLoadedView();
   }
 
   /**
@@ -145,6 +152,11 @@ public class App extends Application {
     return App.class.getResource("/").getFile() + "/" + relativePathInResourceFolder;
   }
 
+  /**
+   * This is the entry method for the application
+   *
+   * @param args
+   */
   public static void main(final String[] args) {
     // Launch the JavaFX runtime
     launch();

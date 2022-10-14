@@ -4,9 +4,12 @@ import ai.djl.ModelException;
 import ai.djl.modality.Classifications.Classification;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.Map.Entry;
+import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.util.Category;
 import nz.ac.auckland.se206.util.CategoryType;
 import nz.ac.auckland.se206.util.CountdownTimer;
@@ -28,10 +31,16 @@ public class GameLogicManager {
 
   private Category categoryToGuess;
 
+  // This is used to track the categories played in rapid fire mode
+  private List<CategoryPlayedInfo> categoriesPlayedInThisGame = new ArrayList<CategoryPlayedInfo>();
+
   private PredictionManager predictionManager;
   private CountdownTimer countdownTimer;
 
   private GameProfile currentGameProfile;
+
+  // This counter is uded to count how long it took to get each category.
+  private int gameTimeCounter = 0;
 
   private EventEmitter<List<Classification>> predictionChangeEmitter =
       new EventEmitter<List<Classification>>();
@@ -60,6 +69,7 @@ public class GameLogicManager {
     countdownTimer.setOnChange(
         (secondsRemaining) -> {
           timeChangedEmitter.emit(secondsRemaining);
+          gameTimeCounter++;
         });
     countdownTimer.setOnComplete(
         () -> {
@@ -111,29 +121,85 @@ public class GameLogicManager {
    */
   public void initializeGame(GameProfile profile) {
 
+    // stop the previous game if there was one.
     stopGame();
 
     currentGameProfile = profile;
+    categoriesPlayedInThisGame.clear();
 
-    Set<String> categories =
-        profile.gameHistory().stream()
-            .flatMap(
-                (game) ->
-                    game.getCategoriesPlayed().stream()
-                        .map((categoryPlayed) -> categoryPlayed.getCategory().getName()))
-            .collect(Collectors.toSet());
+    // Select a new category to play.
+    selectNewRandomCategory();
+  }
 
-    WordChoice wordChoice = profile.settings().getWordChoice();
+  /**
+   * This method takes the categories played in the game and the game history to get a list of
+   * categories that have already been played. It then picks a new category to play that has not yet
+   * been played.
+   */
+  private void selectNewRandomCategory() {
+
+    // A set to store the previous categories and their associated counts.
+    HashMap<String, Integer> categoriesPlayedCounter = new HashMap<String, Integer>();
+
+    for (Category category : predictionManager.getCategories()) {
+      categoriesPlayedCounter.put(category.getName(), 0);
+    }
+
+    // OK so what we are doing here is kinda whack. We count all the times a category is played.
+    // Whatever count is the highest, we remove anything that isn't also that count from the
+    // possible categories.
+    for (GameInfo game : currentGameProfile.gameHistory()) {
+
+      GameMode mode = game.getGameMode();
+
+      if (mode == GameMode.RAPID_FIRE) {
+        for (CategoryPlayedInfo category : game.getCategoriesPlayed()) {
+          String name = category.getCategory().getName();
+          int count = categoriesPlayedCounter.get(name) + 1;
+          categoriesPlayedCounter.put(name, count);
+        }
+      } else if (mode == GameMode.CLASSIC || mode == GameMode.HIDDEN_WORD || mode == GameMode.ZEN) {
+        CategoryPlayedInfo category = game.getCategoryPlayed();
+        String name = category.getCategory().getName();
+        int count = categoriesPlayedCounter.get(name) + 1;
+        categoriesPlayedCounter.put(name, count);
+      }
+    }
+
+    for (CategoryPlayedInfo category : categoriesPlayedInThisGame) {
+      String name = category.getCategory().getName();
+      int count = categoriesPlayedCounter.get(name) + 1;
+      categoriesPlayedCounter.put(name, count);
+    }
+
+    int lowestCount = Integer.MAX_VALUE;
+    for (Entry<String, Integer> entry : categoriesPlayedCounter.entrySet()) {
+      if (entry.getValue() < lowestCount) {
+        lowestCount = entry.getValue();
+      }
+    }
+
+    // We are left with a set with all the most played categoreis which we can use as our filter.
+    HashSet<String> mostPlayedCategories = new HashSet<String>();
+
+    for (Entry<String, Integer> entry : categoriesPlayedCounter.entrySet()) {
+      if (entry.getValue() > lowestCount) {
+        mostPlayedCategories.add(entry.getKey());
+      }
+    }
+
+    WordChoice wordChoice = currentGameProfile.settings().getWordChoice();
 
     try {
       categoryToGuess =
           predictionManager.getNewRandomCategory(
-              categories,
+              mostPlayedCategories,
               wordChoice.categoryShouldBeIncluded(CategoryType.EASY),
               wordChoice.categoryShouldBeIncluded(CategoryType.MEDIUM),
               wordChoice.categoryShouldBeIncluded(CategoryType.HARD));
+      categoryChangeEmitter.emit(categoryToGuess);
     } catch (FilterTooStrictException e) {
-      e.printStackTrace();
+      App.expect("The filter should always be safe", e);
     }
   }
 
@@ -142,6 +208,8 @@ public class GameLogicManager {
     if (currentGameProfile.gameMode() != GameMode.ZEN) {
       countdownTimer.startCountdown(currentGameProfile.settings().getTime().getTimeToDraw());
     }
+    gameTimeCounter = 0;
+    categoriesPlayedInThisGame.clear();
     predictionManager.startMakingPredictions();
     gameStartedEmitter.emit();
     isPlaying = true;
@@ -151,9 +219,7 @@ public class GameLogicManager {
   public void stopGame() {
     if (isPlaying) {
       if (currentGameProfile.gameMode() == GameMode.ZEN) {
-        endGame(EndGameState.NOT_APPLICABLE);
-      } else {
-        endGame(EndGameState.GIVE_UP);
+        endGame(EndGameReason.GAVE_UP_OR_CANCELLED);
       }
     }
   }
@@ -163,23 +229,37 @@ public class GameLogicManager {
    *
    * @param winState the state of the game when it ends
    */
-  private void endGame(EndGameState winState) {
+  private void endGame(EndGameReason winState) {
+
     // get info
     int secondsRemaining = countdownTimer.getRemainingCount();
     predictionManager.stopMakingPredictions();
     countdownTimer.cancelCountdown();
 
     // send the end game information
-    gameEndedEmitter.emit(
-        new GameInfo(
-            winState,
-            List.of(
-                new CategoryPlayedInfo(
-                    currentGameProfile.settings().getTime().getTimeToDraw() - secondsRemaining - 1,
-                    secondsRemaining,
-                    categoryToGuess)),
-            currentGameProfile.settings(),
-            currentGameProfile.gameMode()));
+    if (currentGameProfile.gameMode() == GameMode.RAPID_FIRE) {
+      gameEndedEmitter.emit(
+          new GameInfo(
+              winState,
+              categoriesPlayedInThisGame,
+              currentGameProfile.settings(),
+              currentGameProfile.gameMode()));
+    } else if (currentGameProfile.gameMode() == GameMode.ZEN) {
+      gameEndedEmitter.emit(
+          new GameInfo(
+              winState,
+              new CategoryPlayedInfo(gameTimeCounter, -1, categoryToGuess),
+              currentGameProfile.settings(),
+              currentGameProfile.gameMode()));
+
+    } else {
+      gameEndedEmitter.emit(
+          new GameInfo(
+              winState,
+              new CategoryPlayedInfo(gameTimeCounter, secondsRemaining, categoryToGuess),
+              currentGameProfile.settings(),
+              currentGameProfile.gameMode()));
+    }
 
     isPlaying = false;
     predictionWinningEnabled = true;
@@ -190,16 +270,32 @@ public class GameLogicManager {
    * state to be WIN
    */
   private void onCorrectPrediction() {
-    if (currentGameProfile.gameMode() == GameMode.ZEN) {
-      correctPredictionEmitter.emit(new CategoryPlayedInfo(-1, -1, categoryToGuess));
-    } else {
+
+    CategoryPlayedInfo categoryPlayed = null;
+    GameMode mode = currentGameProfile.gameMode();
+
+    if (mode == GameMode.ZEN) {
+      categoryPlayed = new CategoryPlayedInfo(gameTimeCounter, -1, categoryToGuess);
+    } else if (mode == GameMode.CLASSIC
+        || mode == GameMode.HIDDEN_WORD
+        || mode == GameMode.RAPID_FIRE) {
+
       int secondsRemaining = countdownTimer.getRemainingCount();
-      correctPredictionEmitter.emit(
-          new CategoryPlayedInfo(
-              currentGameProfile.settings().getTime().getTimeToDraw() - secondsRemaining - 1,
-              secondsRemaining,
-              categoryToGuess));
-      endGame(EndGameState.WIN);
+      categoryPlayed = new CategoryPlayedInfo(gameTimeCounter, secondsRemaining, categoryToGuess);
+    }
+
+    if (mode == GameMode.RAPID_FIRE) {
+      gameTimeCounter = 0;
+      categoriesPlayedInThisGame.add(categoryPlayed);
+      selectNewRandomCategory();
+    }
+
+    assert categoryPlayed != null : "CategoryPlayed should not be null";
+
+    correctPredictionEmitter.emit(categoryPlayed);
+
+    if (mode == GameMode.CLASSIC || mode == GameMode.HIDDEN_WORD) {
+      endGame(EndGameReason.CORRECT_CATEOGRY);
     }
   }
 
@@ -211,7 +307,12 @@ public class GameLogicManager {
     assert currentGameProfile.gameMode() != GameMode.ZEN
         : "Zen mode is not timed so we should not 'run out of time'";
 
-    endGame(EndGameState.LOOSE);
+    GameMode gameMode = currentGameProfile.gameMode();
+    if (gameMode == GameMode.CLASSIC
+        || gameMode == GameMode.HIDDEN_WORD
+        || gameMode == GameMode.RAPID_FIRE) {
+      endGame(EndGameReason.OUT_OF_TIME);
+    }
   }
 
   ///////////////////////////// GETTING AND SETTING GAME DATA /////////////////////////////

@@ -3,7 +3,11 @@ package nz.ac.auckland.se206;
 import ai.djl.ModelException;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
+import nz.ac.auckland.se206.gamelogicmanager.CategoryPlayedInfo;
+import nz.ac.auckland.se206.gamelogicmanager.GameInfo;
 import nz.ac.auckland.se206.gamelogicmanager.GameLogicManager;
 import nz.ac.auckland.se206.gamelogicmanager.GameMode;
 import nz.ac.auckland.se206.util.Profile;
@@ -65,7 +69,7 @@ public class QuickDrawGameManager {
   }
 
   /**
-   * This method will get the gameLogicManager instance
+   * This method will get the gameLogicManager instance to be used thoughout the application.
    *
    * @return game logic manager instance
    */
@@ -73,18 +77,36 @@ public class QuickDrawGameManager {
     return gameLogicManager;
   }
 
+  /**
+   * This method will get the badgeManager instance to be used throughout the application.
+   *
+   * @return the badge manager instance
+   */
   public static BadgeManager getBadgeManager() {
     return badgeManager;
   }
 
+  /**
+   * Gets the currently selected game mode.
+   *
+   * @return the currently selected game mode.
+   */
   public static GameMode getCurrentlySelectedGameMode() {
     return currentlySelectedGameMode;
   }
 
+  /**
+   * Use this method to save game mode state between views.
+   *
+   * @param currentlySelectedGameMode the game mode.
+   */
   public static void setCurrentlySelectedGameMode(GameMode currentlySelectedGameMode) {
     QuickDrawGameManager.currentlySelectedGameMode = currentlySelectedGameMode;
   }
 
+  /**
+   * This method initialises the whole QuickDraw game. It sets up some logic to run when games end.
+   */
   public static void initGame() {
     // Update profile details when the game ends and save to file
     gameLogicManager.subscribeToGameEnd(
@@ -94,6 +116,7 @@ public class QuickDrawGameManager {
 
           Set<String> existingBadges = currentProfile.getEarnedBadgeIds();
 
+          // Award the player their relevant badges
           for (Badge badge : badgeManager.getAllBadges()) {
             if (!existingBadges.contains(badge.getId())) {
               if (badge.earned(currentProfile)) {
@@ -102,5 +125,33 @@ public class QuickDrawGameManager {
             }
           }
         });
+  }
+
+  /**
+   * This method gets a list of all the categories that have been played for a given game mode and
+   * game history.
+   *
+   * @param gameHistory the list of games that you want to extract the categories from.
+   * @param gameMode the game mode which you want to filter by.
+   * @return the list of categories from the given game history list.
+   */
+  public static List<CategoryPlayedInfo> getCategoriesPlayedForGameMode(
+      List<GameInfo> gameHistory, GameMode gameMode) {
+
+    List<CategoryPlayedInfo> categories = new ArrayList<CategoryPlayedInfo>();
+
+    // Search through game history
+    for (GameInfo gameInfo : gameHistory) {
+      if (gameInfo.getGameMode() == gameMode) {
+        // Add the relevant categories to the list if the game has the right gamemode.
+        if (gameMode == GameMode.RAPID_FIRE) {
+          categories.addAll(gameInfo.getCategoriesPlayed());
+        } else {
+          categories.add(gameInfo.getCategoryPlayed());
+        }
+      }
+    }
+
+    return categories;
   }
 }

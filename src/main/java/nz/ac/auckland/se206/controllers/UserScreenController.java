@@ -69,11 +69,13 @@ public class UserScreenController {
     App.setView(View.CATEGORYHISTORY);
   }
 
+  /** Switches to the badges view */
   @FXML
   private void onSwitchToBadges() {
     App.setView(View.BADGES);
   }
 
+  /** Switches to the settings view */
   @FXML
   private void onSwitchToSettings() {
     App.setView(View.DIFFICULTY);

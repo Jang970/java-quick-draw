@@ -22,18 +22,15 @@ public class CsvObjectLoader<T> {
   }
 
   /**
-   * This function takes a path to a csv file and loads in all the keys and values from that file.
-   * It uses the tranformer functions passed in the constructor to turn strings into the desired
-   * values. If either of these functions returns null, the line of the csv file is rejected
+   * This function takes a transformer which converts an array of strings to a object. It then
+   * applies the transformation on each row of a CSV and returns the list.
    *
    * @param pathToFile path to the csv file we want to read from
-   * @param reverseOrder set this to true if the keys come after the values in the csv
-   * @return the map from keys to values
+   * @return the list of transformed objecys
    * @throws IOException
    * @throws CsvException
    */
-  public List<T> loadObjectsFromFile(String pathToFile, boolean reverseOrder)
-      throws IOException, CsvException {
+  public List<T> loadObjectsFromFile(String pathToFile) throws IOException, CsvException {
 
     // get data from the CSV
     CSVReader reader = new CSVReader(new FileReader(pathToFile));
