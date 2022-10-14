@@ -1,18 +1,14 @@
 /* Stylesheet for all fxml pages */
-/* Note: all images are drawn by me */
 
-/* All the fonts used (Google Fonts) */
 @font-face {
-	src: url('../fonts/Londrina_Solid/LondrinaSolid-Regular.ttf');
+	-fx-font-family: 'Normandy', italic;
+	src: url('../fonts/normandy_beach/normandybeach.ttf');
 }
 
 @font-face {
-	src: url('../fonts/Gaegu/Gaegu-Regular.ttf');
+	src: url('../fonts/VT323/VT323-Regular.ttf');
 }
 
-@font-face {
-	src: url('../fonts/Gaegu/Gaegu-Bold.ttf');
-}
 
 /* Sets the background color of all scenes as cream */
 .root {
@@ -21,40 +17,41 @@
 }
 
 .headers{
-	-fx-font-family: 'Londrina Solid';
+	-fx-font-family: 'Normandy Beach';
 }
+
 
 .subHeaders{
-	-fx-font-family: 'Gaegu Bold';
-}
-
-.stateHeaders{
-	-fx-background-color: #668cff;
-	-fx-background-radius: 40px;
+	-fx-font-family: 'VT323', monospace;
 }
 
 .button {
-	-fx-font-family: 'Gaegu';
-	-fx-background-color: black;
-	-fx-background-radius: 40px;
-	-fx-text-fill: #668cff;
-	-fx-font-size: 18px;
+	-fx-font-family: 'VT323', monospace;
+	-fx-background-color: #264653;
+	-fx-border-color: #F4A261;
+	-fx-text-fill: #E9C46A;
+	-fx-font-size: 25px;
 }
 
-.button:hover{
-	-fx-background-color: rgb(102, 140, 255);
-	-fx-text-fill: black;
+.button:hover, .canvasColorPicker:hover{
+	-fx-background-color: #F4A261;
+	-fx-text-fill: #264653;
+	-fx-border-color:  #264653;
 }
 
-.button:hover, .userIconButton:hover, .usernameButton:hover, .pagination .toggle-button:hover, .color-picker:hover{
+.button:hover, .userIconButton:hover, .usernameButton:hover, .pagination .toggle-button:hover, .color-picker:hover, .canvasColorPicker:hover{
 	-fx-cursor: hand;
 }
 
 /* Main Menu scene */
 
 /* Adds the splash */
-.splash {
-	-fx-image: url('../images/splash.png');
+.mainMenuOn {
+	-fx-image: url('../images/main-menu-screen-on.png');
+}
+
+.mainMenuOff {
+	-fx-image: url('../images/main-menu-screen-off.png');
 }
 
 /*TODO: Should we use this or not*/
@@ -69,129 +66,236 @@
 
 /* User Profile scene*/
 
+.userProfile {
+	-fx-image: url('../images/user-profiles-screen.png');
+}
+
+.profilesPane{
+	-fx-border-color: black;
+	-fx-border-radius: 35;
+	-fx-border-width: 4;
+	-fx-pref-width: 290;
+	-fx-pref-height: 409;
+}
+
 .userIconButton{
-	-fx-shape: "M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z";
+	-fx-shape: "m 360 127 h -180 v 65 h 180 z m -64 -64 h -32 v 161 h 32 z m -32 161 h -64 v 33 h 64 z m 32 -224 h -32 v 33 h 32 z m 33 97 h -38 v 33 h 38 z m 31 93 h -32 v 33 h 32 z m -95 -158 h -33 v 65 h 33 z m -33 32 h -52 v 63 h 52 z m 65 -1 h -117 v 33 h 117 z m -297 64 h 180 v 65 h -180 z m 64 -64 h 32 v 161 h -32 z m 32 161 h 64 v 33 h -64 z m -32 -224 h 32 v 33 h -32 z m -33 97 h 38 v 33 h -38 z m -31 93 h 32 v 33 h -32 z m 95 -158 h 33 v 65 h -33 z m 33 32 h 52 v 63 h -52 z m -65 -1 h 117 v 33 h -117 z";
     -fx-pref-width: 150;
-	-fx-pref-height: 150;
+	-fx-pref-height: 100;
     -fx-alignment: bottom-center;
 	-fx-text-fill: none;
+	-fx-translate-x: 70;
+	-fx-translate-y: 130;
 }
 
 .usernameButton{
-	-fx-font-family: 'Londrina Solid';
+	-fx-font-family: 'VT323';
 	-fx-text-fill: black;
-	-fx-font-size: 18px;
+	-fx-font-size: 40px;
+	-fx-text-alignment: center;
 	-fx-alignment: bottom-center;
     -fx-wrap-text: true;
+	-fx-pref-width: 290;
+	-fx-translate-y: 300;
 }
 
 .pagination {
-	-fx-font-family: 'Gaegu';
-	-fx-font-size: 18px;
+	-fx-font-family: 'VT323';
+	-fx-font-size: 30px;
 	-fx-page-information-visible: false;
 	-fx-tooltip-visible: false;
 	}
 
 .pagination .toggle-button  {
-	-fx-color:black ;
-	-fx-background-radius: 20px;
+	-fx-color: #F4A261;
+	-fx-background-radius: 40px;
+	-fx-min-width: 40;
+	-fx-min-height: 40;
+	
 }
 
 .pagination .toggle-button:selected{
- 	 -fx-color: rgb(102, 140, 255);
+	-fx-color: #2A9D8F;
 }
 
 .pagination .toggle-button:hover {
- 	 -fx-background-color: rgb(102, 140, 255);
+ 	 -fx-background-color:  #2A9D8F;
 }
 
 .pagination .pagination-control .left-arrow, .right-arrow{
-    -fx-background-color: black, rgb(102, 140, 255);
-	-fx-min-width: 20;
-	-fx-min-height: 20;
+    -fx-background-color: #2A9D8F, #F4A261;
+	-fx-min-width: 30;
+	-fx-min-height: 30;	
+}
+
+.pagination .pagination-control .control-box{
+    -fx-spacing: 10;
 }
 
 .pagination .button {
 	-fx-background-color: none;
+	-fx-border-color: null;
 }
 
 .pagination .pagination-control .left-arrow:hover, .right-arrow:hover{
-    -fx-background-color: rgb(102, 140, 255), black;
-	-fx-min-width: 25;
-	-fx-min-height: 25;
+    -fx-background-color: #F4A261, #2A9D8F;
 	-fx-cursor: hand;
 }
 
+/* New user scene */
+
+.newUserScreen {
+	-fx-image: url('../images/new-user-screen.png');
+}
+
 .text-field, .color-picker {
-	-fx-font-family: 'Gaegu';
-   	-fx-font-size: 18px;
-	-fx-background-color: rgb(235, 233, 221);
-	-fx-background-radius: 40px;
+	-fx-font-family: 'VT323';
+   	-fx-font-size: 25px;
+	-fx-background-color: #ebe9dd;
 }
 
 /* Error Message Scene */
 
 .dialog-pane{
-  	-fx-font-family: 'Gaegu';
+  	-fx-font-family: 'VT323';
 	-fx-font-size: 18px;
 	-fx-background-color: rgb(235, 233, 221);
  }
  
  .dialog-pane .header-panel{
-	-fx-font-family: 'Londrina Solid';
+	-fx-font-family: 'Normandy Beach';
 	-fx-font-size: 20px;
-	-fx-background-color:  rgb(102, 140, 255);
+	-fx-background-color:   #E9C46A;
  }
 
  .dialog-pane .label {
 	-fx-text-fill: darkred;
  }
 
+ /* Category scene */
+
+ .categoryScreen{
+	-fx-image: url('../images/category-screen.png');
+ }
+
 /* Canvas scene */
 
-.userIconButtonCanvas {
-	-fx-pref-width: 50;
-	-fx-pref-height: 50;
+.gameScreen {
+	-fx-image: url('../images/game-screen.png');
 }
 
-.resultSplash {
-	-fx-image: url('../images/resultSplash.png');
+.subHeadersCanvas {
+	-fx-background-color: #E9C46A;
+}
+
+.stateHeaders{
+	-fx-background-color: #264653;
+	-fx-font-family: 'Normandy Beach';
+	-fx-text-fill: #E9C46A;
+}
+
+.userIconButtonCanvas {
+	-fx-pref-width: 100;
+	-fx-pref-height: 90;
+	-fx-background-color: white;
+	-fx-border-color: null;
+	-fx-translate-x: 0;
+	-fx-translate-y: 0;
+}
+
+.userIconButton:hover{
+	-fx-border-color: none;
 }
 
 /* Adds border to canvas so user can see where to draw */
 .canvas {
 	-fx-border-radius: 40px;
-    -fx-border-color: rgb(102, 140, 255);
+    -fx-border-color: #E76F51;
 }
 
-/* User Stats Screen */
-.fastestWinLabel {
-	-fx-background-color: #668cff;
-	-fx-background-radius: 30px;
-	-fx-text-fill:  #ebe9dd;
+.progress-bar .track{ 
+	-fx-background-color: #E76F51;
+	-fx-background-radius: 40px;
+}
+
+.progress-bar .bar{ 
+	-fx-background-color: #264653;
+	-fx-background-radius: 40px;
+}
+
+.canvasColorPicker {
+	-fx-font-family: 'VT323', monospace;
+	-fx-background-color: #264653;
+	-fx-border-color: #F4A261;
+	-fx-font-size: 25px;
+	-fx-pref-width: 101;
+	-fx-pref-height: 45;
+	-fx-color-rect-width: 50;
+    -fx-color-rect-height: 20;
+	-fx-color-label-visible: false ;
+}
+
+.canvasColorPicker .label{
+	-fx-text-fill: #E9C46A;
 	-fx-font-size: 25px;
 }
 
-.playButton {
-	-fx-font-family: 'Gaegu';
-	-fx-background-color: #668cff;
-	-fx-background-radius: 40px;
-	-fx-text-fill: black;
+.canvasColorPicker .arrow{
+	-fx-translate-x: 8;
+	-fx-background-color: #E76F51;
+}
+
+/* User  Screen */
+.userScreen {
+	-fx-image: url('../images/user-screen.png');
+}
+.fastestWinLabel {
+	-fx-background-color: #e9c46a;
+	-fx-font-size: 30px;
+}
+
+.userButton {
+	-fx-font-family: 'VT323';
+	-fx-background-color: #E76F51;
+	-fx-border-color: #264653;
+	-fx-text-fill: #264653;
 	-fx-font-size: 20px;
-	-fx-border-color: black;
-	-fx-border-radius: 40px;
 }
 
-.playButton:hover {
-	-fx-background-color: black;
-	-fx-text-fill: #668cff;
-	-fx-border-color: #668cff;
+.userButton:hover {
+	-fx-background-color: #F4A261;
+	-fx-text-fill: #264653;
+	-fx-border-color: #E76F51;
 
 }
+
+.userCircleButton{
+	-fx-background-radius: 200px;
+	-fx-font-family: 'VT323';
+	-fx-background-color: #E76F51;
+	-fx-border-color: #264653;
+	-fx-border-radius: 200px;
+	-fx-text-fill: #264653;
+	-fx-font-size: 20px;
+}
+
+
 /* Word History Screen */
 
+.wordHistoryScreen{
+	-fx-image: url('../images/category-history/category-history-screen.png');
+}
+
+.slider{
+	-fx-image: url('../images/category-history/slider.png');
+}
+
+.ball {
+	-fx-image: url('../images/category-history/ball.png');
+}
+
 .list-view {
-    -fx-background-color: #ebe9dd;
+    -fx-background-color: #2A9D8F;
 	-fx-alignment: center;
 	-fx-font-size: 18px;
 	-fx-background-radius: 40px;
@@ -202,7 +306,7 @@
 }
 
 .list-view .scroll-bar .thumb{
-	-fx-background-color: rgb(102, 140, 255);
+	-fx-background-color: #e9c46a;
 }
 
 .list-view .scroll-bar .increment-button:hover, .decrement-button:hover{
@@ -215,17 +319,171 @@
 
 .list-cell:odd{
 	-fx-cell-size: 30 ;
-	-fx-background-color: #ebe9dd;
+	-fx-background-color: #264653;
 	-fx-alignment: center;
+	-fx-border-color: #ebe9dd;
+	-fx-text-fill: white;
 }
 
 .list-cell:even{
 	-fx-cell-size: 30;
-	-fx-background-color: #dad8cc;
+	-fx-background-color: #E76F51;
 	-fx-alignment: center;
+	-fx-border-color: #ebe9dd;
+	-fx-text-fill: white;
+}
+
+.list-cell:filled:hover {
+	-fx-background-color: #e9c46a;
+	-fx-border-color: #F4A261;
 }
 
 .list-cell:empty{
-	-fx-background-color: #ebe9dd;
+	-fx-background-color: #2A9D8F;
+	-fx-border-color: #2A9D8F;
 }
+
+/* Badges Screen */
+
+.badgesScreen {
+	-fx-image: url('../images/badges/badges-screen.png');
+}
+
+.badges:disabled{
+	-fx-opacity: 0.4;
+}
+
+.completeGame {
+	-fx-image: url('../images/badges/completeGame.png');
+}
+
+.allCategories {
+	-fx-image: url('../images/badges/allCategories.png');
+}
+
+.consecutiveWins {
+	-fx-image: url('../images/badges/consecutiveWins.png');
+}
+
+.underXSecondsWin {
+	-fx-image: url('../images/badges/underXSecondsWin.png');
+}
+
+.maxDifficulty {
+	-fx-image: url('../images/badges/maxDifficulty.png');
+}
+
+.beatTime {
+	-fx-image: url('../images/badges/beatTime.png');
+}
+
+.justInTime {
+	-fx-image: url('../images/badges/justInTime.png');
+}
+
+/* Difficulty Screen */
+.difficultyScreen {
+	-fx-image: url('../images/difficulty-screen/difficulty-screen.png');
+}
+
+.accuracyImage {
+	-fx-image: url('../images/difficulty-screen/accuracy.png');
+}
+
+.wordsImage {
+	-fx-image: url('../images/difficulty-screen/words.png');
+}
+
+.timeImage {
+	-fx-image: url('../images/difficulty-screen/time.png');
+}
+
+.confidenceImage {
+	-fx-image: url('../images/difficulty-screen/confidence.png');
+}
+
+.choice-box {
+	-fx-background-color:#ebe9dd;
+	-fx-font-family: 'VT323', monospace;
+	-fx-font-size: 30px;
+	-fx-border-radius: 30px;
+}
+
+.choice-box:hover {
+	-fx-background-color:#e9c46a;
+	-fx-background-radius: 30px;
+	-fx-border-radius: 30px;
+}
+
+.choice-box .label {
+	-fx-text-fill: #2A9D8F;
+}
+
+.choice-box .context-menu {
+	-fx-background-color:#ebe9dd;
+	-fx-background-radius: 30px;
+	-fx-border-radius: 30px;
+}
+
+.choice-box .menu-item {
+	-fx-background-color:#ebe9dd;
+	-fx-background-radius: 30px;
+}
+
+.choice-box .menu-item:hover {
+	-fx-background-color: #F4A261;
+	-fx-background-radius: 30px;
+}
+
+/* Game modes Screen */
+.gameModesScreen {
+	-fx-image: url('../images/game-modes/gamemodes-screen.png');
+	-fx-background-color: null;
+	-fx-background-repeat: no-repeat;
+	-fx-border-color: null;
+	-fx-text-fill: black;
+}
+
+.classic {
+	-fx-background-image: url('../images/game-modes/classic.png');
+	-fx-background-color: null;
+	-fx-background-repeat: no-repeat;
+	-fx-border-color: null;
+	-fx-text-fill: black;
+	-fx-font-size: 40px;
+	-fx-background-position: center top;
+}
+
+.zen {
+	-fx-background-image: url('../images/game-modes/zen.png');
+	-fx-background-color: null;
+	-fx-background-repeat: no-repeat;
+	-fx-border-color: null;
+	-fx-text-fill: black;
+	-fx-font-size: 40px;
+}
+
+.hiddenWord {
+	-fx-background-image: url('../images/game-modes/hiddenWord.png');
+	-fx-background-color: null;
+	-fx-background-repeat: no-repeat;
+	-fx-border-color: null;
+	-fx-text-fill: black;
+	-fx-font-size: 40px;
+	-fx-background-size: 140;
+	-fx-background-position: center top;
+}
+
+.crane {
+	-fx-image: url('../images/game-modes/crane.png');
+}
+
+.zen:hover, .hiddenWord:hover, .classic:hover {
+	-fx-background-color: null;
+	-fx-text-fill: #E76F51;
+	-fx-border-color: none;
+}
+
+
+
 

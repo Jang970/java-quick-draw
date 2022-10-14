@@ -1,6 +1,5 @@
 package nz.ac.auckland.se206.fxmlutils;
 
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -15,46 +14,18 @@ import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javax.imageio.ImageIO;
 import nz.ac.auckland.se206.App;
-import nz.ac.auckland.se206.util.EventEmitter;
-import nz.ac.auckland.se206.util.EventListener;
+import nz.ac.auckland.se206.QuickDrawGameManager;
+import nz.ac.auckland.se206.util.BufferedImageUtils;
 
 /**
  * The purpose of this class is to isolate all functionality of the canvas from the controller
  * through a simple interface.
- *
- * <p>It handles everything to do with drawing on, erasing on and clearning the canvas
- *
- * <p>//TODO: Perhaps this functionality should be abstracted as this violates the single
- * responsibility principle It also provides a method which gives the user an image from the pointed
- * canvas
  */
 public class CanvasManager {
 
   public enum DrawMode {
     DRAWING,
     ERASING
-  }
-
-  // tracks if canvas is drawn on or not
-  private static boolean isDrawn = false;
-  private static EventEmitter<Boolean> canvasDrawnEmitter = new EventEmitter<Boolean>();
-
-  /**
-   * Returns if the canvas has been drawn or not
-   *
-   * @return true or false if there has been a drawing
-   */
-  public static boolean getIsDrawn() {
-    return isDrawn;
-  }
-
-  /**
-   * Subscribes to canvas drawn to keep track of when canvas is drawn on
-   *
-   * @param listener the EventListener to be notified when an event is emitted
-   */
-  public static void subscribeToCanvasDrawn(EventListener<Boolean> listener) {
-    canvasDrawnEmitter.subscribe(listener);
   }
 
   private final GraphicsContext context;
@@ -68,6 +39,8 @@ public class CanvasManager {
 
   /** This helps keep track of the mouse being held down and released */
   private boolean isHolding = false;
+
+  private Color penColor = Color.BLACK;
 
   /**
    * The canvas manager is bound to one canvas which is given through this constructor
@@ -151,16 +124,10 @@ public class CanvasManager {
         context.beginPath();
 
         // Sets the stroke colour and width depending on the draw mode
-
-        // TODO: Extract this to either already be set when drawmode is updated or
-        // extract to simple function
         if (drawMode == DrawMode.DRAWING) {
-          context.setStroke(Color.BLACK);
+          context.setStroke(penColor);
           context.setLineWidth(brushSize);
-          isDrawn = true;
-          canvasDrawnEmitter.emit(isDrawn);
         } else if (drawMode == DrawMode.ERASING) {
-          // TODO: Extract this hard coded specific color
           context.setStroke(Color.rgb(235, 233, 221));
           context.setLineWidth(brushSize * 5);
         }
@@ -193,7 +160,7 @@ public class CanvasManager {
     // draw on the canvas when relevant criteria is met
     if (drawingEnabled && drawMode == DrawMode.DRAWING) {
       int circleRadius = 6;
-      isDrawn = true;
+      context.setFill(penColor);
       context.fillOval(
           event.getX() - circleRadius, event.getY() - circleRadius, circleRadius, circleRadius);
     }
@@ -214,31 +181,25 @@ public class CanvasManager {
   }
 
   /**
-   * Get the current snapshot of the canvas.
+   * Get the current snapshot of the canvas in black and white.
    *
    * @return The BufferedImage corresponding to the current canvas content.
    */
-  public BufferedImage getCurrentSnapshot() {
-    final Image snapshot = canvas.snapshot(null, null);
-    final BufferedImage image = SwingFXUtils.fromFXImage(snapshot, null);
-
-    // Convert into a binary image.
-    final BufferedImage imageBinary =
-        new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_BYTE_BINARY);
-
-    final Graphics2D graphics = imageBinary.createGraphics();
-
-    graphics.drawImage(image, 0, 0, null);
-
-    // To release memory we dispose.
-    graphics.dispose();
-
-    return imageBinary;
+  public BufferedImage getCurrentBlackAndWhiteSnapshot() {
+    return BufferedImageUtils.convertColourToBlackAndWhite(getCurrentColourSnapshot());
   }
 
   /**
-   * Save the current snapshot on a bitmap file. // TODO: Extract this to another class as it
-   * violates the single responsibility principle
+   * Get the current snapshot of the canvas in colour
+   *
+   * @return The BufferedImage corresponding to the current canvas content.
+   */
+  public BufferedImage getCurrentColourSnapshot() {
+    return SwingFXUtils.fromFXImage(canvas.snapshot(null, null), null);
+  }
+
+  /**
+   * Save the current snapshot on a bitmap file.
    *
    * @return The file of the saved image.
    * @throws IOException If the image cannot be saved.
@@ -250,9 +211,9 @@ public class CanvasManager {
     FileChooser fileChooser = new FileChooser();
     fileChooser.setTitle("Save Image");
     fileChooser.setInitialFileName(
-        App.getProfileManager().getCurrentProfile().getName()
+        QuickDrawGameManager.getProfileManager().getCurrentProfile().getName()
             + "'s "
-            + App.getGameLogicManager().getCurrentCategory().getName()
+            + QuickDrawGameManager.getGameLogicManager().getCurrentCategory().getName()
             + " drawing");
 
     final File directory = fileChooser.showSaveDialog(App.getStage());
@@ -263,7 +224,7 @@ public class CanvasManager {
       final File imageToClassify =
           new File(directory.getAbsolutePath() + "/snapshot" + System.currentTimeMillis() + ".bmp");
       // save the image to a file
-      ImageIO.write(getCurrentSnapshot(), "bmp", imageToClassify);
+      ImageIO.write(getCurrentColourSnapshot(), "bmp", imageToClassify);
 
       return imageToClassify;
     }
@@ -289,9 +250,12 @@ public class CanvasManager {
     this.drawingEnabled = drawingEnabled;
   }
 
-  /** resets is drawn to false */
-  public void resetIsDrawn() {
-    isDrawn = false;
-    canvasDrawnEmitter.emit(isDrawn);
+  /**
+   * Sets the pen colour to a given colour
+   *
+   * @param color the colour to set the pen colour to
+   */
+  public void setPenColor(Color color) {
+    this.penColor = color;
   }
 }

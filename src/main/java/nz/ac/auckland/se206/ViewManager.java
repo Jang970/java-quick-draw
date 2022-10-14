@@ -11,11 +11,10 @@ public class ViewManager<V extends Enum<V>> {
     public void run(V view);
   }
 
-  // TODO: Refactor so creating a view manager makes more sense
-
   private EventEmitter<V> viewChangeEmitter = new EventEmitter<V>();
   private HashMap<V, Parent> viewMap = new HashMap<V, Parent>();
   private Scene scene;
+  private V currentlyLoadedView;
 
   /**
    * Constructs a new view manager. The view manager is intentionally tied to one scene
@@ -53,6 +52,7 @@ public class ViewManager<V extends Enum<V>> {
    */
   public void loadView(V view) {
     Parent parent = viewMap.get(view);
+    currentlyLoadedView = view;
 
     if (parent != null) {
       scene.setRoot(parent);
@@ -60,6 +60,15 @@ public class ViewManager<V extends Enum<V>> {
       // Runs all registered subscription functions
       viewChangeEmitter.emit(view);
     }
+  }
+
+  /**
+   * This method gives the view enum category which represents the currently loaded view.
+   *
+   * @return the view.
+   */
+  public V getCurrentlyLoadedView() {
+    return currentlyLoadedView;
   }
 
   /**

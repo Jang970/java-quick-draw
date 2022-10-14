@@ -1,23 +1,15 @@
 package nz.ac.auckland.se206;
 
-import ai.djl.ModelException;
-import java.io.File;
 import java.io.IOException;
-import java.util.Set;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import nz.ac.auckland.se206.gamelogicmanager.GameLogicManager;
 import nz.ac.auckland.se206.speech.TextToSpeech;
 import nz.ac.auckland.se206.util.EventEmitter;
 import nz.ac.auckland.se206.util.EventListener;
-import nz.ac.auckland.se206.util.Profile;
-import nz.ac.auckland.se206.util.ProfileManager;
-import nz.ac.auckland.se206.util.badges.Badge;
-import nz.ac.auckland.se206.util.badges.BadgeManager;
 
 /** This is the entry point of the JavaFX application. */
 public class App extends Application {
@@ -29,73 +21,17 @@ public class App extends Application {
     CATEGORY,
     GAME,
     USER,
-    CATEGORYHISTORY
+    CATEGORYHISTORY,
+    BADGES,
+    DIFFICULTY,
+    GAMEMODES
   }
 
   private static Stage stage;
+  private static final TextToSpeech textToSpeech = new TextToSpeech();
   private static final EventEmitter<WindowEvent> appTerminationEmitter =
       new EventEmitter<WindowEvent>();
-  // used for creation of folder to store user profiles
-
   private static ViewManager<View> viewManager;
-  private static final GameLogicManager gameLogicManager = createGameLogicManager();
-  private static final ProfileManager profileManager = createProfileManager();
-  private static final BadgeManager badgeManager = new BadgeManager();
-  private static final TextToSpeech textToSpeech = new TextToSpeech();
-
-  /**
-   * This method will create and return a ProfileManager instance to be used through the application
-   *
-   * @return ProfileManager instance created
-   */
-  private static ProfileManager createProfileManager() {
-
-    File userProfiles = new File(".userprofiles");
-    // create folder to store json file in if not already existing
-    userProfiles.mkdir();
-
-    try {
-      // this creates the json file containing the list of user profiles
-      return new ProfileManager(userProfiles.getAbsolutePath() + File.separator + "profiles.json");
-    } catch (IOException e2) {
-      App.expect("profiles.json is a file name, not a directory", e2);
-      return null;
-    }
-  }
-
-  /**
-   * This method will create and return a GameLogicManager instance to be used throughout the
-   * application
-   *
-   * @return GameLogicManager instance created
-   */
-  private static GameLogicManager createGameLogicManager() {
-    try {
-      // Try create the game logic manager
-      return new GameLogicManager();
-    } catch (IOException | ModelException e1) {
-      App.expect("The machine learning model exists on file", e1);
-      return null;
-    }
-  }
-
-  /**
-   * This method will get the ProfileManager instance
-   *
-   * @return profile manager instance
-   */
-  public static ProfileManager getProfileManager() {
-    return profileManager;
-  }
-
-  /**
-   * This method will get the gameLogicManager instance
-   *
-   * @return game logic manager instance
-   */
-  public static GameLogicManager getGameLogicManager() {
-    return gameLogicManager;
-  }
 
   /**
    * This method will get the current stage
@@ -107,12 +43,21 @@ public class App extends Application {
   }
 
   /**
-   * This method is used when we want to switch between FXMLs.
+   * This method is used when we want to switch between loaded fxmls.
    *
-   * @param view FXML we want to switch to
+   * @param view View we want to switch to
    */
   public static void setView(View view) {
     viewManager.loadView(view);
+  }
+
+  /**
+   * This method returns the currently loaded view.
+   *
+   * @return the currently loaded view.
+   */
+  public static View getCurrentView() {
+    return viewManager.getCurrentlyLoadedView();
   }
 
   /**
@@ -207,6 +152,11 @@ public class App extends Application {
     return App.class.getResource("/").getFile() + "/" + relativePathInResourceFolder;
   }
 
+  /**
+   * This is the entry method for the application
+   *
+   * @param args
+   */
   public static void main(final String[] args) {
     // Launch the JavaFX runtime
     launch();
@@ -229,26 +179,9 @@ public class App extends Application {
   @Override
   public void start(final Stage stage) {
 
-    // Update profile details when the game ends and save to file
-    gameLogicManager.subscribeToGameEnd(
-        (gameInfo) -> {
-          Profile currentProfile = profileManager.getCurrentProfile();
-          currentProfile.addGameToHistory(gameInfo);
-
-          Set<String> existingBadges = currentProfile.getEarnedBadgeIds();
-
-          // at the end of the game, go through all badges and see if the current user has won any
-          // badges
-          for (Badge badge : badgeManager.getAllBadges()) {
-            if (!existingBadges.contains(badge.getId())) {
-              if (badge.earned(currentProfile)) {
-                currentProfile.awardBadge(badge.getId());
-              }
-            }
-          }
-        });
-
     App.stage = stage;
+
+    QuickDrawGameManager.initGame();
 
     // terminates the TTS and fully exits the java app when user presses the 'x' / quits the app
     stage.setOnCloseRequest(
@@ -264,7 +197,7 @@ public class App extends Application {
     try {
 
       defaultParent = loadFxml("home-screen");
-      scene = new Scene(defaultParent, 600, 570);
+      scene = new Scene(defaultParent, 900, 700);
 
       // adding all FXMLs to a view manager
       viewManager = new ViewManager<View>(scene);
@@ -277,6 +210,9 @@ public class App extends Application {
       viewManager.addView(View.USERPROFILES, loadFxml("userprofiles-screen"));
       viewManager.addView(View.NEWUSER, loadFxml("newuser-screen"));
       viewManager.addView(View.USER, loadFxml("user-screen"));
+      viewManager.addView(View.BADGES, loadFxml("badges-screen"));
+      viewManager.addView(View.DIFFICULTY, loadFxml("difficulty-screen"));
+      viewManager.addView(View.GAMEMODES, loadFxml("gamemodes-screen"));
 
     } catch (IOException e1) {
       App.expect("All of the previously listed files should exists", e1);

@@ -6,10 +6,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import nz.ac.auckland.se206.gamelogicmanager.CategoryPlayedInfo;
-import nz.ac.auckland.se206.gamelogicmanager.EndGameState;
+import nz.ac.auckland.se206.gamelogicmanager.EndGameReason;
 import nz.ac.auckland.se206.gamelogicmanager.GameInfo;
+import nz.ac.auckland.se206.gamelogicmanager.GameMode;
 
 /**
  * This class will be used to create objects for each new profile containing all information related
@@ -21,9 +21,6 @@ public class Profile {
   private String name;
   private UUID id;
   private String colour;
-
-  private int gamesWon = 0;
-  private int gamesLost = 0;
 
   private List<GameInfo> gameHistory = new ArrayList<GameInfo>();
 
@@ -133,11 +130,6 @@ public class Profile {
     // we add to the profiles history of games and simultaneously increment gamesWon or gamesLost
     // depending on the win state of the game
     gameHistory.add(gameInfo);
-    if (gameInfo.getWinState() == EndGameState.WIN) {
-      gamesWon++;
-    } else if (gameInfo.getWinState() != EndGameState.NOT_APPLICABLE) {
-      gamesLost++;
-    }
 
     emitChange();
   }
@@ -165,6 +157,18 @@ public class Profile {
    * @return number of games won by profile
    */
   public int getGamesWon() {
+    int gamesWon = 0;
+    for (GameInfo game : gameHistory) {
+      if (game.getGameMode() == GameMode.CLASSIC || game.getGameMode() == GameMode.HIDDEN_WORD) {
+        if (game.getReasonForGameEnd() == EndGameReason.CORRECT_CATEOGRY) {
+          gamesWon++;
+        }
+      } else if (game.getGameMode() == GameMode.RAPID_FIRE) {
+        if (game.getCategoriesPlayed().size() > 0) {
+          gamesWon++;
+        }
+      }
+    }
     return gamesWon;
   }
 
@@ -174,11 +178,24 @@ public class Profile {
    * @return number of games lost by profile
    */
   public int getGamesLost() {
+    int gamesLost = 0;
+    for (GameInfo game : gameHistory) {
+      if (game.getGameMode() == GameMode.HIDDEN_WORD || game.getGameMode() == GameMode.CLASSIC) {
+        if (game.getReasonForGameEnd() == EndGameReason.OUT_OF_TIME
+            || game.getReasonForGameEnd() == EndGameReason.GAVE_UP_OR_CANCELLED) {
+          gamesLost++;
+        }
+      } else if (game.getGameMode() == GameMode.RAPID_FIRE) {
+        if (game.getCategoriesPlayed().size() == 0) {
+          gamesLost++;
+        }
+      }
+    }
     return gamesLost;
   }
 
   /**
-   * This method will get the fastest category played by the profile
+   * This method will get the fastest category played by the profile in classic or hidden word mode
    *
    * @return the fastest category played by the profile
    */
@@ -187,17 +204,25 @@ public class Profile {
     /** If the player has not had a fastest win, this will be null */
     CategoryPlayedInfo bestGame = null;
 
-    // The fancy stuff is just taking a list of games and extracting their lists of categories
-    // plsyed into a new list.
-    for (CategoryPlayedInfo categoryPlayed :
-        gameHistory.stream()
-            .flatMap((game) -> game.getCategoriesPlayed().stream())
-            .collect(Collectors.toList())) {
+    for (GameInfo game : gameHistory) {
+      if (game.getGameMode() == GameMode.CLASSIC || game.getGameMode() == GameMode.HIDDEN_WORD) {
 
-      if (bestGame == null || categoryPlayed.getTimeTaken() < bestGame.getTimeTaken()) {
-        bestGame = categoryPlayed;
+        CategoryPlayedInfo categoryPlayed = game.getCategoryPlayed();
+        if (game.getReasonForGameEnd() == EndGameReason.CORRECT_CATEOGRY) {
+          if (bestGame == null || categoryPlayed.getTimeTaken() < bestGame.getTimeTaken()) {
+            bestGame = categoryPlayed;
+          }
+        }
+
+      } else if (game.getGameMode() == GameMode.RAPID_FIRE) {
+        for (CategoryPlayedInfo categoryPlayed : game.getCategoriesPlayed()) {
+          if (bestGame == null || categoryPlayed.getTimeTaken() < bestGame.getTimeTaken()) {
+            bestGame = categoryPlayed;
+          }
+        }
       }
     }
+
     return bestGame;
   }
 

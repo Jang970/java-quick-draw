@@ -1,7 +1,8 @@
 package nz.ac.auckland.se206.gamelogicmanager;
 
 public enum GameMode {
-  BASIC,
+  CLASSIC,
   ZEN,
-  HIDDEN_WORD
+  HIDDEN_WORD,
+  RAPID_FIRE
 }

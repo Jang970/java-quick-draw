@@ -6,10 +6,8 @@ import ai.djl.translate.TranslateException;
 import com.opencsv.exceptions.CsvException;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
@@ -28,7 +26,7 @@ public class PredictionManager {
 
   private boolean isMakingPredictions = false;
 
-  private Map<CategoryType, Set<Category>> categories;
+  private Set<Category> categories = new HashSet<Category>();
 
   /**
    * The prediction manager will be used to make predictions on the current drawing.
@@ -40,64 +38,34 @@ public class PredictionManager {
    * @throws IOException If there is an error in reading the input/output of the DL model.
    * @throws ModelException If the model cannot be found on the file system.
    */
-  public PredictionManager(long pollInterval, int numTopGuesses)
+  public PredictionManager(long pollInterval, int numberOfPredictions)
       throws IOException, ModelException {
 
     try {
-
       // will load in all words from csv file and sort into respective types
-      List<Category> loaded =
+      CsvObjectLoader<Category> loader =
           new CsvObjectLoader<Category>(
-                  (row) -> {
-                    CategoryType type = CategoryType.EASY;
-                    if (row[1].equals("E")) {
-                      type = CategoryType.EASY;
-                    } else if (row[1].equals("M")) {
-                      type = CategoryType.MEDIUM;
-                    } else if (row[1].equals("H")) {
-                      type = CategoryType.HARD;
-                    }
-                    return new Category(row[0], row[2], type);
-                  })
-              .loadObjectsFromFile(App.getResourcePath("categories.csv"), true);
+              (row) -> {
+                CategoryType type = CategoryType.EASY;
+                if (row[1].equals("E")) {
+                  type = CategoryType.EASY;
+                } else if (row[1].equals("M")) {
+                  type = CategoryType.MEDIUM;
+                } else if (row[1].equals("H")) {
+                  type = CategoryType.HARD;
+                }
+                return new Category(row[0], row[2], type);
+              });
 
-      categories = new HashMap<CategoryType, Set<Category>>();
-
-      // The following code will map the categories in the CSV with relation to their identified
-      // difficulty
-      // key: category type
-      // value: all words of that category type
-      // map the easy words to the EASY category type
-      categories.put(
-          CategoryType.EASY,
-          loaded.stream()
-              .filter(
-                  (cat) -> {
-                    return cat.getCategoryType() == CategoryType.EASY;
-                  })
-              .collect(Collectors.toSet()));
-      // map the easy words to the MEDIUM category type
-      categories.put(
-          CategoryType.MEDIUM,
-          loaded.stream()
-              .filter(
-                  (cat) -> {
-                    return cat.getCategoryType() == CategoryType.MEDIUM;
-                  })
-              .collect(Collectors.toSet()));
-      // map the easy words to the HARD category type
-      categories.put(
-          CategoryType.HARD,
-          loaded.stream()
-              .filter(
-                  (cat) -> {
-                    return cat.getCategoryType() == CategoryType.HARD;
-                  })
-              .collect(Collectors.toSet()));
+      categories =
+          new HashSet<Category>(loader.loadObjectsFromFile(App.getResourcePath("categories.csv")));
 
     } catch (CsvException e) {
       App.expect("Category CSV is in the resource folder and is not empty", e);
     }
+
+    final int internalNumberOfPredictions =
+        numberOfPredictions > 0 ? numberOfPredictions : categories.size();
 
     model = new DoodlePrediction();
 
@@ -121,7 +89,8 @@ public class PredictionManager {
                   if (predictionListener != null && imageSource != null) {
                     BufferedImage snapshot = imageSource.getData();
                     if (snapshot != null) {
-                      predictionListener.update(model.getPredictions(snapshot, numTopGuesses));
+                      predictionListener.update(
+                          model.getPredictions(snapshot, internalNumberOfPredictions));
                     }
                   }
                 } catch (TranslateException error) {
@@ -141,6 +110,24 @@ public class PredictionManager {
         };
 
     pollResultThread.start();
+  }
+
+  /**
+   * Gets the number of categories from the given csv
+   *
+   * @return
+   */
+  public Integer getNumberOfCategories() {
+    return categories.size();
+  }
+
+  /**
+   * Gets a set containing all the categories from the csv. Please do not modify this set!
+   *
+   * @return the set containing all the categories from the csv.
+   */
+  public Set<Category> getCategories() {
+    return categories;
   }
 
   /**
@@ -216,23 +203,19 @@ public class PredictionManager {
       Set<String> categoryFilter, boolean includeEasy, boolean includeMedium, boolean includeHard)
       throws FilterTooStrictException {
 
-    List<Category> possibleCategories = new ArrayList<Category>();
-
     // will check what words to include, this depends on the difficulty
-    if (includeEasy) {
-      possibleCategories.addAll(categories.get(CategoryType.EASY));
-    }
-    if (includeMedium) {
-      possibleCategories.addAll(categories.get(CategoryType.MEDIUM));
-    }
-    if (includeHard) {
-      possibleCategories.addAll(categories.get(CategoryType.HARD));
-    }
-
     // Removes all the items which are also in the filter set (set subtraction)
-    possibleCategories =
-        possibleCategories.stream()
-            .filter((category) -> !categoryFilter.contains(category.getName()))
+    List<Category> possibleCategories =
+        categories.stream()
+            .filter(
+                (category) -> {
+                  CategoryType type = category.getCategoryType();
+
+                  return ((type == CategoryType.EASY && includeEasy)
+                          || (type == CategoryType.MEDIUM && includeMedium)
+                          || (type == CategoryType.HARD && includeHard))
+                      && !categoryFilter.contains(category.getName());
+                })
             .collect(Collectors.toList());
 
     if (possibleCategories.isEmpty()) {

@@ -5,8 +5,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
-import nz.ac.auckland.se206.App;
-import nz.ac.auckland.se206.gamelogicmanager.EndGameState;
+import nz.ac.auckland.se206.QuickDrawGameManager;
+import nz.ac.auckland.se206.gamelogicmanager.EndGameReason;
 import nz.ac.auckland.se206.gamelogicmanager.GameInfo;
 import nz.ac.auckland.se206.gamelogicmanager.GameMode;
 import nz.ac.auckland.se206.util.Profile;
@@ -45,15 +45,14 @@ public class BadgeFactory {
     badges.add(createUnderNumberOfSecondsBadge(10));
 
     badges.add(createMaxDifficultyBadge());
+    badges.add(createPlayedAllCategoriesBadge());
 
     // This one has to go last
     badges.add(createGotAllBadgesBadge());
 
     // add all badge ids to a list and check for duplicates
     for (Badge badge : badges) {
-      if (badgeIds.contains(badge.getId())) {
-        App.expect("Each badge ids should be unique");
-      }
+      assert !badgeIds.contains(badge.getId()) : "Each badge ids should be unique";
       badgeIds.add(badge.getId());
     }
 
@@ -84,6 +83,43 @@ public class BadgeFactory {
   }
 
   /**
+   * This create the played all categories badge
+   *
+   * @return instance of the the type badge representing the all categories badge
+   */
+  private static Badge createPlayedAllCategoriesBadge() {
+    return new Badge(
+        "all_categories",
+        "Drawns All Categories",
+        "The player has won a game with each category in classic or hidden word mode") {
+
+      @Override
+      public boolean earned(Profile profile) {
+
+        Set<String> categoryHistory = new HashSet<String>();
+
+        List<GameInfo> gameHistory =
+            QuickDrawGameManager.getProfileManager().getCurrentProfile().getGameHistory();
+
+        for (GameInfo game : gameHistory) {
+          if (game.getReasonForGameEnd() == EndGameReason.CORRECT_CATEOGRY
+              && (game.getGameMode() == GameMode.HIDDEN_WORD
+                  || game.getGameMode() == GameMode.CLASSIC)) {
+            categoryHistory.add(game.getCategoryPlayed().getCategory().getName());
+          }
+        }
+
+        if (categoryHistory.size()
+            != QuickDrawGameManager.getGameLogicManager().getNumberOfCategories()) {
+          return false;
+        }
+
+        return true;
+      }
+    };
+  }
+
+  /**
    * This creates the max difficulty badge
    *
    * @return instance of type Badge representing the max difficulty badge
@@ -92,20 +128,20 @@ public class BadgeFactory {
     return new Badge(
         "max_dif",
         "Maximum difficulty",
-        "The player won a game on the hardest difficulty settings") {
+        "The player won a game on the hardest difficulty settings in classis or hidden word mode") {
 
       @Override
       public boolean earned(Profile profile) {
         // logic to check if the profile earned max difficulty badge
         // will check if the player played on the hardest difficulties and won
         GameInfo game = profile.getMostRecentGame();
-        Settings settings = profile.getMostRecentGame().getSettings();
+        Settings settings = game.getSettings();
 
         return settings.getAccuracy() == Accuracy.HARD
             && settings.getConfidence() == Confidence.MASTER
             && settings.getTime() == Time.MASTER
             && settings.getWordChoice() == WordChoice.MASTER
-            && game.getWinState() == EndGameState.WIN;
+            && game.getReasonForGameEnd() == EndGameReason.CORRECT_CATEOGRY;
       }
     };
   }
@@ -118,7 +154,9 @@ public class BadgeFactory {
    */
   private static Badge createNumberOfConsecutiveWinsBadge(int n) {
     return new Badge(
-        "consec" + n, n + " Consecutive Wins", "The player won " + n + " games consecutively") {
+        "consec" + n,
+        n + " Consecutive Wins",
+        "The player won " + n + " games consecutively in hidden word or classic mode") {
 
       @Override
       public boolean earned(Profile profile) {
@@ -130,13 +168,23 @@ public class BadgeFactory {
         ListIterator<GameInfo> gameHistoryIterator = gameHistory.listIterator(gameHistory.size());
         int count = 0;
 
-        while (gameHistoryIterator.hasPrevious() && count < n) {
+        while (gameHistoryIterator.hasPrevious()) {
           GameInfo game = gameHistoryIterator.previous();
-          if (game.getGameMode() != GameMode.ZEN && game.getWinState() != EndGameState.WIN) {
-            return false;
+          GameMode mode = game.getGameMode();
+          if (mode == GameMode.CLASSIC || mode == GameMode.HIDDEN_WORD) {
+
+            if (game.getReasonForGameEnd() == EndGameReason.CORRECT_CATEOGRY) {
+              count++;
+              if (count >= n) {
+                return true;
+              }
+            } else {
+              return false;
+            }
           }
         }
-        return true;
+
+        return false;
       }
     };
   }
@@ -155,10 +203,13 @@ public class BadgeFactory {
 
       @Override
       public boolean earned(Profile profile) {
-        // logic to check if the profile earned under number of times badge
-        // will check the recent game and see if the player won under the required time
-        return (profile.getMostRecentGame().getCategoryPlayed().getTimeTaken() <= n)
-            && (profile.getMostRecentGame().getWinState() == EndGameState.WIN);
+
+        GameInfo game = profile.getMostRecentGame();
+        GameMode gameMode = game.getGameMode();
+
+        return (gameMode == GameMode.CLASSIC || gameMode == GameMode.HIDDEN_WORD)
+            && (game.getCategoryPlayed().getTimeTaken() <= n)
+            && (game.getReasonForGameEnd() == EndGameReason.CORRECT_CATEOGRY);
       }
     };
   }
@@ -173,14 +224,12 @@ public class BadgeFactory {
 
       @Override
       public boolean earned(Profile profile) {
-        // logic to check if the profile earned just in time badge
-        // will check if the player won with just 2 seconds left
         GameInfo game = profile.getMostRecentGame();
         GameMode gameMode = game.getGameMode();
 
-        return (gameMode == GameMode.BASIC || gameMode == GameMode.HIDDEN_WORD)
+        return (gameMode == GameMode.CLASSIC || gameMode == GameMode.HIDDEN_WORD)
             && (game.getCategoryPlayed().getSecondsRemaining() <= 2)
-            && (game.getWinState() == EndGameState.WIN);
+            && (game.getReasonForGameEnd() == EndGameReason.CORRECT_CATEOGRY);
       }
     };
   }

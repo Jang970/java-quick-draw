@@ -6,20 +6,33 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.paint.Color;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
+import nz.ac.auckland.se206.QuickDrawGameManager;
 import nz.ac.auckland.se206.fxmlutils.CanvasManager;
 import nz.ac.auckland.se206.fxmlutils.CanvasManager.DrawMode;
-import nz.ac.auckland.se206.gamelogicmanager.EndGameState;
+import nz.ac.auckland.se206.gamelogicmanager.EndGameReason;
+import nz.ac.auckland.se206.gamelogicmanager.GameInfo;
 import nz.ac.auckland.se206.gamelogicmanager.GameLogicManager;
+import nz.ac.auckland.se206.gamelogicmanager.GameMode;
+import nz.ac.auckland.se206.gamelogicmanager.GameProfile;
+import nz.ac.auckland.se206.util.BufferedImageUtils;
+import nz.ac.auckland.se206.util.Category;
+import nz.ac.auckland.se206.util.Profile;
 
 public class GameScreenController {
 
@@ -30,22 +43,29 @@ public class GameScreenController {
   @FXML private Button eraserButton;
   @FXML private Button clearButton;
 
-  @FXML private Button userProfilesButton;
+  @FXML private Button changeGameModeButton;
   @FXML private Button userButton;
   @FXML private Button gameActionButton;
   @FXML private Button downloadImageButton;
 
   @FXML private Label timeRemainingLabel;
   @FXML private Label whatToDrawLabel;
+  @FXML private Label gameModeLabel;
 
   @FXML private VBox guessLabelCol1;
   @FXML private VBox guessLabelCol2;
   @FXML private VBox predictionVbox;
+  @FXML private VBox toolsVBox;
+
+  @FXML private ColorPicker colorPicker;
+  @FXML private ProgressBar predictionBar;
 
   private Label[] guessLabels = new Label[10];
 
   private CanvasManager canvasManager;
   private GameLogicManager gameLogicManager;
+  private Media sound;
+  private MediaPlayer mediaPlayer;
 
   /** Method that is run to set up the GameScreen FXML everytime it is opened/run. */
   public void initialize() {
@@ -58,14 +78,17 @@ public class GameScreenController {
 
     canvasManager = new CanvasManager(canvas);
 
-    gameLogicManager = App.getGameLogicManager();
+    colorPicker = new ColorPicker(Color.BLACK);
+    colorPicker.getStyleClass().add("canvasColorPicker");
+
+    gameLogicManager = QuickDrawGameManager.getGameLogicManager();
 
     // Creates a task which gives the game logic manager a way of accessing the canvas image.
     gameLogicManager.setImageSource(
         () -> {
           // access the image drawn on the canvas
           FutureTask<BufferedImage> getImage =
-              new FutureTask<BufferedImage>(() -> canvasManager.getCurrentSnapshot());
+              new FutureTask<BufferedImage>(() -> canvasManager.getCurrentBlackAndWhiteSnapshot());
           Platform.runLater(getImage);
           // will check for any exceptions but should not really occur
           try {
@@ -78,41 +101,122 @@ public class GameScreenController {
 
     // Subscribe to relevant changes so we can update the display accordingly
     gameLogicManager.subscribeToPredictionsChange(
-        (List<Classification> predictions) -> onPredictionsChange(predictions));
-    gameLogicManager.subscribeToTimeChange((Integer seconds) -> onTimeChange(seconds));
+        (predictions) -> onPredictionsChange(predictions));
+    gameLogicManager.subscribeToTimeChange((seconds) -> onTimeChange(seconds));
     gameLogicManager.subscribeToGameStart(() -> onGameStart());
-    gameLogicManager.subscribeToGameEnd((gameInfo) -> onGameEnd(gameInfo.getWinState()));
+    gameLogicManager.subscribeToGameEnd((gameInfo) -> onGameEnd(gameInfo));
+    gameLogicManager.subscribeToCategoryChange((category) -> onCategoryUpdate(category));
 
     App.subscribeToViewChange(
         (View newView) -> {
           if (newView == View.GAME) {
             // set color of user profile icon button
             setUserButtonStyle();
+            setGameScreenGui(gameLogicManager.getCurrentGameProfile().gameMode());
+
             // When the view changes to game, we start a new game and clear the canvas
             gameLogicManager.startGame();
-            whatToDrawLabel.setText("To Draw: " + gameLogicManager.getCurrentCategory().getName());
-            canvasManager.clearCanvas();
-            canvasManager.resetIsDrawn();
-
-            // doesnt cancel if just looking at user stats
           } else {
-            gameLogicManager.cancelGame();
+
+            // Stops the game if the user leaves.
+            gameLogicManager.stopGame();
           }
         });
+  }
 
-    // when canvas drawn changes between true and false have predictionsVbox do the same.
-    // only starts showing predictions when user draws
-    CanvasManager.subscribeToCanvasDrawn(
-        (Boolean isDrawn) -> {
-          predictionVbox.setVisible(isDrawn);
+  /**
+   * This method is called whenever the game logic manager picks a new category. It updates the game
+   * screen information accordingly with the new category information.
+   *
+   * @param category the category that the game logic manager has picked.
+   */
+  private void onCategoryUpdate(Category category) {
+    Platform.runLater(
+        () -> {
+          if (gameLogicManager.getCurrentGameProfile().gameMode() == GameMode.HIDDEN_WORD) {
+            // Shows the description in hidden word mode.
+            whatToDrawLabel.setText("TO DRAW: " + category.getDescription());
+          } else {
+            // Shows the relevant word in any other mode.
+            if (gameLogicManager.isPlaying()
+                && gameLogicManager.getCurrentGameProfile().gameMode() == GameMode.RAPID_FIRE) {
+              App.getTextToSpeech().speakAsync("Draw " + category.getName());
+            }
+            whatToDrawLabel.setText("TO DRAW: " + category.getName());
+          }
+          canvasManager.clearCanvas();
         });
+  }
+
+  /**
+   * Sets the game screen gui depending on game mode
+   *
+   * @param string the current game mode
+   */
+  private void setGameScreenGui(GameMode gameMode) {
+
+    gameModeLabel.setText(gameMode.name().replace("_", " "));
+
+    // Setups up the game screen GUI depending on the game mode.
+    switch (gameMode) {
+      case CLASSIC:
+        whatToDrawLabel.setStyle("-fx-font-size: 35px");
+        timeRemainingLabel.setVisible(true);
+
+        if (toolsVBox.getChildren().contains(colorPicker)) {
+          toolsVBox.getChildren().remove(colorPicker);
+        }
+
+        canvasManager.setPenColor(Color.BLACK);
+
+        break;
+      case ZEN:
+        whatToDrawLabel.getStyleClass().add("-fx-font-size: 35px");
+        timeRemainingLabel.setVisible(false);
+        if (!toolsVBox.getChildren().contains(colorPicker)) {
+          toolsVBox.getChildren().add(0, colorPicker);
+        }
+
+        colorPicker
+            .valueProperty()
+            .addListener(
+                (observable, oldValue, newValue) -> {
+                  canvasManager.setPenColor(newValue);
+                });
+
+        break;
+      case RAPID_FIRE:
+        whatToDrawLabel.setStyle("-fx-font-size: 35px");
+        timeRemainingLabel.setVisible(true);
+
+        if (toolsVBox.getChildren().contains(colorPicker)) {
+          toolsVBox.getChildren().remove(colorPicker);
+        }
+
+        canvasManager.setPenColor(Color.BLACK);
+        break;
+      case HIDDEN_WORD:
+        // smaller font size for the hidden word mode.
+        whatToDrawLabel.setStyle("-fx-font-size: 22px");
+        timeRemainingLabel.setVisible(true);
+
+        if (toolsVBox.getChildren().contains(colorPicker)) {
+          toolsVBox.getChildren().remove(colorPicker);
+        }
+
+        canvasManager.setPenColor(Color.BLACK);
+        break;
+    }
   }
 
   /** Gets colour and sets css background colour */
   private void setUserButtonStyle() {
     userButton.setStyle(
         "-fx-background-color: "
-            + App.getProfileManager().getCurrentProfile().getColour().replace("0x", "#")
+            + QuickDrawGameManager.getProfileManager()
+                .getCurrentProfile()
+                .getColour()
+                .replace("0x", "#")
             + ";");
   }
 
@@ -122,7 +226,7 @@ public class GameScreenController {
    *
    * @param winState shows if the game was won, lost, cancelled or not applicable
    */
-  private void onGameEnd(EndGameState winState) {
+  private void onGameEnd(GameInfo gameInfo) {
     // Run this after the game ends
     Platform.runLater(
         () -> {
@@ -130,29 +234,81 @@ public class GameScreenController {
           canvasManager.setDrawingEnabled(false);
           setCanvasButtonsDisabled(true);
 
-          gameActionButton.setText("New Game");
+          gameActionButton.setText("NEW GAME");
+          whatToDrawLabel.setStyle("-fx-font-size: 35px");
           whatToDrawLabel.getStyleClass().add("stateHeaders");
 
-          // this logic handles what the TTS and what the label will contain depending on the
-          // winstate
-          if (winState == EndGameState.WIN) {
-            whatToDrawLabel.setText("You got it!");
-            App.getTextToSpeech().speakAsync("You got it!");
-          } else if (winState == EndGameState.LOOSE) {
-            whatToDrawLabel.setText("Sorry, you ran out of time!");
-            App.getTextToSpeech().speakAsync("Sorry, you ran out of time!");
-          } else { // game is cancelled so player didnt win or lose
-            whatToDrawLabel.setText("Game cancelled.");
+          EndGameReason reasonForGameEnd = gameInfo.getReasonForGameEnd();
+          GameMode gameMode = gameInfo.getGameMode();
+
+          // The following logic decides how the game ending should be handled.
+
+          if (gameMode == GameMode.HIDDEN_WORD || gameMode == GameMode.CLASSIC) {
+            // Hidden word or classic mode
+
+            if (reasonForGameEnd == EndGameReason.CORRECT_CATEOGRY) {
+              whatToDrawLabel.setText("You got it!");
+              playWinSound();
+            } else if (reasonForGameEnd == EndGameReason.OUT_OF_TIME) {
+              whatToDrawLabel.setText("Sorry, you ran out of time!");
+              playLooseSound();
+            } else if (reasonForGameEnd == EndGameReason.GAVE_UP_OR_CANCELLED) {
+              whatToDrawLabel.setText("Game stopped");
+            }
+          } else if (gameMode == GameMode.ZEN) {
+            // Zen mode
+
+            whatToDrawLabel.setText("What a lovely drawing :)");
+
+          } else if (gameMode == GameMode.RAPID_FIRE) {
+            // Rapid fire mode
+
+            int numThingsDrawn = gameInfo.getCategoriesPlayed().size();
+            if (numThingsDrawn == 0) {
+              whatToDrawLabel.setText("Sorry, you ran out of time!");
+              playLooseSound();
+            } else {
+              playWinSound();
+              if (numThingsDrawn == 1) {
+                whatToDrawLabel.setText("You drew 1 thing!");
+              } else if (numThingsDrawn > 1) {
+                whatToDrawLabel.setText("You drew " + numThingsDrawn + " things!");
+              }
+            }
           }
         });
   }
 
-  /** This method contains logic that will be run when a game is started */
+  /** This function plays an encouraging win sound. */
+  private void playWinSound() {
+    sound =
+        new Media(getClass().getClassLoader().getResource("sounds/gameWin.mp3").toExternalForm());
+    mediaPlayer = new MediaPlayer(sound);
+    mediaPlayer.play();
+  }
+
+  /** This function plays a disappointing loosing sound. */
+  private void playLooseSound() {
+    sound =
+        new Media(getClass().getClassLoader().getResource("sounds/gameLost.mp3").toExternalForm());
+    mediaPlayer = new MediaPlayer(sound);
+    mediaPlayer.play();
+  }
+
+  /**
+   * This method contains logic that will be run when a game is started. It sets the game action
+   * button text and enables drawing as well as a few other admin tasks
+   */
   private void onGameStart() {
     Platform.runLater(
         () -> {
           // When the game starts, we do the following
-          gameActionButton.setText("Cancel Game");
+          if (gameLogicManager.getCurrentGameProfile().gameMode() == GameMode.ZEN) {
+            gameActionButton.setText("I'M DONE");
+          } else {
+            gameActionButton.setText("GIVE UP");
+          }
+
           setCanvasButtonsDisabled(false);
           // allows player to draw on the canvas
           canvasManager.setDrawingEnabled(true);
@@ -171,13 +327,42 @@ public class GameScreenController {
   private void onPredictionsChange(List<Classification> classificationList) {
     Platform.runLater(
         () -> {
+          double imageFilledFraction =
+              BufferedImageUtils.getFilledFraction(
+                  canvasManager.getCurrentBlackAndWhiteSnapshot(), 1);
+
+          // This makes sure the canvas is more than 2% filled before allowing predictions to win
+          // the game.
+          gameLogicManager.setPredictionWinningEnabled(imageFilledFraction < 0.98);
+
+          // This turns the list of classifications from the prediction model and replaces
+          // underscores with spaces.
+          List<String> normalisedClassfications =
+              classificationList.stream()
+                  .map((classification) -> classification.getClassName().replace('_', ' '))
+                  .collect(Collectors.toList());
+
           // When we are given new predictions, we update the predictions text
           int range = Math.min(classificationList.size(), guessLabels.length);
 
           for (int i = 0; i < range; i++) {
-            String guessText = classificationList.get(i).getClassName().replace('_', ' ');
-            guessLabels[i].setText((i + 1) + ": " + guessText);
+            String guessText = normalisedClassfications.get(i);
+            int percentage = (int) (classificationList.get(i).getProbability() * 100);
+            guessLabels[i].setText(
+                ((i + 1) + ": " + guessText).toUpperCase() + " (" + percentage + "%)");
           }
+
+          String categoryToGuess = gameLogicManager.getCurrentCategory().getName();
+
+          int posInList = 0;
+          while (posInList < classificationList.size()
+              && !normalisedClassfications.get(posInList).equals(categoryToGuess)) {
+            posInList++;
+          }
+          posInList++;
+
+          Double progress = 1 - ((double) posInList / classificationList.size());
+          predictionBar.setProgress(progress);
         });
   }
 
@@ -201,7 +386,7 @@ public class GameScreenController {
    */
   private void updateTimeRemainingLabel(int numberSeconds) {
     timeRemainingLabel.setText(
-        "Time Remaining: " + String.format("%2d", numberSeconds).replace(' ', '0'));
+        "TIME REMAINING: " + String.format("%2d", numberSeconds).replace(' ', '0'));
   }
 
   /**
@@ -235,13 +420,13 @@ public class GameScreenController {
 
   /** Method relating to the button switch to UserProfilesScreen FXML */
   @FXML
-  private void onUserProfiles() {
-    App.setView(View.USERPROFILES);
+  private void onChangeGameMode() {
+    App.setView(View.GAMEMODES);
   }
 
   /** Method relating to the button switch to UserScreen FXML */
   @FXML
-  private void onUserStats() {
+  private void onUserHome() {
     App.setView(View.USER);
   }
 
@@ -252,8 +437,16 @@ public class GameScreenController {
   @FXML
   private void onGameAction() {
     if (gameLogicManager.isPlaying()) {
-      gameLogicManager.cancelGame();
+      gameLogicManager.stopGame();
+      // End the game
     } else {
+      // Start new game
+      Profile profile = QuickDrawGameManager.getProfileManager().getCurrentProfile();
+      gameLogicManager.initializeGame(
+          new GameProfile(
+              profile.getSettings(),
+              gameLogicManager.getCurrentGameProfile().gameMode(),
+              profile.getGameHistory()));
       App.setView(View.CATEGORY);
     }
   }
