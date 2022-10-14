@@ -42,6 +42,7 @@ public class HomeScreenController {
   @FXML
   private void onStartNewGame() {
 
+    // Fade out music effects
     Timeline timeline =
         new Timeline(new KeyFrame(Duration.seconds(3), new KeyValue(player.volumeProperty(), 0)));
     timeline.play();
@@ -50,6 +51,7 @@ public class HomeScreenController {
           player.stop();
         });
 
+    // Set the appropriate view
     if (QuickDrawGameManager.getProfileManager().getProfiles().isEmpty()) {
       App.setView(View.NEWUSER);
     } else {
@@ -57,6 +59,7 @@ public class HomeScreenController {
     }
   }
 
+  /** This method simple turns the intro light on and off */
   @FXML
   private void onSwitchToggle() {
     if (onOffSwitch.isSelected()) {

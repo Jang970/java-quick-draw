@@ -14,6 +14,7 @@ import nz.ac.auckland.se206.QuickDrawGameManager;
 import nz.ac.auckland.se206.util.badges.Badge;
 
 public class BadgesScreenController {
+
   @FXML private Pane badgesPane0;
   @FXML private Pane badgesPane1;
   @FXML private Pane rootPane;

@@ -125,6 +125,7 @@ public class UserProfilesScreenController {
    */
   private void onUserButtonsClicked(Button userButton) {
 
+    // identify when the user clicks on the specific button
     userButton.setOnAction(
         new EventHandler<ActionEvent>() {
           @Override
@@ -144,7 +145,7 @@ public class UserProfilesScreenController {
         });
   }
 
-  /** Switches to new user screen */
+  /** Method that switches to new user screen */
   @FXML
   private void onCreateNewUser() {
     App.setView(View.NEWUSER);
