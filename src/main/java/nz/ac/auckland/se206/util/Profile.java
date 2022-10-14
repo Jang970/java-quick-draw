@@ -6,9 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import nz.ac.auckland.se206.gamelogicmanager.CategoryPlayedInfo;
-import nz.ac.auckland.se206.gamelogicmanager.EndGameState;
+import nz.ac.auckland.se206.gamelogicmanager.EndGameReason;
 import nz.ac.auckland.se206.gamelogicmanager.GameInfo;
 import nz.ac.auckland.se206.gamelogicmanager.GameMode;
 
@@ -125,9 +124,11 @@ public class Profile {
    * This method will be used to add the current category/word to draw to list of previous words Can
    * be called everytime a new category appears
    *
-   * @param gameInfo current category/word that profile must draw
+   * @param gameInfo info of the game to add to history
    */
   public void addGameToHistory(GameInfo gameInfo) {
+    // we add to the profiles history of games and simultaneously increment gamesWon or gamesLost
+    // depending on the win state of the game
     gameHistory.add(gameInfo);
 
     emitChange();
@@ -158,8 +159,14 @@ public class Profile {
   public int getGamesWon() {
     int gamesWon = 0;
     for (GameInfo game : gameHistory) {
-      if (game.getWinState() == EndGameState.WIN) {
-        gamesWon++;
+      if (game.getGameMode() == GameMode.CLASSIC || game.getGameMode() == GameMode.HIDDEN_WORD) {
+        if (game.getReasonForGameEnd() == EndGameReason.CORRECT_CATEOGRY) {
+          gamesWon++;
+        }
+      } else if (game.getGameMode() == GameMode.RAPID_FIRE) {
+        if (game.getCategoriesPlayed().size() > 0) {
+          gamesWon++;
+        }
       }
     }
     return gamesWon;
@@ -173,35 +180,49 @@ public class Profile {
   public int getGamesLost() {
     int gamesLost = 0;
     for (GameInfo game : gameHistory) {
-      if (game.getWinState() == EndGameState.LOOSE || game.getWinState() == EndGameState.GIVE_UP) {
-        gamesLost++;
+      if (game.getGameMode() == GameMode.HIDDEN_WORD || game.getGameMode() == GameMode.CLASSIC) {
+        if (game.getReasonForGameEnd() == EndGameReason.OUT_OF_TIME
+            || game.getReasonForGameEnd() == EndGameReason.GAVE_UP_OR_CANCELLED) {
+          gamesLost++;
+        }
+      } else if (game.getGameMode() == GameMode.RAPID_FIRE) {
+        if (game.getCategoriesPlayed().size() == 0) {
+          gamesLost++;
+        }
       }
     }
     return gamesLost;
   }
 
-  /** If the player has not had a fastest win, this will be null */
-
   /**
-   * This method will get the fastest category played by the profile
+   * This method will get the fastest category played by the profile in classic or hidden word mode
    *
    * @return the fastest category played by the profile
    */
   public CategoryPlayedInfo getFastestCategoryPlayed() {
+
+    /** If the player has not had a fastest win, this will be null */
     CategoryPlayedInfo bestGame = null;
 
-    // The fancy stuff is just taking a list of games and extracting their lists of categories
-    // plsyed into a new list.
-    for (CategoryPlayedInfo categoryPlayed :
-        gameHistory.stream()
-            .filter(game -> game.getGameMode() != GameMode.ZEN)
-            .flatMap((game) -> game.getCategoriesPlayed().stream())
-            .collect(Collectors.toList())) {
+    for (GameInfo game : gameHistory) {
+      if (game.getGameMode() == GameMode.CLASSIC || game.getGameMode() == GameMode.HIDDEN_WORD) {
 
-      if (bestGame == null || categoryPlayed.getTimeTaken() < bestGame.getTimeTaken()) {
-        bestGame = categoryPlayed;
+        CategoryPlayedInfo categoryPlayed = game.getCategoryPlayed();
+        if (game.getReasonForGameEnd() == EndGameReason.CORRECT_CATEOGRY) {
+          if (bestGame == null || categoryPlayed.getTimeTaken() < bestGame.getTimeTaken()) {
+            bestGame = categoryPlayed;
+          }
+        }
+
+      } else if (game.getGameMode() == GameMode.RAPID_FIRE) {
+        for (CategoryPlayedInfo categoryPlayed : game.getCategoriesPlayed()) {
+          if (bestGame == null || categoryPlayed.getTimeTaken() < bestGame.getTimeTaken()) {
+            bestGame = categoryPlayed;
+          }
+        }
       }
     }
+
     return bestGame;
   }
 
@@ -222,8 +243,7 @@ public class Profile {
    * This method will take a badge Id which correlates to the badge we want to award the profile. It
    * will also check if the profile already has the badge.
    *
-   * @param badge the badge to award to the player
-   * @return true if the player did not have the badge and false if they did have the badge
+   * @param badgeId the badge to award to the player
    */
   public void awardBadge(String badgeId) {
     if (!this.badgesEarned.contains(badgeId)) {

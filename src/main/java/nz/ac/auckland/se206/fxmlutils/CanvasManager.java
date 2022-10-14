@@ -20,12 +20,6 @@ import nz.ac.auckland.se206.util.BufferedImageUtils;
 /**
  * The purpose of this class is to isolate all functionality of the canvas from the controller
  * through a simple interface.
- *
- * <p>It handles everything to do with drawing on, erasing on and clearning the canvas
- *
- * <p>//TODO: Perhaps this functionality should be abstracted as this violates the single
- * responsibility principle It also provides a method which gives the user an image from the pointed
- * canvas
  */
 public class CanvasManager {
 
@@ -57,6 +51,7 @@ public class CanvasManager {
     this.canvas = canvas;
     this.context = canvas.getGraphicsContext2D();
 
+    // initialise / setup the canvas for the game
     canvas.setOnMouseDragged((e) -> handleDragEvent(e));
     canvas.setOnMouseReleased((e) -> isHolding = false);
     canvas.setOnMouseClicked((e) -> handleClickEvent(e));
@@ -89,7 +84,7 @@ public class CanvasManager {
 
   /** Sets the cursor based on the drawmode or default if drawing is not enabled */
   private void setCursor() {
-
+    // this logic handles the switching between pencil and eraser
     if (!isDrawingEnabled()) {
       canvas.setCursor(Cursor.DEFAULT);
     } else if (drawMode == DrawMode.DRAWING) {
@@ -129,14 +124,10 @@ public class CanvasManager {
         context.beginPath();
 
         // Sets the stroke colour and width depending on the draw mode
-
-        // TODO: Extract this to either already be set when drawmode is updated or
-        // extract to simple function
         if (drawMode == DrawMode.DRAWING) {
           context.setStroke(penColor);
           context.setLineWidth(brushSize);
         } else if (drawMode == DrawMode.ERASING) {
-          // TODO: Extract this hard coded specific color
           context.setStroke(Color.rgb(235, 233, 221));
           context.setLineWidth(brushSize * 5);
         }
@@ -166,6 +157,7 @@ public class CanvasManager {
    * @param event the click even
    */
   private void handleClickEvent(MouseEvent event) {
+    // draw on the canvas when relevant criteria is met
     if (drawingEnabled && drawMode == DrawMode.DRAWING) {
       int circleRadius = 6;
       context.setFill(penColor);
@@ -189,7 +181,7 @@ public class CanvasManager {
   }
 
   /**
-   * Get the current snapshot of the canvas.
+   * Get the current snapshot of the canvas in black and white.
    *
    * @return The BufferedImage corresponding to the current canvas content.
    */
@@ -198,7 +190,7 @@ public class CanvasManager {
   }
 
   /**
-   * Get the current snapshot of the canvas.
+   * Get the current snapshot of the canvas in colour
    *
    * @return The BufferedImage corresponding to the current canvas content.
    */
@@ -207,8 +199,7 @@ public class CanvasManager {
   }
 
   /**
-   * Save the current snapshot on a bitmap file. // TODO: Extract this to another class as it
-   * violates the single responsibility principle
+   * Save the current snapshot on a bitmap file.
    *
    * @return The file of the saved image.
    * @throws IOException If the image cannot be saved.
@@ -259,6 +250,11 @@ public class CanvasManager {
     this.drawingEnabled = drawingEnabled;
   }
 
+  /**
+   * Sets the pen colour to a given colour
+   *
+   * @param color the colour to set the pen colour to
+   */
   public void setPenColor(Color color) {
     this.penColor = color;
   }

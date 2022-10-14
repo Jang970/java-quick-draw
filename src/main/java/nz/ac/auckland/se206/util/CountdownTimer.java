@@ -17,7 +17,6 @@ public class CountdownTimer {
   private CountdownTimerChangeEvent onChangeEvent;
 
   private int countdownCurrentCount = 0;
-  ;
   private Timer timer;
 
   /**

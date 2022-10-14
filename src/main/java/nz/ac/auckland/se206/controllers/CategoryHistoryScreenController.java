@@ -17,6 +17,7 @@ import nz.ac.auckland.se206.QuickDrawGameManager;
 import nz.ac.auckland.se206.gamelogicmanager.CategoryPlayedInfo;
 import nz.ac.auckland.se206.gamelogicmanager.GameInfo;
 import nz.ac.auckland.se206.gamelogicmanager.GameLogicManager;
+import nz.ac.auckland.se206.gamelogicmanager.GameMode;
 import nz.ac.auckland.se206.util.Category;
 
 public class CategoryHistoryScreenController {
@@ -44,10 +45,19 @@ public class CategoryHistoryScreenController {
             // first get all categories played by profile as a set and of type Category
             Set<Category> tempCategories = new HashSet<Category>();
 
-            for (GameInfo game :
-                QuickDrawGameManager.getProfileManager().getCurrentProfile().getGameHistory()) {
-              for (CategoryPlayedInfo categoryPlayed : game.getCategoriesPlayed()) {
-                tempCategories.add(categoryPlayed.getCategory());
+            List<GameInfo> gameHistory =
+                QuickDrawGameManager.getProfileManager().getCurrentProfile().getGameHistory();
+
+            // Adds categories to the set (removing duplicates)
+            for (GameInfo game : gameHistory) {
+              if (game.getGameMode() == GameMode.HIDDEN_WORD
+                  || game.getGameMode() == GameMode.CLASSIC
+                  || game.getGameMode() == GameMode.ZEN) {
+                tempCategories.add(game.getCategoryPlayed().getCategory());
+              } else if (game.getGameMode() == GameMode.RAPID_FIRE) {
+                for (CategoryPlayedInfo categoryPlayed : game.getCategoriesPlayed()) {
+                  tempCategories.add(categoryPlayed.getCategory());
+                }
               }
             }
 
@@ -95,9 +105,11 @@ public class CategoryHistoryScreenController {
 
   /** Binds the scroll bars of the two lists */
   private void bindScrollBars() {
+    // style the two lists
     categoryHistoryListViewOne.applyCss();
     categoryHistoryListViewTwo.applyCss();
 
+    // create scroll bars and bind together so they scroll at the same time
     ScrollBar sb1 = (ScrollBar) categoryHistoryListViewOne.lookup(".scroll-bar");
     ScrollBar sb2 = (ScrollBar) categoryHistoryListViewTwo.lookup(".scroll-bar");
     sb1.valueProperty().bindBidirectional(sb2.valueProperty());

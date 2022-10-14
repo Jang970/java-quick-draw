@@ -31,8 +31,6 @@ public class App extends Application {
   private static final TextToSpeech textToSpeech = new TextToSpeech();
   private static final EventEmitter<WindowEvent> appTerminationEmitter =
       new EventEmitter<WindowEvent>();
-  // used for creation of folder to store user profiles
-
   private static ViewManager<View> viewManager;
 
   /**
@@ -45,12 +43,21 @@ public class App extends Application {
   }
 
   /**
-   * This method is used when we want to switch between FXMLs.
+   * This method is used when we want to switch between loaded fxmls.
    *
-   * @param view FXML we want to switch to
+   * @param view View we want to switch to
    */
   public static void setView(View view) {
     viewManager.loadView(view);
+  }
+
+  /**
+   * This method returns the currently loaded view.
+   *
+   * @return the currently loaded view.
+   */
+  public static View getCurrentView() {
+    return viewManager.getCurrentlyLoadedView();
   }
 
   /**
@@ -145,6 +152,11 @@ public class App extends Application {
     return App.class.getResource("/").getFile() + "/" + relativePathInResourceFolder;
   }
 
+  /**
+   * This is the entry method for the application
+   *
+   * @param args
+   */
   public static void main(final String[] args) {
     // Launch the JavaFX runtime
     launch();
@@ -171,6 +183,7 @@ public class App extends Application {
 
     QuickDrawGameManager.initGame();
 
+    // terminates the TTS and fully exits the java app when user presses the 'x' / quits the app
     stage.setOnCloseRequest(
         (e) -> {
           textToSpeech.terminate();
@@ -190,11 +203,13 @@ public class App extends Application {
       viewManager = new ViewManager<View>(scene);
       viewManager.addView(View.HOME, defaultParent);
       viewManager.addView(View.GAME, loadFxml("game-screen"));
+      // adding FXML relating to categories
       viewManager.addView(View.CATEGORY, loadFxml("category-screen"));
+      viewManager.addView(View.CATEGORYHISTORY, loadFxml("categoryhistory-screen"));
+      // adding FXML relating to the user
       viewManager.addView(View.USERPROFILES, loadFxml("userprofiles-screen"));
       viewManager.addView(View.NEWUSER, loadFxml("newuser-screen"));
       viewManager.addView(View.USER, loadFxml("user-screen"));
-      viewManager.addView(View.CATEGORYHISTORY, loadFxml("categoryhistory-screen"));
       viewManager.addView(View.BADGES, loadFxml("badges-screen"));
       viewManager.addView(View.DIFFICULTY, loadFxml("difficulty-screen"));
       viewManager.addView(View.GAMEMODES, loadFxml("gamemodes-screen"));
@@ -203,6 +218,7 @@ public class App extends Application {
       App.expect("All of the previously listed files should exists", e1);
     }
 
+    // set stage settings
     stage.setTitle("Speedy Sketchers");
     stage.setResizable(false);
     stage.setScene(scene);

@@ -9,7 +9,7 @@ public class EmptyEventEmitter {
       new HashMap<Integer, EmptyEventListener>();
   private int idCount = 0;
 
-  /** Dispatches data to all the listeners */
+  /** This method Dispatches data to all the listeners */
   public void emit() {
     for (EmptyEventListener observer : eventListeners.values()) {
       observer.update();
@@ -35,7 +35,7 @@ public class EmptyEventEmitter {
    * Allows listeners to unsubscribe from events using the subscription id that was returned when
    * the listener subscribed
    *
-   * @param subscription
+   * @param subscription ID that was used to subcribe the events
    */
   public void unsubscribe(int subscription) {
     eventListeners.remove(subscription);

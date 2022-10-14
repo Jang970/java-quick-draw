@@ -94,7 +94,7 @@ public class Settings {
   /**
    * Use when you want to save/update to a new time level.
    *
-   * @param newAcc new time difficulty level to save
+   * @param newTime new time difficulty level to save
    */
   public void updateTime(Time newTime) {
     this.time = newTime;
@@ -103,7 +103,7 @@ public class Settings {
   /**
    * Use when you want to save/update to a new confidence level.
    *
-   * @param newAcc new confidence difficulty level to save
+   * @param newConf new confidence difficulty level to save
    */
   public void updateConfidence(Confidence newConf) {
     this.confidence = newConf;
@@ -112,7 +112,7 @@ public class Settings {
   /**
    * Use when you want to save/update to a new word choice level.
    *
-   * @param newAcc new word choice difficulty level to save
+   * @param wordChoice new word choice difficulty level to save
    */
   public void updateWordChoice(WordChoice wordChoice) {
     this.wordChoice = wordChoice;

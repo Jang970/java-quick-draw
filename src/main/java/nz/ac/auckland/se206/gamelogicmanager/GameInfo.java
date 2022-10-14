@@ -5,20 +5,57 @@ import nz.ac.auckland.se206.util.Settings;
 
 public class GameInfo {
 
-  private EndGameState winState;
+  private EndGameReason reasonForGameEnd;
   private List<CategoryPlayedInfo> categoriesPlayed;
+  private CategoryPlayedInfo categoryPlayed;
   private Settings settings;
   private GameMode gameMode;
 
+  /**
+   * Creates a new GameInfo object which represents a game that was played. This constructor applies
+   * only to the RAPID_FIRE game mode as it takes a list of categories plsyed.
+   *
+   * @param endGameReason the reason the game ended
+   * @param categoriesPlayed the list of categories played by the player.
+   * @param settingsUsed the settings the player played on.
+   * @param gameMode the game mode of this game.
+   */
   GameInfo(
-      EndGameState winState,
+      EndGameReason endGameReason,
       List<CategoryPlayedInfo> categoriesPlayed,
       Settings settingsUsed,
       GameMode gameMode) {
-    this.winState = winState;
+
+    assert gameMode != GameMode.RAPID_FIRE
+        : "Only the rapid fire game mode takes a list of categories";
+
+    this.gameMode = gameMode;
+    this.reasonForGameEnd = endGameReason;
     this.categoriesPlayed = categoriesPlayed;
     this.settings = settingsUsed;
+  }
+
+  /**
+   * Creates a new GameInfo object which represents a game that was played. This constructor does
+   * not apply to the RAPID_FIRE game mode as it takes a onlye one category played.
+   *
+   * @param endGameReason the reason the game ended
+   * @param categoryPlayed category played by the player.
+   * @param settingsUsed the settings the player played on.
+   * @param gameMode the game mode of this game.
+   */
+  GameInfo(
+      EndGameReason endGameReason,
+      CategoryPlayedInfo categoryPlayed,
+      Settings settingsUsed,
+      GameMode gameMode) {
+
+    assert gameMode != GameMode.RAPID_FIRE : "Rapid fire must take a list of categories played";
+
     this.gameMode = gameMode;
+    this.reasonForGameEnd = endGameReason;
+    this.categoryPlayed = categoryPlayed;
+    this.settings = settingsUsed;
   }
 
   /**
@@ -26,8 +63,8 @@ public class GameInfo {
    *
    * @return win state of the game
    */
-  public EndGameState getWinState() {
-    return winState;
+  public EndGameReason getReasonForGameEnd() {
+    return reasonForGameEnd;
   }
 
   /**
@@ -36,6 +73,9 @@ public class GameInfo {
    * @return list of categories played
    */
   public List<CategoryPlayedInfo> getCategoriesPlayed() {
+    assert gameMode == GameMode.RAPID_FIRE
+        : "List of categories played only applies to rapid fire game mode";
+
     return categoriesPlayed;
   }
 
@@ -45,7 +85,8 @@ public class GameInfo {
    * @return category stored in index 0 of the list of categories
    */
   public CategoryPlayedInfo getCategoryPlayed() {
-    return categoriesPlayed.get(0);
+    assert gameMode != GameMode.RAPID_FIRE : "Rapid fire does not have a single category played";
+    return categoryPlayed;
   }
 
   /**

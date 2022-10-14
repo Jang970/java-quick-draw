@@ -75,7 +75,7 @@ public class TextToSpeech {
   /**
    * This simply runs the spead method in a new task
    *
-   * @param sentence
+   * @param sentence the string to speak
    */
   public void speakAsync(final String sentence) {
     Thread thread =

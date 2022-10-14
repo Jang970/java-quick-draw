@@ -33,6 +33,7 @@ public class UserScreenController {
               fastestWinLabel.setText(
                   "YOU HAVEN'T WON A GAME YET! KEEP PRACTISING, YOU GOT THIS! :)");
             } else {
+              // this will be shown when a player has played and won at least one category
               fastestWinLabel.setText(
                   ("Your fastest win is in "
                           + currentProfile.getFastestCategoryPlayed().getTimeTaken()
@@ -51,29 +52,31 @@ public class UserScreenController {
         });
   }
 
-  /** Switches view to category */
+  /** Method that Switches view to category */
   @FXML
   private void onPlayAgain() {
     App.setView(View.GAMEMODES);
   }
 
-  /** Switches view to user profiles */
+  /** Method that Switches view to user profiles */
   @FXML
   private void onSwitchToProfiles() {
     App.setView(View.USERPROFILES);
   }
 
-  /** Switches view to category history */
+  /** Method that Switches view to category history */
   @FXML
   private void onSwitchToCategoryHistory() {
     App.setView(View.CATEGORYHISTORY);
   }
 
+  /** Switches to the badges view */
   @FXML
   private void onSwitchToBadges() {
     App.setView(View.BADGES);
   }
 
+  /** Switches to the settings view */
   @FXML
   private void onSwitchToSettings() {
     App.setView(View.DIFFICULTY);
