@@ -57,6 +57,7 @@ public class HomeScreenController {
     }
   }
 
+  /** This method simple turns the intro light on and off */
   @FXML
   private void onSwitchToggle() {
     if (onOffSwitch.isSelected()) {

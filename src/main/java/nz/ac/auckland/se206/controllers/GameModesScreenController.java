@@ -24,12 +24,14 @@ public class GameModesScreenController {
    */
   private void moveCrane(int moveX) {
 
+    // Horizontal transition
     TranslateTransition translateOne = new TranslateTransition();
     translateOne.setFromX(0);
     translateOne.setFromY(0);
     translateOne.setByX(moveX);
     translateOne.setDuration(Duration.seconds(1));
 
+    // Vertical transition
     TranslateTransition translateTwo = new TranslateTransition();
     translateTwo.setFromX(moveX);
     translateTwo.setFromY(0);
@@ -63,7 +65,11 @@ public class GameModesScreenController {
     sequence.setOnFinished(
         e -> {
           moveCraneBack();
-          App.setView(View.CATEGORY);
+
+          // Only sets view if the user is still on this screen.
+          if (App.getCurrentView() == View.GAMEMODES) {
+            App.setView(View.CATEGORY);
+          }
         });
   }
 

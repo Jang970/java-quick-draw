@@ -60,8 +60,7 @@ public class PredictionManager {
               });
 
       categories =
-          new HashSet<Category>(
-              loader.loadObjectsFromFile(App.getResourcePath("categories.csv"), true));
+          new HashSet<Category>(loader.loadObjectsFromFile(App.getResourcePath("categories.csv")));
 
     } catch (CsvException e) {
       App.expect("Category CSV is in the resource folder and is not empty", e);
@@ -120,6 +119,15 @@ public class PredictionManager {
    */
   public Integer getNumberOfCategories() {
     return categories.size();
+  }
+
+  /**
+   * Gets a set containing all the categories from the csv. Please do not modify this set!
+   *
+   * @return the set containing all the categories from the csv.
+   */
+  public Set<Category> getCategories() {
+    return categories;
   }
 
   /**

@@ -50,15 +50,17 @@ public class CategoryScreenController {
    */
   private void initGameAndUpdateLabels() {
 
+    // Variables for readability
     Profile profile = profileManager.getCurrentProfile();
-
     GameMode gameMode = QuickDrawGameManager.getCurrentlySelectedGameMode();
 
+    // Start the game with the correct settings. game mode etc.
     gameLogicManager.initializeGame(
         new GameProfile(profile.getSettings(), gameMode, profile.getGameHistory()));
 
     String currentCategoryDisplayString;
 
+    // Updating the font size for the game mode. Needs to be smaller on hidden word mode.
     if (gameMode == GameMode.HIDDEN_WORD) {
       categoryLabel.setStyle("-fx-font-size: 40px");
       currentCategoryDisplayString = gameLogicManager.getCurrentCategory().getDescription();
@@ -66,9 +68,9 @@ public class CategoryScreenController {
       categoryLabel.setStyle("-fx-font-size: 90px");
       currentCategoryDisplayString = gameLogicManager.getCurrentCategory().getName();
     }
-
     categoryLabel.setText(currentCategoryDisplayString.toUpperCase());
 
+    // Little easter egg.
     if (ThreadLocalRandom.current().nextInt(100) == 0) {
       App.getTextToSpeech().speakAsync("Draw " + currentCategoryDisplayString + ". Or else");
     } else {
@@ -76,6 +78,7 @@ public class CategoryScreenController {
     }
     int numSeconds = gameLogicManager.getCurrentGameProfile().settings().getTime().getTimeToDraw();
 
+    // Display correct text for different game modes.
     if (gameMode == GameMode.ZEN) {
       drawTimeLabel.setText("DRAW");
     } else if (gameMode == GameMode.RAPID_FIRE) {

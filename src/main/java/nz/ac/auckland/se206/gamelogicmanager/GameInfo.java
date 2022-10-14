@@ -11,8 +11,17 @@ public class GameInfo {
   private Settings settings;
   private GameMode gameMode;
 
+  /**
+   * Creates a new GameInfo object which represents a game that was played. This constructor applies
+   * only to the RAPID_FIRE game mode as it takes a list of categories plsyed.
+   *
+   * @param endGameReason the reason the game ended
+   * @param categoriesPlayed the list of categories played by the player.
+   * @param settingsUsed the settings the player played on.
+   * @param gameMode the game mode of this game.
+   */
   GameInfo(
-      EndGameReason winState,
+      EndGameReason endGameReason,
       List<CategoryPlayedInfo> categoriesPlayed,
       Settings settingsUsed,
       GameMode gameMode) {
@@ -21,13 +30,22 @@ public class GameInfo {
         : "Only the rapid fire game mode takes a list of categories";
 
     this.gameMode = gameMode;
-    this.reasonForGameEnd = winState;
+    this.reasonForGameEnd = endGameReason;
     this.categoriesPlayed = categoriesPlayed;
     this.settings = settingsUsed;
   }
 
+  /**
+   * Creates a new GameInfo object which represents a game that was played. This constructor does
+   * not apply to the RAPID_FIRE game mode as it takes a onlye one category played.
+   *
+   * @param endGameReason the reason the game ended
+   * @param categoryPlayed category played by the player.
+   * @param settingsUsed the settings the player played on.
+   * @param gameMode the game mode of this game.
+   */
   GameInfo(
-      EndGameReason winState,
+      EndGameReason endGameReason,
       CategoryPlayedInfo categoryPlayed,
       Settings settingsUsed,
       GameMode gameMode) {
@@ -35,7 +53,7 @@ public class GameInfo {
     assert gameMode != GameMode.RAPID_FIRE : "Rapid fire must take a list of categories played";
 
     this.gameMode = gameMode;
-    this.reasonForGameEnd = winState;
+    this.reasonForGameEnd = endGameReason;
     this.categoryPlayed = categoryPlayed;
     this.settings = settingsUsed;
   }

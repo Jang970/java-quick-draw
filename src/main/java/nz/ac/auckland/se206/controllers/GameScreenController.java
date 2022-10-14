@@ -114,20 +114,28 @@ public class GameScreenController {
 
             // When the view changes to game, we start a new game and clear the canvas
             gameLogicManager.startGame();
-
-            // doesnt cancel if just looking at user stats
           } else {
+
+            // Stops the game if the user leaves.
             gameLogicManager.stopGame();
           }
         });
   }
 
+  /**
+   * This method is called whenever the game logic manager picks a new category. It updates the game
+   * screen information accordingly with the new category information.
+   *
+   * @param category the category that the game logic manager has picked.
+   */
   private void onCategoryUpdate(Category category) {
     Platform.runLater(
         () -> {
           if (gameLogicManager.getCurrentGameProfile().gameMode() == GameMode.HIDDEN_WORD) {
+            // Shows the description in hidden word mode.
             whatToDrawLabel.setText("TO DRAW: " + category.getDescription());
           } else {
+            // Shows the relevant word in any other mode.
             if (gameLogicManager.isPlaying()
                 && gameLogicManager.getCurrentGameProfile().gameMode() == GameMode.RAPID_FIRE) {
               App.getTextToSpeech().speakAsync("Draw " + category.getName());
@@ -147,6 +155,7 @@ public class GameScreenController {
 
     gameModeLabel.setText(gameMode.name().replace("_", " "));
 
+    // Setups up the game screen GUI depending on the game mode.
     switch (gameMode) {
       case CLASSIC:
         whatToDrawLabel.setStyle("-fx-font-size: 35px");
@@ -185,6 +194,7 @@ public class GameScreenController {
         canvasManager.setPenColor(Color.BLACK);
         break;
       case HIDDEN_WORD:
+        // smaller font size for the hidden word mode.
         whatToDrawLabel.setStyle("-fx-font-size: 22px");
         timeRemainingLabel.setVisible(true);
 
@@ -230,7 +240,11 @@ public class GameScreenController {
           EndGameReason reasonForGameEnd = gameInfo.getReasonForGameEnd();
           GameMode gameMode = gameInfo.getGameMode();
 
+          // The following logic decides how the game ending should be handled.
+
           if (gameMode == GameMode.HIDDEN_WORD || gameMode == GameMode.CLASSIC) {
+            // Hidden word or classic mode
+
             if (reasonForGameEnd == EndGameReason.CORRECT_CATEOGRY) {
               whatToDrawLabel.setText("You got it!");
               playWinSound();
@@ -241,8 +255,13 @@ public class GameScreenController {
               whatToDrawLabel.setText("Game stopped");
             }
           } else if (gameMode == GameMode.ZEN) {
+            // Zen mode
+
             whatToDrawLabel.setText("What a lovely drawing :)");
+
           } else if (gameMode == GameMode.RAPID_FIRE) {
+            // Rapid fire mode
+
             int numThingsDrawn = gameInfo.getCategoriesPlayed().size();
             if (numThingsDrawn == 0) {
               whatToDrawLabel.setText("Sorry, you ran out of time!");
@@ -259,6 +278,7 @@ public class GameScreenController {
         });
   }
 
+  /** This function plays an encouraging win sound. */
   private void playWinSound() {
     sound =
         new Media(getClass().getClassLoader().getResource("sounds/gameWin.mp3").toExternalForm());
@@ -266,6 +286,7 @@ public class GameScreenController {
     mediaPlayer.play();
   }
 
+  /** This function plays a disappointing loosing sound. */
   private void playLooseSound() {
     sound =
         new Media(getClass().getClassLoader().getResource("sounds/gameLost.mp3").toExternalForm());
@@ -273,7 +294,10 @@ public class GameScreenController {
     mediaPlayer.play();
   }
 
-  /** This method contains logic that will be run when a game is started */
+  /**
+   * This method contains logic that will be run when a game is started. It sets the game action
+   * button text and enables drawing as well as a few other admin tasks
+   */
   private void onGameStart() {
     Platform.runLater(
         () -> {
@@ -301,14 +325,16 @@ public class GameScreenController {
   private void onPredictionsChange(List<Classification> classificationList) {
     Platform.runLater(
         () -> {
-
-          // This makes sure the canvas is at least a little bit filled before allowing detections
           double imageFilledFraction =
               BufferedImageUtils.getFilledFraction(
                   canvasManager.getCurrentBlackAndWhiteSnapshot(), 1);
 
+          // This makes sure the canvas is more than 2% filled before allowing predictions to win
+          // the game.
           gameLogicManager.setPredictionWinningEnabled(imageFilledFraction < 0.98);
 
+          // This turns the list of classifications from the prediction model and replaces
+          // underscores with spaces.
           List<String> normalisedClassfications =
               classificationList.stream()
                   .map((classification) -> classification.getClassName().replace('_', ' '))
@@ -319,7 +345,9 @@ public class GameScreenController {
 
           for (int i = 0; i < range; i++) {
             String guessText = normalisedClassfications.get(i);
-            guessLabels[i].setText(((i + 1) + ": " + guessText).toUpperCase());
+            int percentage = (int) (classificationList.get(i).getProbability() * 100);
+            guessLabels[i].setText(
+                ((i + 1) + ": " + guessText).toUpperCase() + " (" + percentage + "%)");
           }
 
           String categoryToGuess = gameLogicManager.getCurrentCategory().getName();
