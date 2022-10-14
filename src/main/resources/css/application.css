@@ -164,12 +164,14 @@
  
  .dialog-pane .header-panel{
 	-fx-font-family: 'Normandy Beach';
-	-fx-font-size: 20px;
+	-fx-font-size: 30px;
 	-fx-background-color:   #E9C46A;
  }
 
- .dialog-pane .label {
+ .dialog-pane .label.content {
 	-fx-text-fill: darkred;
+	-fx-font-size: 30px;
+	-fx-alignment: center;
  }
 
  /* Category scene */
@@ -243,6 +245,11 @@
 .canvasColorPicker .arrow{
 	-fx-translate-x: 8;
 	-fx-background-color: #E76F51;
+}
+
+.hintsButton {
+	-fx-pref-width: 104;
+	-fx-pref-height: 45;
 }
 
 /* User  Screen */

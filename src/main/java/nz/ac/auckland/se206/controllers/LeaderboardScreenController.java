@@ -28,6 +28,7 @@ public class LeaderboardScreenController {
     App.subscribeToViewChange(
         (View view) -> {
           if (view == View.LEADERBOARD) {
+            // TODO: Leaderboard not sorting by win percentage
             // refreshes leaderboard in case win percentage changes and if new profiles are created
             leaderboard.refresh();
           }

@@ -63,7 +63,7 @@
             </Button>
             <Button fx:id="clearButton" mnemonicParsing="false" onAction="#onClearCanvas" prefWidth="10000.0" text="CLEAR" VBox.vgrow="ALWAYS">
                <VBox.margin>
-                  <Insets top="30.0" />
+                  <Insets bottom="5.0" top="30.0" />
                </VBox.margin>
                <font>
                   <Font size="16.0" />

@@ -9,10 +9,15 @@ import java.util.concurrent.FutureTask;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.Pane;
@@ -20,6 +25,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
+import javafx.stage.Modality;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
 import nz.ac.auckland.se206.QuickDrawGameManager;
@@ -31,6 +37,7 @@ import nz.ac.auckland.se206.gamelogicmanager.GameMode;
 import nz.ac.auckland.se206.gamelogicmanager.GameProfile;
 import nz.ac.auckland.se206.util.BufferedImageUtils;
 import nz.ac.auckland.se206.util.Profile;
+import org.apache.commons.lang3.StringUtils;
 
 public class GameScreenController {
 
@@ -40,6 +47,7 @@ public class GameScreenController {
   @FXML private Button pencilButton;
   @FXML private Button eraserButton;
   @FXML private Button clearButton;
+  @FXML private Button hintsButton;
 
   @FXML private Button changeGameModeButton;
   @FXML private Button userButton;
@@ -57,6 +65,7 @@ public class GameScreenController {
 
   @FXML private ColorPicker colorPicker;
   @FXML private ProgressBar predictionBar;
+  @FXML private Alert hintAlert;
 
   private Label[] guessLabels = new Label[10];
 
@@ -78,6 +87,22 @@ public class GameScreenController {
 
     colorPicker = new ColorPicker(Color.BLACK);
     colorPicker.getStyleClass().add("canvasColorPicker");
+
+    hintAlert = new Alert(AlertType.INFORMATION);
+    DialogPane dialogPane = hintAlert.getDialogPane();
+    dialogPane
+        .getStylesheets()
+        .add(getClass().getResource("/css/application.css").toExternalForm());
+
+    hintsButton = new Button("HINTS!");
+    hintsButton.getStyleClass().add("hintsButton");
+    hintsButton.setOnAction(
+        new EventHandler<ActionEvent>() {
+          @Override
+          public void handle(ActionEvent e) {
+            displayPopup(getHint());
+          }
+        });
 
     gameLogicManager = QuickDrawGameManager.getGameLogicManager();
 
@@ -146,14 +171,23 @@ public class GameScreenController {
           toolsVBox.getChildren().remove(colorPicker);
         }
 
+        if (toolsVBox.getChildren().contains(hintsButton)) {
+          toolsVBox.getChildren().remove(hintsButton);
+        }
+
         canvasManager.setPenColor(Color.BLACK);
 
         break;
       case ZEN:
         whatToDrawLabel.getStyleClass().add("-fx-font-size: 35px");
         timeRemainingLabel.setVisible(false);
+
         if (!toolsVBox.getChildren().contains(colorPicker)) {
           toolsVBox.getChildren().add(0, colorPicker);
+        }
+
+        if (toolsVBox.getChildren().contains(hintsButton)) {
+          toolsVBox.getChildren().remove(hintsButton);
         }
 
         colorPicker
@@ -172,9 +206,64 @@ public class GameScreenController {
           toolsVBox.getChildren().remove(colorPicker);
         }
 
+        if (!toolsVBox.getChildren().contains(hintsButton)) {
+          toolsVBox.getChildren().add(hintsButton);
+          // allows for main window to be clickable
+          hintAlert.initOwner(App.getStage());
+          hintAlert.initModality(Modality.NONE);
+        }
+
+        hintAlert.setContentText("");
         canvasManager.setPenColor(Color.BLACK);
+
         break;
     }
+  }
+
+  /** Displays hint pop up for hidden word mode */
+  private void displayPopup(String hintText) {
+    // shows an information alert pop up of the hint when button is clicked
+    // setting display value
+
+    // if its not showing then it shows
+    if (!hintAlert.isShowing()) {
+      hintAlert.setTitle("Hint");
+      hintAlert.setHeaderText("Hint");
+      hintAlert.setX(100);
+      hintAlert.setY(600);
+      hintAlert.show();
+    }
+
+    // sets context text to hint
+    hintAlert.setContentText(hintText);
+  }
+
+  /**
+   * Gets hint from hidden word by giving each letter of the word at a time
+   *
+   * @return
+   */
+  private String getHint() {
+
+    // gets the most recent hint given from alert
+    String hintText = hintAlert.getContentText();
+    // get current category
+    String category = QuickDrawGameManager.getGameLogicManager().getCurrentCategory().getName();
+
+    // if hint text is blank then it will given empty state with dashes
+    if (hintText.isBlank()) {
+      hintText = StringUtils.repeat("_", category.length());
+    }
+
+    int indexOfLetter = hintText.indexOf("_", 0);
+
+    // if theres no dashes then return category
+    if (indexOfLetter == -1) {
+      return category;
+    }
+
+    // replaces the first dash with the character in the position
+    return hintText.replaceFirst("_", String.valueOf(category.charAt(indexOfLetter)));
   }
 
   /** Gets colour and sets css background colour */
