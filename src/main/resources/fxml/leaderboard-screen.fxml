@@ -20,7 +20,7 @@
         <columns>
             <TableColumn fx:id="rankColumn" editable="false" prefWidth="121.5348892211914" sortable="false" text="RANK" />
           <TableColumn fx:id="namesColumn" editable="false" prefWidth="323.4651184082031" sortable="false" text="NAME" />
-          <TableColumn fx:id="ratioColumn" editable="false" prefWidth="207.44171142578125" sortable="false" text="WIN PERCENTAGE" />
+          <TableColumn fx:id="percentageColumn" editable="false" prefWidth="207.44171142578125" sortable="false" text="WIN PERCENTAGE" />
         </columns>
       </TableView>
       <Button layoutX="356.0" layoutY="647.0" mnemonicParsing="false" onAction="#onBackToProfiles" text="Back to Profiles" />

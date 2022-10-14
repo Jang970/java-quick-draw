@@ -18,8 +18,9 @@ public class LeaderboardScreenController {
   @FXML private TableView<Profile> leaderboard;
   @FXML private TableColumn<Profile, Integer> rankColumn;
   @FXML private TableColumn<Profile, String> namesColumn;
-  @FXML private TableColumn<Profile, Integer> ratioColumn;
+  @FXML private TableColumn<Profile, Integer> percentageColumn;
 
+  /** Creates leaderboard and refereshes leaderboard on view change to leaderboard screen */
   public void initialize() {
 
     createLeaderboardTable();
@@ -27,13 +28,16 @@ public class LeaderboardScreenController {
     App.subscribeToViewChange(
         (View view) -> {
           if (view == View.LEADERBOARD) {
+            // refreshes leaderboard in case win percentage changes and if new profiles are created
             leaderboard.refresh();
           }
         });
   }
 
+  /** Creates the leaderboard table based on profile class */
   private void createLeaderboardTable() {
 
+    // rank column cells are set based on index of leaderboard table
     rankColumn.setCellValueFactory(
         new Callback<CellDataFeatures<Profile, Integer>, ObservableValue<Integer>>() {
           @Override
@@ -43,24 +47,29 @@ public class LeaderboardScreenController {
           }
         });
 
+    // ensures users canot resize, reorder and sort columns
     rankColumn.setResizable(false);
     rankColumn.setReorderable(false);
     rankColumn.setSortable(false);
 
+    // names column is the profile names
     namesColumn.setCellValueFactory(new PropertyValueFactory<Profile, String>("name"));
     namesColumn.setSortable(false);
     namesColumn.setReorderable(false);
     namesColumn.setResizable(false);
 
-    ratioColumn.setCellValueFactory(new PropertyValueFactory<Profile, Integer>("winPercentage"));
-    // ratioColumn.setSortable(true);
-    ratioColumn.setReorderable(false);
-    ratioColumn.setSortType(TableColumn.SortType.DESCENDING);
-    ratioColumn.setResizable(false);
+    // percetane column is the win percentage of each profile
+    percentageColumn.setCellValueFactory(
+        new PropertyValueFactory<Profile, Integer>("winPercentage"));
+    percentageColumn.setReorderable(false);
+    percentageColumn.setSortType(TableColumn.SortType.DESCENDING);
+    percentageColumn.setResizable(false);
 
+    // sets the items in the leaderboard as all current profiles
     leaderboard.setItems(
         FXCollections.observableList(QuickDrawGameManager.getProfileManager().getProfiles()));
-    leaderboard.getSortOrder().add(ratioColumn);
+    // sorts tables by percentage column
+    leaderboard.getSortOrder().add(percentageColumn);
   }
 
   /** Switches view to user profiles */
