@@ -202,6 +202,14 @@ public class GameLogicManager {
               categoriesPlayedInThisGame,
               currentGameProfile.settings(),
               currentGameProfile.gameMode()));
+    } else if (currentGameProfile.gameMode() == GameMode.ZEN) {
+      gameEndedEmitter.emit(
+          new GameInfo(
+              winState,
+              new CategoryPlayedInfo(gameTimeCounter, -1, categoryToGuess),
+              currentGameProfile.settings(),
+              currentGameProfile.gameMode()));
+
     } else {
       gameEndedEmitter.emit(
           new GameInfo(

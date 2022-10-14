@@ -203,13 +203,13 @@ public class Profile {
     CategoryPlayedInfo bestGame = null;
 
     for (GameInfo game : gameHistory) {
-      if (game.getGameMode() == GameMode.CLASSIC
-          || game.getGameMode() == GameMode.HIDDEN_WORD
-          || game.getGameMode() == GameMode.ZEN) {
+      if (game.getGameMode() == GameMode.CLASSIC || game.getGameMode() == GameMode.HIDDEN_WORD) {
 
         CategoryPlayedInfo categoryPlayed = game.getCategoryPlayed();
-        if (bestGame == null || categoryPlayed.getTimeTaken() < bestGame.getTimeTaken()) {
-          bestGame = categoryPlayed;
+        if (game.getReasonForGameEnd() == EndGameReason.CORRECT_CATEOGRY) {
+          if (bestGame == null || categoryPlayed.getTimeTaken() < bestGame.getTimeTaken()) {
+            bestGame = categoryPlayed;
+          }
         }
 
       } else if (game.getGameMode() == GameMode.RAPID_FIRE) {
