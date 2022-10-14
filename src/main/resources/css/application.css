@@ -484,6 +484,62 @@
 	-fx-border-color: none;
 }
 
+/* Leaderboard Screen */
+.leaderboardScreen {
+	-fx-image: url('../images/leaderboard-screen.png');
+}
+
+.table-view {
+    -fx-background-color: transparent;
+	-fx-font-family: 'VT323', monospace;
+}
+
+.table-view .column-header-background{
+    -fx-background-color: #264653;
+	-fx-font-size: 30px;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header .label{
+	-fx-text-fill: #e9c46a;
+}
+
+.table-view .table-cell{
+    -fx-border-color: transparent;
+	-fx-alignment: center;
+}
+
+.table-row-cell {
+	-fx-font-size: 25px;
+}
+
+.table-row-cell:odd{
+    -fx-background-color: #E76F51;
+}
+.table-row-cell:even{
+    -fx-background-color: #F4A261;
+}
+
+.table-row-cell:selected {
+	-fx-text-background-color: #264653;
+}
+
+.table-row-cell:empty {
+	-fx-background-color: transparent;
+}
+
+.table-view .scroll-bar * {
+    -fx-min-width: 0;
+    -fx-pref-width: 0;
+    -fx-max-width: 0;
+
+    -fx-min-height: 0;
+    -fx-pref-height: 0;
+    -fx-max-height: 0;
+}
 
 
 

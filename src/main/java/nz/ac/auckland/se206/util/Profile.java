@@ -180,6 +180,21 @@ public class Profile {
     return gamesLost;
   }
 
+  /**
+   * This method wil get the win percentage of the profile
+   *
+   * @return win percentage of the profile in string format or returns 0 percentage is NaN
+   */
+  public Integer getWinPercentage() {
+    Integer winPercentage = (int) Math.round(((double) getGamesWon() / gameHistory.size()) * 100);
+
+    if (Double.isNaN(winPercentage)) {
+      return 0;
+    }
+
+    return winPercentage;
+  }
+
   /** If the player has not had a fastest win, this will be null */
 
   /**

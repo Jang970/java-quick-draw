@@ -149,4 +149,10 @@ public class UserProfilesScreenController {
   private void onCreateNewUser() {
     App.setView(View.NEWUSER);
   }
+
+  /** Switchs to leaderboard screen FXML */
+  @FXML
+  private void onSwitchToLeaderboard() {
+    App.setView(View.LEADERBOARD);
+  }
 }

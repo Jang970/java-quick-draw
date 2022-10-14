@@ -24,7 +24,8 @@ public class App extends Application {
     CATEGORYHISTORY,
     BADGES,
     DIFFICULTY,
-    GAMEMODES
+    GAMEMODES,
+    LEADERBOARD
   }
 
   private static Stage stage;
@@ -198,6 +199,7 @@ public class App extends Application {
       viewManager.addView(View.BADGES, loadFxml("badges-screen"));
       viewManager.addView(View.DIFFICULTY, loadFxml("difficulty-screen"));
       viewManager.addView(View.GAMEMODES, loadFxml("gamemodes-screen"));
+      viewManager.addView(View.LEADERBOARD, loadFxml("leaderboard-screen"));
 
     } catch (IOException e1) {
       App.expect("All of the previously listed files should exists", e1);
