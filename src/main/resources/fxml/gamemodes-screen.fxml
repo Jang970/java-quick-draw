@@ -22,7 +22,7 @@
                </HBox.margin>
             </Button>
             <Button alignment="BOTTOM_CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#onSelectZen" onMouseEntered="#onHoverZen" onMouseExited="#onMouseExited" prefHeight="238.0" prefWidth="141.0" styleClass="zen" text="ZEN" textAlignment="CENTER" />
-            <Button alignment="BOTTOM_CENTER" contentDisplay="BOTTOM" mnemonicParsing="false" onAction="#onSelectRapid" onMouseEntered="#onHoverHiddenWord" onMouseExited="#onMouseExited" prefHeight="263.0" prefWidth="154.0" styleClass="rapid" text="RAPID" textAlignment="CENTER" />
+            <Button alignment="BOTTOM_CENTER" contentDisplay="BOTTOM" mnemonicParsing="false" onAction="#onSelectRapid" onMouseEntered="#onHoverRapid" onMouseExited="#onMouseExited" prefHeight="263.0" prefWidth="154.0" styleClass="rapid" text="RAPID" textAlignment="CENTER" />
          </children>
       </HBox>
       <Label fx:id="descriptionLabel" alignment="CENTER" layoutX="64.0" layoutY="42.0" prefHeight="82.0" prefWidth="776.0" styleClass="subHeaders" text="CLICK ON THE GAME MODE TO PLAY.&#10;HOVER OVER EACH GAME MODE TO SEE DESCRIPTION." textAlignment="CENTER" wrapText="true">

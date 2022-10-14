@@ -49,5 +49,6 @@
             <Font size="25.0" />
          </font>
       </Label>
+      <Button layoutX="384.0" layoutY="644.0" mnemonicParsing="false" onAction="#onLetsPlay" prefHeight="45.0" prefWidth="153.0" text="Let's Play!" />
    </children>
 </Pane>

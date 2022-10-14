@@ -144,6 +144,12 @@ public class GameModesScreenController {
         "HIDDEN MODE YOU GET THE DEFINITION OF THE WORD INSTEAD OF THE WORD ITSELF");
   }
 
+  /** Explains how to play rapid fire game mode */
+  @FXML
+  private void onHoverRapid() {
+    descriptionLabel.setText("RAPID MODE YOU HAVE TO TRY DRAW AS MANY WORDS BEFORE TIMER RUNS OUT");
+  }
+
   /** Switch to user profile screen FXML */
   @FXML
   private void onBackToUserScreen() {

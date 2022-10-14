@@ -488,6 +488,14 @@ public class GameScreenController {
     pencilButton.setDisable(disabled);
     eraserButton.setDisable(disabled);
     clearButton.setDisable(disabled);
+
+    if (toolsVBox.getChildren().contains(hintsButton)) {
+      hintsButton.setDisable(disabled);
+    }
+
+    if (toolsVBox.getChildren().contains(colorPicker)) {
+      colorPicker.setDisable(disabled);
+    }
   }
 
   /** Set the 'tool' in use to be the pencil so player can draw */
