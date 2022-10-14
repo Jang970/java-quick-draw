@@ -209,27 +209,21 @@ public class CanvasManager {
     // making use of FileChooser that will allow user to create a folder containing their drawing
     // and save it anywhere on their pc
     FileChooser fileChooser = new FileChooser();
+
     fileChooser.setTitle("Save Image");
     fileChooser.setInitialFileName(
         QuickDrawGameManager.getProfileManager().getCurrentProfile().getName()
             + "'s "
             + QuickDrawGameManager.getGameLogicManager().getCurrentCategory().getName()
-            + " drawing");
+            + " drawing.png");
+    fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PNG", "*.png"));
 
-    final File directory = fileChooser.showSaveDialog(App.getStage());
-
-    if (directory != null) {
-      directory.mkdir();
-      // save image to a file in created folder
-      final File imageToClassify =
-          new File(directory.getAbsolutePath() + "/snapshot" + System.currentTimeMillis() + ".bmp");
-      // save the image to a file
-      ImageIO.write(getCurrentColourSnapshot(), "bmp", imageToClassify);
-
-      return imageToClassify;
+    final File file = fileChooser.showSaveDialog(App.getStage());
+    if (file != null) {
+      ImageIO.write(getCurrentColourSnapshot(), "png", file);
     }
 
-    return null;
+    return file;
   }
 
   /**
