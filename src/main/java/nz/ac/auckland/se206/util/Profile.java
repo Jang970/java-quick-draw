@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import nz.ac.auckland.se206.gamelogicmanager.CategoryPlayedInfo;
 import nz.ac.auckland.se206.gamelogicmanager.EndGameState;
 import nz.ac.auckland.se206.gamelogicmanager.GameInfo;
+import nz.ac.auckland.se206.gamelogicmanager.GameMode;
 
 /**
  * This class will be used to create objects for each new profile containing all information related
@@ -193,6 +194,7 @@ public class Profile {
     // plsyed into a new list.
     for (CategoryPlayedInfo categoryPlayed :
         gameHistory.stream()
+            .filter(game -> game.getGameMode() != GameMode.ZEN)
             .flatMap((game) -> game.getCategoriesPlayed().stream())
             .collect(Collectors.toList())) {
 

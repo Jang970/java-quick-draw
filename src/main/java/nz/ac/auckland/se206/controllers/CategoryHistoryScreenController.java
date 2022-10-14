@@ -13,6 +13,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
+import nz.ac.auckland.se206.QuickDrawGameManager;
 import nz.ac.auckland.se206.gamelogicmanager.GameLogicManager;
 import nz.ac.auckland.se206.util.Category;
 
@@ -30,23 +31,18 @@ public class CategoryHistoryScreenController {
   /** Method that is run to set up the CategoryHistoryScreen FXML everytime it is opened/run. */
   public void initialize() {
 
-    gameLogicManager = App.getGameLogicManager();
+    gameLogicManager = QuickDrawGameManager.getGameLogicManager();
 
     // gets category history and displays every time view is changed
     App.subscribeToViewChange(
         (View view) -> {
           if (view == View.CATEGORYHISTORY) {
 
-            // added new List that will store categories as the Category instance
-            categoriesPlayed =
-                App.getProfileManager().getCurrentProfile().getGameHistory().stream()
-                    .flatMap(
-                        (game) -> game.getCategoriesPlayed().stream().map(cat -> cat.getCategory()))
-                    .collect(Collectors.toList());
-
             categoryHistoryAsString =
-                App.getProfileManager().getCurrentProfile().getGameHistory().stream()
-                    .distinct()
+                QuickDrawGameManager.getProfileManager()
+                    .getCurrentProfile()
+                    .getGameHistory()
+                    .stream()
                     .flatMap(
                         (game) ->
                             game.getCategoriesPlayed().stream()

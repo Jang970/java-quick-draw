@@ -106,11 +106,14 @@ public class GameLogicManager {
   ///////////////////////////// GAME STATE TRANSISTIONS /////////////////////////////
 
   /**
-   * This method will get the game ready to be played using the current profile
+   * This method will get the game ready to be played using the given profile
    *
    * @param profile current profile playing
    */
   public void initializeGame(GameProfile profile) {
+
+    stopGame();
+
     currentGameProfile = profile;
 
     Set<String> categories =

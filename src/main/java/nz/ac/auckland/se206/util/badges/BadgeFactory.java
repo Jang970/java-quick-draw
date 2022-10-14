@@ -7,6 +7,7 @@ import java.util.ListIterator;
 import java.util.Set;
 import java.util.stream.Collectors;
 import nz.ac.auckland.se206.App;
+import nz.ac.auckland.se206.QuickDrawGameManager;
 import nz.ac.auckland.se206.gamelogicmanager.EndGameState;
 import nz.ac.auckland.se206.gamelogicmanager.GameInfo;
 import nz.ac.auckland.se206.gamelogicmanager.GameMode;
@@ -94,13 +95,14 @@ public class BadgeFactory {
       @Override
       public boolean earned(Profile profile) {
         Set<String> categoryHistory =
-            App.getProfileManager().getCurrentProfile().getGameHistory().stream()
+            QuickDrawGameManager.getProfileManager().getCurrentProfile().getGameHistory().stream()
                 .flatMap(
                     (game) ->
                         game.getCategoriesPlayed().stream().map(cat -> cat.getCategory().getName()))
                 .collect(Collectors.toSet());
 
-        if (categoryHistory.size() != App.getGameLogicManager().getNumberOfCategories()) {
+        if (categoryHistory.size()
+            != QuickDrawGameManager.getGameLogicManager().getNumberOfCategories()) {
           return false;
         }
 
@@ -199,7 +201,7 @@ public class BadgeFactory {
         GameInfo game = profile.getMostRecentGame();
         GameMode gameMode = game.getGameMode();
 
-        return (gameMode == GameMode.BASIC || gameMode == GameMode.HIDDEN_WORD)
+        return (gameMode == GameMode.CLASSIC || gameMode == GameMode.HIDDEN_WORD)
             && (game.getCategoryPlayed().getSecondsRemaining() <= 2)
             && (game.getWinState() == EndGameState.WIN);
       }

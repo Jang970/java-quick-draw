@@ -8,6 +8,8 @@ import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
+import nz.ac.auckland.se206.QuickDrawGameManager;
+import nz.ac.auckland.se206.gamelogicmanager.GameMode;
 
 public class GameModesScreenController {
   @FXML private ImageView craneImageView;
@@ -54,7 +56,9 @@ public class GameModesScreenController {
   /** sets game mode as classic and goes to category screen */
   @FXML
   private void onSelectClassic() {
-    // TODO: set mode as classic
+
+    QuickDrawGameManager.setCurrentlySelectedGameMode(GameMode.CLASSIC);
+
     moveCrane(-180);
     sequence.setOnFinished(
         e -> {
@@ -66,7 +70,9 @@ public class GameModesScreenController {
   /** sets game mode as hidden word and goes to category screen */
   @FXML
   private void onSelectHiddenWord() {
-    // TODO: set mode as hidden word
+
+    QuickDrawGameManager.setCurrentlySelectedGameMode(GameMode.HIDDEN_WORD);
+
     moveCrane(180);
     sequence.setOnFinished(
         e -> {
@@ -78,7 +84,9 @@ public class GameModesScreenController {
   /** sets game mode as zen and goes to category screen */
   @FXML
   private void onSelectZen() {
-    // TODO: set mode as zen
+
+    QuickDrawGameManager.setCurrentlySelectedGameMode(GameMode.ZEN);
+
     TranslateTransition translate = new TranslateTransition();
     translate.setNode(craneImageView);
     translate.setFromX(0);

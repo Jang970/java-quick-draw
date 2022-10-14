@@ -10,6 +10,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
+import nz.ac.auckland.se206.QuickDrawGameManager;
 import nz.ac.auckland.se206.util.badges.Badge;
 
 public class BadgesScreenController {
@@ -42,7 +43,8 @@ public class BadgesScreenController {
             reset();
 
             // goes through all earned badges and makes their image views visible
-            for (String badgeId : App.getProfileManager().getCurrentProfile().getEarnedBadgeIds()) {
+            for (String badgeId :
+                QuickDrawGameManager.getProfileManager().getCurrentProfile().getEarnedBadgeIds()) {
               badgesImageViews.get(badgeId).setDisable(false);
             }
           }
@@ -65,7 +67,7 @@ public class BadgesScreenController {
 
   /** sets all image views in every pane as disabled */
   private void reset() {
-    for (Badge badge : App.getBadgeManager().getAllBadges()) {
+    for (Badge badge : QuickDrawGameManager.getBadgeManager().getAllBadges()) {
       badgesImageViews.get(badge.getId()).setDisable(true);
     }
   }

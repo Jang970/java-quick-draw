@@ -9,6 +9,7 @@ import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
+import nz.ac.auckland.se206.QuickDrawGameManager;
 import nz.ac.auckland.se206.gamelogicmanager.GameLogicManager;
 import nz.ac.auckland.se206.gamelogicmanager.GameMode;
 import nz.ac.auckland.se206.gamelogicmanager.GameProfile;
@@ -21,6 +22,7 @@ public class CategoryScreenController {
   @FXML private Label drawTimeLabel;
   @FXML private Label categoryLabel;
   @FXML private Label usernameLabel;
+  @FXML private Label currentGameModeLabel;
 
   private GameLogicManager gameLogicManager;
   private ProfileManager profileManager;
@@ -28,8 +30,8 @@ public class CategoryScreenController {
   /** Method that is run to set up the CategoryScreen FXML everytime it is opened/run. */
   public void initialize() {
 
-    gameLogicManager = App.getGameLogicManager();
-    profileManager = App.getProfileManager();
+    gameLogicManager = QuickDrawGameManager.getGameLogicManager();
+    profileManager = QuickDrawGameManager.getProfileManager();
 
     App.subscribeToViewChange(
         (View view) -> {
@@ -37,44 +39,50 @@ public class CategoryScreenController {
             // When the app laods changes to the catgory screen, we genereate a new category and
             // make display updates
             usernameLabel.setText("Hi, " + profileManager.getCurrentProfile().getName());
-            initialiseGameAndUpdateLabels();
-            updateGameTimeLabel();
+            initGameAndUpdateLabels();
           }
         });
-  }
-
-  /**
-   * Method that will update the label that displays the time allowed to draw to the set time
-   * relative to the user's saved Time difficulty
-   */
-  private void updateGameTimeLabel() {
-    int numSeconds = gameLogicManager.getCurrentGameProfile().settings().getTime().getTimeToDraw();
-    drawTimeLabel.setText("Draw in " + numSeconds + " seconds");
   }
 
   /**
    * This method is used to initialise a new game and the GUI labels relating to displaying the
    * category to draw respectively
    */
-  private void initialiseGameAndUpdateLabels() {
+  private void initGameAndUpdateLabels() {
 
-    // We need to make sure that we are generating a new category which the player has not already
-    // played.
+    Profile profile = profileManager.getCurrentProfile();
 
-    Profile currentProfile = profileManager.getCurrentProfile();
+    GameMode gameMode = QuickDrawGameManager.getCurrentlySelectedGameMode();
 
     gameLogicManager.initializeGame(
-        new GameProfile(
-            currentProfile.getSettings(), GameMode.BASIC, currentProfile.getGameHistory()));
+        new GameProfile(profile.getSettings(), gameMode, profile.getGameHistory()));
 
-    categoryLabel.setText(gameLogicManager.getCurrentCategory().getName());
+    String currentCategoryDisplayString;
+
+    if (gameMode == GameMode.HIDDEN_WORD) {
+      categoryLabel.setStyle("-fx-font-size: 40px");
+      currentCategoryDisplayString = gameLogicManager.getCurrentCategory().getDescription();
+    } else {
+      categoryLabel.setStyle("-fx-font-size: 90px");
+      currentCategoryDisplayString = gameLogicManager.getCurrentCategory().getName();
+    }
+
+    categoryLabel.setText(currentCategoryDisplayString.toUpperCase());
 
     if (ThreadLocalRandom.current().nextInt(100) == 0) {
-      App.getTextToSpeech()
-          .speakAsync("Draw " + gameLogicManager.getCurrentCategory().getName() + ". Or else");
+      App.getTextToSpeech().speakAsync("Draw " + currentCategoryDisplayString + ". Or else");
     } else {
-      App.getTextToSpeech().speakAsync("Draw " + gameLogicManager.getCurrentCategory().getName());
+      App.getTextToSpeech().speakAsync("Draw " + currentCategoryDisplayString);
     }
+    int numSeconds = gameLogicManager.getCurrentGameProfile().settings().getTime().getTimeToDraw();
+
+    if (gameMode == GameMode.ZEN) {
+      drawTimeLabel.setText("DRAW");
+    } else {
+      drawTimeLabel.setText("DRAW IN " + numSeconds + " SECONDS");
+    }
+
+    currentGameModeLabel.setText("CURRENT GAME MODE: " + gameMode.name().replace('_', ' '));
   }
 
   /** Method relating to the button switch to the GameScreen FXML */
@@ -87,6 +95,12 @@ public class CategoryScreenController {
   @FXML
   private void onSwitchToSettings() {
     App.setView(View.DIFFICULTY);
+  }
+
+  /** Method relating to the button to switch to the UserScreen FXML */
+  @FXML
+  private void onChangeGameMode() {
+    App.setView(View.GAMEMODES);
   }
 
   /** Method to show the how to play pop up to the user */

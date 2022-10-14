@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
+import nz.ac.auckland.se206.QuickDrawGameManager;
 import nz.ac.auckland.se206.util.Settings;
 import nz.ac.auckland.se206.util.difficulties.Accuracy;
 import nz.ac.auckland.se206.util.difficulties.Confidence;
@@ -20,6 +21,8 @@ public class DifficultyScreenController {
 
   private Settings settings;
 
+  private View previousView;
+
   /**
    * Create choice boxes for each difficult setting, sets listener to choice boxes, and gets
    * selected game mode to display
@@ -33,7 +36,7 @@ public class DifficultyScreenController {
           if (newView == View.DIFFICULTY) {
 
             // set selected settings
-            settings = App.getProfileManager().getCurrentProfile().getSettings();
+            settings = QuickDrawGameManager.getProfileManager().getCurrentProfile().getSettings();
             accuracyChoiceBox
                 .getSelectionModel()
                 .select(settings.getAccuracy().getLabel().toUpperCase());
@@ -44,6 +47,8 @@ public class DifficultyScreenController {
             confidenceChoiceBox
                 .getSelectionModel()
                 .select(settings.getConfidence().getLabel().toUpperCase());
+          } else {
+            previousView = newView;
           }
         });
 
@@ -99,13 +104,7 @@ public class DifficultyScreenController {
 
   /** Switches back to user profile screen FXML */
   @FXML
-  private void onBackToProfile() {
-    App.setView(View.USER);
-  }
-
-  /** Switch to game modes screen FXML */
-  @FXML
-  private void onSwitchToGameModes() {
-    App.setView(View.GAMEMODES);
+  private void onBack() {
+    App.setView(previousView);
   }
 }

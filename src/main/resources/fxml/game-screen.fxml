@@ -31,7 +31,7 @@
             <Font size="28.0" />
          </font>
       </Label>
-      <Button fx:id="userButton" alignment="BOTTOM_CENTER" contentDisplay="CENTER" layoutX="771.0" layoutY="16.0" mnemonicParsing="false" onAction="#onUserStats" prefHeight="96.0" prefWidth="102.0" textAlignment="CENTER">
+      <Button fx:id="userButton" alignment="BOTTOM_CENTER" contentDisplay="CENTER" layoutX="771.0" layoutY="16.0" mnemonicParsing="false" onAction="#onUserHome" prefHeight="96.0" prefWidth="102.0" textAlignment="CENTER">
          <styleClass>
             <String fx:value="userIconButtonCanvas" />
             <String fx:value="userIconButton" />
@@ -148,7 +148,7 @@
       </VBox>
       <HBox alignment="CENTER" layoutX="193.0" layoutY="643.0" prefHeight="48.0" prefWidth="515.0" spacing="10.0">
          <children>
-            <Button fx:id="userProfilesButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onUserProfiles" prefHeight="45.0" prefWidth="187.0" text="SWITCH PROFILES" textAlignment="CENTER">
+            <Button fx:id="changeGameModeButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onChangeGameMode" prefHeight="45.0" prefWidth="187.0" text="CHANGE GAMEMODE" textAlignment="CENTER">
                <HBox.margin>
                   <Insets />
                </HBox.margin>
@@ -161,6 +161,11 @@
             <Button fx:id="downloadImageButton" mnemonicParsing="false" onAction="#onDownloadImage" prefHeight="45.0" prefWidth="137.0" text="SAVE IMAGE" />
          </children>
       </HBox>
-      <ProgressBar fx:id="predictionBar" layoutX="572.0" layoutY="306.0" prefHeight="31.0" prefWidth="305.0" progress="0.0" rotate="90.0" />
+      <ProgressBar fx:id="predictionBar" layoutX="572.0" layoutY="306.0" prefHeight="31.0" prefWidth="305.0" progress="0.0" rotate="-90.0" />
+      <Label fx:id="gameModeLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="753.0" layoutY="495.0" prefHeight="191.0" prefWidth="138.0" style="-fx-background-color: #2A9D8F;" styleClass="headers" text="GAME MODE" textAlignment="CENTER" wrapText="true">
+         <font>
+            <Font size="35.0" />
+         </font>
+      </Label>
    </children>
 </Pane>

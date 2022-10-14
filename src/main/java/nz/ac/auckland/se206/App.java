@@ -1,23 +1,15 @@
 package nz.ac.auckland.se206;
 
-import ai.djl.ModelException;
-import java.io.File;
 import java.io.IOException;
-import java.util.Set;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import nz.ac.auckland.se206.gamelogicmanager.GameLogicManager;
 import nz.ac.auckland.se206.speech.TextToSpeech;
 import nz.ac.auckland.se206.util.EventEmitter;
 import nz.ac.auckland.se206.util.EventListener;
-import nz.ac.auckland.se206.util.Profile;
-import nz.ac.auckland.se206.util.ProfileManager;
-import nz.ac.auckland.se206.util.badges.Badge;
-import nz.ac.auckland.se206.util.badges.BadgeManager;
 
 /** This is the entry point of the JavaFX application. */
 public class App extends Application {
@@ -36,73 +28,12 @@ public class App extends Application {
   }
 
   private static Stage stage;
+  private static final TextToSpeech textToSpeech = new TextToSpeech();
   private static final EventEmitter<WindowEvent> appTerminationEmitter =
       new EventEmitter<WindowEvent>();
   // used for creation of folder to store user profiles
 
   private static ViewManager<View> viewManager;
-  private static final GameLogicManager gameLogicManager = createGameLogicManager();
-  private static final ProfileManager profileManager = createProfileManager();
-  private static final BadgeManager badgeManager = new BadgeManager();
-  private static final TextToSpeech textToSpeech = new TextToSpeech();
-
-  /**
-   * This method will create and return a ProfileManager instance to be used through the application
-   *
-   * @return ProfileManager instance created
-   */
-  private static ProfileManager createProfileManager() {
-
-    File userProfiles = new File(".userprofiles");
-    // create folder to store json file in if not already existing
-    userProfiles.mkdir();
-
-    try {
-      // this creates the json file containing the list of user profiles
-      return new ProfileManager(userProfiles.getAbsolutePath() + File.separator + "profiles.json");
-    } catch (IOException e2) {
-      App.expect("profiles.json is a file name, not a directory", e2);
-      return null;
-    }
-  }
-
-  /**
-   * This method will create and return a GameLogicManager instance to be used throughout the
-   * application
-   *
-   * @return GameLogicManager instance created
-   */
-  private static GameLogicManager createGameLogicManager() {
-    try {
-      // Try create the game logic manager
-      return new GameLogicManager();
-    } catch (IOException | ModelException e1) {
-      App.expect("The machine learning model exists on file", e1);
-      return null;
-    }
-  }
-
-  /**
-   * This method will get the ProfileManager instance
-   *
-   * @return profile manager instance
-   */
-  public static ProfileManager getProfileManager() {
-    return profileManager;
-  }
-
-  /**
-   * This method will get the gameLogicManager instance
-   *
-   * @return game logic manager instance
-   */
-  public static GameLogicManager getGameLogicManager() {
-    return gameLogicManager;
-  }
-
-  public static BadgeManager getBadgeManager() {
-    return badgeManager;
-  }
 
   /**
    * This method will get the current stage
@@ -236,24 +167,9 @@ public class App extends Application {
   @Override
   public void start(final Stage stage) {
 
-    // Update profile details when the game ends and save to file
-    gameLogicManager.subscribeToGameEnd(
-        (gameInfo) -> {
-          Profile currentProfile = profileManager.getCurrentProfile();
-          currentProfile.addGameToHistory(gameInfo);
-
-          Set<String> existingBadges = currentProfile.getEarnedBadgeIds();
-
-          for (Badge badge : badgeManager.getAllBadges()) {
-            if (!existingBadges.contains(badge.getId())) {
-              if (badge.earned(currentProfile)) {
-                currentProfile.awardBadge(badge.getId());
-              }
-            }
-          }
-        });
-
     App.stage = stage;
+
+    QuickDrawGameManager.initGame();
 
     stage.setOnCloseRequest(
         (e) -> {

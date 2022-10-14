@@ -12,7 +12,7 @@
 <Pane centerShape="false" prefHeight="700.0" prefWidth="900.0" stylesheets="@../css/application.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nz.ac.auckland.se206.controllers.NewUserScreenController">
    <children>
       <ImageView fitHeight="700.0" fitWidth="900.0" pickOnBounds="true" preserveRatio="true" styleClass="newUserScreen" />
-      <Label layoutX="236.0" styleClass="headers" text="Quick, Draw!">
+      <Label layoutX="256.0" layoutY="16.0" styleClass="headers" text="Quick, Draw!">
          <font>
             <Font size="70.0" />
          </font>

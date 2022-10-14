@@ -11,6 +11,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
+import nz.ac.auckland.se206.QuickDrawGameManager;
 import nz.ac.auckland.se206.util.Profile;
 
 public class UserProfilesScreenController {
@@ -29,7 +30,7 @@ public class UserProfilesScreenController {
     App.subscribeToViewChange(
         (View view) -> {
           if (view == View.USERPROFILES) {
-            users = App.getProfileManager().getProfiles();
+            users = QuickDrawGameManager.getProfileManager().getProfiles();
             createProfilesPagination();
           }
         });
@@ -131,7 +132,8 @@ public class UserProfilesScreenController {
 
             try {
               // sets current profile by obtaining button uuid
-              App.getProfileManager().setCurrentProfile(UUID.fromString(userButton.getId()));
+              QuickDrawGameManager.getProfileManager()
+                  .setCurrentProfile(UUID.fromString(userButton.getId()));
             } catch (NumberFormatException e) {
               App.expect("Button ids should be able to generate valid UUIDs", e);
             }

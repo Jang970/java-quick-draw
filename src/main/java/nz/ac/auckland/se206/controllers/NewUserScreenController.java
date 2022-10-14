@@ -13,6 +13,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
+import nz.ac.auckland.se206.QuickDrawGameManager;
 
 public class NewUserScreenController {
 
@@ -38,7 +39,7 @@ public class NewUserScreenController {
 
             // if there are existing users allow user to go back to user profiles screen by making
             // button visible
-            if (!App.getProfileManager().getProfiles().isEmpty()) {
+            if (!QuickDrawGameManager.getProfileManager().getProfiles().isEmpty()) {
               backButton.setVisible(true);
             }
           }
@@ -58,7 +59,7 @@ public class NewUserScreenController {
     // and checks is username is no longer than 20 characters
     if (!usernameTextField.getText().isBlank()
         && !colorPicker.getValue().equals(Color.TRANSPARENT)
-        && App.getProfileManager()
+        && QuickDrawGameManager.getProfileManager()
             .createProfile(usernameTextField.getText(), colorPicker.getValue().toString())
         && (usernameTextField.getText().length() <= 20)) {
 
