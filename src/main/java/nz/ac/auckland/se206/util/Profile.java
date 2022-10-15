@@ -201,7 +201,10 @@ public class Profile {
    * @return win percentage of the profile in string format or returns 0 percentage is NaN
    */
   public int getWinPercentage() {
-    int winPercentage = (int) (Math.round(((double) getGamesWon() / gameHistory.size()) * 100));
+    int gamesWon = getGamesWon();
+    int gamesLost = getGamesLost();
+    int totalGames = gamesWon + gamesLost;
+    int winPercentage = (int) (((double) gamesWon / (double) totalGames) * 100);
 
     if (Double.isNaN(winPercentage)) {
       return 0;
