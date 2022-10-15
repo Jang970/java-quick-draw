@@ -123,9 +123,34 @@ public class CategoryScreenController {
     howToPlayAlert.setHeaderText("How to Play");
     // content to display on the pop up
     howToPlayAlert.setContentText(
-        "Once you click the \"I'm Ready!\" button, "
-            + "the timer will start immediately and you "
-            + "can start drawing on the canvas. Good luck!");
+        getGameModeHowToPlay(QuickDrawGameManager.getCurrentlySelectedGameMode()).toUpperCase());
     howToPlayAlert.showAndWait();
+  }
+
+  /**
+   * Returns the string on how to play for each game mode.
+   *
+   * @param gameMode takes in the current game mode
+   * @return the string on how to play for the given current game mode
+   */
+  private String getGameModeHowToPlay(GameMode gameMode) {
+    switch (gameMode) {
+      case CLASSIC:
+        return "Once you click the \"I'm Ready!\" button, "
+            + "the timer will start immediately and you "
+            + "can start drawing on the canvas. The word will be displayed at the top. Good luck!";
+      case ZEN:
+        return "Once you click the \"I'm Ready!\" button, "
+            + "you can start drawing on the canvas for as long as you like. You can change the pencil colour as you please! Have fun :)";
+      case HIDDEN_WORD:
+        return "Once you click the \"I'm Ready!\" button, "
+            + "the timer will start immediately and you "
+            + "can start drawing on the canvas. The defintion will be displayed at the top. There are hints if you need them. Good luck!";
+      case RAPID_FIRE:
+        return "Once you click the \"I'm Ready!\" button, "
+            + "the timer will start immediately and you "
+            + "can start drawing on the canvas. The new word will be given at the top as you soon as you win the current word. Good luck!";
+    }
+    return "Invalid game mode";
   }
 }
