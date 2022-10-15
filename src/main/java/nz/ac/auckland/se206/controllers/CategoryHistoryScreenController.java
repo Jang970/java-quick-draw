@@ -1,9 +1,7 @@
 package nz.ac.auckland.se206.controllers;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListCell;
@@ -14,10 +12,7 @@ import javafx.scene.layout.HBox;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
 import nz.ac.auckland.se206.QuickDrawGameManager;
-import nz.ac.auckland.se206.gamelogicmanager.CategoryPlayedInfo;
-import nz.ac.auckland.se206.gamelogicmanager.GameInfo;
 import nz.ac.auckland.se206.gamelogicmanager.GameLogicManager;
-import nz.ac.auckland.se206.gamelogicmanager.GameMode;
 import nz.ac.auckland.se206.util.Category;
 
 public class CategoryHistoryScreenController {
@@ -42,26 +37,11 @@ public class CategoryHistoryScreenController {
         (View view) -> {
           if (view == View.CATEGORYHISTORY) {
 
-            // first get all categories played by profile as a set and of type Category
-            Set<Category> tempCategories = new HashSet<Category>();
-
-            List<GameInfo> gameHistory =
-                QuickDrawGameManager.getProfileManager().getCurrentProfile().getGameHistory();
-
-            // Adds categories to the set (removing duplicates)
-            for (GameInfo game : gameHistory) {
-              if (game.getGameMode() == GameMode.HIDDEN_WORD
-                  || game.getGameMode() == GameMode.CLASSIC
-                  || game.getGameMode() == GameMode.ZEN) {
-                tempCategories.add(game.getCategoryPlayed().getCategory());
-              } else if (game.getGameMode() == GameMode.RAPID_FIRE) {
-                for (CategoryPlayedInfo categoryPlayed : game.getCategoriesPlayed()) {
-                  tempCategories.add(categoryPlayed.getCategory());
-                }
-              }
-            }
-
-            categoriesPlayed = new ArrayList<Category>(tempCategories);
+            categoriesPlayed =
+                new ArrayList<Category>(
+                    QuickDrawGameManager.getProfileManager()
+                        .getCurrentProfile()
+                        .getAllPlayedCategories());
 
             bindScrollBars();
             setCategoryHistoryLists();

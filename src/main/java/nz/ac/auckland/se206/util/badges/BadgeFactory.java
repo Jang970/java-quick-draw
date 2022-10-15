@@ -96,20 +96,7 @@ public class BadgeFactory {
       @Override
       public boolean earned(Profile profile) {
 
-        Set<String> categoryHistory = new HashSet<String>();
-
-        List<GameInfo> gameHistory =
-            QuickDrawGameManager.getProfileManager().getCurrentProfile().getGameHistory();
-
-        for (GameInfo game : gameHistory) {
-          if (game.getReasonForGameEnd() == EndGameReason.CORRECT_CATEOGRY
-              && (game.getGameMode() == GameMode.HIDDEN_WORD
-                  || game.getGameMode() == GameMode.CLASSIC)) {
-            categoryHistory.add(game.getCategoryPlayed().getCategory().getName());
-          }
-        }
-
-        if (categoryHistory.size()
+        if (profile.getAllPlayedCategories().size()
             != QuickDrawGameManager.getGameLogicManager().getNumberOfCategories()) {
           return false;
         }
