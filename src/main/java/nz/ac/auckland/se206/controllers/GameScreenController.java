@@ -448,7 +448,7 @@ public class GameScreenController {
             guessLabels[i].setText(
                 ((i + 1) + ": " + guessText).toUpperCase() + " (" + percentage + "%)");
 
-            // highlights guess text if its the categoryToGuess
+            // highlights guess text if its the categoryToGuess or in the top guesses
             if (guessText.equals(categoryToGuess)) {
               setColourOfLabel(i, "#E76F51");
             } else if (i < nTopGuess) {
@@ -470,6 +470,12 @@ public class GameScreenController {
         });
   }
 
+  /**
+   * Sets the text colour of the label
+   *
+   * @param i the index of the guess label
+   * @param color the colour to set the label to
+   */
   private void setColourOfLabel(int i, String color) {
     guessLabels[i].setStyle("-fx-text-fill:" + color);
   }
