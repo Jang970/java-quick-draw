@@ -414,6 +414,7 @@
 	-fx-font-family: 'VT323', monospace;
 	-fx-font-size: 30px;
 	-fx-border-radius: 30px;
+	-fx-focused-mark-color: rgba(24, 20, 20, 0.685);
 }
 
 .choice-box:hover {
@@ -434,7 +435,7 @@
 
 .choice-box .menu-item {
 	-fx-background-color:#ebe9dd;
-	-fx-background-radius: 30px;
+	-fx-background-radius: 30px;	
 }
 
 .choice-box .menu-item:hover {
