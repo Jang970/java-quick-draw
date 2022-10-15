@@ -80,6 +80,7 @@ public class DifficultyScreenController {
         .addListener(
             (observable, oldValue, newValue) -> {
               listener.update(newValue);
+              QuickDrawGameManager.getProfileManager().saveChanges();
             });
   }
 
