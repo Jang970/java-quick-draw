@@ -96,6 +96,12 @@ public class CategoryScreenController {
     App.setView(View.GAME);
   }
 
+  /** Method relating to the button switch to the Home Screen */
+  @FXML
+  private void onGoHome() {
+    App.setView(View.USER);
+  }
+
   /** Method relating to the button to switch to the UserScreen FXML */
   @FXML
   private void onSwitchToSettings() {

@@ -101,6 +101,10 @@ public class DifficultyScreenController {
   /** Switches to games modes screen FXML */
   @FXML
   private void onLetsPlay() {
-    App.setView(View.GAMEMODES);
+    if (previousView == View.CATEGORY) {
+      App.setView(View.CATEGORY);
+    } else {
+      App.setView(View.GAMEMODES);
+    }
   }
 }
