@@ -22,20 +22,20 @@ public class GameModesScreenController {
    *
    * @param moveX the given postion to move x in (left or right)
    */
-  private void moveCrane(int moveX) {
+  private void moveCrane(int moveX, int moveY) {
 
     // Horizontal transition
     TranslateTransition translateOne = new TranslateTransition();
     translateOne.setFromX(0);
     translateOne.setFromY(0);
     translateOne.setByX(moveX);
-    translateOne.setDuration(Duration.seconds(1));
+    translateOne.setDuration(Duration.seconds(0.5));
 
     // Vertical transition
     TranslateTransition translateTwo = new TranslateTransition();
     translateTwo.setFromX(moveX);
     translateTwo.setFromY(0);
-    translateTwo.setByY(30);
+    translateTwo.setByY(moveY);
     translateTwo.setDuration(Duration.seconds(0.5));
     translateTwo.play();
 
@@ -61,7 +61,7 @@ public class GameModesScreenController {
 
     QuickDrawGameManager.setCurrentlySelectedGameMode(GameMode.CLASSIC);
 
-    moveCrane(-180);
+    moveCrane(-40, 30);
     sequence.setOnFinished(
         e -> {
           moveCraneBack();
@@ -79,7 +79,7 @@ public class GameModesScreenController {
 
     QuickDrawGameManager.setCurrentlySelectedGameMode(GameMode.HIDDEN_WORD);
 
-    moveCrane(180);
+    moveCrane(-215, 25);
     sequence.setOnFinished(
         e -> {
           moveCraneBack();
@@ -93,15 +93,24 @@ public class GameModesScreenController {
 
     QuickDrawGameManager.setCurrentlySelectedGameMode(GameMode.ZEN);
 
-    TranslateTransition translate = new TranslateTransition();
-    translate.setNode(craneImageView);
-    translate.setFromX(0);
-    translate.setFromY(0);
-    translate.setByY(30);
-    translate.setDuration(Duration.seconds(0.5));
-    translate.play();
+    moveCrane(105, 30);
 
-    translate.setOnFinished(
+    sequence.setOnFinished(
+        e -> {
+          moveCraneBack();
+          App.setView(View.CATEGORY);
+        });
+  }
+
+  /** sets game mode as rapid and goes to category screen */
+  @FXML
+  private void onSelectRapid() {
+
+    QuickDrawGameManager.setCurrentlySelectedGameMode(GameMode.RAPID_FIRE);
+
+    moveCrane(255, 30);
+
+    sequence.setOnFinished(
         e -> {
           moveCraneBack();
           App.setView(View.CATEGORY);
@@ -133,6 +142,12 @@ public class GameModesScreenController {
   private void onHoverHiddenWord() {
     descriptionLabel.setText(
         "HIDDEN MODE YOU GET THE DEFINITION OF THE WORD INSTEAD OF THE WORD ITSELF");
+  }
+
+  /** Explains how to play rapid fire game mode */
+  @FXML
+  private void onHoverRapid() {
+    descriptionLabel.setText("RAPID MODE YOU HAVE TO TRY DRAW AS MANY WORDS BEFORE TIMER RUNS OUT");
   }
 
   /** Switch to user profile screen FXML */

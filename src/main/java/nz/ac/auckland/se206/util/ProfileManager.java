@@ -165,8 +165,8 @@ public class ProfileManager {
     return profiles.get(currentProfileIndex);
   }
 
-  /** This method will indicate in the console if a save is being made */
-  private void saveChanges() {
+  /** This method will request a change */
+  public void saveChanges() {
     System.out.println("   * Requesting save change");
     changeSaveCountdown.startCountdown(1);
   }

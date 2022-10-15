@@ -33,7 +33,7 @@ public class GameLogicManager {
   private Category categoryToGuess;
 
   // This is used to track the categories played in rapid fire mode
-  private List<CategoryPlayedInfo> categoriesPlayedInThisGame = new ArrayList<CategoryPlayedInfo>();
+  private List<CategoryPlayedInfo> categoriesPlayedInThisGame;
 
   private PredictionManager predictionManager;
   private CountdownTimer countdownTimer;
@@ -126,7 +126,7 @@ public class GameLogicManager {
     stopGame();
 
     currentGameProfile = profile;
-    categoriesPlayedInThisGame.clear();
+    categoriesPlayedInThisGame = new ArrayList<CategoryPlayedInfo>();
 
     // Select a new category to play.
     if (!overrideCategory) {
@@ -215,7 +215,6 @@ public class GameLogicManager {
       countdownTimer.startCountdown(currentGameProfile.settings().getTime().getTimeToDraw());
     }
     gameTimeCounter = 0;
-    categoriesPlayedInThisGame.clear();
     predictionManager.startMakingPredictions();
     gameStartedEmitter.emit();
     isPlaying = true;
@@ -224,9 +223,7 @@ public class GameLogicManager {
   /** Ends the game if it is ongoing with a win state of CANCEL */
   public void stopGame() {
     if (isPlaying) {
-      if (currentGameProfile.gameMode() == GameMode.ZEN) {
-        endGame(EndGameReason.GAVE_UP_OR_CANCELLED);
-      }
+      endGame(EndGameReason.GAVE_UP_OR_CANCELLED);
     }
   }
 
@@ -448,6 +445,7 @@ public class GameLogicManager {
   public void forceCategoryForNextInitialisation(Category category) {
     overrideCategory = true;
     categoryToGuess = category;
+    categoryChangeEmitter.emit(category);
   }
 
   public void diableForcedCategory() {

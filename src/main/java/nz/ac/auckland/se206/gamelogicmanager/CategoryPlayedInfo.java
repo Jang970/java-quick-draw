@@ -48,4 +48,12 @@ public class CategoryPlayedInfo {
   public Category getCategory() {
     return category;
   }
+
+  /* (non-Javadoc)
+   * @see java.lang.Object#toString()
+   */
+  @Override
+  public String toString() {
+    return category.toString();
+  }
 }

@@ -63,7 +63,7 @@
             </Button>
             <Button fx:id="clearButton" mnemonicParsing="false" onAction="#onClearCanvas" prefWidth="10000.0" text="CLEAR" VBox.vgrow="ALWAYS">
                <VBox.margin>
-                  <Insets top="30.0" />
+                  <Insets bottom="5.0" top="30.0" />
                </VBox.margin>
                <font>
                   <Font size="16.0" />
@@ -72,7 +72,7 @@
          </children>
       </VBox>
 
-                  <VBox fx:id="predictionVbox" alignment="CENTER_RIGHT" layoutX="205.0" layoutY="493.0" prefHeight="141.0" prefWidth="490.0" styleClass="subHeadersCanvas">
+                  <VBox fx:id="predictionVbox" alignment="CENTER_RIGHT" layoutX="191.0" layoutY="493.0" prefHeight="141.0" prefWidth="515.0" styleClass="subHeadersCanvas">
          <children>
             <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="10000.0" styleClass="subHeaders" text="TOP GUESSES" textAlignment="CENTER" VBox.vgrow="ALWAYS">
                <VBox.margin>
@@ -82,67 +82,70 @@
                   <Font size="30.0" />
                </font>
             </Label>
-            <HBox alignment="CENTER" prefHeight="105.0" prefWidth="442.0" spacing="10.0" VBox.vgrow="NEVER">
+            <HBox alignment="CENTER" prefHeight="105.0" prefWidth="557.0" VBox.vgrow="NEVER">
                <children>
-                  <VBox fx:id="guessLabelCol1" alignment="CENTER" prefHeight="105.0" prefWidth="230.0">
+                  <VBox fx:id="guessLabelCol1" alignment="CENTER" prefHeight="105.0" prefWidth="263.0">
                      <children>
-                        <Label prefHeight="17.0" prefWidth="231.0" styleClass="subHeaders" text="Guess 1" textAlignment="JUSTIFY" textFill="#2a9d8f">
+                        <Label alignment="CENTER" prefHeight="21.0" prefWidth="270.0" styleClass="subHeaders" text="Guess 1">
                            <font>
-                              <Font size="20.0" />
+                              <Font size="19.0" />
                            </font>
                         </Label>
-                        <Label prefHeight="17.0" prefWidth="517.0" styleClass="subHeaders" text="Guess 2" textAlignment="JUSTIFY" textFill="#2a9d8f">
+                        <Label alignment="CENTER" prefHeight="17.0" prefWidth="517.0" styleClass="subHeaders" text="Guess 2">
                            <font>
-                              <Font size="20.0" />
+                              <Font size="19.0" />
                            </font>
                         </Label>
-                        <Label prefHeight="17.0" prefWidth="585.0" styleClass="subHeaders" text="Guess 3" textAlignment="JUSTIFY" textFill="#2a9d8f">
+                        <Label alignment="CENTER" prefHeight="17.0" prefWidth="585.0" styleClass="subHeaders" text="Guess 3">
                            <font>
-                              <Font size="20.0" />
+                              <Font size="19.0" />
                            </font>
                         </Label>
-                        <Label prefHeight="17.0" prefWidth="585.0" styleClass="subHeaders" text="Guess 4" textAlignment="JUSTIFY">
+                        <Label alignment="CENTER" prefHeight="17.0" prefWidth="585.0" styleClass="subHeaders" text="Guess 4">
                            <font>
-                              <Font size="20.0" />
+                              <Font size="19.0" />
                            </font>
                         </Label>
-                        <Label prefHeight="17.0" prefWidth="585.0" styleClass="subHeaders" text="Guess 5" textAlignment="JUSTIFY">
+                        <Label alignment="CENTER" prefHeight="17.0" prefWidth="585.0" styleClass="subHeaders" text="Guess 5">
                            <font>
-                              <Font size="20.0" />
+                              <Font size="19.0" />
                            </font>
                         </Label>
                      </children>
                   </VBox>
-                  <VBox fx:id="guessLabelCol2" alignment="CENTER" layoutX="260.0" layoutY="10.0" prefHeight="105.0" prefWidth="230.0">
+                  <VBox fx:id="guessLabelCol2" alignment="CENTER" layoutX="260.0" layoutY="10.0" prefHeight="105.0" prefWidth="266.0">
                      <children>
-                        <Label contentDisplay="CENTER" prefHeight="17.0" prefWidth="585.0" styleClass="subHeaders" text="Guess 6" textAlignment="JUSTIFY">
+                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="585.0" styleClass="subHeaders" text="Guess 6">
                            <font>
-                              <Font size="20.0" />
+                              <Font size="19.0" />
                            </font>
                         </Label>
-                        <Label contentDisplay="CENTER" prefHeight="17.0" prefWidth="585.0" styleClass="subHeaders" text="Guess 7" textAlignment="JUSTIFY">
+                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="585.0" styleClass="subHeaders" text="Guess 7">
                            <font>
-                              <Font size="20.0" />
+                              <Font size="19.0" />
                            </font>
                         </Label>
-                        <Label contentDisplay="CENTER" prefHeight="21.0" prefWidth="235.0" styleClass="subHeaders" text="Guess 8" textAlignment="JUSTIFY">
+                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="21.0" prefWidth="269.0" styleClass="subHeaders" text="Guess 8">
                            <font>
-                              <Font size="20.0" />
+                              <Font size="19.0" />
                            </font>
                         </Label>
-                        <Label contentDisplay="CENTER" prefHeight="17.0" prefWidth="585.0" styleClass="subHeaders" text="Guess 9" textAlignment="JUSTIFY">
+                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="585.0" styleClass="subHeaders" text="Guess 9">
                            <font>
-                              <Font size="20.0" />
+                              <Font size="19.0" />
                            </font>
                         </Label>
-                        <Label contentDisplay="CENTER" prefHeight="17.0" prefWidth="585.0" styleClass="subHeaders" text="Guess 10" textAlignment="JUSTIFY">
+                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="585.0" styleClass="subHeaders" text="Guess 10">
                            <font>
-                              <Font size="20.0" />
+                              <Font size="19.0" />
                            </font>
                         </Label>
                      </children>
                   </VBox>
                </children>
+               <VBox.margin>
+                  <Insets left="10.0" />
+               </VBox.margin>
             </HBox>
          </children>
       </VBox>

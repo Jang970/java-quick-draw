@@ -158,6 +158,7 @@ public class Profile {
    */
   public int getGamesWon() {
     int gamesWon = 0;
+
     for (GameInfo game : gameHistory) {
       if (game.getGameMode() == GameMode.CLASSIC || game.getGameMode() == GameMode.HIDDEN_WORD) {
         if (game.getReasonForGameEnd() == EndGameReason.CORRECT_CATEOGRY) {
@@ -195,6 +196,26 @@ public class Profile {
   }
 
   /**
+   * This method wil get the win percentage of the profile
+   *
+   * @return win percentage of the profile in string format or returns 0 percentage is NaN
+   */
+  public int getWinPercentage() {
+    int gamesWon = getGamesWon();
+    int gamesLost = getGamesLost();
+    int totalGames = gamesWon + gamesLost;
+    int winPercentage = (int) (((double) gamesWon / (double) totalGames) * 100);
+
+    if (Double.isNaN(winPercentage)) {
+      return 0;
+    }
+
+    return winPercentage;
+  }
+
+  /** If the player has not had a fastest win, this will be null */
+
+  /**
    * This method will get the fastest category played by the profile in classic or hidden word mode
    *
    * @return the fastest category played by the profile
@@ -224,6 +245,18 @@ public class Profile {
     }
 
     return bestGame;
+  }
+
+  public int getHighestRapidFireCount() {
+    int highestCount = 0;
+    for (GameInfo gameInfo : gameHistory) {
+      if (gameInfo.getGameMode() == GameMode.RAPID_FIRE) {
+        if (gameInfo.getCategoriesPlayed().size() > highestCount) {
+          highestCount = gameInfo.getCategoriesPlayed().size();
+        }
+      }
+    }
+    return highestCount;
   }
 
   /**

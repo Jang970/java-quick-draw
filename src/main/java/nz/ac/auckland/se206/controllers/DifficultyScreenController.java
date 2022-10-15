@@ -80,6 +80,7 @@ public class DifficultyScreenController {
         .addListener(
             (observable, oldValue, newValue) -> {
               listener.update(newValue);
+              QuickDrawGameManager.getProfileManager().saveChanges();
             });
   }
 
@@ -95,5 +96,15 @@ public class DifficultyScreenController {
   @FXML
   private void onBack() {
     App.setView(previousView);
+  }
+
+  /** Switches to games modes screen FXML */
+  @FXML
+  private void onLetsPlay() {
+    if (previousView == View.CATEGORY) {
+      App.setView(View.CATEGORY);
+    } else {
+      App.setView(View.GAMEMODES);
+    }
   }
 }

@@ -64,7 +64,6 @@ public class CategoryHistoryScreenController {
             categoriesPlayed = new ArrayList<Category>(tempCategories);
 
             bindScrollBars();
-
             setCategoryHistoryLists();
           }
         });

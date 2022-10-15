@@ -46,4 +46,32 @@ public class Category {
   public CategoryType getCategoryType() {
     return this.categoryType;
   }
+
+  /* (non-Javadoc)
+   * @see java.lang.Object#toString()
+   */
+  @Override
+  public String toString() {
+    return name;
+  }
+
+  /* (non-Javadoc)
+   * @see java.lang.Object#hashCode()
+   */
+  @Override
+  public int hashCode() {
+    return name.hashCode();
+  }
+
+  /* (non-Javadoc)
+   * @see java.lang.Object#equals(java.lang.Object)
+   */
+  @Override
+  public boolean equals(Object arg0) {
+    if (arg0 != null && arg0 instanceof Category) {
+      return name.equals(((Category) arg0).name);
+    } else {
+      return false;
+    }
+  }
 }
