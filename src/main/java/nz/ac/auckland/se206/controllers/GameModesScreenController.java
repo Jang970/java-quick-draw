@@ -55,66 +55,41 @@ public class GameModesScreenController {
     translate.play();
   }
 
+  private void moveCraneAndSelectGameMode(GameMode mode, int x, int y) {
+    QuickDrawGameManager.setCurrentlySelectedGameMode(mode);
+
+    // Moves the crane to the desired location
+    moveCrane(x, y);
+    // Sets the view to category screen when it gets there
+    sequence.setOnFinished(
+        (e) -> {
+          moveCraneBack();
+          App.setView(View.CATEGORY);
+        });
+  }
+
   /** sets game mode as classic and goes to category screen */
   @FXML
   private void onSelectClassic() {
-
-    QuickDrawGameManager.setCurrentlySelectedGameMode(GameMode.CLASSIC);
-
-    moveCrane(-40, 30);
-    sequence.setOnFinished(
-        e -> {
-          moveCraneBack();
-
-          // Only sets view if the user is still on this screen.
-          if (App.getCurrentView() == View.GAMEMODES) {
-            App.setView(View.CATEGORY);
-          }
-        });
+    moveCraneAndSelectGameMode(GameMode.CLASSIC, -40, 30);
   }
 
   /** sets game mode as hidden word and goes to category screen */
   @FXML
   private void onSelectHiddenWord() {
-
-    QuickDrawGameManager.setCurrentlySelectedGameMode(GameMode.HIDDEN_WORD);
-
-    moveCrane(-215, 25);
-    sequence.setOnFinished(
-        e -> {
-          moveCraneBack();
-          App.setView(View.CATEGORY);
-        });
+    moveCraneAndSelectGameMode(GameMode.HIDDEN_WORD, -215, 25);
   }
 
   /** sets game mode as zen and goes to category screen */
   @FXML
   private void onSelectZen() {
-
-    QuickDrawGameManager.setCurrentlySelectedGameMode(GameMode.ZEN);
-
-    moveCrane(105, 30);
-
-    sequence.setOnFinished(
-        e -> {
-          moveCraneBack();
-          App.setView(View.CATEGORY);
-        });
+    moveCraneAndSelectGameMode(GameMode.ZEN, 105, 30);
   }
 
   /** sets game mode as rapid and goes to category screen */
   @FXML
   private void onSelectRapid() {
-
-    QuickDrawGameManager.setCurrentlySelectedGameMode(GameMode.RAPID_FIRE);
-
-    moveCrane(255, 30);
-
-    sequence.setOnFinished(
-        e -> {
-          moveCraneBack();
-          App.setView(View.CATEGORY);
-        });
+    moveCraneAndSelectGameMode(GameMode.RAPID_FIRE, 255, 30);
   }
 
   /** Creats a hover transiton which displays instructions */
