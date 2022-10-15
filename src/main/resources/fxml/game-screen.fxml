@@ -86,17 +86,17 @@
                <children>
                   <VBox fx:id="guessLabelCol1" alignment="CENTER" prefHeight="105.0" prefWidth="263.0">
                      <children>
-                        <Label alignment="CENTER" prefHeight="21.0" prefWidth="270.0" styleClass="subHeaders" text="Guess 1" textFill="#2a9d8f">
+                        <Label alignment="CENTER" prefHeight="21.0" prefWidth="270.0" styleClass="subHeaders" text="Guess 1">
                            <font>
                               <Font size="19.0" />
                            </font>
                         </Label>
-                        <Label alignment="CENTER" prefHeight="17.0" prefWidth="517.0" styleClass="subHeaders" text="Guess 2" textFill="#2a9d8f">
+                        <Label alignment="CENTER" prefHeight="17.0" prefWidth="517.0" styleClass="subHeaders" text="Guess 2">
                            <font>
                               <Font size="19.0" />
                            </font>
                         </Label>
-                        <Label alignment="CENTER" prefHeight="17.0" prefWidth="585.0" styleClass="subHeaders" text="Guess 3" textFill="#2a9d8f">
+                        <Label alignment="CENTER" prefHeight="17.0" prefWidth="585.0" styleClass="subHeaders" text="Guess 3">
                            <font>
                               <Font size="19.0" />
                            </font>

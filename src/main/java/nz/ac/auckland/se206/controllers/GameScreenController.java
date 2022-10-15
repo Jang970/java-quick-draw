@@ -434,15 +434,29 @@ public class GameScreenController {
 
           // When we are given new predictions, we update the predictions text
           int range = Math.min(classificationList.size(), guessLabels.length);
+          int nTopGuess =
+              QuickDrawGameManager.getProfileManager()
+                  .getCurrentProfile()
+                  .getSettings()
+                  .getAccuracy()
+                  .getTopNumGuesses();
+          String categoryToGuess = gameLogicManager.getCurrentCategory().getName();
 
           for (int i = 0; i < range; i++) {
             String guessText = normalisedClassfications.get(i);
             int percentage = (int) (classificationList.get(i).getProbability() * 100);
             guessLabels[i].setText(
                 ((i + 1) + ": " + guessText).toUpperCase() + " (" + percentage + "%)");
-          }
 
-          String categoryToGuess = gameLogicManager.getCurrentCategory().getName();
+            // highlights guess text if its the categoryToGuess
+            if (guessText.equals(categoryToGuess)) {
+              setColourOfLabel(i, "#E76F51");
+            } else if (i < nTopGuess) {
+              setColourOfLabel(i, "#2A9D8F");
+            } else {
+              setColourOfLabel(i, "#181414");
+            }
+          }
 
           int posInList = 0;
           while (posInList < classificationList.size()
@@ -454,6 +468,10 @@ public class GameScreenController {
           Double progress = 1 - ((double) posInList / classificationList.size());
           predictionBar.setProgress(progress);
         });
+  }
+
+  private void setColourOfLabel(int i, String color) {
+    guessLabels[i].setStyle("-fx-text-fill:" + color);
   }
 
   /**
