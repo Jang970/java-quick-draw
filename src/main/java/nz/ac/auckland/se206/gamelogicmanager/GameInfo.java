@@ -107,6 +107,9 @@ public class GameInfo {
     return gameMode;
   }
 
+  /* (non-Javadoc)
+   * @see java.lang.Object#toString()
+   */
   @Override
   public String toString() {
     if (gameMode == GameMode.RAPID_FIRE) {
