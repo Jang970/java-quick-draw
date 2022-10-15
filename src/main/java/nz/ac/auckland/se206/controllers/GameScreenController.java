@@ -63,7 +63,7 @@ public class GameScreenController {
   @FXML private VBox guessLabelCol1;
   @FXML private VBox guessLabelCol2;
   @FXML private VBox predictionVbox;
-  @FXML private VBox toolsVBox;
+  @FXML private VBox toolsVbox;
 
   @FXML private ColorPicker colorPicker;
   @FXML private ProgressBar predictionBar;
@@ -188,12 +188,12 @@ public class GameScreenController {
         whatToDrawLabel.setStyle("-fx-font-size: 35px");
         timeRemainingLabel.setVisible(true);
 
-        if (toolsVBox.getChildren().contains(colorPicker)) {
-          toolsVBox.getChildren().remove(colorPicker);
+        if (toolsVbox.getChildren().contains(colorPicker)) {
+          toolsVbox.getChildren().remove(colorPicker);
         }
 
-        if (toolsVBox.getChildren().contains(hintsButton)) {
-          toolsVBox.getChildren().remove(hintsButton);
+        if (toolsVbox.getChildren().contains(hintsButton)) {
+          toolsVbox.getChildren().remove(hintsButton);
         }
 
         canvasManager.setPenColor(Color.BLACK);
@@ -203,12 +203,12 @@ public class GameScreenController {
         whatToDrawLabel.getStyleClass().add("-fx-font-size: 35px");
         timeRemainingLabel.setVisible(false);
 
-        if (!toolsVBox.getChildren().contains(colorPicker)) {
-          toolsVBox.getChildren().add(0, colorPicker);
+        if (!toolsVbox.getChildren().contains(colorPicker)) {
+          toolsVbox.getChildren().add(0, colorPicker);
         }
 
-        if (toolsVBox.getChildren().contains(hintsButton)) {
-          toolsVBox.getChildren().remove(hintsButton);
+        if (toolsVbox.getChildren().contains(hintsButton)) {
+          toolsVbox.getChildren().remove(hintsButton);
         }
 
         colorPicker
@@ -223,8 +223,8 @@ public class GameScreenController {
         whatToDrawLabel.setStyle("-fx-font-size: 35px");
         timeRemainingLabel.setVisible(true);
 
-        if (toolsVBox.getChildren().contains(colorPicker)) {
-          toolsVBox.getChildren().remove(colorPicker);
+        if (toolsVbox.getChildren().contains(colorPicker)) {
+          toolsVbox.getChildren().remove(colorPicker);
         }
 
         canvasManager.setPenColor(Color.BLACK);
@@ -234,12 +234,12 @@ public class GameScreenController {
         whatToDrawLabel.setStyle("-fx-font-size: 22px");
         timeRemainingLabel.setVisible(true);
 
-        if (toolsVBox.getChildren().contains(colorPicker)) {
-          toolsVBox.getChildren().remove(colorPicker);
+        if (toolsVbox.getChildren().contains(colorPicker)) {
+          toolsVbox.getChildren().remove(colorPicker);
         }
 
-        if (!toolsVBox.getChildren().contains(hintsButton)) {
-          toolsVBox.getChildren().add(hintsButton);
+        if (!toolsVbox.getChildren().contains(hintsButton)) {
+          toolsVbox.getChildren().add(hintsButton);
           // allows for main window to be clickable
           hintAlert.initOwner(App.getStage());
           hintAlert.initModality(Modality.NONE);
@@ -434,7 +434,7 @@ public class GameScreenController {
 
           // When we are given new predictions, we update the predictions text
           int range = Math.min(classificationList.size(), guessLabels.length);
-          int nTopGuess =
+          int topNumGuesses =
               QuickDrawGameManager.getProfileManager()
                   .getCurrentProfile()
                   .getSettings()
@@ -451,7 +451,7 @@ public class GameScreenController {
             // highlights guess text if its the categoryToGuess or in the top guesses
             if (guessText.equals(categoryToGuess)) {
               setColourOfLabel(i, "#E76F51");
-            } else if (i < nTopGuess) {
+            } else if (i < topNumGuesses) {
               setColourOfLabel(i, "#2A9D8F");
             } else {
               setColourOfLabel(i, "#181414");
@@ -513,11 +513,11 @@ public class GameScreenController {
     eraserButton.setDisable(disabled);
     clearButton.setDisable(disabled);
 
-    if (toolsVBox.getChildren().contains(hintsButton)) {
+    if (toolsVbox.getChildren().contains(hintsButton)) {
       hintsButton.setDisable(disabled);
     }
 
-    if (toolsVBox.getChildren().contains(colorPicker)) {
+    if (toolsVbox.getChildren().contains(colorPicker)) {
       colorPicker.setDisable(disabled);
     }
   }
