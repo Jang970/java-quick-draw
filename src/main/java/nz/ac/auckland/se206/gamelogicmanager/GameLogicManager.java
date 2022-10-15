@@ -28,6 +28,7 @@ import nz.ac.auckland.se206.util.difficulties.WordChoice;
  */
 public class GameLogicManager {
   private Boolean isPlaying = false;
+  private Boolean overrideCategory = false;
 
   private Category categoryToGuess;
 
@@ -128,7 +129,11 @@ public class GameLogicManager {
     categoriesPlayedInThisGame.clear();
 
     // Select a new category to play.
-    selectNewRandomCategory();
+    if (!overrideCategory) {
+      selectNewRandomCategory();
+    } else {
+      overrideCategory = false;
+    }
   }
 
   /**
@@ -431,5 +436,21 @@ public class GameLogicManager {
 
   public Integer getNumberOfCategories() {
     return predictionManager.getNumberOfCategories();
+  }
+
+  /**
+   * This method is used to manually override the category that is played for the next game. This
+   * will be reset after the game is initialised. If the player initialises the game, it will use
+   * the reset category. If the game is initialised again, a different word will be used.
+   *
+   * @param newCategory new category to set the category to play to
+   */
+  public void forceCategoryForNextInitialisation(Category category) {
+    overrideCategory = true;
+    categoryToGuess = category;
+  }
+
+  public void diableForcedCategory() {
+    overrideCategory = false;
   }
 }
