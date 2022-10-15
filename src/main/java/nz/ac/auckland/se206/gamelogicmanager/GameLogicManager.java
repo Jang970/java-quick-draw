@@ -446,6 +446,7 @@ public class GameLogicManager {
   public void forceCategoryForNextInitialisation(Category category) {
     overrideCategory = true;
     categoryToGuess = category;
+    categoryChangeEmitter.emit(category);
   }
 
   public void diableForcedCategory() {

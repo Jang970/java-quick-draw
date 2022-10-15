@@ -158,6 +158,7 @@ public class Profile {
    */
   public int getGamesWon() {
     int gamesWon = 0;
+
     for (GameInfo game : gameHistory) {
       if (game.getGameMode() == GameMode.CLASSIC || game.getGameMode() == GameMode.HIDDEN_WORD) {
         if (game.getReasonForGameEnd() == EndGameReason.CORRECT_CATEOGRY) {
