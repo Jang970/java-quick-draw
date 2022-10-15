@@ -6,9 +6,11 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
 import nz.ac.auckland.se206.QuickDrawGameManager;
+import nz.ac.auckland.se206.gamelogicmanager.CategoryPlayedInfo;
 import nz.ac.auckland.se206.gamelogicmanager.EndGameReason;
 import nz.ac.auckland.se206.gamelogicmanager.GameInfo;
 import nz.ac.auckland.se206.gamelogicmanager.GameMode;
+import nz.ac.auckland.se206.util.Category;
 import nz.ac.auckland.se206.util.Profile;
 import nz.ac.auckland.se206.util.Settings;
 import nz.ac.auckland.se206.util.difficulties.Accuracy;
@@ -96,20 +98,25 @@ public class BadgeFactory {
       @Override
       public boolean earned(Profile profile) {
 
-        Set<String> categoryHistory = new HashSet<String>();
+        Set<Category> categoriesPlayed = new HashSet<Category>();
 
         List<GameInfo> gameHistory =
             QuickDrawGameManager.getProfileManager().getCurrentProfile().getGameHistory();
 
+        // Adds categories to the set (removing duplicates)
         for (GameInfo game : gameHistory) {
-          if (game.getReasonForGameEnd() == EndGameReason.CORRECT_CATEOGRY
-              && (game.getGameMode() == GameMode.HIDDEN_WORD
-                  || game.getGameMode() == GameMode.CLASSIC)) {
-            categoryHistory.add(game.getCategoryPlayed().getCategory().getName());
+          if (game.getGameMode() == GameMode.HIDDEN_WORD
+              || game.getGameMode() == GameMode.CLASSIC
+              || game.getGameMode() == GameMode.ZEN) {
+            categoriesPlayed.add(game.getCategoryPlayed().getCategory());
+          } else if (game.getGameMode() == GameMode.RAPID_FIRE) {
+            for (CategoryPlayedInfo categoryPlayed : game.getCategoriesPlayed()) {
+              categoriesPlayed.add(categoryPlayed.getCategory());
+            }
           }
         }
 
-        if (categoryHistory.size()
+        if (categoriesPlayed.size()
             != QuickDrawGameManager.getGameLogicManager().getNumberOfCategories()) {
           return false;
         }
