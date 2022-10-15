@@ -268,8 +268,36 @@ public class Profile {
     return gameHistory;
   }
 
+  /**
+   * Gets the most recent game played by the player
+   *
+   * @return the game info of the most recent game
+   */
   public GameInfo getMostRecentGame() {
     return gameHistory.isEmpty() ? null : gameHistory.get(gameHistory.size() - 1);
+  }
+
+  /**
+   * Gets a set of all the categories the player has ever played.
+   *
+   * @return theset of categories
+   */
+  public Set<Category> getAllPlayedCategories() {
+    Set<Category> categoriesPlayed = new HashSet<Category>();
+    // Adds categories to the set (removing duplicates)
+    for (GameInfo game : gameHistory) {
+      if (game.getGameMode() == GameMode.HIDDEN_WORD
+          || game.getGameMode() == GameMode.CLASSIC
+          || game.getGameMode() == GameMode.ZEN) {
+        categoriesPlayed.add(game.getCategoryPlayed().getCategory());
+      } else if (game.getGameMode() == GameMode.RAPID_FIRE) {
+        for (CategoryPlayedInfo categoryPlayed : game.getCategoriesPlayed()) {
+          categoriesPlayed.add(categoryPlayed.getCategory());
+        }
+      }
+    }
+
+    return categoriesPlayed;
   }
 
   /**
