@@ -48,4 +48,9 @@ public class CategoryPlayedInfo {
   public Category getCategory() {
     return category;
   }
+
+  @Override
+  public String toString() {
+    return category.toString();
+  }
 }

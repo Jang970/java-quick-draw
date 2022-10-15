@@ -106,4 +106,17 @@ public class GameInfo {
   public GameMode getGameMode() {
     return gameMode;
   }
+
+  @Override
+  public String toString() {
+    if (gameMode == GameMode.RAPID_FIRE) {
+      return "RAPID_FIRE: " + categoriesPlayed.size() + " - " + reasonForGameEnd.toString();
+    } else {
+      return gameMode.toString()
+          + ": "
+          + categoryPlayed.toString()
+          + " - "
+          + reasonForGameEnd.toString();
+    }
+  }
 }

@@ -46,4 +46,23 @@ public class Category {
   public CategoryType getCategoryType() {
     return this.categoryType;
   }
+
+  @Override
+  public String toString() {
+    return name;
+  }
+
+  @Override
+  public int hashCode() {
+    return name.hashCode();
+  }
+
+  @Override
+  public boolean equals(Object arg0) {
+    if (arg0 != null && arg0 instanceof Category) {
+      return name.equals(((Category) arg0).name);
+    } else {
+      return false;
+    }
+  }
 }
