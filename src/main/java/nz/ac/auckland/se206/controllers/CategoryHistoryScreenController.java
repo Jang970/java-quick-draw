@@ -13,7 +13,9 @@ import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.App.View;
 import nz.ac.auckland.se206.QuickDrawGameManager;
 import nz.ac.auckland.se206.gamelogicmanager.GameLogicManager;
+import nz.ac.auckland.se206.gamelogicmanager.GameProfile;
 import nz.ac.auckland.se206.util.Category;
+import nz.ac.auckland.se206.util.Profile;
 
 public class CategoryHistoryScreenController {
 
@@ -25,6 +27,7 @@ public class CategoryHistoryScreenController {
   // A list of the categories with no duplicates
   private List<Category> categoriesPlayed;
   private GameLogicManager gameLogicManager;
+  private Profile profile;
 
   /** Method that is run to set up the CategoryHistoryScreen FXML everytime it is opened/run. */
   public void initialize() {
@@ -36,12 +39,9 @@ public class CategoryHistoryScreenController {
         (View view) -> {
           if (view == View.CATEGORYHISTORY) {
 
+            profile = QuickDrawGameManager.getProfileManager().getCurrentProfile();
             // We get all the categories played from the profile manager
-            categoriesPlayed =
-                new ArrayList<Category>(
-                    QuickDrawGameManager.getProfileManager()
-                        .getCurrentProfile()
-                        .getAllPlayedCategories());
+            categoriesPlayed = new ArrayList<Category>(profile.getAllPlayedCategories());
 
             // bind the scroll bars and then set the history lists
             bindScrollBars();
@@ -78,10 +78,16 @@ public class CategoryHistoryScreenController {
           cell.setOnMouseClicked(
               e -> {
                 if (!cell.isEmpty()) {
+                  // intialises game and forces category selection
+                  gameLogicManager.initializeGame(
+                      new GameProfile(
+                          profile.getSettings(),
+                          QuickDrawGameManager.getCurrentlySelectedGameMode(),
+                          profile.getGameHistory()));
                   gameLogicManager.forceCategoryForNextInitialisation(cell.getItem());
                   // change view and reset boolean value so that when they play a new game other
                   // than replaying a word, a new random category is generated
-                  App.setView(View.CATEGORY);
+                  App.setView(View.GAMEMODES);
                   e.consume();
                 }
               });
