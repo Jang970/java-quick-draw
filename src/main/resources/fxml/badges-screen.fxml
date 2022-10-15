@@ -117,7 +117,7 @@
                         <Font size="30.0" />
                      </font>
                   </Label>
-                  <Label alignment="CENTER" layoutX="180.0" layoutY="172.0" prefHeight="35.0" prefWidth="540.0" style="-fx-background-color: #2A9D8F;" styleClass="subHeaders" text="PLAY ALL CATEGORIES IN EASY, MEDIUM AND HARD">
+                  <Label alignment="CENTER" layoutX="180.0" layoutY="172.0" prefHeight="35.0" prefWidth="540.0" style="-fx-background-color: #2A9D8F;" styleClass="subHeaders" text="PLAY ALL EASY, MEDIUM AND HARD CATEGORIES">
                      <font>
                         <Font size="30.0" />
                      </font>
