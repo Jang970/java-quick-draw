@@ -33,7 +33,7 @@ public class GameLogicManager {
   private Category categoryToGuess;
 
   // This is used to track the categories played in rapid fire mode
-  private List<CategoryPlayedInfo> categoriesPlayedInThisGame = new ArrayList<CategoryPlayedInfo>();
+  private List<CategoryPlayedInfo> categoriesPlayedInThisGame;
 
   private PredictionManager predictionManager;
   private CountdownTimer countdownTimer;
@@ -126,7 +126,7 @@ public class GameLogicManager {
     stopGame();
 
     currentGameProfile = profile;
-    categoriesPlayedInThisGame.clear();
+    categoriesPlayedInThisGame = new ArrayList<CategoryPlayedInfo>();
 
     // Select a new category to play.
     if (!overrideCategory) {
@@ -215,7 +215,6 @@ public class GameLogicManager {
       countdownTimer.startCountdown(currentGameProfile.settings().getTime().getTimeToDraw());
     }
     gameTimeCounter = 0;
-    categoriesPlayedInThisGame.clear();
     predictionManager.startMakingPredictions();
     gameStartedEmitter.emit();
     isPlaying = true;
