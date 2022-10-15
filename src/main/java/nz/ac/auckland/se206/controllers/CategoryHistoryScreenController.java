@@ -24,7 +24,6 @@ public class CategoryHistoryScreenController {
 
   // A list of the categories with no duplicates
   private List<Category> categoriesPlayed;
-
   private GameLogicManager gameLogicManager;
 
   /** Method that is run to set up the CategoryHistoryScreen FXML everytime it is opened/run. */
@@ -37,22 +36,31 @@ public class CategoryHistoryScreenController {
         (View view) -> {
           if (view == View.CATEGORYHISTORY) {
 
+            // We get all the categories played from the profile manager
             categoriesPlayed =
                 new ArrayList<Category>(
                     QuickDrawGameManager.getProfileManager()
                         .getCurrentProfile()
                         .getAllPlayedCategories());
 
+            // bind the scroll bars and then set the history lists
             bindScrollBars();
             setCategoryHistoryLists();
           }
         });
 
+    // Initializes the two list views
     initialiseListView(categoryHistoryListViewOne);
     initialiseListView(categoryHistoryListViewTwo);
   }
 
+  /**
+   * This sets up the data source for each category history list.
+   *
+   * @param categoryHistoryList the list to initialize the data for
+   */
   private void initialiseListView(ListView<Category> categoryHistoryList) {
+    // We set how the cells use the data from the category history.
     categoryHistoryList.setCellFactory(
         lv -> {
           ListCell<Category> cell =
@@ -61,20 +69,19 @@ public class CategoryHistoryScreenController {
                 protected void updateItem(Category item, boolean empty) {
                   super.updateItem(item, empty);
                   if (!empty) {
+                    // Set the text to the name of the category.
                     setText(item.getName());
                   }
                 }
               };
+          // When the mouse is clicked, we want to set the view
           cell.setOnMouseClicked(
               e -> {
                 if (!cell.isEmpty()) {
-
                   gameLogicManager.forceCategoryForNextInitialisation(cell.getItem());
                   // change view and reset boolean value so that when they play a new game other
                   // than replaying a word, a new random category is generated
-
                   App.setView(View.CATEGORY);
-
                   e.consume();
                 }
               });
@@ -82,7 +89,7 @@ public class CategoryHistoryScreenController {
         });
   }
 
-  /** Binds the scroll bars of the two lists */
+  /** Binds the scroll bars of the two lists so they scroll together */
   private void bindScrollBars() {
     // style the two lists
     categoryHistoryListViewOne.applyCss();

@@ -180,13 +180,17 @@ public class Profile {
    */
   public int getGamesLost() {
     int gamesLost = 0;
+
+    // Iterate through each game, not including those played in zen mode.
     for (GameInfo game : gameHistory) {
       if (game.getGameMode() == GameMode.HIDDEN_WORD || game.getGameMode() == GameMode.CLASSIC) {
+        // If the game mode is hidden word or classes, we check that the game they ran out of time.
         if (game.getReasonForGameEnd() == EndGameReason.OUT_OF_TIME
             || game.getReasonForGameEnd() == EndGameReason.GAVE_UP_OR_CANCELLED) {
           gamesLost++;
         }
       } else if (game.getGameMode() == GameMode.RAPID_FIRE) {
+        // If the game is rapid fire, we check that they didnt get any categories
         if (game.getCategoriesPlayed().size() == 0) {
           gamesLost++;
         }
@@ -213,8 +217,6 @@ public class Profile {
     return winPercentage;
   }
 
-  /** If the player has not had a fastest win, this will be null */
-
   /**
    * This method will get the fastest category played by the profile in classic or hidden word mode
    *
@@ -222,11 +224,13 @@ public class Profile {
    */
   public CategoryPlayedInfo getFastestCategoryPlayed() {
 
-    /** If the player has not had a fastest win, this will be null */
+    // If the player has not had a fastest win, this will be null.
     CategoryPlayedInfo bestGame = null;
 
+    // Iterate through all games the player has played
     for (GameInfo game : gameHistory) {
       if (game.getGameMode() == GameMode.CLASSIC || game.getGameMode() == GameMode.HIDDEN_WORD) {
+        // If game mode is HIDDEN_WORD or CLASSIC, we check if the played category was faster.
 
         CategoryPlayedInfo categoryPlayed = game.getCategoryPlayed();
         if (game.getReasonForGameEnd() == EndGameReason.CORRECT_CATEOGRY) {
@@ -236,6 +240,7 @@ public class Profile {
         }
 
       } else if (game.getGameMode() == GameMode.RAPID_FIRE) {
+        // If game mode is Rapid, we each category played to see if it is faster.
         for (CategoryPlayedInfo categoryPlayed : game.getCategoriesPlayed()) {
           if (bestGame == null || categoryPlayed.getTimeTaken() < bestGame.getTimeTaken()) {
             bestGame = categoryPlayed;
@@ -244,9 +249,15 @@ public class Profile {
       }
     }
 
+    // Return the fastest category.
     return bestGame;
   }
 
+  /**
+   * Gets the highest number of words a player has gotten in a rapid fire game.
+   *
+   * @return the highest number of words a player has gotten in a rapid fire game.
+   */
   public int getHighestRapidFireCount() {
     int highestCount = 0;
     for (GameInfo gameInfo : gameHistory) {
@@ -289,8 +300,10 @@ public class Profile {
       if (game.getGameMode() == GameMode.HIDDEN_WORD
           || game.getGameMode() == GameMode.CLASSIC
           || game.getGameMode() == GameMode.ZEN) {
+        // Single category played. We add it to the list.
         categoriesPlayed.add(game.getCategoryPlayed().getCategory());
       } else if (game.getGameMode() == GameMode.RAPID_FIRE) {
+        // Add all categories played to the list.
         for (CategoryPlayedInfo categoryPlayed : game.getCategoriesPlayed()) {
           categoriesPlayed.add(categoryPlayed.getCategory());
         }

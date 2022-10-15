@@ -33,8 +33,8 @@ public class PredictionManager {
    *
    * @param pollInterval how often the manager will send queires to the server to get predictions in
    *     milliseconds. The poll interval is bound below by 10ms
-   * @param numTopGuesses where the drawing has to be in the ML top guesses order for it to be a win
-   *     i.e if it was 3, then the drawing must be top 3 in guesses.
+   * @param numberOfPredictions where the drawing has to be in the ML top guesses order for it to be
+   *     a win i.e if it was 3, then the drawing must be top 3 in guesses.
    * @throws IOException If there is an error in reading the input/output of the DL model.
    * @throws ModelException If the model cannot be found on the file system.
    */
@@ -115,7 +115,7 @@ public class PredictionManager {
   /**
    * Gets the number of categories from the given csv
    *
-   * @return
+   * @return the number of categories.
    */
   public Integer getNumberOfCategories() {
     return categories.size();

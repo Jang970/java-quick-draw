@@ -39,6 +39,7 @@ public class GameModesScreenController {
     translateTwo.setDuration(Duration.seconds(0.5));
     translateTwo.play();
 
+    // Get transitions to play one after another.
     sequence = new SequentialTransition(craneImageView, translateOne, translateTwo);
     sequence.play();
   }
@@ -47,17 +48,18 @@ public class GameModesScreenController {
   private void moveCraneBack() {
     TranslateTransition translate = new TranslateTransition();
     translate.setNode(craneImageView);
+    // Start and end positions
     translate.setFromX(0);
     translate.setFromY(0);
     translate.setByX(0);
     translate.setByY(0);
+    // How long it will take the crane to translate.
     translate.setDuration(Duration.seconds(0.5));
     translate.play();
   }
 
   private void moveCraneAndSelectGameMode(GameMode mode, int x, int y) {
     QuickDrawGameManager.setCurrentlySelectedGameMode(mode);
-
     // Moves the crane to the desired location
     moveCrane(x, y);
     // Sets the view to category screen when it gets there
