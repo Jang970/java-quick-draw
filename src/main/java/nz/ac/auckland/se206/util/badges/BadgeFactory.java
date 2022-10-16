@@ -88,6 +88,7 @@ public class BadgeFactory {
    * @return instance of the the type badge representing the all categories badge
    */
   private static Badge createPlayedAllCategoriesBadge() {
+    // Creates the badge and returns it
     return new Badge(
         "all_categories",
         "Drawns All Categories",
@@ -96,12 +97,15 @@ public class BadgeFactory {
       @Override
       public boolean earned(Profile profile) {
 
-        if (profile.getAllPlayedCategories().size()
-            != QuickDrawGameManager.getGameLogicManager().getNumberOfCategories()) {
-          return false;
+        // If the playes has attained all categories, we return true.
+        if (profile
+            .getAllPlayedCategories()
+            .containsAll(QuickDrawGameManager.getGameLogicManager().getAllCategories())) {
+          return true;
         }
 
-        return true;
+        // Return false if the previous if statement was false.
+        return false;
       }
     };
   }
@@ -183,6 +187,7 @@ public class BadgeFactory {
    * @return instance of type Badge representing the under n seconds badges
    */
   private static Badge createUnderNumberOfSecondsBadge(int n) {
+    // We construct a badge and return it.
     return new Badge(
         "under" + n + "sec",
         "Under " + n + " seconds",
@@ -191,9 +196,11 @@ public class BadgeFactory {
       @Override
       public boolean earned(Profile profile) {
 
+        // Variables for convenience
         GameInfo game = profile.getMostRecentGame();
         GameMode gameMode = game.getGameMode();
 
+        // The badge is awareded if the player won the category under n seconds.
         return (gameMode == GameMode.CLASSIC || gameMode == GameMode.HIDDEN_WORD)
             && (game.getCategoryPlayed().getTimeTaken() <= n)
             && (game.getReasonForGameEnd() == EndGameReason.CORRECT_CATEOGRY);

@@ -27,7 +27,6 @@ public class DifficultyScreenController {
    * selected game mode to display
    */
   public void initialize() {
-
     createChoiceBoxes();
     // reset to accuracy pane visible and rest not
     App.subscribeToViewChange(
@@ -35,6 +34,7 @@ public class DifficultyScreenController {
           if (newView == View.DIFFICULTY) {
 
             // set selected settings
+            // these are just setting the initial settings values.
             settings = QuickDrawGameManager.getProfileManager().getCurrentProfile().getSettings();
             accuracyChoiceBox
                 .getSelectionModel()
@@ -47,16 +47,19 @@ public class DifficultyScreenController {
                 .getSelectionModel()
                 .select(settings.getConfidence().getLabel().toUpperCase());
           } else {
+            // if the new view is not this one, we update the previous view.
             previousView = newView;
           }
         });
 
+    // Update the difficulty settings
     updateDifficultySettings();
   }
 
   /** adds listener to the choice boxes and gets the selected option and updates each settings */
   private void updateDifficultySettings() {
-
+    // Adds all the respective listeners.
+    // Fairly self explanatory...
     updateValueOnBoxHelper(
         accuracyChoiceBox, (newValue) -> settings.updateAccuracy(Accuracy.valueOf(newValue)));
     updateValueOnBoxHelper(
@@ -75,6 +78,8 @@ public class DifficultyScreenController {
    * @param listener the listener of the event.
    */
   private void updateValueOnBoxHelper(ChoiceBox<String> box, EventListener<String> listener) {
+    // This is a little helper method.
+    // When the item is clicked, we send and update of the item to the listener.
     box.getSelectionModel()
         .selectedItemProperty()
         .addListener(
@@ -86,6 +91,7 @@ public class DifficultyScreenController {
 
   /** Creates choice boxes with the given difficulty options */
   private void createChoiceBoxes() {
+    // Simply adding the choices to each box.
     accuracyChoiceBox.getItems().addAll("EASY", "MEDIUM", "HARD");
     wordsChoiceBox.getItems().addAll("EASY", "MEDIUM", "HARD", "MASTER");
     timeChoiceBox.getItems().addAll("EASY", "MEDIUM", "HARD", "MASTER");

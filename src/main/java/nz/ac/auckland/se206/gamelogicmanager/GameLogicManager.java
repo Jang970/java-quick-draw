@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Set;
 import nz.ac.auckland.se206.App;
 import nz.ac.auckland.se206.util.Category;
 import nz.ac.auckland.se206.util.CategoryType;
@@ -143,27 +144,33 @@ public class GameLogicManager {
    */
   private void selectNewRandomCategory() {
 
-    // A set to store the previous categories and their associated counts.
+    // A map to store the previous categories and their associated counts.
     HashMap<String, Integer> categoriesPlayedCounter = new HashMap<String, Integer>();
 
+    // Initializes the map with all the categories that a player could have played to 0.
     for (Category category : predictionManager.getCategories()) {
       categoriesPlayedCounter.put(category.getName(), 0);
     }
 
-    // OK so what we are doing here is kinda whack. We count all the times a category is played.
-    // Whatever count is the highest, we remove anything that isn't also that count from the
-    // possible categories.
+    // OK so what we are doing here is kinda whack. We count how many times each category has been
+    // played. Then we figure out which category/ies have been played the least. We then add any
+    // categories which have been played more to the filter set. The game will not pick categories
+    // from the filter set
+
+    // This for loop is responsible for adding the category counts to the map.
     for (GameInfo game : currentGameProfile.gameHistory()) {
 
       GameMode mode = game.getGameMode();
 
       if (mode == GameMode.RAPID_FIRE) {
+        // Iterate through categories played in rapid fire
         for (CategoryPlayedInfo category : game.getCategoriesPlayed()) {
           String name = category.getCategory().getName();
           int count = categoriesPlayedCounter.get(name) + 1;
           categoriesPlayedCounter.put(name, count);
         }
       } else if (mode == GameMode.CLASSIC || mode == GameMode.HIDDEN_WORD || mode == GameMode.ZEN) {
+        // Add single category if not rapid fire.
         CategoryPlayedInfo category = game.getCategoryPlayed();
         String name = category.getCategory().getName();
         int count = categoriesPlayedCounter.get(name) + 1;
@@ -171,12 +178,15 @@ public class GameLogicManager {
       }
     }
 
+    // This loop then adds all the categories which have been played in this game so far to the
+    // counter map. We dont want rapid fire to pick the same category twice.
     for (CategoryPlayedInfo category : categoriesPlayedInThisGame) {
       String name = category.getCategory().getName();
       int count = categoriesPlayedCounter.get(name) + 1;
       categoriesPlayedCounter.put(name, count);
     }
 
+    // We then find the lowest count in the map in this loop.
     int lowestCount = Integer.MAX_VALUE;
     for (Entry<String, Integer> entry : categoriesPlayedCounter.entrySet()) {
       if (entry.getValue() < lowestCount) {
@@ -184,16 +194,19 @@ public class GameLogicManager {
       }
     }
 
-    // We are left with a set with all the most played categoreis which we can use as our filter.
+    // Finally, we add all the categories which have been played more times than the lowest count to
+    // the filter set.
     HashSet<String> mostPlayedCategories = new HashSet<String>();
-
     for (Entry<String, Integer> entry : categoriesPlayedCounter.entrySet()) {
       if (entry.getValue() > lowestCount) {
         mostPlayedCategories.add(entry.getKey());
       }
     }
 
+    // The filter set now contains all the categories that have been played the most.
     WordChoice wordChoice = currentGameProfile.settings().getWordChoice();
+
+    // TODO: Remove irrelvant categories from the list before figuring out lowest count.
 
     try {
       // check which categories to include in generating a new category to play
@@ -212,8 +225,10 @@ public class GameLogicManager {
   /** Starts the countdown, and enables the prediction server */
   public void startGame() {
     if (currentGameProfile.gameMode() != GameMode.ZEN) {
+      // In zen mode, we don't set a timer. We do in every other mode.
       countdownTimer.startCountdown(currentGameProfile.settings().getTime().getTimeToDraw());
     }
+    // reset timer and start making predictions.
     gameTimeCounter = 0;
     predictionManager.startMakingPredictions();
     gameStartedEmitter.emit();
@@ -241,6 +256,7 @@ public class GameLogicManager {
 
     // send the end game information
     if (currentGameProfile.gameMode() == GameMode.RAPID_FIRE) {
+      // On rapid fire, we use the special game info constructor.
       gameEndedEmitter.emit(
           new GameInfo(
               winState,
@@ -248,6 +264,7 @@ public class GameLogicManager {
               currentGameProfile.settings(),
               currentGameProfile.gameMode()));
     } else if (currentGameProfile.gameMode() == GameMode.ZEN) {
+      // If game mode is zen, we set the time remaining to -1.
       gameEndedEmitter.emit(
           new GameInfo(
               winState,
@@ -264,6 +281,7 @@ public class GameLogicManager {
               currentGameProfile.gameMode()));
     }
 
+    // Disable some flags so its ready for the next game.
     isPlaying = false;
     predictionWinningEnabled = true;
   }
@@ -274,20 +292,25 @@ public class GameLogicManager {
    */
   private void onCorrectPrediction() {
 
+    // Variables for convenience.
     CategoryPlayedInfo categoryPlayed = null;
     GameMode mode = currentGameProfile.gameMode();
 
     if (mode == GameMode.ZEN) {
+      // Zen mode has no time remaining concept so we use -1 to signify it is not applicable.
       categoryPlayed = new CategoryPlayedInfo(gameTimeCounter, -1, categoryToGuess);
     } else if (mode == GameMode.CLASSIC
         || mode == GameMode.HIDDEN_WORD
         || mode == GameMode.RAPID_FIRE) {
 
+      // In other modes, we simply get the time until the counter runs out.
       int secondsRemaining = countdownTimer.getRemainingCount();
       categoryPlayed = new CategoryPlayedInfo(gameTimeCounter, secondsRemaining, categoryToGuess);
     }
 
     if (mode == GameMode.RAPID_FIRE) {
+      // In rapid fire mode, we reset the counter and add the category to the list of categories
+      // played.
       gameTimeCounter = 0;
       categoriesPlayedInThisGame.add(categoryPlayed);
       selectNewRandomCategory();
@@ -298,6 +321,7 @@ public class GameLogicManager {
     correctPredictionEmitter.emit(categoryPlayed);
 
     if (mode == GameMode.CLASSIC || mode == GameMode.HIDDEN_WORD) {
+      // End the game if classic of hidden word mode.
       endGame(EndGameReason.CORRECT_CATEOGRY);
     }
   }
@@ -307,9 +331,11 @@ public class GameLogicManager {
    * state to be LOOSE
    */
   private void onOutOfTime() {
+    // Assert thta it is indeed not zen mode
     assert currentGameProfile.gameMode() != GameMode.ZEN
         : "Zen mode is not timed so we should not 'run out of time'";
 
+    // End the game if it is not zen mode.
     GameMode gameMode = currentGameProfile.gameMode();
     if (gameMode == GameMode.CLASSIC
         || gameMode == GameMode.HIDDEN_WORD
@@ -387,6 +413,12 @@ public class GameLogicManager {
     gameEndedEmitter.subscribe(listener);
   }
 
+  /**
+   * This method allows us to subscribe to the player getting the drawing right using the given
+   * settings.
+   *
+   * @param listener the event listener which getts the information about the category played.
+   */
   public void subscribeToCorrectPrediction(EventListener<CategoryPlayedInfo> listener) {
     correctPredictionEmitter.subscribe(listener);
   }
@@ -431,8 +463,22 @@ public class GameLogicManager {
     categoryChangeEmitter.subscribe(listener);
   }
 
-  public Integer getNumberOfCategories() {
+  /**
+   * Returns the number of categories that the game can select from.
+   *
+   * @return an integer which is the number of categories that the game can select from.
+   */
+  public int getNumberOfCategories() {
     return predictionManager.getNumberOfCategories();
+  }
+
+  /**
+   * This method returns a set of all the categories that the game can select from.
+   *
+   * @return the set of all the categories that the game can select from.
+   */
+  public Set<Category> getAllCategories() {
+    return predictionManager.getCategories();
   }
 
   /**
@@ -448,7 +494,11 @@ public class GameLogicManager {
     categoryChangeEmitter.emit(category);
   }
 
-  public void diableForcedCategory() {
+  /**
+   * Disabled the category override for next initialisation. This ensures the game will select a new
+   * random category.
+   */
+  public void disableForcedCategory() {
     overrideCategory = false;
   }
 }
