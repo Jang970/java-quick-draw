@@ -24,10 +24,11 @@ public class EmptyEventEmitter {
    * @return the subscription ID for unsubscribing
    */
   public int subscribe(EmptyEventListener listener) {
+    // increment and update id everytime this is called so we have unique ones for each listener
     int id = idCount;
     idCount = idCount + 1;
-
     this.eventListeners.put(id, listener);
+
     return id;
   }
 

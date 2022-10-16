@@ -74,6 +74,7 @@ public class NewUserScreenController {
           .getStylesheets()
           .add(getClass().getResource("/css/application.css").toExternalForm());
 
+      // alerts the user if they are making a profile with invalid properties
       errorAlert.setTitle("Invalid Input");
       errorAlert.setContentText("Please enter a valid username or color.");
       errorAlert.showAndWait();

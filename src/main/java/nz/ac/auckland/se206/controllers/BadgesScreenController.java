@@ -57,6 +57,7 @@ public class BadgesScreenController {
    * is the image view node
    */
   private void getAllBadgesImageViews() {
+    //  puts it into hashmap where key is the id and the value
     for (Pane badgePane : badgesPanes) {
       for (Node children : badgePane.getChildren()) {
         if (children instanceof ImageView) {
@@ -68,6 +69,7 @@ public class BadgesScreenController {
 
   /** sets all image views in every pane as disabled */
   private void reset() {
+    // disable every pane
     for (Badge badge : QuickDrawGameManager.getBadgeManager().getAllBadges()) {
       badgesImageViews.get(badge.getId()).setDisable(true);
     }

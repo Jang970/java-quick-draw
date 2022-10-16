@@ -32,7 +32,7 @@ public class HomeScreenController {
         new Media(
             getClass().getClassLoader().getResource("sounds/gameOpener.mp3").toExternalForm());
     player = new MediaPlayer(sound);
-    // Play the intro usic on repeat
+    // Play the intro music on repeat
     player.setCycleCount(AudioClip.INDEFINITE);
     player.play();
   }
@@ -71,6 +71,7 @@ public class HomeScreenController {
       mainMenu.getStyleClass().clear();
       mainMenu.getStyleClass().add("mainMenuOff");
 
+      // turn off labels
       quickDrawLabel.setVisible(false);
       editionLabel.setVisible(false);
       creditLabel.setVisible(false);
@@ -80,6 +81,7 @@ public class HomeScreenController {
       mainMenu.getStyleClass().clear();
       mainMenu.getStyleClass().add("mainMenuOn");
 
+      // turn on labels
       quickDrawLabel.setVisible(true);
       editionLabel.setVisible(true);
       creditLabel.setVisible(true);

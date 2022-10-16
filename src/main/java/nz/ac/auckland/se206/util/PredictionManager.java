@@ -46,17 +46,21 @@ public class PredictionManager {
       CsvObjectLoader<Category> loader =
           new CsvObjectLoader<Category>(
               (row) -> {
+                // load easy words
                 CategoryType type = CategoryType.EASY;
                 if (row[1].equals("E")) {
                   type = CategoryType.EASY;
                 } else if (row[1].equals("M")) {
+                  // load medium words
                   type = CategoryType.MEDIUM;
                 } else if (row[1].equals("H")) {
+                  // load hard words
                   type = CategoryType.HARD;
                 }
                 return new Category(row[0], row[2], type);
               });
 
+      // store categories in a hashmap
       categories =
           new HashSet<Category>(loader.loadObjectsFromFile(App.getResourcePath("categories.csv")));
 
@@ -89,6 +93,7 @@ public class PredictionManager {
                   if (predictionListener != null && imageSource != null) {
                     BufferedImage snapshot = imageSource.getData();
                     if (snapshot != null) {
+                      // when the snapshot given is not null, we update the predictions
                       predictionListener.update(
                           model.getPredictions(snapshot, internalNumberOfPredictions));
                     }
@@ -154,6 +159,11 @@ public class PredictionManager {
     }
   }
 
+  /**
+   * Getter method that will get the prediction poll interval
+   *
+   * @return prediction poll interval
+   */
   public long getPredictionPollInterval() {
     return pollInterval;
   }
@@ -211,6 +221,7 @@ public class PredictionManager {
                 (category) -> {
                   CategoryType type = category.getCategoryType();
 
+                  // determines what category types to include
                   return ((type == CategoryType.EASY && includeEasy)
                           || (type == CategoryType.MEDIUM && includeMedium)
                           || (type == CategoryType.HARD && includeHard))
@@ -218,6 +229,7 @@ public class PredictionManager {
                 })
             .collect(Collectors.toList());
 
+    // throw exception when all categories have been filtered
     if (possibleCategories.isEmpty()) {
       throw new FilterTooStrictException("The filter filtered out all categories");
     }

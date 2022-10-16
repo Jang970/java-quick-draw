@@ -22,6 +22,7 @@ public class BufferedImageUtils {
     int[] pixels = new int[4];
     for (int x = 0; x < image.getWidth(); x++) {
       for (int y = 0; y < image.getHeight(); y++) {
+        // get the pixels
         raster.getPixel(x, y, pixels);
         if (pixels[0] >= brightnessThreshold
             || pixels[1] >= brightnessThreshold
@@ -55,6 +56,7 @@ public class BufferedImageUtils {
     // Iterate through all the pixels
     for (int y = 0; y < originalRaster.getHeight(); y++) {
       for (int x = 0; x < originalRaster.getWidth(); x++) {
+        // get pixel and consequently check if they are filled / black
         originalRaster.getPixel(x, y, pixels);
         boolean isBlack = pixels[0] < 220 || pixels[1] < 220 || pixels[2] < 220;
         if (isBlack) {
