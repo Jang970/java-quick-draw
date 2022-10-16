@@ -166,10 +166,10 @@ public class ProfileManager {
     return profiles.get(currentProfileIndex);
   }
 
-  /** This method will request a change */
+  /** This method will request a change and start the save countdown */
   public void saveChanges() {
     System.out.println("   * Requesting save change");
-    changeSaveCountdown.startCountdown(1);
+    changeSaveCountdown.startCountdown(2);
   }
 
   /** This method will handle serialising / saving to json file */

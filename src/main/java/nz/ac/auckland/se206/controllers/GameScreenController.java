@@ -150,8 +150,10 @@ public class GameScreenController {
             // set color of user profile icon button
             setUserButtonStyle();
             setGameScreenGui(gameLogicManager.getCurrentGameProfile().gameMode());
+            gameLogicManager.setPredictionDetectionEnabled(false);
 
             // When the view changes to game, we start a new game and clear the canvas
+            canvasManager.clearCanvas();
             gameLogicManager.startGame();
           } else {
 
@@ -455,9 +457,10 @@ public class GameScreenController {
               BufferedImageUtils.getFilledFraction(
                   canvasManager.getCurrentBlackAndWhiteSnapshot(), 1);
 
+          boolean enablePredictions = imageFilledFraction < 0.99;
           // This makes sure the canvas is more than 2% filled before allowing predictions to win
           // the game.
-          gameLogicManager.setPredictionWinningEnabled(imageFilledFraction < 0.98);
+          gameLogicManager.setPredictionDetectionEnabled(enablePredictions);
 
           // This turns the list of classifications from the prediction model and replaces
           // underscores with spaces.
@@ -487,11 +490,11 @@ public class GameScreenController {
 
             // highlights guess text if its the categoryToGuess or in the top guesses
             if (guessText.equals(categoryToGuess)) {
-              setColourOfLabel(i, "#E76F51");
+              setColourOfLabel(i, enablePredictions ? "#E76F51" : "#AD6E5E");
             } else if (i < topNumGuesses) {
-              setColourOfLabel(i, "#2A9D8F");
+              setColourOfLabel(i, enablePredictions ? "#2A9D8F" : "#5E7D78");
             } else {
-              setColourOfLabel(i, "#181414");
+              setColourOfLabel(i, enablePredictions ? "#181414" : "#3D3939");
             }
           }
 

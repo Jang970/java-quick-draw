@@ -44,7 +44,7 @@ public class GameLogicManager {
   // This counter is uded to count how long it took to get each category.
   private int gameTimeCounter = 0;
 
-  private EventEmitter<List<Classification>> predictionChangeEmitter =
+  private EventEmitter<List<Classification>> predictionReceivedEmitter =
       new EventEmitter<List<Classification>>();
   private EventEmitter<Category> categoryChangeEmitter = new EventEmitter<Category>();
 
@@ -55,7 +55,7 @@ public class GameLogicManager {
   private EmptyEventEmitter gameStartedEmitter = new EmptyEventEmitter();
 
   private boolean sentPredictionMessage = false;
-  private boolean predictionWinningEnabled = true;
+  private boolean predictionDetectionEnabled = true;
 
   /**
    * This is the constructor for the GameLogicManager class which contains and handles all the logic
@@ -85,7 +85,9 @@ public class GameLogicManager {
 
     predictionManager.setPredictionListener(
         (predictions) -> {
-          if (predictionWinningEnabled) {
+          predictionReceivedEmitter.emit(predictions);
+
+          if (predictionDetectionEnabled) {
             // set accuracy required
             int topNumGuessesNeededToWin =
                 currentGameProfile.settings().getAccuracy().getTopNumGuesses();
@@ -114,8 +116,6 @@ public class GameLogicManager {
               }
             }
           }
-
-          predictionChangeEmitter.emit(predictions);
         });
   }
 
@@ -288,7 +288,7 @@ public class GameLogicManager {
 
     // Disable some flags so its ready for the next game.
     isPlaying = false;
-    predictionWinningEnabled = true;
+    predictionDetectionEnabled = true;
   }
 
   /**
@@ -378,8 +378,17 @@ public class GameLogicManager {
    *
    * @param enabled whether or not the prediction win detector is enabled
    */
-  public void setPredictionWinningEnabled(boolean enabled) {
-    predictionWinningEnabled = enabled;
+  public void setPredictionDetectionEnabled(boolean enabled) {
+    predictionDetectionEnabled = enabled;
+  }
+
+  /**
+   * This method returns whether or not the geme is currently listening to the prediction data.
+   *
+   * @return a boolean indicating whether or not the prediction data is currently being listened to
+   */
+  public boolean getPredictionDetectionEnabled() {
+    return predictionDetectionEnabled;
   }
 
   /**
@@ -406,8 +415,6 @@ public class GameLogicManager {
   public GameProfile getCurrentGameProfile() {
     return currentGameProfile;
   }
-
-  // TODO: Add unsubscribe methods
 
   /**
    * This method allows us to add a listener to event emitter gameEndedEmitter to keep track of when
@@ -456,7 +463,7 @@ public class GameLogicManager {
    * @param listener the EventListener to be notified when an event is emitted
    */
   public void subscribeToPredictionsChange(EventListener<List<Classification>> listener) {
-    predictionChangeEmitter.subscribe(listener);
+    predictionReceivedEmitter.subscribe(listener);
   }
 
   /**
