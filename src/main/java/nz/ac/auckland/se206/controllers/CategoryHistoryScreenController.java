@@ -63,6 +63,7 @@ public class CategoryHistoryScreenController {
     // We set how the cells use the data from the category history.
     categoryHistoryList.setCellFactory(
         lv -> {
+          // make cells contain objects of type Category
           ListCell<Category> cell =
               new ListCell<Category>() {
                 @Override

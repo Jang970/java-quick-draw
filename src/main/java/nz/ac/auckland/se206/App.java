@@ -127,6 +127,7 @@ public class App extends Application {
    * @param exception exception to be thrown/shown to the developer when the app fails
    */
   public static Object expect(String whyThisShouldNeverRun, Exception exception) {
+    // print message on console as to why it failed
     System.out.println(
         "Unexpected crash as the following expectation was not upheld: " + whyThisShouldNeverRun);
     System.out.println("Exception Message: " + exception.getMessage());
@@ -211,8 +212,10 @@ public class App extends Application {
       viewManager.addView(View.USERPROFILES, loadFxml("userprofiles-screen"));
       viewManager.addView(View.NEWUSER, loadFxml("newuser-screen"));
       viewManager.addView(View.USER, loadFxml("user-screen"));
+      // adding FXML relating to badges and the difficulties
       viewManager.addView(View.BADGES, loadFxml("badges-screen"));
       viewManager.addView(View.DIFFICULTY, loadFxml("difficulty-screen"));
+      // adding FXML relating to gamemodes and leaderboard
       viewManager.addView(View.GAMEMODES, loadFxml("gamemodes-screen"));
       viewManager.addView(View.LEADERBOARD, loadFxml("leaderboard-screen"));
 

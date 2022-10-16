@@ -27,10 +27,11 @@ public class EventEmitter<D> {
    * @return the subscription ID for unsubscribing
    */
   public int subscribe(EventListener<D> listener) {
+    // make it so that each listener has a unique id
     int id = idCount;
     idCount = idCount + 1;
-
     this.eventListeners.put(id, listener);
+
     return id;
   }
 

@@ -30,6 +30,7 @@ public class CategoryScreenController {
   /** Method that is run to set up the CategoryScreen FXML everytime it is opened/run. */
   public void initialize() {
 
+    // get the gamelogic and profile managers
     gameLogicManager = QuickDrawGameManager.getGameLogicManager();
     profileManager = QuickDrawGameManager.getProfileManager();
 
@@ -65,6 +66,7 @@ public class CategoryScreenController {
       categoryLabel.setStyle("-fx-font-size: 40px");
       currentCategoryDisplayString = gameLogicManager.getCurrentCategory().getDescription();
     } else {
+      // otherwise, if not hidden word, can keep font size original size
       categoryLabel.setStyle("-fx-font-size: 90px");
       currentCategoryDisplayString = gameLogicManager.getCurrentCategory().getName();
     }
@@ -76,6 +78,7 @@ public class CategoryScreenController {
     } else {
       App.getTextToSpeech().speakAsync("Draw " + currentCategoryDisplayString);
     }
+    // set number of seconds allowed for player to draw
     int numSeconds = gameLogicManager.getCurrentGameProfile().settings().getTime().getTimeToDraw();
 
     // Display correct text for different game modes.
@@ -84,9 +87,11 @@ public class CategoryScreenController {
     } else if (gameMode == GameMode.RAPID_FIRE) {
       drawTimeLabel.setText("START BY DRAWING");
     } else {
+      // display time allowed for classic and hidden word mode
       drawTimeLabel.setText("DRAW IN " + numSeconds + " SECONDS");
     }
 
+    // show user their current game mode
     currentGameModeLabel.setText("CURRENT GAME MODE: " + gameMode.name().replace('_', ' '));
   }
 
@@ -140,19 +145,23 @@ public class CategoryScreenController {
    * @return the string on how to play for the given current game mode
    */
   private String getGameModeHowToPlay(GameMode gameMode) {
-    // This should all be fairly self explanatory.
+    // this will handle what message to display depending on the gamemode
     switch (gameMode) {
+        // for classic mode
       case CLASSIC:
         return "Once you click the \"I'm Ready!\" button, "
             + "the timer will start immediately and you "
             + "can start drawing on the canvas. The word will be displayed at the top. Good luck!";
+        // for zen mode
       case ZEN:
         return "Once you click the \"I'm Ready!\" button, "
             + "you can start drawing on the canvas for as long as you like. You can change the pencil colour as you please! Have fun :)";
+        // for hidden word mode
       case HIDDEN_WORD:
         return "Once you click the \"I'm Ready!\" button, "
             + "the timer will start immediately and you "
             + "can start drawing on the canvas. The defintion will be displayed at the top. There are hints if you need them. Good luck!";
+        // for rapid fire mode
       case RAPID_FIRE:
         return "Once you click the \"I'm Ready!\" button, "
             + "the timer will start immediately and you "

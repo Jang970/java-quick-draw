@@ -53,6 +53,7 @@ public class CanvasManager {
 
     // initialise / setup the canvas for the game
     canvas.setOnMouseDragged((e) -> handleDragEvent(e));
+    // update when the user stops holding their button
     canvas.setOnMouseReleased((e) -> isHolding = false);
     canvas.setOnMouseClicked((e) -> handleClickEvent(e));
     canvas.setOnMouseMoved(
@@ -128,6 +129,7 @@ public class CanvasManager {
           context.setStroke(penColor);
           context.setLineWidth(brushSize);
         } else if (drawMode == DrawMode.ERASING) {
+          // if user wants to erase their drawing
           context.setStroke(Color.rgb(235, 233, 221));
           context.setLineWidth(brushSize * 5);
         }
@@ -210,7 +212,9 @@ public class CanvasManager {
     // and save it anywhere on their pc
     FileChooser fileChooser = new FileChooser();
 
+    // set tile of file chooser window
     fileChooser.setTitle("Save Image");
+    // set the name of the file to save the image to
     fileChooser.setInitialFileName(
         QuickDrawGameManager.getProfileManager().getCurrentProfile().getName()
             + "'s "
@@ -218,6 +222,7 @@ public class CanvasManager {
             + " drawing.png");
     fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PNG", "*.png"));
 
+    // writing to the file if it is not null
     final File file = fileChooser.showSaveDialog(App.getStage());
     if (file != null) {
       ImageIO.write(getCurrentColourSnapshot(), "png", file);

@@ -87,21 +87,28 @@ public class GameScreenController {
 
     canvasManager = new CanvasManager(canvas);
 
+    // set up colour picker for zen mode
     colorPicker = new ColorPicker(Color.BLACK);
     colorPicker.getStyleClass().add("canvasColorPicker");
 
+    // set up hints for hidden word mode
     hintAlert = new Alert(AlertType.INFORMATION);
     DialogPane dialogPane = hintAlert.getDialogPane();
+    // styling it up !
     dialogPane
         .getStylesheets()
         .add(getClass().getResource("/css/application.css").toExternalForm());
 
+    // create button for hints in hidden word
     hintsButton = new Button("HINTS!");
+    // style it up !
     hintsButton.getStyleClass().add("hintsButton");
+    // display hints when the button is pressed
     hintsButton.setOnAction(
         new EventHandler<ActionEvent>() {
           @Override
           public void handle(ActionEvent e) {
+            // show hint for the word
             displayPopup(getHint());
           }
         });
@@ -125,11 +132,16 @@ public class GameScreenController {
         });
 
     // Subscribe to relevant changes so we can update the display accordingly
+    // for changes in prediction orders
     gameLogicManager.subscribeToPredictionsChange(
         (predictions) -> onPredictionsChange(predictions));
+    // for changes in the time left
     gameLogicManager.subscribeToTimeChange((seconds) -> onTimeChange(seconds));
+    // for when the game begins
     gameLogicManager.subscribeToGameStart(() -> onGameStart());
+    // for when the game currently played ends
     gameLogicManager.subscribeToGameEnd((gameInfo) -> onGameEnd(gameInfo));
+    // for when the category to draw changes
     gameLogicManager.subscribeToCategoryChange((category) -> onCategoryUpdate(category));
 
     App.subscribeToViewChange(
@@ -138,8 +150,10 @@ public class GameScreenController {
             // set color of user profile icon button
             setUserButtonStyle();
             setGameScreenGui(gameLogicManager.getCurrentGameProfile().gameMode());
+            gameLogicManager.setPredictionDetectionEnabled(false);
 
             // When the view changes to game, we start a new game and clear the canvas
+            canvasManager.clearCanvas();
             gameLogicManager.startGame();
           } else {
 
@@ -158,6 +172,7 @@ public class GameScreenController {
   private void onCategoryUpdate(Category category) {
     Platform.runLater(
         () -> {
+          // will handle the special case in hidden word mode where we show description
           if (gameLogicManager.getCurrentGameProfile().gameMode() == GameMode.HIDDEN_WORD) {
             // Shows the description in hidden word mode.
             whatToDrawLabel.setText("TO DRAW: " + category.getDescription());
@@ -167,6 +182,7 @@ public class GameScreenController {
                 && gameLogicManager.getCurrentGameProfile().gameMode() == GameMode.RAPID_FIRE) {
               App.getTextToSpeech().speakAsync("Draw " + category.getName());
             }
+            // update the label which shows what to draw
             whatToDrawLabel.setText("TO DRAW: " + category.getName());
           }
           canvasManager.clearCanvas();
@@ -189,10 +205,12 @@ public class GameScreenController {
         whatToDrawLabel.setStyle("-fx-font-size: 35px");
         timeRemainingLabel.setVisible(true);
 
+        // remove unneccessary GUI components for this game mode
         if (toolsVbox.getChildren().contains(colorPicker)) {
           toolsVbox.getChildren().remove(colorPicker);
         }
 
+        // remove unneccessary GUI components for this game mode
         if (toolsVbox.getChildren().contains(hintsButton)) {
           toolsVbox.getChildren().remove(hintsButton);
         }
@@ -207,10 +225,12 @@ public class GameScreenController {
         whatToDrawLabel.getStyleClass().add("-fx-font-size: 35px");
         timeRemainingLabel.setVisible(false);
 
+        // add neccessary GUI components for this game mode
         if (!toolsVbox.getChildren().contains(colorPicker)) {
           toolsVbox.getChildren().add(0, colorPicker);
         }
 
+        // remove unneccessary GUI components for this game mode
         if (toolsVbox.getChildren().contains(hintsButton)) {
           toolsVbox.getChildren().remove(hintsButton);
         }
@@ -226,10 +246,11 @@ public class GameScreenController {
 
         break;
       case RAPID_FIRE:
-        // In rapid fire, we reset the display like in classis.
+        // In rapid fire, we reset the display like in classic.
         whatToDrawLabel.setStyle("-fx-font-size: 35px");
         timeRemainingLabel.setVisible(true);
 
+        // remove unneccessary GUI components for this game mode
         if (toolsVbox.getChildren().contains(colorPicker)) {
           toolsVbox.getChildren().remove(colorPicker);
         }
@@ -241,10 +262,12 @@ public class GameScreenController {
         whatToDrawLabel.setStyle("-fx-font-size: 22px");
         timeRemainingLabel.setVisible(true);
 
+        // remove unneccessary GUI components for this game mode
         if (toolsVbox.getChildren().contains(colorPicker)) {
           toolsVbox.getChildren().remove(colorPicker);
         }
 
+        // add neccessary GUI components for this game mode
         if (!toolsVbox.getChildren().contains(hintsButton)) {
           toolsVbox.getChildren().add(hintsButton);
           // allows for main window to be clickable
@@ -272,6 +295,7 @@ public class GameScreenController {
     if (!hintAlert.isShowing()) {
       hintAlert.setTitle("Hint");
       hintAlert.setHeaderText("Hint");
+      // setting hint alert size and showing it
       hintAlert.setX(100);
       hintAlert.setY(600);
       hintAlert.show();
@@ -343,7 +367,6 @@ public class GameScreenController {
           EndGameReason reasonForGameEnd = gameInfo.getReasonForGameEnd();
           GameMode gameMode = gameInfo.getGameMode();
           // The following logic decides how the game ending should be handled.
-
           if (gameMode == GameMode.HIDDEN_WORD || gameMode == GameMode.CLASSIC) {
             // Hidden word or classic mode
             if (reasonForGameEnd == EndGameReason.CORRECT_CATEOGRY) {
@@ -363,7 +386,6 @@ public class GameScreenController {
 
           } else if (gameMode == GameMode.RAPID_FIRE) {
             // Rapid fire mode
-
             int numThingsDrawn = gameInfo.getCategoriesPlayed().size();
             if (numThingsDrawn == 0) {
               // if they haven't drawn anything, they loose.
@@ -384,6 +406,7 @@ public class GameScreenController {
 
   /** This function plays an encouraging win sound. */
   private void playWinSound() {
+    // play fun sound
     sound =
         new Media(getClass().getClassLoader().getResource("sounds/gameWin.mp3").toExternalForm());
     mediaPlayer = new MediaPlayer(sound);
@@ -392,6 +415,7 @@ public class GameScreenController {
 
   /** This function plays a disappointing loosing sound. */
   private void playLooseSound() {
+    // play sad sound
     sound =
         new Media(getClass().getClassLoader().getResource("sounds/gameLost.mp3").toExternalForm());
     mediaPlayer = new MediaPlayer(sound);
@@ -423,7 +447,6 @@ public class GameScreenController {
 
   /**
    * This method handles what to do when we are given new predictions/ the predictions are updated
-   * TODO: have to show confidence levels
    *
    * @param classificationList list of predictions to display
    */
@@ -434,9 +457,10 @@ public class GameScreenController {
               BufferedImageUtils.getFilledFraction(
                   canvasManager.getCurrentBlackAndWhiteSnapshot(), 1);
 
+          boolean enablePredictions = imageFilledFraction < 0.99;
           // This makes sure the canvas is more than 2% filled before allowing predictions to win
           // the game.
-          gameLogicManager.setPredictionWinningEnabled(imageFilledFraction < 0.98);
+          gameLogicManager.setPredictionDetectionEnabled(enablePredictions);
 
           // This turns the list of classifications from the prediction model and replaces
           // underscores with spaces.
@@ -447,6 +471,8 @@ public class GameScreenController {
 
           // When we are given new predictions, we update the predictions text
           int range = Math.min(classificationList.size(), guessLabels.length);
+          // get the top num guesses required in order for user to win depending on accuracy
+          // difficulty set
           int topNumGuesses =
               QuickDrawGameManager.getProfileManager()
                   .getCurrentProfile()
@@ -455,6 +481,7 @@ public class GameScreenController {
                   .getTopNumGuesses();
           String categoryToGuess = gameLogicManager.getCurrentCategory().getName();
 
+          // show confidence level for each prediction
           for (int i = 0; i < range; i++) {
             String guessText = normalisedClassfications.get(i);
             int percentage = (int) (classificationList.get(i).getProbability() * 100);
@@ -463,21 +490,23 @@ public class GameScreenController {
 
             // highlights guess text if its the categoryToGuess or in the top guesses
             if (guessText.equals(categoryToGuess)) {
-              setColourOfLabel(i, "#E76F51");
+              setColourOfLabel(i, enablePredictions ? "#E76F51" : "#AD6E5E");
             } else if (i < topNumGuesses) {
-              setColourOfLabel(i, "#2A9D8F");
+              setColourOfLabel(i, enablePredictions ? "#2A9D8F" : "#5E7D78");
             } else {
-              setColourOfLabel(i, "#181414");
+              setColourOfLabel(i, enablePredictions ? "#181414" : "#3D3939");
             }
           }
 
+          // following logic is for the progress bar which shows how close the prediction is to
+          // getting into the top 10 guesses
           int posInList = 0;
           while (posInList < classificationList.size()
               && !normalisedClassfications.get(posInList).equals(categoryToGuess)) {
             posInList++;
           }
           posInList++;
-
+          // update and show on gui using predictionBar how far the guess is from the Top 10
           Double progress = 1 - ((double) posInList / classificationList.size());
           predictionBar.setProgress(progress);
         });
@@ -522,14 +551,17 @@ public class GameScreenController {
    * @param disabled value depends on if we want to enable or disable the buttons
    */
   private void setCanvasButtonsDisabled(boolean disabled) {
+    // disable buttons
     pencilButton.setDisable(disabled);
     eraserButton.setDisable(disabled);
     clearButton.setDisable(disabled);
 
+    // disable hints
     if (toolsVbox.getChildren().contains(hintsButton)) {
       hintsButton.setDisable(disabled);
     }
 
+    // disable colours
     if (toolsVbox.getChildren().contains(colorPicker)) {
       colorPicker.setDisable(disabled);
     }
@@ -577,6 +609,8 @@ public class GameScreenController {
     } else {
       // Start new game
       Profile profile = QuickDrawGameManager.getProfileManager().getCurrentProfile();
+      // initialise a new game with the profile's settings, the game mode selected and profiles game
+      // history
       gameLogicManager.initializeGame(
           new GameProfile(
               profile.getSettings(),
@@ -589,6 +623,7 @@ public class GameScreenController {
   /** Method relating to the button that will allow user to save the image drawn */
   @FXML
   private void onDownloadImage() {
+    // will show if the image failed to download
     try {
       canvasManager.saveCurrentSnapshotOnFile();
     } catch (IOException e) {

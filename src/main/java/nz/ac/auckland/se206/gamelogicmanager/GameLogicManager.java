@@ -44,7 +44,7 @@ public class GameLogicManager {
   // This counter is uded to count how long it took to get each category.
   private int gameTimeCounter = 0;
 
-  private EventEmitter<List<Classification>> predictionChangeEmitter =
+  private EventEmitter<List<Classification>> predictionReceivedEmitter =
       new EventEmitter<List<Classification>>();
   private EventEmitter<Category> categoryChangeEmitter = new EventEmitter<Category>();
 
@@ -55,7 +55,7 @@ public class GameLogicManager {
   private EmptyEventEmitter gameStartedEmitter = new EmptyEventEmitter();
 
   private boolean sentPredictionMessage = false;
-  private boolean predictionWinningEnabled = true;
+  private boolean predictionDetectionEnabled = true;
 
   /**
    * This is the constructor for the GameLogicManager class which contains and handles all the logic
@@ -68,11 +68,13 @@ public class GameLogicManager {
 
     // initialise countdown timer
     countdownTimer = new CountdownTimer();
+    // update the listener to show that the time has changed
     countdownTimer.setOnChange(
         (secondsRemaining) -> {
           timeChangedEmitter.emit(secondsRemaining);
           gameTimeCounter++;
         });
+    // if count is complete then we run out of time and lose
     countdownTimer.setOnComplete(
         () -> {
           onOutOfTime();
@@ -83,15 +85,20 @@ public class GameLogicManager {
 
     predictionManager.setPredictionListener(
         (predictions) -> {
-          if (predictionWinningEnabled) {
+          predictionReceivedEmitter.emit(predictions);
+
+          if (predictionDetectionEnabled) {
+            // set accuracy required
             int topNumGuessesNeededToWin =
                 currentGameProfile.settings().getAccuracy().getTopNumGuesses();
 
+            // set confidence required
             double confidenceNeededToWin =
                 currentGameProfile.settings().getConfidence().getProbabilityPercentage();
 
             int range = Math.min(predictions.size(), topNumGuessesNeededToWin);
 
+            // get confidence levels
             for (int i = 0; i < range; i++) {
               String prediction = predictions.get(i).getClassName().replace('_', ' ');
               double confidence = predictions.get(i).getProbability();
@@ -109,8 +116,6 @@ public class GameLogicManager {
               }
             }
           }
-
-          predictionChangeEmitter.emit(predictions);
         });
   }
 
@@ -156,7 +161,6 @@ public class GameLogicManager {
     // played. Then we figure out which category/ies have been played the least. We then add any
     // categories which have been played more to the filter set. The game will not pick categories
     // from the filter set
-
     // This for loop is responsible for adding the category counts to the map.
     for (GameInfo game : currentGameProfile.gameHistory()) {
 
@@ -249,7 +253,7 @@ public class GameLogicManager {
    */
   private void endGame(EndGameReason winState) {
 
-    // get info
+    // get info and end the predictions and counter
     int secondsRemaining = countdownTimer.getRemainingCount();
     predictionManager.stopMakingPredictions();
     countdownTimer.cancelCountdown();
@@ -273,6 +277,7 @@ public class GameLogicManager {
               currentGameProfile.gameMode()));
 
     } else {
+      // otherwise, set as normal for hidden word and classic modes
       gameEndedEmitter.emit(
           new GameInfo(
               winState,
@@ -283,7 +288,7 @@ public class GameLogicManager {
 
     // Disable some flags so its ready for the next game.
     isPlaying = false;
-    predictionWinningEnabled = true;
+    predictionDetectionEnabled = true;
   }
 
   /**
@@ -316,6 +321,7 @@ public class GameLogicManager {
       selectNewRandomCategory();
     }
 
+    // null check
     assert categoryPlayed != null : "CategoryPlayed should not be null";
 
     correctPredictionEmitter.emit(categoryPlayed);
@@ -372,8 +378,17 @@ public class GameLogicManager {
    *
    * @param enabled whether or not the prediction win detector is enabled
    */
-  public void setPredictionWinningEnabled(boolean enabled) {
-    predictionWinningEnabled = enabled;
+  public void setPredictionDetectionEnabled(boolean enabled) {
+    predictionDetectionEnabled = enabled;
+  }
+
+  /**
+   * This method returns whether or not the geme is currently listening to the prediction data.
+   *
+   * @return a boolean indicating whether or not the prediction data is currently being listened to
+   */
+  public boolean getPredictionDetectionEnabled() {
+    return predictionDetectionEnabled;
   }
 
   /**
@@ -400,8 +415,6 @@ public class GameLogicManager {
   public GameProfile getCurrentGameProfile() {
     return currentGameProfile;
   }
-
-  // TODO: Add unsubscribe methods
 
   /**
    * This method allows us to add a listener to event emitter gameEndedEmitter to keep track of when
@@ -450,7 +463,7 @@ public class GameLogicManager {
    * @param listener the EventListener to be notified when an event is emitted
    */
   public void subscribeToPredictionsChange(EventListener<List<Classification>> listener) {
-    predictionChangeEmitter.subscribe(listener);
+    predictionReceivedEmitter.subscribe(listener);
   }
 
   /**

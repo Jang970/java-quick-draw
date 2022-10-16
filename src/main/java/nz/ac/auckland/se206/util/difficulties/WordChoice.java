@@ -47,6 +47,7 @@ public enum WordChoice {
     boolean hard = type == CategoryType.HARD || medium;
     boolean master = type == CategoryType.HARD;
 
+    // will give what specific category type to be included
     return (this == EASY && easy)
         || (this == MEDIUM && medium)
         || (this == HARD && hard)

@@ -21,6 +21,7 @@ public class BadgeManager {
     // being the badge itself
     this.badgeList = BadgeFactory.createBadgeList();
 
+    // create new hashmap to store badges
     badgeIdMap = new HashMap<String, Badge>();
     for (Badge badge : badgeList) {
       badgeIdMap.put(badge.getId(), badge);
