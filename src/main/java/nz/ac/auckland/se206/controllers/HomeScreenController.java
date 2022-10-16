@@ -32,6 +32,7 @@ public class HomeScreenController {
         new Media(
             getClass().getClassLoader().getResource("sounds/gameOpener.mp3").toExternalForm());
     player = new MediaPlayer(sound);
+    player.setVolume(0.2);
     // Play the intro music on repeat
     player.setCycleCount(AudioClip.INDEFINITE);
     player.play();
