@@ -47,8 +47,10 @@ public class UserScreenController {
             //  rest of user stats label
             numGamesWonLabel.setText(String.valueOf(currentProfile.getGamesWon()));
             numGamesLostLabel.setText(String.valueOf(currentProfile.getGamesLost()));
+            // update number of categories label
             numCategoriesPlayedLabel.setText(
                 String.valueOf(currentProfile.getGameHistory().size()));
+            // update rapid fire label
             bestRapidFireCountLabel.setText(
                 String.valueOf(currentProfile.getHighestRapidFireCount()));
           }

@@ -36,6 +36,7 @@ public class GameModesScreenController {
     translateTwo.setFromX(moveX);
     translateTwo.setFromY(0);
     translateTwo.setByY(moveY);
+    // set how long the transition goes for
     translateTwo.setDuration(Duration.seconds(0.5));
     translateTwo.play();
 

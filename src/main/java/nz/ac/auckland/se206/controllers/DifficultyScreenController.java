@@ -58,14 +58,17 @@ public class DifficultyScreenController {
 
   /** adds listener to the choice boxes and gets the selected option and updates each settings */
   private void updateDifficultySettings() {
-    // Adds all the respective listeners.
+    // Adds all the respective listeners for each choice box
     // Fairly self explanatory...
     updateValueOnBoxHelper(
         accuracyChoiceBox, (newValue) -> settings.updateAccuracy(Accuracy.valueOf(newValue)));
+    // for word choice difficulty
     updateValueOnBoxHelper(
         wordsChoiceBox, (newValue) -> settings.updateWordChoice(WordChoice.valueOf(newValue)));
+    // for time difficulty
     updateValueOnBoxHelper(
         timeChoiceBox, (newValue) -> settings.updateTime(Time.valueOf(newValue)));
+    // for confidence difficulty
     updateValueOnBoxHelper(
         confidenceChoiceBox, (newValue) -> settings.updateConfidence(Confidence.valueOf(newValue)));
   }
@@ -84,6 +87,7 @@ public class DifficultyScreenController {
         .selectedItemProperty()
         .addListener(
             (observable, oldValue, newValue) -> {
+              // this will save any changes the user makes to their set difficulties
               listener.update(newValue);
               QuickDrawGameManager.getProfileManager().saveChanges();
             });
@@ -107,6 +111,7 @@ public class DifficultyScreenController {
   /** Switches to games modes screen FXML */
   @FXML
   private void onLetsPlay() {
+    // will switch to either category view or game mode view depending on the previous view
     if (previousView == View.CATEGORY) {
       App.setView(View.CATEGORY);
     } else {
