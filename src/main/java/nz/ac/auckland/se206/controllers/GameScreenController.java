@@ -416,6 +416,7 @@ public class GameScreenController {
     sound =
         new Media(getClass().getClassLoader().getResource("sounds/gameWin.mp3").toExternalForm());
     mediaPlayer = new MediaPlayer(sound);
+    mediaPlayer.setVolume(0.2);
     mediaPlayer.play();
   }
 
@@ -425,6 +426,7 @@ public class GameScreenController {
     sound =
         new Media(getClass().getClassLoader().getResource("sounds/gameLost.mp3").toExternalForm());
     mediaPlayer = new MediaPlayer(sound);
+    mediaPlayer.setVolume(0.2);
     mediaPlayer.play();
   }
 
