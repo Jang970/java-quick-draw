@@ -68,11 +68,13 @@ public class GameLogicManager {
 
     // initialise countdown timer
     countdownTimer = new CountdownTimer();
+    // update the listener to show that the time has changed
     countdownTimer.setOnChange(
         (secondsRemaining) -> {
           timeChangedEmitter.emit(secondsRemaining);
           gameTimeCounter++;
         });
+    // if count is complete then we run out of time and lose
     countdownTimer.setOnComplete(
         () -> {
           onOutOfTime();
@@ -84,14 +86,17 @@ public class GameLogicManager {
     predictionManager.setPredictionListener(
         (predictions) -> {
           if (predictionWinningEnabled) {
+            // set accuracy required
             int topNumGuessesNeededToWin =
                 currentGameProfile.settings().getAccuracy().getTopNumGuesses();
 
+            // set confidence required
             double confidenceNeededToWin =
                 currentGameProfile.settings().getConfidence().getProbabilityPercentage();
 
             int range = Math.min(predictions.size(), topNumGuessesNeededToWin);
 
+            // get confidence levels
             for (int i = 0; i < range; i++) {
               String prediction = predictions.get(i).getClassName().replace('_', ' ');
               double confidence = predictions.get(i).getProbability();
@@ -156,7 +161,6 @@ public class GameLogicManager {
     // played. Then we figure out which category/ies have been played the least. We then add any
     // categories which have been played more to the filter set. The game will not pick categories
     // from the filter set
-
     // This for loop is responsible for adding the category counts to the map.
     for (GameInfo game : currentGameProfile.gameHistory()) {
 
@@ -249,7 +253,7 @@ public class GameLogicManager {
    */
   private void endGame(EndGameReason winState) {
 
-    // get info
+    // get info and end the predictions and counter
     int secondsRemaining = countdownTimer.getRemainingCount();
     predictionManager.stopMakingPredictions();
     countdownTimer.cancelCountdown();
@@ -273,6 +277,7 @@ public class GameLogicManager {
               currentGameProfile.gameMode()));
 
     } else {
+      // otherwise, set as normal for hidden word and classic modes
       gameEndedEmitter.emit(
           new GameInfo(
               winState,
@@ -316,6 +321,7 @@ public class GameLogicManager {
       selectNewRandomCategory();
     }
 
+    // null check
     assert categoryPlayed != null : "CategoryPlayed should not be null";
 
     correctPredictionEmitter.emit(categoryPlayed);
