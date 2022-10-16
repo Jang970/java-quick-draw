@@ -374,7 +374,13 @@ public class GameScreenController {
               // If they get the category, they win, otherwise they loose
               playWinSound();
             } else if (reasonForGameEnd == EndGameReason.OUT_OF_TIME) {
-              whatToDrawLabel.setText("Sorry, you ran out of time!");
+              String text =
+                  gameMode == GameMode.CLASSIC
+                      ? "Sorry, you ran out of time!"
+                      : ("The word was \""
+                          + gameInfo.getCategoryPlayed().getCategory().getName()
+                          + "\"");
+              whatToDrawLabel.setText(text);
               playLooseSound();
             } else if (reasonForGameEnd == EndGameReason.GAVE_UP_OR_CANCELLED) {
               playLooseSound();
