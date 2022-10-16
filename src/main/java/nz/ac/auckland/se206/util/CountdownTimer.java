@@ -66,6 +66,7 @@ public class CountdownTimer {
 
     // this sets a timer to decrease the count every period milliseconds
     timer.scheduleAtFixedRate(
+        // create new timer task
         new TimerTask() {
 
           @Override
