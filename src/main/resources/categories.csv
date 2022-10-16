@@ -1,4 +1,3 @@
-aircraft carrier,H,a large warship with a deck from which aircraft can take off and land.
 airplane,E,a powered flying vehicle with fixed wings and a weight greater than that of the air it displaces
 alarm clock,M,"a device that can be made to sound at the time set in advance, used to wake someone up."
 ambulance,M,"a vehicle equipped for taking sick or injured people to and from hospital, especially in emergencies."
@@ -161,14 +160,12 @@ kangaroo,M,a large plant-eating marsupial with a long powerful tail and strongly
 key,E,"a small piece of shaped metal with incisions cut to fit the wards of a particular lock, which is inserted into a lock and turned to open or close it."
 keyboard,E,a panel of keys that operate a computer or typewriter.
 knee,M,the joint between the thigh and the lower leg in humans.
-knife,E,"an instrument composed of a blade fixed into a handle, used for cutting or as a weapon."
 ladder,E,"a piece of equipment consisting of a series of bars or steps between two upright lengths of wood, metal, or rope, used for climbing up or down."
 lantern,E,"a lamp with a transparent case protecting the flame or electric bulb, and typically having a handle by which it may be carried or hung."
 laptop,H,a computer that is portable and suitable for use while travelling.
 leaf,E,"a flattened structure of a higher plant, typically green and blade-like, that is attached to a stem directly or via a stalk."
 leg,M,each of the limbs on which a person or animal walks and stands.
 light bulb,E,"a device used to convert electricity into light, consisting of a source of illumination enclosed within a transparent or translucent rounded shell."
-lighter,M,a device that produces a small flame.
 lighthouse,M,a tower or other structure containing a beacon light to warn or guide ships at sea.
 lightning,E,the occurrence of a natural electrical discharge of very short duration and high voltage between a cloud and the ground or within a cloud.
 line,E,"a long, narrow mark or band."
@@ -241,7 +238,6 @@ rainbow,E,"an arch of colours visible in the sky, caused by the refraction and d
 rake,M,"an implement consisting of a pole with a toothed crossbar, used especially for drawing together cut grass or smoothing loose soil or gravel."
 remote control,M,an implement used to control a machine or apparatus from a distance by means of radio or infrared signals.
 rhinoceros,M,"a large, heavily built plant-eating mammal with one or two horns on the nose and thick folded skin, native to Africa and southern Asia."
-rifle,M,"a gun, especially one fired from shoulder level, having a long barrel to give improved accuracy over a long distance."
 river,M,"a large natural stream of water flowing in a channel to the sea, a lake."
 roller coaster,M,a small mat for a bottle or glass.
 rollerskates,M,"each of a pair of boots or metal frames fitted to shoes with four or more small wheels, for gliding across a hard surface."
@@ -298,7 +294,6 @@ swan,E,"a large waterbird with a long flexible neck, short legs, webbed feet, a 
 sweater,H,"a knitted garment worn on the upper body, typically with long sleeves, put on over the head."
 swing set,H,"a frame for children to play on, typically including one or more swings and a slide."
 sword,E,"a weapon with a long metal blade and a hilt with a hand guard, used for thrusting or striking and now typically worn as part of ceremonial dress."
-syringe,E,a tube with a nozzle and piston for sucking in and ejecting liquid in a thin stream.
 table,E,"a piece of furniture with a flat top and one or more legs, providing a level surface for eating, writing, or working at."
 teapot,E,"a pot with a handle, spout, and lid, in which tea is brewed and from which it is poured."
 teddy-bear,E,a soft toy bear.
