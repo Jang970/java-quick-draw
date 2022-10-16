@@ -66,6 +66,7 @@ public class ProfileManager {
     }
     loadProfilesFromFile();
 
+    // save profile changes if any
     changeSaveCountdown.setOnComplete(
         () -> {
           saveProfilesToFile();
@@ -223,6 +224,7 @@ public class ProfileManager {
 
       profiles = obj.profileList;
 
+      // update listener
       for (Profile profile : profiles) {
         profile.setOnChange(profileUpdateListener);
       }

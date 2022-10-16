@@ -20,6 +20,7 @@ public class ImageUtils {
   public static BufferedImage getBlackImage(final int width, final int height) {
     final BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 
+    // go through all pixels and set them to black
     for (int i = 0; i < width - 1; i++) {
       for (int j = 0; j < height - 1; j++) {
         image.setRGB(i, j, Color.black.getRGB());
@@ -40,15 +41,18 @@ public class ImageUtils {
   public static BufferedImage invertBlackAndWhite(final BufferedImage image) {
     final BufferedImage imageOut = getBlackImage(image.getWidth(), image.getHeight());
 
+    // iterate through image
     for (int i = 0; i < image.getWidth(); i++) {
       for (int j = 0; j < image.getHeight(); j++) {
         final Color c = new Color(image.getRGB(i, j));
 
+        // invert black and  white
         if (c.equals(Color.white)) {
           imageOut.setRGB(i, j, Color.black.getRGB());
         } else if (c.equals(Color.black)) {
           imageOut.setRGB(i, j, Color.white.getRGB());
         } else {
+          // leave if it is not black or white
           imageOut.setRGB(i, j, image.getRGB(i, j));
         }
       }
