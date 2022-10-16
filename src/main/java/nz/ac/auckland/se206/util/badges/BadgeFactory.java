@@ -128,6 +128,7 @@ public class BadgeFactory {
         GameInfo game = profile.getMostRecentGame();
         Settings settings = game.getSettings();
 
+        // conditions that must be met to earn the badge
         return settings.getAccuracy() == Accuracy.HARD
             && settings.getConfidence() == Confidence.MASTER
             && settings.getTime() == Time.MASTER
@@ -159,13 +160,15 @@ public class BadgeFactory {
         ListIterator<GameInfo> gameHistoryIterator = gameHistory.listIterator(gameHistory.size());
         int count = 0;
 
+        // conditions that must be met to earn the badge
         while (gameHistoryIterator.hasPrevious()) {
           GameInfo game = gameHistoryIterator.previous();
           GameMode mode = game.getGameMode();
           if (mode == GameMode.CLASSIC || mode == GameMode.HIDDEN_WORD) {
-
+            // count number of games won in a row
             if (game.getReasonForGameEnd() == EndGameReason.CORRECT_CATEOGRY) {
               count++;
+              // if suffices, then they earn the badge
               if (count >= n) {
                 return true;
               }
@@ -218,9 +221,11 @@ public class BadgeFactory {
 
       @Override
       public boolean earned(Profile profile) {
+        // get the most recent game and the game mode
         GameInfo game = profile.getMostRecentGame();
         GameMode gameMode = game.getGameMode();
 
+        // conditions that must be met to earn the badge
         return (gameMode == GameMode.CLASSIC || gameMode == GameMode.HIDDEN_WORD)
             && (game.getCategoryPlayed().getSecondsRemaining() <= 2)
             && (game.getReasonForGameEnd() == EndGameReason.CORRECT_CATEOGRY);
