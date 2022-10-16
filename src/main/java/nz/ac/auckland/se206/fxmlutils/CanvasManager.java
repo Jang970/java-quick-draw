@@ -227,7 +227,8 @@ public class CanvasManager {
   }
 
   /**
-   * Gets the isDrawingEnabled state
+   * This method returns a boolean value indicating whether or not drawing is currently enabled for
+   * the canvas.
    *
    * @return a boolean indicating whether drawing is enabled
    */
@@ -236,7 +237,8 @@ public class CanvasManager {
   }
 
   /**
-   * Sets the isDrawingEnabled state
+   * This methods allows the user to enable or disable drawing for the canvas. When drawing is
+   * disabled, the user will not be able to draw.
    *
    * @param drawingEnabled a boolean indicating whether drawing should be enabled
    */

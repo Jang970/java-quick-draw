@@ -26,11 +26,13 @@ public class HomeScreenController {
 
   private MediaPlayer player;
 
+  /** This function is called when the FXML page is loaded. We start the intro music! */
   public void initialize() {
     Media sound =
         new Media(
             getClass().getClassLoader().getResource("sounds/gameOpener.mp3").toExternalForm());
     player = new MediaPlayer(sound);
+    // Play the intro usic on repeat
     player.setCycleCount(AudioClip.INDEFINITE);
     player.play();
   }
@@ -62,7 +64,9 @@ public class HomeScreenController {
   /** This method simple turns the intro light on and off */
   @FXML
   private void onSwitchToggle() {
+    // Should make sense:
     if (onOffSwitch.isSelected()) {
+      // if we are selected, we turn the light off and update the button
       onOffSwitch.setText("ON");
       mainMenu.getStyleClass().clear();
       mainMenu.getStyleClass().add("mainMenuOff");
@@ -71,6 +75,7 @@ public class HomeScreenController {
       editionLabel.setVisible(false);
       creditLabel.setVisible(false);
     } else {
+      // if we are not selected, we turn the light on and update the button
       onOffSwitch.setText("OFF");
       mainMenu.getStyleClass().clear();
       mainMenu.getStyleClass().add("mainMenuOn");

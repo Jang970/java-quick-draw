@@ -140,6 +140,7 @@ public class CategoryScreenController {
    * @return the string on how to play for the given current game mode
    */
   private String getGameModeHowToPlay(GameMode gameMode) {
+    // This should all be fairly self explanatory.
     switch (gameMode) {
       case CLASSIC:
         return "Once you click the \"I'm Ready!\" button, "
@@ -157,6 +158,7 @@ public class CategoryScreenController {
             + "the timer will start immediately and you "
             + "can start drawing on the canvas. The new word will be given at the top as you soon as you win the current word. Good luck!";
     }
-    return "Invalid game mode";
+    // Return that the game mode is invalid. SHould never reach this point.
+    return (String) App.expect("All cases are handled");
   }
 }

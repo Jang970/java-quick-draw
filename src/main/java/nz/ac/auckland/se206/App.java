@@ -156,7 +156,7 @@ public class App extends Application {
   /**
    * This is the entry method for the application
    *
-   * @param args
+   * @param args arguments to be passed to the application. Should not be used.
    */
   public static void main(final String[] args) {
     // Launch the JavaFX runtime

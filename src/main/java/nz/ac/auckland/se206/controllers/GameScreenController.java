@@ -63,7 +63,7 @@ public class GameScreenController {
   @FXML private VBox guessLabelCol1;
   @FXML private VBox guessLabelCol2;
   @FXML private VBox predictionVbox;
-  @FXML private VBox toolsVBox;
+  @FXML private VBox toolsVbox;
 
   @FXML private ColorPicker colorPicker;
   @FXML private ProgressBar predictionBar;
@@ -182,49 +182,56 @@ public class GameScreenController {
 
     gameModeLabel.setText(gameMode.name().replace("_", " "));
 
-    // Setups up the game screen GUI depending on the game mode.
+    // Sets up the game screen GUI depending on the game mode.
     switch (gameMode) {
       case CLASSIC:
+        // In classic, we set the font size to normal display the timer and remove the colour picker
         whatToDrawLabel.setStyle("-fx-font-size: 35px");
         timeRemainingLabel.setVisible(true);
 
-        if (toolsVBox.getChildren().contains(colorPicker)) {
-          toolsVBox.getChildren().remove(colorPicker);
+        if (toolsVbox.getChildren().contains(colorPicker)) {
+          toolsVbox.getChildren().remove(colorPicker);
         }
 
-        if (toolsVBox.getChildren().contains(hintsButton)) {
-          toolsVBox.getChildren().remove(hintsButton);
+        if (toolsVbox.getChildren().contains(hintsButton)) {
+          toolsVbox.getChildren().remove(hintsButton);
         }
 
+        // Set the proper pen colour
         canvasManager.setPenColor(Color.BLACK);
 
         break;
       case ZEN:
+
+        // In zen mode, we enabled the colour picker and set the font size to nrormal.
         whatToDrawLabel.getStyleClass().add("-fx-font-size: 35px");
         timeRemainingLabel.setVisible(false);
 
-        if (!toolsVBox.getChildren().contains(colorPicker)) {
-          toolsVBox.getChildren().add(0, colorPicker);
+        if (!toolsVbox.getChildren().contains(colorPicker)) {
+          toolsVbox.getChildren().add(0, colorPicker);
         }
 
-        if (toolsVBox.getChildren().contains(hintsButton)) {
-          toolsVBox.getChildren().remove(hintsButton);
+        if (toolsVbox.getChildren().contains(hintsButton)) {
+          toolsVbox.getChildren().remove(hintsButton);
         }
 
+        // Colour picker event listener
         colorPicker
             .valueProperty()
             .addListener(
                 (observable, oldValue, newValue) -> {
+                  // set pen colour on colour choice
                   canvasManager.setPenColor(newValue);
                 });
 
         break;
       case RAPID_FIRE:
+        // In rapid fire, we reset the display like in classis.
         whatToDrawLabel.setStyle("-fx-font-size: 35px");
         timeRemainingLabel.setVisible(true);
 
-        if (toolsVBox.getChildren().contains(colorPicker)) {
-          toolsVBox.getChildren().remove(colorPicker);
+        if (toolsVbox.getChildren().contains(colorPicker)) {
+          toolsVbox.getChildren().remove(colorPicker);
         }
 
         canvasManager.setPenColor(Color.BLACK);
@@ -234,12 +241,12 @@ public class GameScreenController {
         whatToDrawLabel.setStyle("-fx-font-size: 22px");
         timeRemainingLabel.setVisible(true);
 
-        if (toolsVBox.getChildren().contains(colorPicker)) {
-          toolsVBox.getChildren().remove(colorPicker);
+        if (toolsVbox.getChildren().contains(colorPicker)) {
+          toolsVbox.getChildren().remove(colorPicker);
         }
 
-        if (!toolsVBox.getChildren().contains(hintsButton)) {
-          toolsVBox.getChildren().add(hintsButton);
+        if (!toolsVbox.getChildren().contains(hintsButton)) {
+          toolsVbox.getChildren().add(hintsButton);
           // allows for main window to be clickable
           hintAlert.initOwner(App.getStage());
           hintAlert.initModality(Modality.NONE);
@@ -252,7 +259,11 @@ public class GameScreenController {
     }
   }
 
-  /** Displays hint pop up for hidden word mode */
+  /**
+   * Displayes a popup with text for the hint. Useful for displaying hints.
+   *
+   * @param hintText the text to display on the hint popup
+   */
   private void displayPopup(String hintText) {
     // shows an information alert pop up of the hint when button is clicked
     // setting display value
@@ -300,6 +311,7 @@ public class GameScreenController {
 
   /** Gets colour and sets css background colour */
   private void setUserButtonStyle() {
+    // Sets the user button to their chosen colour
     userButton.setStyle(
         "-fx-background-color: "
             + QuickDrawGameManager.getProfileManager()
@@ -323,20 +335,20 @@ public class GameScreenController {
           canvasManager.setDrawingEnabled(false);
           setCanvasButtonsDisabled(true);
 
+          // Update text and style on buttons
           gameActionButton.setText("NEW GAME");
           whatToDrawLabel.setStyle("-fx-font-size: 35px");
           whatToDrawLabel.getStyleClass().add("stateHeaders");
 
           EndGameReason reasonForGameEnd = gameInfo.getReasonForGameEnd();
           GameMode gameMode = gameInfo.getGameMode();
-
           // The following logic decides how the game ending should be handled.
 
           if (gameMode == GameMode.HIDDEN_WORD || gameMode == GameMode.CLASSIC) {
             // Hidden word or classic mode
-
             if (reasonForGameEnd == EndGameReason.CORRECT_CATEOGRY) {
               whatToDrawLabel.setText("You got it!");
+              // If they get the category, they win, otherwise they loose
               playWinSound();
             } else if (reasonForGameEnd == EndGameReason.OUT_OF_TIME) {
               whatToDrawLabel.setText("Sorry, you ran out of time!");
@@ -346,8 +358,7 @@ public class GameScreenController {
               whatToDrawLabel.setText("Game stopped");
             }
           } else if (gameMode == GameMode.ZEN) {
-            // Zen mode
-
+            // Zen mode kind message.
             whatToDrawLabel.setText("What a lovely drawing :)");
 
           } else if (gameMode == GameMode.RAPID_FIRE) {
@@ -355,9 +366,11 @@ public class GameScreenController {
 
             int numThingsDrawn = gameInfo.getCategoriesPlayed().size();
             if (numThingsDrawn == 0) {
+              // if they haven't drawn anything, they loose.
               whatToDrawLabel.setText("Sorry, you ran out of time!");
               playLooseSound();
             } else {
+              // Otherwise they win!
               playWinSound();
               if (numThingsDrawn == 1) {
                 whatToDrawLabel.setText("You drew 1 thing!");
@@ -434,7 +447,7 @@ public class GameScreenController {
 
           // When we are given new predictions, we update the predictions text
           int range = Math.min(classificationList.size(), guessLabels.length);
-          int nTopGuess =
+          int topNumGuesses =
               QuickDrawGameManager.getProfileManager()
                   .getCurrentProfile()
                   .getSettings()
@@ -451,7 +464,7 @@ public class GameScreenController {
             // highlights guess text if its the categoryToGuess or in the top guesses
             if (guessText.equals(categoryToGuess)) {
               setColourOfLabel(i, "#E76F51");
-            } else if (i < nTopGuess) {
+            } else if (i < topNumGuesses) {
               setColourOfLabel(i, "#2A9D8F");
             } else {
               setColourOfLabel(i, "#181414");
@@ -513,11 +526,11 @@ public class GameScreenController {
     eraserButton.setDisable(disabled);
     clearButton.setDisable(disabled);
 
-    if (toolsVBox.getChildren().contains(hintsButton)) {
+    if (toolsVbox.getChildren().contains(hintsButton)) {
       hintsButton.setDisable(disabled);
     }
 
-    if (toolsVBox.getChildren().contains(colorPicker)) {
+    if (toolsVbox.getChildren().contains(colorPicker)) {
       colorPicker.setDisable(disabled);
     }
   }
